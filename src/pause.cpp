@@ -1,7 +1,7 @@
 #include "include.hpp"
 #include "define.hpp"
 #include "pause.hpp"
-#include "gameSingle.hpp"
+//#include "gameSingle.hpp"
 
 // Types of selected box
 enum{  
@@ -15,110 +15,10 @@ enum{
 
 
 // Global HUD
-// Global static texts
-GUI::staticText texts[TXT_count] = {
-    // Selection menu
-    {"Tic-tac-toe\nКрестики нолики\n", 
-        24, 0.5, 0.1},
-    {"Singleplayer\nОдиночная игра\n", 
-        24, 0.5, 0.3},
-    {"Two players\nДва игрока\n", 
-        24, 0.5, 0.5},
-    {"Create server\nСоздать сервер\n", 
-        24, 0.5, 0.7},
-    {"Connect\nПрисоединится\n", 
-        24, 0.5, 0.9},
-    
-    // Game pause
-    {"Pause\nПаузе\n",
-        24, 0.5, 0.1},
-    {"Music:\nМузыка:\n",
-        24, 0.5, 0.6},
-    {"Sounds:\nЗвуки:\n",
-        24, 0.5, 0.8},
-
-    // Game start
-    {"Select type\nВыберите тип\n",
-        31, 0.5, 0.2, BLACK},
-
-    // Game stop
-    {"You win!\nВы выйграли!\n",
-        24, 0.5, 0.3},
-    {"You loose...\nВы проиграли...\n", 
-        24, 0.5, 0.3},
-    {"Nobody win.\nНичья.\n", 
-        24, 0.5, 0.3},
-    {"Game stopped.\nИгра остановлена.\n",
-        24, 0.5, 0.3},
-    {"Cross win\nКрестик выйграл\n",
-        24, 0.5, 0.3},
-    {"Circle win\nКружок выйграл\n",
-        24, 0.5, 0.1},
-    {"Restart\nПерезапустить\n",
-        24, 0.5, 0.7},
-    {"Game menu\nИгровое меню\n",
-        24, 0.5, 0.9},
-
-    // Internet texts
-    {"Your turn\nВаш ход\n",
-        20, 0.5, 0.1, BLACK},
-    {"Wait for turn\nОжидайте ход\n",
-        20, 0.5, 0.1, BLACK},
-    
-    // Server texts
-    {"Wait for connect\nОжидайте\n",
-        24, 0.5, 0.1},
-    {"Your port: %\nВаш порт: %\n",
-        24, 0.5, 0.3},
-    
-    // Client texts
-    {"Enter IP\nВведите IP\n",
-        24, 0.5, 0.1},
-    {"Enter port\nВведите порт\n",
-        24, 0.5, 0.4},
-    {"Connect\nПрисоединится\n",
-        24, 0.5, 0.7},
-    {"Wait start\nОжидайте начала\n",
-        24, 0.5, 0.1, BLACK},
-};
-
-#if ANI_count
-HUD::Animation Animations[ANI_count];  // Global animations list
-#endif
 GUI::Button esc = {0.9, 0.1, IMG_MENU_PAUSE};
 
 
-void setAllText(){
-    for(Uint8 i=0; i < TXT_count; ++i){
-        texts[i].init();
-    }
-    esc.init();
-}
 
-void updateTranslation(LNG_types language){
-    // Setting fruit skin
-    switch (language)
-    {
-    case LNG_ENGLISH:
-        SDL_SetWindowTitle(app.window, "Tic-tac-toe on SDL");
-        break;
-
-    case LNG_RUSSIAN:
-        SDL_SetWindowTitle(app.window, "Крестики нолики на SDL");
-        break;
-    }
-    
-    // Updating texts
-    for(int i=0; i < TXT_count; ++i){
-        texts[i].updateText();
-    }
-}
-
-void clearAllText(){
-    for(Uint8 i=0; i < TXT_count; ++i){
-        texts[i].free();
-    }
-}
 
 // Pause menu
 void pause(){
@@ -247,7 +147,7 @@ void pause(){
         }
 
         // Drawing
-        SDL_RenderClear(app.renderer);
+        SDL_RenderClear(process.app.renderer);
          
         // Showing extra text
         texts[TXT_PAUSE_PAUSE].blit();
@@ -263,7 +163,7 @@ void pause(){
         }
 
         // Blitting textures on screen
-        SDL_RenderPresent(app.renderer);  
+        SDL_RenderPresent(process.app.renderer);  
 
         // Delaying time to decrease CPU loading
         SDL_Delay(1000 / drawFPS);  
@@ -308,21 +208,7 @@ void selectMenu(){
                     pause();
                 }
                 else if(buttons[0].in(MouseX, MouseY)){
-                    if(fieldWidth > 3){
-                        switch (language)
-                        {
-                        case LNG_ENGLISH:
-                            SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "Can't launch", "At width of field more than 3 singleplayer can't be launched.", app.window);
-                            break;
-                        
-                        case LNG_RUSSIAN:
-                            SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "Невозможно запустить", "При данном размере поля одиночный режим не может быть запущён.", app.window);
-                            break;
-                        }
-                    }
-                    else{
-                        singleMainCycle();
-                    }
+                    singleMainCycle();
                 }
                 else if(buttons[1].in(MouseX, MouseY)){
                     twoMainCycle();
@@ -337,7 +223,7 @@ void selectMenu(){
             }
         }
         // Drawing
-        SDL_RenderClear(app.renderer);
+        SDL_RenderClear(process.app.renderer);
 
         // Drawing GUI
         texts[TXT_SELECT_ENTER].blit();
@@ -353,7 +239,7 @@ void selectMenu(){
             MenuAdvertisment.blit();
         }
         #endif
-        SDL_RenderPresent(app.renderer);
+        SDL_RenderPresent(process.app.renderer);
 
         SDL_Delay( 1000/drawFPS );    // Delaying constant time between ticks to decrease CPU loading
     }

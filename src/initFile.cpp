@@ -4,10 +4,11 @@
 #include "values.hpp"
 
 #include "initFile.hpp"
-#include "pause.hpp"
+#include "texts.hpp"
 
-std::string baseIP;  // Saved ip for better expirience
-std::string basePort;     // Saved connection port for better expirience
+std::string baseIP;    // Saved ip for better expirience
+std::string basePort;  // Saved connection port for better expirience
+std::string startConfig;  // Start field configuration
 
 // Loading initialasing settings in game
 void loadInitFile(){
@@ -20,10 +21,9 @@ void loadInitFile(){
     MusicVolume = MIX_MAX_VOLUME/2;
     EffectsVolume = MIX_MAX_VOLUME/2;
     drawFPS = 60;
-    fieldWidth = 3;
-    winWidth = 3;
     baseIP = "127.0.0.1";
     basePort = "2000";
+    startConfig = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq";
 
     // Reading file until it end
     while(std::getline(inSettings, line)){  
@@ -37,6 +37,12 @@ void loadInitFile(){
             else if(lang == "english"){
                 language = LNG_ENGLISH;
             }
+            else if(lang == "german"){
+                language = LNG_GERMAN;
+            }
+            else if(lang == "belarusian"){
+                language = LNG_BELARUSIAN;
+            }
         }
         else if( first == "music" ){
             MusicVolume = std::stoi( line.substr(line.rfind('=')+2) );
@@ -47,11 +53,8 @@ void loadInitFile(){
         else if( first == "max FPS" ){
             drawFPS = std::stoi( line.substr(line.rfind('=')+2) );
         }
-        else if( first == "width" ){
-            fieldWidth = std::stoi( line.substr(line.rfind('=')+2) );
-        }
-        else if( first == "win width" ){
-            winWidth = std::stoi( line.substr(line.rfind('=')+2) );
+        else if( first == "Start config" ){
+            startConfig = line.substr(line.rfind('=')+2);
         }
         else if( first == "IP" ){
             baseIP = line.substr(line.rfind('=')+2);
@@ -62,10 +65,6 @@ void loadInitFile(){
     }
     // Checking of minimal posible values
     SET_MIN(drawFPS, 5);
-    SET_MIN(fieldWidth, 3);
-    SET_MAX(fieldWidth, 21);
-    SET_MIN(winWidth, 3);
-    SET_MAX(winWidth, fieldWidth);
 
     inSettings.close();  // Closing reading file
 }
@@ -79,23 +78,27 @@ void saveInitFile(){
     fprintf(outSettings, "# Language type (english/russian):\n");// Extra comment
     switch (language)  // Writing language
     {
+    case LNG_ENGLISH:
+        fprintf(outSettings, "language = english\n");
+        break;
     case LNG_RUSSIAN:
         fprintf(outSettings, "language = russian\n");
         break;
-    case LNG_ENGLISH:
-    default:
-        fprintf(outSettings, "language = english\n");
+    case LNG_GERMAN:
+        fprintf(outSettings, "language = german\n");
+        break;
+    case LNG_BELARUSIAN:
+        fprintf(outSettings, "language = belarusian\n");
         break;
     }
 
-    fprintf(outSettings, "\n# Technical part:\n");               // Extra comment
-    fprintf(outSettings, "music = %u\n", MusicVolume);           // Writing music volume
-    fprintf(outSettings, "effects = %u\n", EffectsVolume);       // Writing effects volume
-    fprintf(outSettings, "max FPS = %u\n", drawFPS);             // Writing frames per seconds
+    fprintf(outSettings, "\n# Technical part:\n");                       // Extra comment
+    fprintf(outSettings, "music = %u\n", MusicVolume);                   // Writing music volume
+    fprintf(outSettings, "effects = %u\n", EffectsVolume);               // Writing effects volume
+    fprintf(outSettings, "max FPS = %u\n", drawFPS);                     // Writing frames per seconds
 
-    fprintf(outSettings, "\n# Sizes of game field:\n");          // Extra comment
-    fprintf(outSettings, "width = %u\n", fieldWidth);            // Writing width of grid of field
-    fprintf(outSettings, "win width = %u\n", winWidth);          // Writing width to win
+    fprintf(outSettings, "\nGame configuration\n");                        // Extra comment
+    fprintf(outSettings, "start config = %s\n", startConfig);            // Writing starting config (order of figures)
 
     fprintf(outSettings, "\n# Intrnet base parameters\n");               // Extra comment
     fprintf(outSettings, "IP = %s\n", baseIP.std::string::c_str());      // Base connect IP

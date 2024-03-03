@@ -1,12 +1,11 @@
 #include "stdio.h"
 #include "include.hpp"
 #include "SDL_net.h"
-#include "values.hpp"
-
-#include "init.hpp"
+#include "process.hpp"
+#include "workCodes.hpp"
 
 // Function of initialasing all libraries
-void initLibraries(){
+Process::Process(){
     // Initialising main SDL libarary
     if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)){
         printf("Couldn't initialise SDL main library: %s\n", SDL_GetError());
@@ -46,45 +45,10 @@ void initLibraries(){
     #endif
 }
 
-// Function of creating window and renderer for outputing image
-void createVideo(){
-    // Creating main game window
-    app.window = SDL_CreateWindow(WINDOWNAME, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
-    if(app.window == NULL){
-        printf("Couldn't create window.\n");
-        exit(ERR_INI_WIN);
-    }
-
-    // Creating renderer from window
-	app.renderer = SDL_CreateRenderer(app.window, -1, SDL_RENDERER_ACCELERATED);
-    if(app.renderer == NULL){
-        printf("Couldn't create renderer.\n");
-        exit(ERR_INI_REN);
-    }
-    // Setting base drawing color
-    SDL_SetRenderDrawColor(app.renderer, BACKGROUND_COLOR);
-
-    // Openning audio chanel
-    #if MUS_count || SND_count
-    if(Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 )){
-        printf("Couldn't initialase audio chanel.\n");
-        exit(ERR_INI_SND);
-    }
-    #endif
-}
-
-// Function of deleting window and renders
-void deleteVideo(){
-    #if MUS_count || SND_count
-    Mix_CloseAudio();                   // Closing audio library
-    #endif
-	SDL_DestroyRenderer(app.renderer);  // Destroying renderer
-	SDL_DestroyWindow(app.window);      // Destrying window
-}
 
 // Function of closing all outside libraries and files
-void exitLibraries(){
-    // Closing all outside libraries
+Process::~Process(){
+    // Closing all outside libraries in reverce order
     #if BASE_PORT
     SDLNet_Quit();    // Closing network libarary
     #endif
@@ -99,4 +63,10 @@ void exitLibraries(){
     IMG_Quit();        // Closing image library
     #endif
     SDL_Quit();        // Closing main sdl library
+}
+
+// Main function of running process
+int Process::run(){
+
+    return 0;
 }

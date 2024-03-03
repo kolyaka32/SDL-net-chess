@@ -1,8 +1,10 @@
 #pragma once
 
-#include "include.hpp"
-#include "define.hpp"
-#include "values.hpp"
+#include "../include.hpp"
+#include "../define.hpp"
+#include "../values.hpp"
+#include "../Graphics.hpp"
+#include "../animations.hpp"
 
 // Namespace of objects for UI
 namespace GUI{
@@ -20,19 +22,20 @@ namespace GUI{
     private:
         const static Uint8 BUFFER_SIZE = 50;  // Length of buffers for text
         char *text;                // Text to show on screen
-        textHeight height;         // Font size to create font
-        float posX, posY;          // Relative positions on screen
+        //textHeight height;         // Font size to create font
+        //float posX, posY;          // Relative positions on screen
         ALIGNMENT_types aligment;  // Aligment type to improve displasment
         SDL_Color color;           // Base draw color
 
-        TTF_Font* Font;            // Font to create texture
-        SDL_Texture *Texture;      // Texture of text
-        SDL_Rect Rect;             // Position to draw
+        TTF_Font* font;            // Font to create texture
+        SDL_Texture *texture;      // Texture of text
+        SDL_Rect rect;             // Position to draw
     public:
         staticText(char* newText, textHeight newSize, float newX, 
             float newY, SDL_Color newColor = WHITE, ALIGNMENT_types newAlignment = MIDLE_text);
-        void init();                      // Creating font seted size
-        void free();                      // Free texture and font
+        ~staticText();
+        //void init();                      // Creating font seted size
+        //void free();                      // Free texture and font
         void updateText(int number = 0);  // Create new texture with displasment '%' to entered number
         void blit();                      // Drawing selected text
     };
@@ -56,21 +59,33 @@ namespace GUI{
         void blit();                                            // Drawing slider with need button position
     };
 
-    // Class of GUI objects, which use to activate something
-    class Button
+    // Class of buttons with image on it
+    class ImageButton
+    {
+    private:
+        float posX, posY;        // Relative positions on screen
+        SDL_Texture *texture;    // Index of texture from IMG_names
+        SDL_Rect dest;           // Position of current button
+    public:
+        ImageButton(float X, float Y, IMG_names textureIndex);   // Create new button
+        void blit();                      // Drawing current button
+        bool in(int mouseX, int mouseY);  // Return, if mouse press on current button
+    };
+
+    // Class of buttons with text on it
+    class TextButton
     {
     private:
         float posX, posY;        // Relative positions on screen
         IMG_names textureIndex;  // Index of texture from IMG_names
         SDL_Rect dest;           // Position of current button
-        staticText* topText;     // Pointer to text on this button (shortcut)
+        staticText &topText;     // Pointer to text on this button (shortcut)
     public:
-        Button(float X, float Y, IMG_names textureIndex, 
-            staticText* top = nullptr);   // Create new button, posible with pointer to text on it
-        void init();                      // Initialise position, width and height of current button
+        TextButton(float X, float Y, staticText &top);   // Create new button
         void blit();                      // Drawing current button
         bool in(int mouseX, int mouseY);  // Check, if mouse press on current area
     };
+
 
     // Class of objects, which show GIF-animations
     #if ANI_count

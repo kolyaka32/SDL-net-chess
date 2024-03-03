@@ -2,7 +2,6 @@
 #include "define.hpp"
 #include "values.hpp"
 
-#include "init.hpp"
 #include "dataLoader.hpp"
 
 typedef Uint8 counter;  // Type of data for count number of loaded objects
@@ -65,7 +64,7 @@ inline unsigned loadIcone(const char* name){
         return 0;  // Returning 0 as error with loading
     }
     SDL_RWclose(tempRW);
-    SDL_SetWindowIcon(app.window, iconeImage);
+    SDL_SetWindowIcon(process.app.window, iconeImage);
     SDL_FreeSurface(iconeImage);
     return ICO_count;  // Returning correction of loading
 };
@@ -79,7 +78,7 @@ static void loadPicture(const char* name, IMG_names number){
     // Getting selected picture data
     SDL_RWops* tempRW = dataFromarchive(name);
     // Creating texture from data
-    Textures[number] = SDL_CreateTextureFromSurface(app.renderer, IMG_LoadPNG_RW(tempRW));
+    Textures[number] = SDL_CreateTextureFromSurface(process.app.renderer, IMG_LoadPNG_RW(tempRW));
     SDL_RWclose(tempRW);
 
     // Checking correction of loaded file
@@ -175,7 +174,7 @@ inline unsigned loadIcone(const char* name){
     // Getting icone data
     SDL_Surface* iconeImage = IMG_Load(name);
     // Setting window icone
-    SDL_SetWindowIcon(app.window, iconeImage);
+    SDL_SetWindowIcon(process.app.window, iconeImage);
     SDL_FreeSurface(iconeImage);
     return ICO_count;  // Returning correction of loading
 };
@@ -187,7 +186,7 @@ static counter loadedImages;
 // Functions of loading selected image file
 static void loadPicture(const char* name, IMG_names number){
     // Loading texture from data
-    Textures[number] = IMG_LoadTexture(app.renderer, name);
+    Textures[number] = IMG_LoadTexture(process.app.renderer, name);
 
     // Checking correction of loaded file
     if(Textures[number] != NULL){
@@ -396,10 +395,7 @@ void loadData(){
 void unloadData(){
     // Unloading data in reverce form from loading
 
-    // Deliting font data
-    #if FNT_count
-    free(fontData.data);
-    #endif
+
     // Unloading sound effects
     #if SND_count
     for(int i=0; i < SND_count; ++i){
@@ -415,17 +411,5 @@ void unloadData(){
         #endif
     }
     #endif
-    // Unloading gif animations
-    #if ANI_count
-    for(int i=0; i < ANI_count; ++i){
-        IMG_FreeAnimation(Animations[i]);
-    }
-    #endif
-    // Unloading images
-    #if IMG_count
-    for(int i = 0; i < IMG_count; ++i){
-        SDL_DestroyTexture(Textures[i]);
-        //Textures[i] = NULL;
-    }
-    #endif
+    
 };

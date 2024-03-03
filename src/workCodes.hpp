@@ -1,18 +1,4 @@
 
-#pragma once
-
-// Function of initialasing all libraries
-void initLibraries();
-
-// Function of creating window and renderer for outputing image
-void createVideo();
-
-// Function of deliting window and renders
-void deleteVideo();
-
-// Function of closing all outside libraries and files
-void exitLibraries();
-
 // Work codes
 // Normal work
 #define NOR_NOR 0x00000  // Normal work of program without any problems

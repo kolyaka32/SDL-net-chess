@@ -1,29 +1,14 @@
-#include "include.hpp"
-#include "SDL_net.h"
-#include "define.hpp"
-#include "values.hpp"
-#include "pause.hpp"
-#include "gameSingle.hpp"
-#include "gameServer.hpp"
+#include "../include.hpp"
+#include "../define.hpp"
+#include "../values.hpp"
+#include "../process.hpp"
+#include "base.hpp"
+#include "baseInternet.hpp"
 
-// Macros for removing select from typeBox
-#define removeTypeBox() if(inBox){\
-    typeBoxes[inBox - 1].removeSelect();\
-    inBox = 0; }
 
-// Macros for sending message
-static inline void send(MESSAGE_types type, Uint8 d1 = 0, Uint8 d2 = 0){
-    sendData->data[0] = type;
-    sendData->data[1] = d1;
-    sendData->data[2] = d2;
-    SDLNet_UDP_Send(socket, -1, sendData);
-
-    lastMessageSend = SDL_GetTicks64();
-    waitApply = true;
-}
 
 // Function of trying connect to writed coordinats
-static inline void tryConnect(const char* ipText, const char* portText, bool* waiting){
+/*static inline void tryConnect(const char* ipText, const char* portText, bool* waiting){
     IPaddress sendIP;  // IP of reciever
     if(SDLNet_ResolveHost(&sendIP, ipText, std::stoi(portText)) == 0){
         // Setting send address
@@ -162,7 +147,7 @@ static inline Uint8 enteringCycle(){
         }
 
         // Drawing
-        SDL_RenderClear(app.renderer);
+        SDL_RenderClear(process.app.renderer);
 
         texts[TXT_CLIENT_IP].blit();
         typeBoxes[0].blit();
@@ -173,7 +158,7 @@ static inline Uint8 enteringCycle(){
         menuButton.blit();
 
         // Blitting textures on screen
-        SDL_RenderPresent(app.renderer); 
+        SDL_RenderPresent(process.app.renderer); 
 
         // Delaying time to decrease CPU loading
         SDL_Delay(1000 / drawFPS);
@@ -256,7 +241,7 @@ static inline void stopMenu(){
         }
 
         // Drawing
-        SDL_RenderClear(app.renderer);
+        SDL_RenderClear(process.app.renderer);
         
         // Showing end message
         texts[TXT_STOP_WIN - 1 + gameState].blit();
@@ -265,7 +250,7 @@ static inline void stopMenu(){
         menuButton.blit();
 
         // Blitting textures on screen
-        SDL_RenderPresent(app.renderer);
+        SDL_RenderPresent(process.app.renderer);
 
         // Delaying time to decrease CPU loading
         SDL_Delay(1000 / drawFPS);  
@@ -382,7 +367,7 @@ static inline void gameCycle(){
         }
 
         // Drawing
-        SDL_RenderClear(app.renderer);
+        SDL_RenderClear(process.app.renderer);
         
         field.blit();
 
@@ -397,7 +382,7 @@ static inline void gameCycle(){
             texts[TXT_INTERNET_TURN].blit();
 
         // Blitting textures on screen
-        SDL_RenderPresent(app.renderer); 
+        SDL_RenderPresent(process.app.renderer); 
 
         // Delaying time to decrease CPU loading
         SDL_Delay(1000 / drawFPS);  
@@ -502,4 +487,4 @@ void multiMainClient(){
     SDLNet_UDP_Close(socket);
     SDLNet_FreePacket(recieveData);
     SDLNet_FreePacket(sendData);
-}
+}*/

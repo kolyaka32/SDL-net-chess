@@ -1,14 +1,13 @@
-#include "include.hpp"
-#include "SDL_net.h"
-#include "define.hpp"
-#include "values.hpp"
-#include "pause.hpp"
-#include "gameSingle.hpp"
-#include "gameServer.hpp"
+#include "../include.hpp"
+#include "../define.hpp"
+#include "../values.hpp"
+#include "../process.hpp"
+#include "base.hpp"
+#include "baseInternet.hpp"
 
 
 // Global multiplayer variables
-Uint8 gameState;           // State of game (from END_types)
+/*Uint8 gameState;           // State of game (from END_types)
 bool waitTurn;             // Flag of waiting, until another user have his turn
 bool runGame;              // Flag of running main game cycle
 bool start;                // Flag of showing welcome screen with choosing command
@@ -65,7 +64,7 @@ static inline Uint8 waitingMenu(){
         }
 
         // Drawing
-        SDL_RenderClear(app.renderer);
+        SDL_RenderClear(process.app.renderer);
 
         // Showing text to wait to connect
         texts[TXT_SERVER_WAIT].blit();
@@ -74,7 +73,7 @@ static inline Uint8 waitingMenu(){
         menuButton.blit();
 
         // Blitting textures on screen
-        SDL_RenderPresent(app.renderer); 
+        SDL_RenderPresent(process.app.renderer); 
 
         // Delaying time to decrease CPU loading
         SDL_Delay(1000 / drawFPS);
@@ -170,7 +169,7 @@ static inline void stopMenu(){
         }
 
         // Drawing
-        SDL_RenderClear(app.renderer);
+        SDL_RenderClear(process.app.renderer);
 
         // Showing end message
         texts[TXT_STOP_WIN - 1 + gameState].blit();
@@ -181,7 +180,7 @@ static inline void stopMenu(){
         }
 
         // Blitting textures on screen
-        SDL_RenderPresent(app.renderer);
+        SDL_RenderPresent(process.app.renderer);
 
         // Delaying time to decrease CPU loading
         SDL_Delay(1000 / drawFPS);  
@@ -312,7 +311,7 @@ static inline void gameCycle(){
         }
 
         // Drawing
-        SDL_RenderClear(app.renderer);
+        SDL_RenderClear(process.app.renderer);
         
         field.blit();
 
@@ -335,7 +334,7 @@ static inline void gameCycle(){
         }
 
         // Blitting textures on screen
-        SDL_RenderPresent(app.renderer); 
+        SDL_RenderPresent(process.app.renderer); 
 
         // Delaying time to decrease CPU loading
         SDL_Delay(1000 / drawFPS);  
@@ -386,3 +385,4 @@ void multiMainServer(){
     SDLNet_FreePacket(recieveData);
     SDLNet_FreePacket(sendData);
 }
+*/

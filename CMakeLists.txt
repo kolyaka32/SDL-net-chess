@@ -7,44 +7,65 @@ add_executable( ${CMAKE_PROJECT_NAME}
     # Base includes and defines
     src/include.hpp
     src/define.hpp
+    src/workCodes.hpp
     src/dataTypes.hpp
     src/values.hpp
 
-    # Function of initialasing all data
-    src/init.hpp
-    src/init.cpp
+    # Base graphic interface
+    src/GUI/baseGUI.hpp
+    src/GUI/animation.cpp
+    src/GUI/bar.cpp
+    src/GUI/textButton.cpp
+    src/GUI/imageButton.cpp
+    src/GUI/slider.cpp
+    src/GUI/staticText.cpp
+    src/GUI/typeBox.cpp
 
-    # Functions of loading all in-game data
-    src/dataLoader.hpp
-    src/dataLoader.cpp
+    # Base process 
 
-    # Base interface
-    src/baseGUI.hpp
-    src/baseGUI.cpp
-
-    # Interface of game pausing
-    src/pause.hpp
-    src/pause.cpp
-
-    # System of initialasing file loading and unloading
     src/initFile.hpp
     src/initFile.cpp
 
-    # In game classes
-    src/entity.hpp
-    src/entity.cpp
+    src/application.hpp
+    src/application.cpp
+    
+    src/graphics.hpp
+    src/graphics.cpp
 
-    # Singleplayer game cycles
-    src/gameSingle.hpp
-    src/gameSingle.cpp
+    src/font.hpp
+    src/font.cpp
+
+    src/sounds.hpp
+    src/sounds.cpp
+
+    src/musics.hpp
+    src/musics.cpp
+
+    src/texts.hpp
+    src/texts.cpp
+
+    src/process.hpp
+    src/process.cpp
+
+    # Base game interface
+    src/game/base.hpp
+    src/game/baseInternet.hpp
+
+    # Singleplayer game cycle
+    src/game/singlePlayer.hpp
+    src/game/singlePlayer.cpp
+
+    # Two-player game cycle
+    src/game/twoPlayer.hpp
+    src/game/twoPlayer.cpp
 
     # Server game cycle
-    src/gameServer.hpp
-    src/gameServer.cpp
+    src/game/server.hpp
+    src/game/server.cpp
 
     # Client game cycle
-    src/gameClient.hpp
-    src/gameClient.cpp
+    src/game/client.hpp
+    src/game/client.cpp
 
     # Main function
     src/main.cpp

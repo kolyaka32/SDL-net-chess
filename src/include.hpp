@@ -1,6 +1,3 @@
-// Main c++ libraries
-#include <string>
-#include <vector>
 
 // SDL library for graphics, audio and fonts work
 #include <SDL.h>

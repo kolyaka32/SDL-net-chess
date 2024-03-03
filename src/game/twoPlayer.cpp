@@ -1,20 +1,18 @@
-#include "include.hpp"
-#include "values.hpp"
-#include "define.hpp"
-#include "pause.hpp"
-#include "gameSingle.hpp"
+#include "../include.hpp"
+#include "../values.hpp"
+#include "../define.hpp"
+#include "base.hpp"
+#include "../process.hpp"
 
 static bool twoPlayers;  // Flag of mode with two players to show text of 1/2 player instead of you
 
-Uint8 fieldWidth;        // Width and height of field
-Uint8 winWidth;          // Width, which need for win
-Uint8 queue;             // Modifictor to change picture of current player (0 for cross, 1 for circle)
-Uint8 player;            // Number of player, which selected
-
-Field field;             // Main game field
+//Uint8 fieldWidth;        // Width and height of field
+//Uint8 winWidth;          // Width, which need for win
+//Uint8 queue;             // Modifictor to change picture of current player (0 for cross, 1 for circle)
+//Uint8 player;            // Number of player, which selected
 
 // Menu for waiting to restart or go to menu
-inline void stopMenu(){
+/*inline void stopMenu(){
     // Creating buttons
     GUI::Button stopButtons[] = {
         {0.5, 0.7, IMG_MENU_BUTTON, texts + TXT_STOP_RESTART},
@@ -57,7 +55,7 @@ inline void stopMenu(){
             }
         }
         // Drawing
-        SDL_RenderClear(app.renderer);
+        SDL_RenderClear(process.app.renderer);
 
         // Draw game stop reason
         if(gameState < END_NOBODY && twoPlayers){
@@ -73,7 +71,7 @@ inline void stopMenu(){
         }
 
         // Blitting textures on screen
-        SDL_RenderPresent(app.renderer);
+        SDL_RenderPresent(process.app.renderer);
 
         // Delaying time to decrease CPU loading
         SDL_Delay(1000 / drawFPS);  
@@ -157,7 +155,7 @@ void singleMainCycle(){
         }
 
         // Drawing
-        SDL_RenderClear(app.renderer);
+        SDL_RenderClear(process.app.renderer);
         
         field.blit();
 
@@ -172,7 +170,7 @@ void singleMainCycle(){
         }
 
         // Blitting textures on screen
-        SDL_RenderPresent(app.renderer); 
+        SDL_RenderPresent(process.app.renderer); 
 
         // Delaying time to decrease CPU loading
         SDL_Delay(1000 / drawFPS);  
@@ -228,15 +226,16 @@ void twoMainCycle(){
         }
 
         // Drawing
-        SDL_RenderClear(app.renderer);
+        SDL_RenderClear(process.app.renderer);
         
         field.blit();
 
         // Blitting textures on screen
-        SDL_RenderPresent(app.renderer); 
+        SDL_RenderPresent(process.app.renderer); 
 
         // Delaying time to decrease CPU loading
         SDL_Delay(1000 / drawFPS);  
     }
     twoPlayers = false;
 }
+*/
