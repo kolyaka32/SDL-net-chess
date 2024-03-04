@@ -3,8 +3,10 @@
 #include "../include.hpp"
 #include "../define.hpp"
 #include "../values.hpp"
-#include "../Graphics.hpp"
-#include "../animations.hpp"
+#include "../application.hpp"
+#include "../graphics.hpp"
+#include "../font.hpp"
+//#include "../animations.hpp"
 
 // Namespace of objects for UI
 namespace GUI{
@@ -16,20 +18,35 @@ namespace GUI{
         RIGHT_text
     };
 
+
+    // Graphic
+    class GUItemplate : public App
+    {
+    protected:
+        SDL_Texture *texture;
+        SDL_Rect rect;
+    public:
+        GUItemplate();
+        ~GUItemplate();
+        void blit();
+        bool in(int mouseX, int mouseY);
+    };
+
+
     // Static text on screen with drawing functions
-    class staticText
+    class staticText : public GUItemplate, public Font
     {
     private:
         const static Uint8 BUFFER_SIZE = 50;  // Length of buffers for text
         char *text;                // Text to show on screen
         //textHeight height;         // Font size to create font
-        //float posX, posY;          // Relative positions on screen
+        float posX, posY;          // Relative positions on screen
         ALIGNMENT_types aligment;  // Aligment type to improve displasment
         SDL_Color color;           // Base draw color
 
-        TTF_Font* font;            // Font to create texture
-        SDL_Texture *texture;      // Texture of text
-        SDL_Rect rect;             // Position to draw
+        TTF_Font *font;            // Font to create texture
+        //SDL_Texture *texture;      // Texture of text
+        //SDL_Rect rect;             // Position to draw
     public:
         staticText(char* newText, textHeight newSize, float newX, 
             float newY, SDL_Color newColor = WHITE, ALIGNMENT_types newAlignment = MIDLE_text);
@@ -40,12 +57,14 @@ namespace GUI{
         void blit();                      // Drawing selected text
     };
 
+
     // Class of slider bar with point on it to control some parameter
-    class Slider{
+    class Slider : public GUItemplate
+    {
     private:
-        SDL_Texture *textureLine;    // Texture of line (lower part of slider)
+        //SDL_Texture *textureLine;    // Texture of line (lower part of slider)
         SDL_Texture *textureButton;  // Texture of line (upper part of slider)
-        SDL_Rect destLine;           // Place for rendering lower part
+        //SDL_Rect destLine;           // Place for rendering lower part
         SDL_Rect destButton;         // Place for rendering upper part
         Uint16 maxValue;             // Maximal value of state
     public:
@@ -53,50 +72,52 @@ namespace GUI{
 
         Slider(float Y, Uint16 max = 255, IMG_names lineImage = IMG_MENU_SCROLLER_LINE, 
             IMG_names buttonImage = IMG_MENU_SCROLLER_BUTTON);  // Create slide with need line and button images
-        bool checkIn(int mouseX, int mouseY);                   // Function of checking mouse in
+        //bool checkIn(int mouseX, int mouseY);                   // Function of checking mouse in
         void setValue(int mouseX);                              // Setting new mouse position
         bool scroll(Sint32 wheelY, int mouseX, int mouseY);     // Checking mouse wheel action
         void blit();                                            // Drawing slider with need button position
     };
 
+
     // Class of buttons with image on it
-    class ImageButton
+    class ImageButton : public GUItemplate, public Textures
     {
     private:
         float posX, posY;        // Relative positions on screen
-        SDL_Texture *texture;    // Index of texture from IMG_names
-        SDL_Rect dest;           // Position of current button
+        //SDL_Texture *texture;    // Index of texture from IMG_names
+        //SDL_Rect dest;           // Position of current button
     public:
         ImageButton(float X, float Y, IMG_names textureIndex);   // Create new button
         void blit();                      // Drawing current button
-        bool in(int mouseX, int mouseY);  // Return, if mouse press on current button
+        //bool in(int mouseX, int mouseY);  // Return, if mouse press on current button
     };
 
+
     // Class of buttons with text on it
-    class TextButton
+    class TextButton : public GUItemplate
     {
     private:
         float posX, posY;        // Relative positions on screen
-        IMG_names textureIndex;  // Index of texture from IMG_names
-        SDL_Rect dest;           // Position of current button
+        //IMG_names textureIndex;  // Index of texture from IMG_names
+        //SDL_Rect dest;           // Position of current button
         staticText &topText;     // Pointer to text on this button (shortcut)
     public:
         TextButton(float X, float Y, staticText &top);   // Create new button
         void blit();                      // Drawing current button
-        bool in(int mouseX, int mouseY);  // Check, if mouse press on current area
+        //bool in(int mouseX, int mouseY);  // Check, if mouse press on current area
     };
 
 
     // Class of objects, which show GIF-animations
     #if ANI_count
-    class Animation
+    class Animation : public GUItemplate
     {
     private:
         ANI_names type;
-        SDL_Texture* texture;
+        //SDL_Texture* texture;
         Uint32 frame;
         timer prevTick;
-        SDL_Rect dest;
+        //SDL_Rect dest;
     public:
         Animation( SDL_Rect destination, ANI_names newType );
         void blit();
@@ -106,13 +127,13 @@ namespace GUI{
 
 
     // Bar to show some charachteristic (like health) with icone
-    class Bar
+    class Bar : public GUItemplate
     {
     private:
-        SDL_Rect Back_rect;         // Background rect for second color
+        //SDL_Rect Back_rect;         // Background rect for second color
         SDL_Rect Front_rect;        // Front rect for primal color
         SDL_Rect IconeRect;         // Rect for icone, near bar
-        SDL_Texture* IconeTexture;  // Icone texture, or NULL, if not need
+        //SDL_Texture* IconeTexture;  // Icone texture, or NULL, if not need
         SDL_Color color;
     public:
         // Create new bar with it position, primal color and icone near it
@@ -120,8 +141,9 @@ namespace GUI{
         void blit( int width );  // Drawing bar with icone need width
     };
 
+
     // Class of box, where user can type text
-    class typeBox
+    class typeBox : public GUItemplate, public Font
     {
     private:
         // Global class constants
@@ -134,9 +156,9 @@ namespace GUI{
         // Variables
         Uint8 caret;               // Position of place, where user type
         Uint8 length;              // Length of all text
-        TTF_Font* Font;            // Font for type text
-        SDL_Rect dest;             // Rectangle, where text draw
-        SDL_Texture* Texture;      // Generated texture of text
+        TTF_Font *font;            // Font for type text
+        //SDL_Rect dest;             // Rectangle, where text draw
+        //SDL_Texture* Texture;      // Generated texture of text
         SDL_Rect backRect;         // Rectangle of background plate (for better visability)
 
         void updateTexture();      // System function of creating new texture and updating his position
@@ -153,6 +175,6 @@ namespace GUI{
         void updateCaret();                          // Function of change caret symbol from '|' to ' ' and back
         void select();                               // Function of setting caret for typing after
         void removeSelect();                         // Function of removing caret after typing
-        bool in(int mouseX, int mouseY);             // Function of checking, if mouse press on this typeBox
+        //bool in(int mouseX, int mouseY);             // Function of checking, if mouse press on this typeBox
     };
 }

@@ -9,33 +9,28 @@ using namespace GUI;
 
 // Slider class
 Slider::Slider(const float Y, Uint16 max, const IMG_names lineImage, const IMG_names buttonImage){
-    textureLine = process.graphics[lineImage];
-    textureButton = process.graphics[buttonImage];
-    SDL_QueryTexture(textureLine, NULL, NULL, &destLine.w, &destLine.h);
+    texture = process.textures[lineImage];
+    textureButton = process.textures[buttonImage];
+    SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
     SDL_QueryTexture(textureButton, NULL, NULL, &destButton.w, &destButton.h);
-    destLine.x = SCREEN_WIDTH / 2 - destLine.w / 2; 
-    destLine.y = SCREEN_HEIGHT * Y - destLine.h / 2; 
+    rect.x = SCREEN_WIDTH / 2 - rect.w / 2; 
+    rect.y = SCREEN_HEIGHT * Y - rect.h / 2; 
     destButton.y = SCREEN_HEIGHT * Y - destButton.h / 2;
     maxValue = max;
 };
 
 void Slider::blit(){
-    SDL_RenderCopy(process.app.renderer, textureLine, NULL, &destLine);
-    SDL_RenderCopy(process.app.renderer, textureButton, NULL, &destButton);
-};
-
-bool Slider::checkIn(int mouseX, int mouseY){
-    return ((mouseX > destLine.x && mouseX < destLine.x + destLine.w) &&
-        (mouseY > destLine.y && mouseY < destLine.y + destLine.h));
+    SDL_RenderCopy(renderer, texture, NULL, &rect);
+    SDL_RenderCopy(renderer, textureButton, NULL, &destButton);
 };
 
 void Slider::setValue(const int mouseX){
     // Getting new position
     destButton.x = mouseX;
-    SET_MAX(destButton.x, destLine.x + destLine.w);
-    SET_MIN(destButton.x, destLine.x);
+    SET_MAX(destButton.x, rect.x + rect.w);
+    SET_MIN(destButton.x, rect.x);
 
-    state = (destButton.x - destLine.x) * maxValue / destLine.w;
+    state = (destButton.x - rect.x) * maxValue / rect.w;
 
     destButton.x -= destButton.w / 2;
 };
@@ -43,7 +38,7 @@ void Slider::setValue(const int mouseX){
 bool Slider::scroll(const Sint32 wheelY, const int mouseX, const int mouseY){
     const static Uint8 deadZone = 1;
     
-    if(checkIn(mouseX, mouseY)){
+    if(in(mouseX, mouseY)){
         if(wheelY > deadZone){
             state++;
         }

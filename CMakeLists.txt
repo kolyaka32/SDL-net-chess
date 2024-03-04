@@ -35,11 +35,14 @@ add_executable( ${CMAKE_PROJECT_NAME}
     src/font.hpp
     src/font.cpp
 
-    src/sounds.hpp
-    src/sounds.cpp
+    src/audio/audio.hpp
+    src/audio/audio.cpp
 
-    src/musics.hpp
-    src/musics.cpp
+    src/audio/sounds.hpp
+    src/audio/sounds.cpp
+
+    src/audio/musics.hpp
+    src/audio/musics.cpp
 
     src/texts.hpp
     src/texts.cpp

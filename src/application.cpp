@@ -7,6 +7,12 @@
 
 // Function of creating window and renderer for outputing image
 App::App(){
+    // Initialising main SDL libarary
+    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)){
+        printf("Couldn't initialise SDL main library: %s\n", SDL_GetError());
+        exit(ERR_SDL_SDL);
+    }
+
     // Creating main game window
     window = SDL_CreateWindow(WINDOWNAME, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
     if(window == NULL){
@@ -20,23 +26,27 @@ App::App(){
         printf("Couldn't create renderer.\n");
         exit(ERR_INI_REN);
     }
+    
     // Setting base drawing color
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-
-    // Openning audio chanel
-    #if MUS_count || SND_count
-    if(Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 )){
-        printf("Couldn't initialase audio chanel.\n");
-        exit(ERR_INI_SND);
-    }
-    #endif
-}
+    setColor(BLACK);
+};
 
 // Function of deleting window and renders
 App::~App(){
-    #if MUS_count || SND_count
-    Mix_CloseAudio();               // Closing audio library
-    #endif
-	SDL_DestroyRenderer(renderer);  // Destroying renderer
-	SDL_DestroyWindow(window);      // Destrying window
-}
+    // Destroying renderer
+	SDL_DestroyRenderer(renderer);
+    
+    // Destrying window
+	SDL_DestroyWindow(window);
+
+    // Closing SDL library
+    SDL_Quit();
+};
+
+inline void App::setColor(SDL_Color color){
+    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+};
+
+inline void App::render(){
+    SDL_RenderPresent(renderer);
+};

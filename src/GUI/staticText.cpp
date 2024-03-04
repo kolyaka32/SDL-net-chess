@@ -11,17 +11,13 @@ using namespace GUI;
 // Class of static text
 staticText::staticText(char* _text, textHeight _height, float _x, float _y, SDL_Color _color, ALIGNMENT_types _aligment){
     //height = _height;
-    font = process.createFont(_height);
+    font = createFont(_height);
     text = _text;
-    //posX = _x;
-    //posY = _y;
+    posX = _x;
+    posY = _y;
     aligment = _aligment;
     color = _color;
 };
-
-/*void staticText::init(){
-    Font = process.font.createFont(height);
-};*/
 
 inline void writeNumber(char* buffer, int number, Uint8* pos){
     if(number < 0){
@@ -65,19 +61,19 @@ void staticText::updateText(int number){
     }
     buffer[d] = '\0';
     
-    SDL_Surface* Surface = TTF_RenderUTF8_Solid(Font, buffer, color);
-    Texture = SDL_CreateTextureFromSurface(process.app.renderer, Surface);
-    SDL_FreeSurface(Surface);
-    SDL_QueryTexture(Texture, NULL, NULL, &Rect.w, &Rect.h);
-    Rect.x = SCREEN_WIDTH * posX - (Rect.w * aligment / 2); 
-    Rect.y = SCREEN_HEIGHT * posY - Rect.h / 2;
+    SDL_Surface* surface = TTF_RenderUTF8_Solid(font, buffer, color);
+    texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
+    SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
+    rect.x = SCREEN_WIDTH * posX - (rect.w * aligment / 2); 
+    rect.y = SCREEN_HEIGHT * posY - rect.h / 2;
 };
 
 void staticText::blit(){
-    SDL_RenderCopy(process.app.renderer, Texture, NULL, &Rect);
+    SDL_RenderCopy(renderer, texture, NULL, &rect);
 };
 
-void staticText::free(){
-    SDL_DestroyTexture(Texture);
-    TTF_CloseFont(Font);
-};
+staticText::~staticText(){
+    SDL_DestroyTexture(texture);
+    TTF_CloseFont(font);
+}

@@ -37,15 +37,15 @@ enum END_types{
 };
 
 // Function of showing disconect message
-inline void showDisconect(){
+/*inline void showDisconect(){
     switch (language)
     {
     case LNG_ENGLISH:
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "Disconect", "Your connection lost, server disconect", process.app.window);
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "Disconect", "Your connection lost, server disconect", window);
         break;
     
     case LNG_RUSSIAN:
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "Соединение потеряно", "Соединение потерено, сервер отключён", process.app.window);
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "Соединение потеряно", "Соединение потерено, сервер отключён", window);
         break;
     }
 };
@@ -55,11 +55,11 @@ inline void showStopConnection(){
     switch (language)
     {
     case LNG_ENGLISH:
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "Connection stopped", "Connection stopped by another side", process.app.window);
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "Connection stopped", "Connection stopped by another side", window);
         break;
     
     case LNG_RUSSIAN:
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "Соединение остановлено", "Соединение остановлено по инициативе второй стороны", process.app.window);
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "Соединение остановлено", "Соединение остановлено по инициативе второй стороны", window);
         break;
     }
 }
@@ -80,4 +80,4 @@ inline void send(MESSAGE_types type, Uint8 d1 = 0, Uint8 d2 = 0, Uint8 d3 = 0, U
 
     lastMessageSend = SDL_GetTicks64();
     waitApply = true;
-}
+}*/

@@ -15,19 +15,19 @@ void Texts::updateTranslation(){
     switch (language)
     {
     case LNG_ENGLISH:
-        SDL_SetWindowTitle(process.window, "Tic-tac-toe on SDL");
+        SDL_SetWindowTitle(window, "Tic-tac-toe on SDL");
         break;
 
     case LNG_RUSSIAN:
-        SDL_SetWindowTitle(process.window, "Крестики нолики на SDL");
+        SDL_SetWindowTitle(window, "Крестики нолики на SDL");
         break;
 
     case LNG_GERMAN:
-        SDL_SetWindowTitle(process.window, "Крестики нолики на SDL");
+        SDL_SetWindowTitle(window, "Крестики нолики на SDL");
         break;
 
     case LNG_BELARUSIAN:
-        SDL_SetWindowTitle(process.window, "Крестики нолики на SDL");
+        SDL_SetWindowTitle(window, "Крестики нолики на SDL");
         break;
     }
     

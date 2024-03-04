@@ -4,7 +4,7 @@
 
 #include "dataLoader.hpp"
 
-typedef Uint8 counter;  // Type of data for count number of loaded objects
+/*typedef Uint8 counter;  // Type of data for count number of loaded objects
 
 // Functions of loading need outside data
 #if ARCHIEVE_LOADING
@@ -390,26 +390,3 @@ void loadData(){
     zip_close(archive);
     #endif
 }
-
-// Function of clearing all temporary data, loaded from arcieve
-void unloadData(){
-    // Unloading data in reverce form from loading
-
-
-    // Unloading sound effects
-    #if SND_count
-    for(int i=0; i < SND_count; ++i){
-        Mix_FreeChunk(Sounds[i]);
-    }
-    #endif
-    // Unloading music effects and data
-    #if MUS_count
-    for(int i=0; i < MUS_count; ++i){
-        Mix_FreeMusic(Musics[i]);
-        #if ARCHIEVE_LOADING
-        SDL_RWclose(MusicsData[i]);
-        #endif
-    }
-    #endif
-    
-};

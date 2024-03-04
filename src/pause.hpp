@@ -13,9 +13,9 @@ void updateTranslation(LNG_types language);
 void clearAllText();*/
 
 // Pause menu with settings
-void pause();
+//void pause();
 
 // First loaded menu, where player can choose mode, choose settings
-void selectMenu();
+//void selectMenu();
 
 extern GUI::ImageButton esc;

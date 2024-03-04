@@ -2,23 +2,22 @@
 #include "../define.hpp"
 #include "../values.hpp"
 #include "baseGUI.hpp"
-#include "../graphics.hpp"
 #include "../process.hpp"
 
 using namespace GUI;
 
 
 // Bar class
-Bar::Bar( const SDL_Rect dest, SDL_Color newColor, IMG_names icone ){
+Bar::Bar( const SDL_Rect _rect, SDL_Color _color, IMG_names _icone ){
     // Base bar
-    Back_rect = dest;
-    Front_rect = dest;
-    color = newColor;
+    rect = _rect;
+    Front_rect = _rect;
+    color = _color;
 
     // Icone part
-    if(icone){
-        IconeTexture = process.graphics[icone];  // Texture of icone
-        IconeRect = dest;
+    if(_icone){
+        texture = process.textures[_icone];  // Texture of icone
+        IconeRect = rect;
         //SDL_QueryTexture(IconeTexture, NULL, NULL, &IconeRect.w, &IconeRect.h);
         //IconeRect.w = 14;
         //IconeRect.h = 16;
@@ -30,14 +29,14 @@ Bar::Bar( const SDL_Rect dest, SDL_Color newColor, IMG_names icone ){
 
 void Bar::blit(int width){
     Front_rect.w = width;  // Setting width
-    SDL_SetRenderDrawColor(process.app.renderer, 255, 255, 255, 255);  
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);  
     // Drawing back part
-    SDL_RenderFillRect(process.app.renderer, &Back_rect);  
-    SDL_SetRenderDrawColor(process.app.renderer, color.r, color.g, color.b, color.a);  
+    SDL_RenderFillRect(renderer, &rect);  
+    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);  
     // Drawing front part
-    SDL_RenderFillRect(process.app.renderer, &Front_rect);
+    SDL_RenderFillRect(renderer, &Front_rect);
     // Drawing icone
-    if(IconeTexture){
-        SDL_RenderCopy(process.app.renderer, IconeTexture, NULL, &IconeRect);
+    if(texture){
+        SDL_RenderCopy(renderer, texture, NULL, &IconeRect);
     }
 };

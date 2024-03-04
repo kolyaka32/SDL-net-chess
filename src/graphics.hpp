@@ -1,6 +1,7 @@
 #pragma once
 
 #include "include.hpp"
+#include "graphics.hpp"
 
 // Names of all images with related numbers
 enum IMG_names{
@@ -30,12 +31,22 @@ enum IMG_names{
 // Number of all images
 #define IMG_count 12
 
+
 //
-class Graphics
+class GraphicsLibrary
+{
+public:
+    GraphicsLibrary();
+    ~GraphicsLibrary();
+};
+
+
+//
+class Textures : GraphicsLibrary
 {
 public:
     SDL_Texture* textures[IMG_count];  // Array of all textures
 public:
-    Graphics();
-    ~Graphics();
+    Textures();
+    ~Textures();
 };

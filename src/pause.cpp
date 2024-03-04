@@ -15,13 +15,13 @@ enum{
 
 
 // Global HUD
-GUI::Button esc = {0.9, 0.1, IMG_MENU_PAUSE};
+//GUI::Button esc = {0.9, 0.1, IMG_MENU_PAUSE};
 
 
 
 
 // Pause menu
-void pause(){
+/*void pause(){
     // Save time, when pause start
     timer saveTimer = SDL_GetTicks64();
 
@@ -163,7 +163,7 @@ void pause(){
         }
 
         // Blitting textures on screen
-        SDL_RenderPresent(process.app.renderer);  
+        SDL_RenderPresent(process.app.renderer);
 
         // Delaying time to decrease CPU loading
         SDL_Delay(1000 / drawFPS);  
@@ -252,4 +252,4 @@ void selectMenu(){
 
     // Starting playing main game theme
     //Mix_PlayMusic( Musics[MUS_MAIN_THEME], -1 );
-}
+}*/

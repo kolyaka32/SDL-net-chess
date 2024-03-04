@@ -1,9 +1,24 @@
 #include "include.hpp"
 #include "font.hpp"
+#include "workCodes.hpp"
+
+
+FontLibrary::FontLibrary(){
+    // Initializing fonts library
+    if(TTF_Init()){
+        printf("Couldn't initialize font library: %s\n", TTF_GetError());
+        exit(ERR_SDL_FFT);
+    }
+}
+
+FontLibrary::~FontLibrary(){
+    // Closing font library
+	TTF_Quit();
+}
 
 
 Font::Font(){
-
+    
 }
 
 Font::~Font(){

@@ -4,12 +4,12 @@
 #include "application.hpp"
 #include "graphics.hpp"
 #include "font.hpp"
-#include "sounds.hpp"
-#include "musics.hpp"
+#include "audio/sounds.hpp"
+#include "audio/musics.hpp"
 #include "texts.hpp"
 
 // Main process
-class Process : public InitFile, App, Graphics, Font, Sounds, Musics, Texts
+class Process : public InitFile, public App, public Textures, public Sounds, public Musics, public Texts
 {
 //public:
     /*InitFile initFile;
@@ -20,7 +20,7 @@ class Process : public InitFile, App, Graphics, Font, Sounds, Musics, Texts
     Musics musics;
     Texts texts;*/
 public:
-    Process(/* args */);  // Initialasing all libraries
+    Process();  // Initialasing all libraries
     int run();
     ~Process();  // Closing all libraries
 };

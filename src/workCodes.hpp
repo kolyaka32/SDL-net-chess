@@ -1,3 +1,7 @@
+#pragma once
+
+// Including standart output to print this codes
+#include <ostream>
 
 // Work codes
 // Normal work

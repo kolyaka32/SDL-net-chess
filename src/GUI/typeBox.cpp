@@ -11,10 +11,10 @@ using namespace GUI;
 
 // Type box class
 typeBox::typeBox(textHeight _height, float _x, float _y, const char* _text, ALIGNMENT_types _aligment, SDL_Color _color){
-    Font = process.font.createFont(_height);
-    dest.x = SCREEN_WIDTH * _x;
-    dest.y = SCREEN_HEIGHT * _y - _height / 2;
-    dest.w = dest.h = 0;
+    font = createFont(_height);
+    rect.x = SCREEN_WIDTH * _x;
+    rect.y = SCREEN_HEIGHT * _y - _height / 2;
+    rect.w = rect.h = 0;
 
     aligment = _aligment;
     color = _color;
@@ -26,24 +26,24 @@ typeBox::typeBox(textHeight _height, float _x, float _y, const char* _text, ALIG
     }
 
     // Creating background picture for typing
-    SDL_QueryTexture(process.graphics[IMG_MENU_TYPE_BOX], NULL, NULL, &backRect.w, &backRect.h);
+    SDL_QueryTexture(process.textures[IMG_MENU_TYPE_BOX], NULL, NULL, &backRect.w, &backRect.h);
     backRect.x = SCREEN_WIDTH * _x - backRect.w/2;
     backRect.y = SCREEN_HEIGHT * _y - backRect.h/2 - 2;
 }
 
 typeBox::~typeBox(){
-    SDL_DestroyTexture(Texture);
-    TTF_CloseFont(Font);
+    SDL_DestroyTexture(texture);
+    TTF_CloseFont(font);
 }
 
 // Creating new texture
 void typeBox::updateTexture(){
-    SDL_Surface* Surface = TTF_RenderUTF8_Solid(Font, buffer, color);
-    Texture = SDL_CreateTextureFromSurface(process.app.renderer, Surface);
-    SDL_FreeSurface(Surface);
-    dest.x += dest.w * aligment / 2;
-    SDL_QueryTexture(Texture, NULL, NULL, &dest.w, &dest.h);
-    dest.x -= dest.w * aligment / 2;
+    SDL_Surface* surface = TTF_RenderUTF8_Solid(font, buffer, color);
+    texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
+    rect.x += rect.w * aligment / 2;
+    SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
+    rect.x -= rect.w * aligment / 2;
 }
 
 void typeBox::writeString(char* str, bool freeData){
@@ -160,15 +160,10 @@ void typeBox::updateCaret(){
     updateTexture();
 };
 
-bool typeBox::in(int x, int y){
-    return ((x > backRect.x && x < backRect.x + backRect.w) &&
-        (y > backRect.y && y < backRect.y + backRect.h));
-};
-
 void typeBox::blit(){
     // Rendering background picture for better typing
-    SDL_RenderCopy(process.app.renderer, process.graphics[IMG_MENU_TYPE_BOX], NULL, &backRect);
+    SDL_RenderCopy(renderer, process.textures[IMG_MENU_TYPE_BOX], NULL, &backRect);
 
     // Rendering text
-    SDL_RenderCopy(process.app.renderer, Texture, NULL, &dest);
+    SDL_RenderCopy(renderer, texture, NULL, &rect);
 };
