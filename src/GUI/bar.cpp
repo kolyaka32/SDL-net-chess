@@ -1,8 +1,6 @@
 #include "../include.hpp"
 #include "../define.hpp"
-#include "../values.hpp"
 #include "baseGUI.hpp"
-#include "../process.hpp"
 
 using namespace GUI;
 
@@ -11,12 +9,12 @@ using namespace GUI;
 Bar::Bar( const SDL_Rect _rect, SDL_Color _color, IMG_names _icone ){
     // Base bar
     rect = _rect;
-    Front_rect = _rect;
+    Front_rect = rect;
     color = _color;
 
     // Icone part
     if(_icone){
-        texture = process.textures[_icone];  // Texture of icone
+        texture = textures[_icone];  // Texture of icone
         IconeRect = rect;
         //SDL_QueryTexture(IconeTexture, NULL, NULL, &IconeRect.w, &IconeRect.h);
         //IconeRect.w = 14;
@@ -28,13 +26,17 @@ Bar::Bar( const SDL_Rect _rect, SDL_Color _color, IMG_names _icone ){
 };
 
 void Bar::blit(int width){
-    Front_rect.w = width;  // Setting width
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);  
+    // Setting width
+    Front_rect.w = width;
+
     // Drawing back part
-    SDL_RenderFillRect(renderer, &rect);  
-    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);  
+    setColor(WHITE);
+    SDL_RenderFillRect(renderer, &rect);
+
     // Drawing front part
+    setColor(color);
     SDL_RenderFillRect(renderer, &Front_rect);
+
     // Drawing icone
     if(texture){
         SDL_RenderCopy(renderer, texture, NULL, &IconeRect);

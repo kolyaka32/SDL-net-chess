@@ -1,18 +1,13 @@
 #include "../include.hpp"
 #include "../define.hpp"
-#include "../process.hpp"
-#include "../values.hpp"
-#include "../dataLoader.hpp"
 #include "baseGUI.hpp"
-#include "../pause.hpp"
 
 using namespace GUI;
 
 // Class of static text
-staticText::staticText(char* _text, textHeight _height, float _x, float _y, SDL_Color _color, ALIGNMENT_types _aligment){
+staticText::staticText(const char* _text, textHeight _height, float _x, float _y, SDL_Color _color, ALIGNMENT_types _aligment) : GUItemplate(), text (_text){
     //height = _height;
     font = createFont(_height);
-    text = _text;
     posX = _x;
     posY = _y;
     aligment = _aligment;

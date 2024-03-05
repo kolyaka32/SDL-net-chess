@@ -3,14 +3,13 @@
 #include "../values.hpp"
 #include "../dataLoader.hpp"
 #include "baseGUI.hpp"
-#include "../process.hpp"
 
 using namespace GUI;
 
 // Slider class
-Slider::Slider(const float Y, Uint16 max, const IMG_names lineImage, const IMG_names buttonImage){
-    texture = process.textures[lineImage];
-    textureButton = process.textures[buttonImage];
+Slider::Slider(const float Y, Uint16 max, const IMG_names lineImage, const IMG_names buttonImage) : GUItemplate(){
+    texture = textures[lineImage];
+    textureButton = textures[buttonImage];
     SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
     SDL_QueryTexture(textureButton, NULL, NULL, &destButton.w, &destButton.h);
     rect.x = SCREEN_WIDTH / 2 - rect.w / 2; 

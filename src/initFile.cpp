@@ -1,17 +1,13 @@
 #include "include.hpp"
 #include <fstream>
 #include "define.hpp"
-#include "values.hpp"
 
 #include "initFile.hpp"
 #include "texts.hpp"
 
-std::string baseIP;    // Saved ip for better expirience
-std::string basePort;  // Saved connection port for better expirience
-std::string startConfig;  // Start field configuration
 
 // Loading initialasing settings in game
-void loadInitFile(){
+InitFile::InitFile(){
     // Reading file
     std::ifstream inSettings(SETTING_FILE); // Open file to read
     std::string line;  // Output string line
@@ -70,12 +66,12 @@ void loadInitFile(){
 }
 
 // Saving initialasing file
-void saveInitFile(){
+InitFile::~InitFile(){
     // Creating output file
     FILE* outSettings = fopen(SETTING_FILE, "w");
 
     // Writing data to output
-    fprintf(outSettings, "# Language type (english/russian):\n");// Extra comment
+    fprintf(outSettings, "# Language type (english/russian):\n");  // Extra comment
     switch (language)  // Writing language
     {
     case LNG_ENGLISH:

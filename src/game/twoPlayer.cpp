@@ -2,7 +2,6 @@
 #include "../values.hpp"
 #include "../define.hpp"
 #include "base.hpp"
-#include "../process.hpp"
 
 static bool twoPlayers;  // Flag of mode with two players to show text of 1/2 player instead of you
 

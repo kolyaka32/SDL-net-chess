@@ -30,7 +30,6 @@ enum LNG_types{
 class Texts : public App
 {
 public:
-    LNG_types language;
     GUI::staticText texts[TXT_count] = {
         // Selection menu
         {"Tic-tac-toe\nКрестики нолики\n", 

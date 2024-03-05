@@ -2,7 +2,6 @@
 
 #include "../include.hpp"
 #include "SDL_net.h"
-#include "../process.hpp"
 #include "../texts.hpp"
 
 // Data for internet connection

@@ -8,17 +8,12 @@
 #include "audio/musics.hpp"
 #include "texts.hpp"
 
+
 // Main process
-class Process : public InitFile, public App, public Textures, public Sounds, public Musics, public Texts
+class Process : public Textures, public Sounds, public Musics, public Texts
 {
-//public:
-    /*InitFile initFile;
-    App app;
-    Graphics graphics;
-    Font font;
-    Sounds sounds;
-    Musics musics;
-    Texts texts;*/
+public:
+    // Extra data
 public:
     Process();  // Initialasing all libraries
     int run();

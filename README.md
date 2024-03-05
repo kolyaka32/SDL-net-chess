@@ -1,10 +1,10 @@
-# The standard "Tic-tac-toe" game on c++ using SDL2
+# The standard "" game on c++ using SDL2
 
 This repository contains sources for standart game  I made based on SDL2 library.
 
 ![Screenshot of game](/screenshots/game-main.png?raw=true)
 
-## Installing
+## Installing as game
 1. Simply download archieve from [releases](https://github.com/kolyaka32/tic-tac-toe-on-SDL-net/releases), unzip and run 'tic-tac-toe.exe'!
 2. Also you can download game installer from [releases](https://github.com/kolyaka32/tic-tac-toe-on-SDL-net/releases).
 3. Also you can build project by yourself, watch point 'Instalation for own use'.
@@ -22,8 +22,10 @@ Also you can change numbers of width, win width and other usefull things from "s
 ## Supported languages
 * English
 * Russian (Русский)
+* 
+* 
 
-## Instalation for own use
+## Instalation for own use (windows)
 Need external soft:
 1. C++ compiler (such as [MSYS2](https://www.msys2.org/#installation));
 2. [Make](https://sourceforge.net/projects/gnuwin32/files/make/3.81/make-3.81.exe/download);
@@ -31,6 +33,16 @@ Need external soft:
 4. External SDL libraries ([SDL2](https://github.com/libsdl-org/SDL/releases), [SDL image](https://github.com/libsdl-org/SDL_image/releases), [SDL mixer](https://github.com/libsdl-org/SDL_mixer/releases), [SDL ttf](https://github.com/libsdl-org/SDL_ttf/releases), [SDL net](https://github.com/libsdl-org/SDL_net/releases));
 5. External archieve library - libzip (build by you own), required: 1. [zlib](https://www.zlib.net/), 2. bzip (came with GNU), 3. [libzip](https://libzip.org/download/);
 6. (Optional) Code editor [Visual Studio Code](https://code.visualstudio.com/download) (for better usage).
+
+## Instalation for own use (unux-like)
+Need external soft:
+1. 
+2. 
+3. [CMake](https://sourceforge.net/projects/cmake.mirror/);
+4. External SDL libraries ([SDL2](https://github.com/libsdl-org/SDL/releases), [SDL image](https://github.com/libsdl-org/SDL_image/releases), [SDL mixer](https://github.com/libsdl-org/SDL_mixer/releases), [SDL ttf](https://github.com/libsdl-org/SDL_ttf/releases), [SDL net](https://github.com/libsdl-org/SDL_net/releases));
+5. External archieve library - libzip (build by you own), required: [libzip](https://libzip.org/download/);
+6. (Optional) Code editor [Visual Studio Code](https://code.visualstudio.com/download) (for better usage).
+
 
 Point 3 with all last builded sources is located at [releases](https://github.com/kolyaka32/tic-tac-toe-on-SDL-net/releases) (Development-kit).
 

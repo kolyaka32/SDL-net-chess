@@ -1,12 +1,10 @@
 #include "include.hpp"
 #include "define.hpp"
-#include "iostream"
-#include "values.hpp"
 #include "application.hpp"
 #include "workCodes.hpp"
 
 // Function of creating window and renderer for outputing image
-App::App(){
+App::App() : InitFile(){
     // Initialising main SDL libarary
     if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)){
         printf("Couldn't initialise SDL main library: %s\n", SDL_GetError());
@@ -43,10 +41,10 @@ App::~App(){
     SDL_Quit();
 };
 
-inline void App::setColor(SDL_Color color){
+void App::setColor(SDL_Color color){
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 };
 
-inline void App::render(){
+void App::render(){
     SDL_RenderPresent(renderer);
 };

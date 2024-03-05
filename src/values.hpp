@@ -6,14 +6,14 @@
 #include "dataTypes.hpp"
 
 // Flags of running
-extern bool running;  // Flag of main cycle work
-extern bool restart;  // Flag of restarting whole game with other parameters
+//extern bool running;  // Flag of main cycle work
+//extern bool restart;  // Flag of restarting whole game with other parameters
 
 // External values to save and load from settings file
-extern Uint8 language;  // Language settings
-extern Uint8 MusicVolume;  // Start volume of music
-extern Uint8 EffectsVolume;  // Start volume of effects
-extern Uint16 drawFPS;  // Setted frames per seconds
+//extern Uint8 language;  // Language settings
+//extern Uint8 MusicVolume;  // Start volume of music
+//extern Uint8 EffectsVolume;  // Start volume of effects
+//extern Uint16 drawFPS;  // Setted frames per seconds
 
 
 // Game parameters (for game and multiplayer part)
