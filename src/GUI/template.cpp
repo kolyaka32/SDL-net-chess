@@ -3,6 +3,10 @@
 
 using namespace GUI;
 
+GUItemplate::GUItemplate(){
+    texture = nullptr;
+}
+
 void GUItemplate::blit(){
     SDL_RenderCopy(renderer, texture, NULL, &rect);
 };

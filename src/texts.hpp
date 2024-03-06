@@ -1,5 +1,6 @@
 #pragma once
 
+#include "initFile.hpp"
 #include "GUI/baseGUI.hpp"
 
 // Types of numerated static texts
@@ -27,7 +28,7 @@ enum LNG_types{
 
 
 // All static texts
-class Texts : public App
+class Texts : public App, public InitFile
 {
 public:
     GUI::staticText texts[TXT_count] = {

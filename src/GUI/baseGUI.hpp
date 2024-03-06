@@ -26,13 +26,14 @@ namespace GUI{
         SDL_Texture *texture;
         SDL_Rect rect;
     public:
+        GUItemplate();
         void blit();
         bool in(const int mouseX, const int mouseY);
     };
 
 
     // Static text on screen with drawing functions
-    class staticText : public GUItemplate, public Font
+    class staticText : public GUItemplate, public Font, public InitFile
     {
     private:
         const static Uint8 BUFFER_SIZE = 50;  // Length of buffers for text
@@ -91,7 +92,7 @@ namespace GUI{
     };
 
 
-    // Class of objects, which show GIF-animations
+    // GIF-animations
     #if ANI_count
     class Animation : public GUItemplate
     {

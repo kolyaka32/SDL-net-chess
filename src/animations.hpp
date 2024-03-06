@@ -8,7 +8,8 @@ enum ANI_names{
 
 #define ANI_count 0
 
-/*class Animations
+#if ANI_count
+class Animations
 {
 private:
     GUI::Animation* animations[ANI_count];
@@ -16,4 +17,5 @@ public:
     Animations();
     ~Animations();
     GUI::Animation* operator[](ANI_names num);
-};*/
+};
+#endif

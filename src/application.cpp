@@ -4,7 +4,7 @@
 #include "workCodes.hpp"
 
 // Function of creating window and renderer for outputing image
-App::App() : InitFile(){
+App::App(){
     // Initialising main SDL libarary
     if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)){
         printf("Couldn't initialise SDL main library: %s\n", SDL_GetError());

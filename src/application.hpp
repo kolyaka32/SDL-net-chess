@@ -4,7 +4,7 @@
 #include "initFile.hpp"
 
 
-class App : public InitFile
+class App
 {
 public:
     SDL_Renderer *renderer;

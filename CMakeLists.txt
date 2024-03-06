@@ -13,6 +13,7 @@ add_executable( ${CMAKE_PROJECT_NAME}
 
     # Base graphic interface
     src/GUI/baseGUI.hpp
+    src/GUI/template.cpp
     src/GUI/animation.cpp
     src/GUI/bar.cpp
     src/GUI/textButton.cpp
