@@ -1,7 +1,7 @@
 #pragma once
 
 #include "include.hpp"
-#include "graphics.hpp"
+#include "dataLoader.hpp"
 
 // Names of all images with related numbers
 enum IMG_names{
@@ -42,11 +42,13 @@ public:
 
 
 //
-class Textures : GraphicsLibrary
+class Textures : GraphicsLibrary, public DataLoader
 {
+private:
+    void loadTexture(const char *name, IMG_names index);
+    bool checkCorrection();
 public:
-    SDL_Texture* textures[IMG_count];  // Array of all textures
-public:
+    SDL_Texture *textures[IMG_count];  // Array of all textures
     Textures();
     ~Textures();
 };

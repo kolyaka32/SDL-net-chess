@@ -2,6 +2,7 @@
 
 #include "include.hpp"
 #include "dataTypes.hpp"
+#include "dataLoader.hpp"
 
 #define FNT_count 1  // Number of fonts for better count
 
@@ -9,8 +10,6 @@
 //
 class FontLibrary
 {
-private:
-    /* data */
 public:
     FontLibrary();
     ~FontLibrary();
@@ -18,11 +17,12 @@ public:
 
 
 //
-class Font : FontLibrary
+class Font : FontLibrary, public DataLoader
 {
 private:
-    char* data;   // Pointer to data of font
-    Uint64 size;  // Size of font
+    SDL_RWops *fontData;   // Pointer to data of font
+
+    bool loadFont(const char *name);
 public:
     Font();
     ~Font();

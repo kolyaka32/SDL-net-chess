@@ -20,7 +20,7 @@ namespace GUI{
 
 
     // Graphic
-    class GUItemplate : public App, public Textures
+    class GUItemplate : public Textures
     {
     protected:
         SDL_Texture *texture;
@@ -147,7 +147,7 @@ namespace GUI{
     public:
         char buffer[bufferSize + 1];  // Read only data, which write in this typebox
 
-        typeBox(textHeight size, float posX, float posY, const char* startText = "", 
+        typeBox(textHeight size, float posX, float posY, const char *startText = "", 
             ALIGNMENT_types newAligment = MIDLE_text, SDL_Color newColor = BLACK);
         ~typeBox();                                  // Clearing font and texture
         void blit();                                 // Function of drawing text with background plate

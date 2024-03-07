@@ -1,12 +1,21 @@
 #pragma once
 
 #include "include.hpp"
-#include "define.hpp"
-#include "values.hpp"
+#include "application.hpp"
 
-// Archive values
-#define PASSWORD NULL  // Archive password
 
-// Used numerated numbers
-#define ICO_count 1  // Number of icones for better count
+// 
+#define ARCHIEVE_PASSWORD NULL
 
+
+// 
+class DataLoader : public App
+{
+protected:
+    SDL_RWops *loadObject(const char *name);
+public:
+    DataLoader();
+    ~DataLoader();
+
+    void closeLoader();
+};

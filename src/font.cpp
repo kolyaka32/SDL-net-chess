@@ -3,6 +3,7 @@
 #include "workCodes.hpp"
 
 
+//
 FontLibrary::FontLibrary(){
     // Initializing fonts library
     if(TTF_Init()){
@@ -17,15 +18,35 @@ FontLibrary::~FontLibrary(){
 }
 
 
+//
 Font::Font(){
-    
+    // Checking correction of loading current font
+    if(!loadFont("fnt/Arial.ttf")){
+        printf("Can't load font");
+        exit(ERR_FIL_FNT);
+    }
 }
 
+//
 Font::~Font(){
-    free(data);
+    // Claering data for font creating
+    SDL_FreeRW(fontData);
 }
 
+//
 TTF_Font *Font::createFont(textHeight _size){
-    SDL_RWops* RWopsData = SDL_RWFromMem(data, size);
-    return TTF_OpenFontRW(RWopsData, 1, _size);
+    // Setting to read file from start
+    SDL_RWseek(fontData, 0, RW_SEEK_SET);
+
+    // Creating new font
+    return TTF_OpenFontRW(fontData, 0, _size);
 };
+
+//
+bool Font::loadFont(const char *name){
+    // Openning font file
+    fontData = loadObject(name);
+
+    // Checking correction of file
+    return (fontData != nullptr);
+}

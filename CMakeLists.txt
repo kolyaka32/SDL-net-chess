@@ -29,9 +29,16 @@ add_executable( ${CMAKE_PROJECT_NAME}
 
     src/application.hpp
     src/application.cpp
-    
+
+    src/dataLoader.hpp
+    src/fileLoader.cpp
+    src/archieveLoader.cpp
+
     src/graphics.hpp
     src/graphics.cpp
+
+    src/icone.hpp
+    src/icone.cpp
 
     src/font.hpp
     src/font.cpp
