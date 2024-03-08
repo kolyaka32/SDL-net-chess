@@ -9,7 +9,7 @@
 
 
 // 
-class DataLoader : public App
+class DataLoader : public virtual App
 {
 protected:
     SDL_RWops *loadObject(const char *name);

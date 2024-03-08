@@ -12,7 +12,7 @@ enum MUS_names{
 
 #define MUS_count 0
 
-class Musics : AudioLibrary, public DataLoader
+class Musics : virtual AudioLibrary, public virtual DataLoader
 {
 private:
     Mix_Music* musics[MUS_count];      // Array of all music

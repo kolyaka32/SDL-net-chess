@@ -1,8 +1,6 @@
 #include "../include.hpp"
 #include "../define.hpp"
-#include "../values.hpp"
 #include "baseGUI.hpp"
-#include "../pause.hpp"
 
 using namespace GUI;
 
@@ -24,7 +22,7 @@ typeBox::typeBox(textHeight _height, float _x, float _y, const char* _text, ALIG
     }
 
     // Creating background picture for typing
-    SDL_QueryTexture(textures[IMG_MENU_TYPE_BOX], NULL, NULL, &backRect.w, &backRect.h);
+    SDL_QueryTexture(textures[IMG_GUI_TYPE_BOX], NULL, NULL, &backRect.w, &backRect.h);
     backRect.x = SCREEN_WIDTH * _x - backRect.w / 2;
     backRect.y = SCREEN_HEIGHT * _y - backRect.h / 2 - 2;
 }
@@ -164,7 +162,7 @@ void typeBox::updateCaret(){
 
 void typeBox::blit(){
     // Rendering background picture for better typing
-    SDL_RenderCopy(renderer, textures[IMG_MENU_TYPE_BOX], NULL, &backRect);
+    SDL_RenderCopy(renderer, textures[IMG_GUI_TYPE_BOX], NULL, &backRect);
 
     // Rendering text
     SDL_RenderCopy(renderer, texture, NULL, &rect);

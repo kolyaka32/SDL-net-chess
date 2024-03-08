@@ -6,7 +6,7 @@
 //
 Musics::Musics(){
     // Resetting list of music tracks
-    memset(musics, 0, MUS_count);
+    memset(musics, 0, MUS_count * sizeof(musics[0]));
 
     // Loading all sounds
     //loadMusic("mus/.mp3", MUS_);  // Template
@@ -15,7 +15,7 @@ Musics::Musics(){
     //loadMusic("mus/menu_theme.mp3", MUS_MENU_THEME);
 
     // Checking correction of loading
-    if(checkCorrection()){
+    if(!checkCorrection()){
         printf("Wrong count of music");
         exit(ERR_FIL_MUS);
     }

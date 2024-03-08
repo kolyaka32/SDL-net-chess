@@ -9,9 +9,51 @@ add_executable( ${CMAKE_PROJECT_NAME}
     src/define.hpp
     src/workCodes.hpp
     src/dataTypes.hpp
-    src/values.hpp
 
-    # Base graphic interface
+    # Initialasing data for program
+    src/initFile.hpp
+    src/initFile.cpp
+
+    # Main data for render
+    src/application.hpp
+    src/application.cpp
+
+    # Data loading system
+    src/dataLoader.hpp
+    src/fileLoader.cpp
+    src/archieveLoader.cpp
+
+    # Base program systems
+    # Textures library
+    src/graphics.hpp
+    src/graphics.cpp
+
+    # Game icone loading
+    src/icone.hpp
+    src/icone.cpp
+
+    # Game animations
+    src/animations.hpp
+    src/animations.cpp
+
+    # Game type font
+    src/font.hpp
+    src/font.cpp
+
+    # All audio
+    # Main audio libraries
+    src/audio/audio.hpp
+    src/audio/audio.cpp
+
+    # Sounds library
+    src/audio/sounds.hpp
+    src/audio/sounds.cpp
+
+    # Musics library
+    src/audio/musics.hpp
+    src/audio/musics.cpp
+
+    # Base graphic user interface (GUI)
     src/GUI/baseGUI.hpp
     src/GUI/template.cpp
     src/GUI/animation.cpp
@@ -22,39 +64,11 @@ add_executable( ${CMAKE_PROJECT_NAME}
     src/GUI/staticText.cpp
     src/GUI/typeBox.cpp
 
-    # Base process 
-
-    src/initFile.hpp
-    src/initFile.cpp
-
-    src/application.hpp
-    src/application.cpp
-
-    src/dataLoader.hpp
-    src/fileLoader.cpp
-    src/archieveLoader.cpp
-
-    src/graphics.hpp
-    src/graphics.cpp
-
-    src/icone.hpp
-    src/icone.cpp
-
-    src/font.hpp
-    src/font.cpp
-
-    src/audio/audio.hpp
-    src/audio/audio.cpp
-
-    src/audio/sounds.hpp
-    src/audio/sounds.cpp
-
-    src/audio/musics.hpp
-    src/audio/musics.cpp
-
+    # Global interface
     src/texts.hpp
     src/texts.cpp
 
+    # Main game processes
     src/process.hpp
     src/process.cpp
 

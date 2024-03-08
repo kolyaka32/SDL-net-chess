@@ -1,62 +1,62 @@
 #include "include.hpp"
 #include "animations.hpp"
+#include "workCodes.hpp"
 
 #if ANI_count
 
-Animation::Animation(){
+//
+Animations::Animations(){
+    // Resetting list of textures
+    memset(animations, 0, ANI_count * sizeof(animations[0]));
 
-}
+    // Loading all animations
+    //loadAnimation("ani/.gif", ANI_);  // Template
 
-Anumation::~Animation(){
-    // Unloading gif animations
-    for(int i=0; i < ANI_count; ++i){
-        IMG_FreeAnimation(Animations[i]);
+
+    // Checking correction of all loaded animations
+    if(!checkCorrection()){
+        printf("Wrong count of animations");
+        exit(ERR_FIL_ANI);
     }
 }
 
-
-// Animations functions
-static counter loadedAnimations;
-// Function of loading selected GIF animation
-static void loadAnimation(const char* name, ANI_names number){
-    // Getting selected animation data
-    SDL_RWops* tempRW = dataFromarchive(name);
-    // Creating animation from data
-    Animations[number] = IMG_LoadAnimation_RW(tempRW, 0);
-    SDL_RWclose(tempRW);
-
-    // Checking correction of loaded file
-    if(Animations[number] != NULL){
-        loadedAnimations++;
-    };
-};
-
-if(loadAllAnimations() != ANI_count){
-    printf("Wrong count of animations");
-    exit(ERR_FIL_ANI);
+//
+Animations::~Animations(){
+    // Unloading gif animations
+    for(int i=0; i < ANI_count; ++i){
+        IMG_FreeAnimation(animations[i]);
+    }
 }
 
-// Animations functions
+//
+void Animations::loadAnimation(const char *_name, ANI_names _index){
+    // Getting selected animation data
+    SDL_RWops *tempRW = loadObject(_name);
 
-// Loading all animations
-inline unsigned loadAllAnimations(){
-    loadedAnimations = 0;  // Resseting counter
-    //loadAnimation("ani/.gif", ANI_);
+    // Checking correction of loaded data
+    if(!tempRW){
+        printf("Error with loading animation file '%s' at %u.", _name, _index);
+        exit(ERR_FIL_IMG);
+    }
 
-    // Returning numbers of loaded files
-    return loadedAnimations;
+    // Creating animation and setting it to need place, freeing loading data
+    animations[_index] = IMG_LoadAnimation_RW(tempRW, 1);
 };
 
-static counter loadedAnimations;
-// Function of loading selected GIF animation
-static void loadAnimation(const char* name, ANI_names number){
-    // Creating animation from data
-    Animations[number] = IMG_LoadAnimation(name);
+// 
+bool Animations::checkCorrection(){
+    // Setting counter
+    Uint8 count = 0;
 
-    // Checking correction of loaded file
-    if(Animations[number] != NULL){
-        loadedAnimations++;
-    };
+    // Checking, if all images exist
+    for(Uint8 i = 0; i < ANI_count; ++i){
+        if(animations[i]){
+            count++;
+        }
+    }
+
+    // Returing correction of loaded number
+    return count == IMG_count;
 };
 
 #endif

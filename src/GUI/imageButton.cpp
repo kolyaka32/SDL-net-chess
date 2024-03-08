@@ -1,6 +1,5 @@
 #include "../include.hpp"
 #include "../define.hpp"
-#include "../values.hpp"
 #include "baseGUI.hpp"
 
 using namespace GUI;

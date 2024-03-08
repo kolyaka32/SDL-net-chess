@@ -5,7 +5,7 @@
 #include "../application.hpp"
 #include "../graphics.hpp"
 #include "../font.hpp"
-//#include "../animations.hpp"
+#include "../animations.hpp"
 
 
 // Namespace of objects for UI
@@ -20,7 +20,7 @@ namespace GUI{
 
 
     // Graphic
-    class GUItemplate : public Textures
+    class GUItemplate : public virtual Textures
     {
     protected:
         SDL_Texture *texture;
@@ -61,8 +61,8 @@ namespace GUI{
     public:
         Uint16 state;                // Current state of slider
 
-        Slider(float Y, Uint16 max = 255, IMG_names lineImage = IMG_MENU_SCROLLER_LINE, 
-            IMG_names buttonImage = IMG_MENU_SCROLLER_BUTTON);  // Create slide with need line and button images
+        Slider(float Y, Uint16 max = 255, IMG_names lineImage = IMG_GUI_SLIDER_LINE, 
+            IMG_names buttonImage = IMG_GUI_SLIDER_BUTTON);  // Create slide with need line and button images
         void setValue(int mouseX);                              // Setting new mouse position
         bool scroll(Sint32 wheelY, int mouseX, int mouseY);     // Checking mouse wheel action
         void blit();                                            // Drawing slider with need button position
@@ -77,7 +77,6 @@ namespace GUI{
     public:
         ImageButton(float X, float Y, IMG_names textureIndex);   // Create new button
         void blit();                      // Drawing current button
-        //bool in(int mouseX, int mouseY);  // Return, if mouse press on current button
     };
 
 
@@ -94,18 +93,16 @@ namespace GUI{
 
     // GIF-animations
     #if ANI_count
-    class Animation : public GUItemplate
+    class GIFAnimation : public GUItemplate, public Animations
     {
     private:
         ANI_names type;
-        //SDL_Texture* texture;
         Uint32 frame;
         timer prevTick;
-        //SDL_Rect dest;
     public:
-        Animation( SDL_Rect destination, ANI_names newType );
+        GIFAnimation( SDL_Rect destination, ANI_names type );
+        ~GIFAnimation();
         void blit();
-        void clear();
     };
     #endif
 

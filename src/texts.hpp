@@ -28,7 +28,7 @@ enum LNG_types{
 
 
 // All static texts
-class Texts : public App, public InitFile
+class Texts : public virtual App, public virtual InitFile
 {
 public:
     GUI::staticText texts[TXT_count] = {

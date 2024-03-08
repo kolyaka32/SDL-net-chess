@@ -8,7 +8,7 @@ using namespace GUI;
 // Button class
 TextButton::TextButton(float _x, float _y, staticText &_text) : GUItemplate(), topText (_text){
     // Setting base texture
-    texture = textures[IMG_MENU_BUTTON];
+    texture = textures[IMG_GUI_BASE_BUTTON];
     
     // Setting destination
     SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);

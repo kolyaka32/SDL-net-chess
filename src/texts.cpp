@@ -3,7 +3,7 @@
 
 // Global static texts
 Texts::Texts(){
-
+    
 };
 
 Texts::~Texts(){

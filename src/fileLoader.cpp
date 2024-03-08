@@ -27,7 +27,7 @@ SDL_RWops *DataLoader::loadObject(const char *_name){
     SDL_RWops *tempRW = SDL_RWFromFile(_name, "r");
 
     // Checking file correction
-    if(tempRW){
+    if(!tempRW){
         printf("Can't load file '%s'.", _name);
         exit(ERR_FIL_OPN);
     }

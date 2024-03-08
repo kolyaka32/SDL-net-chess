@@ -1,6 +1,5 @@
 #include "../include.hpp"
 #include "../define.hpp"
-#include "../values.hpp"
 #include "../dataLoader.hpp"
 #include "baseGUI.hpp"
 

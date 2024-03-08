@@ -5,7 +5,7 @@
 // 
 Sounds::Sounds(){
     // Resetting list of sounds
-    memset(sounds, 0, SND_count);
+    memset(sounds, 0, SND_count * sizeof(sounds[0]));
 
     // Loading all sounds
     //loadSound("snd/.wav", SND_);  // Template
@@ -16,7 +16,7 @@ Sounds::Sounds(){
     //loadSound("snd/win.wav", SND_WIN);
 
     // Checking correction of loading
-    if(checkCorrection()){
+    if(!checkCorrection()){
         printf("Wrong count of sounds");
         exit(ERR_FIL_SND);
     }

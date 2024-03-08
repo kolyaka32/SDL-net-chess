@@ -6,7 +6,7 @@
 
 
 //
-class Icone : GraphicsLibrary, public DataLoader
+class Icone : virtual GraphicsLibrary, public virtual DataLoader
 {
 private:
     /* data */

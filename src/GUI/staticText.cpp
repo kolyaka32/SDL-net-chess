@@ -6,7 +6,6 @@ using namespace GUI;
 
 // Class of static text
 staticText::staticText(const char* _text, textHeight _height, float _x, float _y, SDL_Color _color, ALIGNMENT_types _aligment) : GUItemplate(), text (_text){
-    //height = _height;
     font = createFont(_height);
     posX = _x;
     posY = _y;

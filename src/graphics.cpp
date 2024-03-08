@@ -20,29 +20,27 @@ GraphicsLibrary::~GraphicsLibrary(){
 //
 Textures::Textures(){
     // Resetting list of textures
-    memset(textures, 0, IMG_count);
+    memset(textures, 0, IMG_count * sizeof(textures[0]));
 
     // Loading all images
     //loadTexture("img/.png", IMG_);  // Template
 
-    loadTexture("img/esc_button.png", IMG_MENU_PAUSE);
-    loadTexture("img/slider_button.png", IMG_MENU_SCROLLER_BUTTON);
-    loadTexture("img/slider_line.png", IMG_MENU_SCROLLER_LINE);
-    loadTexture("img/button.png", IMG_MENU_BUTTON);
-    loadTexture("img/type_box.png", IMG_MENU_TYPE_BOX);
+    // Graphic interface sprites
+    loadTexture("img/GUI/esc_button.png", IMG_GUI_PAUSE_BUTTON);
+    loadTexture("img/GUI/slider_button.png", IMG_GUI_SLIDER_BUTTON);
+    loadTexture("img/GUI/slider_line.png", IMG_GUI_SLIDER_LINE);
+    loadTexture("img/GUI/button.png", IMG_GUI_BASE_BUTTON);
+    loadTexture("img/GUI/type_box.png",IMG_GUI_TYPE_BOX);
 
-    loadTexture("img/Flag_USA.png", IMG_FLAG_USA);
-    loadTexture("img/Flag_RUS.png", IMG_FLAG_RUS);
+    // Base flags in settings
+    loadTexture("img/GUI/Flag_USA.png", IMG_GUI_FLAG_USA);
+    loadTexture("img/GUI/Flag_RUS.png", IMG_GUI_FLAG_RUS);
+    loadTexture("img/GUI/Flag_GER.png", IMG_GUI_FLAG_GER);
+    loadTexture("img/GUI/Flag_BEL.png", IMG_GUI_FLAG_BEL);
 
-    loadTexture("img/green_circle.png", IMG_GREEN_CIRCLE);
-    loadTexture("img/green_cross.png", IMG_GREEN_CROSS);
-    loadTexture("img/red_circle.png", IMG_RED_CIRCLE);
-    loadTexture("img/red_cross.png", IMG_RED_CROSS);
-
-    loadTexture("img/cell.png", IMG_CELL);
 
     // Checking correction of all loaded images
-    if(checkCorrection()){
+    if(!checkCorrection()){
         printf("Wrong count of images");
         exit(ERR_FIL_IMG);
     }
@@ -57,13 +55,13 @@ Textures::~Textures(){
 }
 
 //
-void Textures::loadTexture(const char *name, IMG_names index){
+void Textures::loadTexture(const char *_name, IMG_names _index){
     // Getting selected picture data
-    SDL_RWops *tempRW = loadObject(name);
+    SDL_RWops *tempRW = loadObject(_name);
 
     // Checking correction of loaded data
     if(!tempRW){
-        printf("Error with loading image file '%s' at %u.", name, index);
+        printf("Error with loading image file '%s' at %u.", _name, _index);
         exit(ERR_FIL_IMG);
     }
 
@@ -71,7 +69,7 @@ void Textures::loadTexture(const char *name, IMG_names index){
     SDL_Surface *tempSurface = IMG_LoadPNG_RW(tempRW);
 
     // Creating texture from surface and setting to it place
-    textures[index] = SDL_CreateTextureFromSurface(renderer, tempSurface);
+    textures[_index] = SDL_CreateTextureFromSurface(renderer, tempSurface);
 
     // Clearing data
     SDL_FreeSurface(tempSurface);
@@ -91,5 +89,5 @@ bool Textures::checkCorrection(){
     }
 
     // Returing correction of loaded number
-    return count == IMG_count;
+    return (count == IMG_count);
 };

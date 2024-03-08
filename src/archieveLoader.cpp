@@ -65,7 +65,13 @@ SDL_RWops *DataLoader::loadObject(const char *name){
     zip_fclose(file);
 
     // Creating SDL-based structure with this data
-    SDL_RWops* tempRW = SDL_RWFromMem(buffer, st.size);
+    SDL_RWops *tempRW = SDL_RWFromMem(buffer, st.size);
+
+    // Checking correction of loaded object
+    if(!tempRW){
+        printf("Can't load object '%s' from arhieve", _name);
+        exit(ERR_FIL_OPN);
+    }
 
     // Clearing data for creating this RW
     free(buffer);

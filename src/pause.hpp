@@ -1,7 +1,6 @@
 #pragma once
 
 #include "GUI/baseGUI.hpp"
-#include "values.hpp"
 #include "Texts.hpp"
 
 // Working with text
@@ -18,4 +17,4 @@ void clearAllText();*/
 // First loaded menu, where player can choose mode, choose settings
 //void selectMenu();
 
-extern GUI::ImageButton esc;
+//extern GUI::ImageButton esc;
