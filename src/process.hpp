@@ -11,7 +11,7 @@
 
 
 // Structure with all process data
-class Data : public Textures, public Icone, public Sounds, public Musics, public Texts
+class Data : public App, public Textures, public Icone, public Sounds, public Musics, public Texts
 {
 private:
     /* data */
