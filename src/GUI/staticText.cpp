@@ -1,12 +1,13 @@
 #include "../include.hpp"
 #include "../define.hpp"
+#include "../data.hpp"
 #include "baseGUI.hpp"
 
 using namespace GUI;
 
 // Class of static text
 staticText::staticText(const char* _text, textHeight _height, float _x, float _y, SDL_Color _color, ALIGNMENT_types _aligment) : GUItemplate(), text (_text){
-    font = createFont(_height);
+    font = data.createFont(_height);
     posX = _x;
     posY = _y;
     aligment = _aligment;
@@ -35,7 +36,7 @@ inline void writeNumber(char* buffer, int number, Uint8* pos){
 void staticText::updateText(int number){
     char buffer[BUFFER_SIZE];
     Uint8 start = 0;
-    for(Uint8 end = 0; (end != language) && (start < BUFFER_SIZE); ++start){
+    for(Uint8 end = 0; (end != data.language) && (start < BUFFER_SIZE); ++start){
         if(text[start] == '\n'){
             end++;
         }
@@ -56,15 +57,11 @@ void staticText::updateText(int number){
     buffer[d] = '\0';
     
     SDL_Surface* surface = TTF_RenderUTF8_Solid(font, buffer, color);
-    texture = SDL_CreateTextureFromSurface(renderer, surface);
+    texture = SDL_CreateTextureFromSurface(data.renderer, surface);
     SDL_FreeSurface(surface);
     SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
     rect.x = SCREEN_WIDTH * posX - (rect.w * aligment / 2); 
     rect.y = SCREEN_HEIGHT * posY - rect.h / 2;
-};
-
-void staticText::blit(){
-    SDL_RenderCopy(renderer, texture, NULL, &rect);
 };
 
 staticText::~staticText(){

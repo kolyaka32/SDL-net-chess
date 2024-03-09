@@ -1,4 +1,5 @@
 #include "../include.hpp"
+#include "../data.hpp"
 #include "baseGUI.hpp"
 
 using namespace GUI;
@@ -8,7 +9,7 @@ GUItemplate::GUItemplate(){
 }
 
 void GUItemplate::blit(){
-    SDL_RenderCopy(renderer, texture, NULL, &rect);
+    SDL_RenderCopy(data.renderer, texture, NULL, &rect);
 };
 
 bool GUItemplate::in(const int mouseX, const int mouseY){

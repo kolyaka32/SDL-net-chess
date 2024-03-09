@@ -20,6 +20,9 @@ Sounds::Sounds(){
         printf("Wrong count of sounds");
         exit(ERR_FIL_SND);
     }
+
+    // Setting start volume of effects
+    Mix_Volume(-1, EffectsVolume);
 }
 
 // 

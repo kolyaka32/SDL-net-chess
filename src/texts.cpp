@@ -3,7 +3,7 @@
 
 // Global static texts
 Texts::Texts(){
-    
+    updateTranslation();
 };
 
 Texts::~Texts(){
@@ -32,7 +32,7 @@ void Texts::updateTranslation(){
     }
     
     // Updating texts
-    for(int i=0; i < TXT_count; ++i){
+    for(Uint8 i = 0; i < TXT_count; ++i){
         texts[i].updateText();
     }
 }

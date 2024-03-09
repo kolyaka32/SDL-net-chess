@@ -14,7 +14,7 @@ enum SND_names{
 
 
 //
-class Sounds : virtual AudioLibrary, public virtual DataLoader
+class Sounds : virtual AudioLibrary, public virtual InitFile, public virtual DataLoader
 {
 private:
     Mix_Chunk *sounds[SND_count];      // Array of all sound effects

@@ -1,5 +1,6 @@
 #include "../include.hpp"
 #include "../define.hpp"
+#include "../data.hpp"
 #include "baseGUI.hpp"
 
 using namespace GUI;
@@ -7,7 +8,7 @@ using namespace GUI;
 
 // Type box class
 typeBox::typeBox(textHeight _height, float _x, float _y, const char* _text, ALIGNMENT_types _aligment, SDL_Color _color){
-    font = createFont(_height);
+    font = data.createFont(_height);
     rect.x = SCREEN_WIDTH * _x;
     rect.y = SCREEN_HEIGHT * _y - _height / 2;
     rect.w = rect.h = 0;
@@ -22,7 +23,7 @@ typeBox::typeBox(textHeight _height, float _x, float _y, const char* _text, ALIG
     }
 
     // Creating background picture for typing
-    SDL_QueryTexture(textures[IMG_GUI_TYPE_BOX], NULL, NULL, &backRect.w, &backRect.h);
+    SDL_QueryTexture(data.textures[IMG_GUI_TYPE_BOX], NULL, NULL, &backRect.w, &backRect.h);
     backRect.x = SCREEN_WIDTH * _x - backRect.w / 2;
     backRect.y = SCREEN_HEIGHT * _y - backRect.h / 2 - 2;
 }
@@ -37,7 +38,7 @@ void typeBox::updateTexture(){
     // Creating surface from text
     SDL_Surface* surface = TTF_RenderUTF8_Solid(font, buffer, color);
     // Updating texture
-    texture = SDL_CreateTextureFromSurface(renderer, surface);
+    texture = SDL_CreateTextureFromSurface(data.renderer, surface);
     SDL_FreeSurface(surface);
 
     // Resetting place of text with saving aligment
@@ -162,8 +163,8 @@ void typeBox::updateCaret(){
 
 void typeBox::blit(){
     // Rendering background picture for better typing
-    SDL_RenderCopy(renderer, textures[IMG_GUI_TYPE_BOX], NULL, &backRect);
+    SDL_RenderCopy(data.renderer, data.textures[IMG_GUI_TYPE_BOX], NULL, &backRect);
 
     // Rendering text
-    SDL_RenderCopy(renderer, texture, NULL, &rect);
+    SDL_RenderCopy(data.renderer, texture, NULL, &rect);
 };

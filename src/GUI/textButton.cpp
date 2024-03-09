@@ -1,5 +1,6 @@
 #include "../include.hpp"
 #include "../define.hpp"
+#include "../data.hpp"
 #include "baseGUI.hpp"
 
 using namespace GUI;
@@ -8,7 +9,7 @@ using namespace GUI;
 // Button class
 TextButton::TextButton(float _x, float _y, staticText &_text) : GUItemplate(), topText (_text){
     // Setting base texture
-    texture = textures[IMG_GUI_BASE_BUTTON];
+    texture = data.textures[IMG_GUI_BASE_BUTTON];
     
     // Setting destination
     SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
@@ -17,6 +18,6 @@ TextButton::TextButton(float _x, float _y, staticText &_text) : GUItemplate(), t
 };
 
 void TextButton::blit(){
-    SDL_RenderCopy(renderer, texture, NULL, &rect);
+    SDL_RenderCopy(data.renderer, texture, NULL, &rect);
     topText.blit();
 };

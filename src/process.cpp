@@ -26,6 +26,5 @@ Process::~Process(){
 
 // Main function of running process
 int Process::run(){
-
     return 0;
 }

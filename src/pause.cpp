@@ -147,7 +147,7 @@ enum{
         }
 
         // Drawing
-        SDL_RenderClear(process.app.renderer);
+        SDL_RenderClear(renderer);
          
         // Showing extra text
         texts[TXT_PAUSE_PAUSE].blit();
@@ -163,7 +163,7 @@ enum{
         }
 
         // Blitting textures on screen
-        SDL_RenderPresent(process.app.renderer);
+        SDL_RenderPresent(renderer);
 
         // Delaying time to decrease CPU loading
         SDL_Delay(1000 / drawFPS);  
@@ -223,7 +223,7 @@ void selectMenu(){
             }
         }
         // Drawing
-        SDL_RenderClear(process.app.renderer);
+        SDL_RenderClear(renderer);
 
         // Drawing GUI
         texts[TXT_SELECT_ENTER].blit();
@@ -239,7 +239,7 @@ void selectMenu(){
             MenuAdvertisment.blit();
         }
         #endif
-        SDL_RenderPresent(process.app.renderer);
+        SDL_RenderPresent(renderer);
 
         SDL_Delay( 1000/drawFPS );    // Delaying constant time between ticks to decrease CPU loading
     }

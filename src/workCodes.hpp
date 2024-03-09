@@ -5,7 +5,7 @@
 
 // Work codes
 // Normal work
-#define NOR_NOR 0x00000  // Normal work of program without any problems
+#define NOR_WOR 0x00000  // Normal work of program without any problems
 
 // Errors codes
 // Error codes of libraries

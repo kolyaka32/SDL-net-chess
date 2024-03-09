@@ -19,10 +19,16 @@ Musics::Musics(){
         printf("Wrong count of music");
         exit(ERR_FIL_MUS);
     }
+
+    // Setting start volume of music
+    Mix_VolumeMusic(MusicVolume);  
 }
 
 //
 Musics::~Musics(){
+    // Stopping playing music
+    Mix_PauseMusic();
+
     // Clearing all musics after work
     for(int i=0; i < MUS_count; ++i){
         // Clearing main music track

@@ -9,10 +9,8 @@
 class Icone : virtual GraphicsLibrary, public virtual DataLoader
 {
 private:
-    /* data */
+    bool loadIcone(const char *name);
 public:
     Icone();
     ~Icone();
-
-    bool loadIcone(const char *name);
 };

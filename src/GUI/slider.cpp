@@ -1,14 +1,14 @@
 #include "../include.hpp"
 #include "../define.hpp"
-#include "../dataLoader.hpp"
+#include "../data.hpp"
 #include "baseGUI.hpp"
 
 using namespace GUI;
 
 // Slider class
 Slider::Slider(const float Y, Uint16 max, const IMG_names lineImage, const IMG_names buttonImage) : GUItemplate(){
-    texture = textures[lineImage];
-    textureButton = textures[buttonImage];
+    texture = data.textures[lineImage];
+    textureButton = data.textures[buttonImage];
     SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
     SDL_QueryTexture(textureButton, NULL, NULL, &destButton.w, &destButton.h);
     rect.x = SCREEN_WIDTH / 2 - rect.w / 2; 
@@ -18,8 +18,8 @@ Slider::Slider(const float Y, Uint16 max, const IMG_names lineImage, const IMG_n
 };
 
 void Slider::blit(){
-    SDL_RenderCopy(renderer, texture, NULL, &rect);
-    SDL_RenderCopy(renderer, textureButton, NULL, &destButton);
+    SDL_RenderCopy(data.renderer, texture, NULL, &rect);
+    SDL_RenderCopy(data.renderer, textureButton, NULL, &destButton);
 };
 
 void Slider::setValue(const int mouseX){

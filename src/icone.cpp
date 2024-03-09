@@ -25,7 +25,7 @@ bool Icone::loadIcone(const char *name){
     }
 
     // Setting window icone
-    SDL_Surface* iconeImage = IMG_LoadICO_RW(tempRW);
+    SDL_Surface *iconeImage = IMG_LoadICO_RW(tempRW);
 
     // Closing data for image
     SDL_RWclose(tempRW);

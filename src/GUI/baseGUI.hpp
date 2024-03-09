@@ -2,7 +2,6 @@
 
 #include "../include.hpp"
 #include "../define.hpp"
-#include "../application.hpp"
 #include "../graphics.hpp"
 #include "../font.hpp"
 #include "../animations.hpp"
@@ -20,7 +19,7 @@ namespace GUI{
 
 
     // Graphic
-    class GUItemplate : public virtual Textures
+    class GUItemplate
     {
     protected:
         SDL_Texture *texture;
@@ -33,7 +32,7 @@ namespace GUI{
 
 
     // Static text on screen with drawing functions
-    class staticText : public GUItemplate, public Font, public InitFile
+    class staticText : public virtual GUItemplate
     {
     private:
         const static Uint8 BUFFER_SIZE = 50;  // Length of buffers for text
@@ -47,12 +46,11 @@ namespace GUI{
             float newY, SDL_Color newColor = WHITE, ALIGNMENT_types newAlignment = MIDLE_text);
         ~staticText();
         void updateText(int number = 0);  // Create new texture with displasment '%' to entered number
-        void blit();                      // Drawing selected text
     };
 
 
     // Class of slider bar with point on it to control some parameter
-    class Slider : public GUItemplate
+    class Slider : public virtual GUItemplate
     {
     private:
         SDL_Texture *textureButton;  // Texture of line (upper part of slider)
@@ -70,18 +68,17 @@ namespace GUI{
 
 
     // Class of buttons with image on it
-    class ImageButton : public GUItemplate
+    class ImageButton : public virtual GUItemplate
     {
     private:
         //
     public:
         ImageButton(float X, float Y, IMG_names textureIndex);   // Create new button
-        void blit();                      // Drawing current button
     };
 
 
     // Class of buttons with text on it
-    class TextButton : public GUItemplate
+    class TextButton : public virtual GUItemplate
     {
     private:
         staticText &topText;     // Pointer to text on this button (shortcut)
@@ -93,7 +90,7 @@ namespace GUI{
 
     // GIF-animations
     #if ANI_count
-    class GIFAnimation : public GUItemplate, public Animations
+    class GIFAnimation : public virtual GUItemplate
     {
     private:
         ANI_names type;
@@ -108,7 +105,7 @@ namespace GUI{
 
 
     // Bar to show some charachteristic (like health) with icone
-    class Bar : public GUItemplate
+    class Bar : public virtual GUItemplate
     {
     private:
         //SDL_Rect Back_rect;         // Background rect for second color
@@ -123,7 +120,7 @@ namespace GUI{
 
 
     // Class of box, where user can type text
-    class typeBox : public GUItemplate, public Font
+    class typeBox : public virtual GUItemplate
     {
     private:
         // Global class constants

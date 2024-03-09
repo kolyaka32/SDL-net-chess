@@ -68,6 +68,9 @@ add_executable( ${CMAKE_PROJECT_NAME}
     src/texts.hpp
     src/texts.cpp
 
+    # All game data
+    src/data.hpp
+
     # Main game processes
     src/process.hpp
     src/process.cpp

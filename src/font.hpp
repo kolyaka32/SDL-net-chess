@@ -17,7 +17,7 @@ public:
 
 
 //
-class Font : FontLibrary, public DataLoader
+class Font : virtual FontLibrary, protected virtual DataLoader
 {
 private:
     SDL_RWops *fontData;   // Pointer to data of font

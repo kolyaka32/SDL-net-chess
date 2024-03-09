@@ -32,11 +32,11 @@
             switch (language)
             {
             case LNG_ENGLISH:
-                SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Can't connect", "Can't connect to given address", app.window);
+                SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Can't connect", "Can't connect to given address", window);
                 break;
             
             case LNG_RUSSIAN:
-                SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Невозможно присоединится", "Невозможно присоединится по указанному адресу", app.window);
+                SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Невозможно присоединится", "Невозможно присоединится по указанному адресу", window);
                 break;
             }
         }
@@ -146,7 +146,7 @@ static inline Uint8 enteringCycle(){
         }
 
         // Drawing
-        SDL_RenderClear(process.app.renderer);
+        SDL_RenderClear(renderer);
 
         texts[TXT_CLIENT_IP].blit();
         typeBoxes[0].blit();
@@ -157,7 +157,7 @@ static inline Uint8 enteringCycle(){
         menuButton.blit();
 
         // Blitting textures on screen
-        SDL_RenderPresent(process.app.renderer); 
+        SDL_RenderPresent(renderer); 
 
         // Delaying time to decrease CPU loading
         SDL_Delay(1000 / drawFPS);
