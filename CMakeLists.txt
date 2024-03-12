@@ -108,7 +108,8 @@ set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
 #set(CMAKE_GENERATOR_PLATFORM -A "x64")
 
 # Hidding console
-set(DCMAKE_C_FLAGS "-mwindows")
+set(CMAKE_C_FLAGS "-mwindows")
+set(CMAKE_CXX_FLAGS "-mwindows")
 
 # Setting other flags
 #set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++ -lwsock32 -lws2_32 -mwindows ${CMAKE_CSS_STANDARD_LIBRARIES}")
