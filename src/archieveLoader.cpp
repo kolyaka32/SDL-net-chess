@@ -44,21 +44,23 @@ void DataLoader::closeLoader(){
 }
 
 //
-SDL_RWops *DataLoader::loadObject(const char *name){
+SDL_RWops *DataLoader::loadObject(const char *_name){
     // Openning need file
-    zip_file_t* file = zip_fopen_encrypted(archive, name, 0, ARCHIEVE_PASSWORD);
+    zip_file_t *file = zip_fopen_encrypted(archive, _name, 0, ARCHIEVE_PASSWORD);
     
     // Getting states of need file
     zip_stat_t st;
-	zip_stat(archive, name, 0, &st);
+	zip_stat(archive, _name, 0, &st);
 
     // Checking correction of openned file
-    if(st.size == 0){  
+    if(st.size == 0){
         return nullptr;
     }
 
+    // Creating buffer for data
+    char *buffer = (char*)malloc(sizeof(char) * st.size);
+
     // Copping data to buffer
-    char *buffer = (char*)malloc(sizeof(char*)*st.size);
     zip_fread(file, buffer, st.size);
 
     // Closing readed file
@@ -72,9 +74,6 @@ SDL_RWops *DataLoader::loadObject(const char *name){
         printf("Can't load object '%s' from arhieve", _name);
         exit(ERR_FIL_OPN);
     }
-
-    // Clearing data for creating this RW
-    free(buffer);
 
     // Returning created data structure
     return tempRW;

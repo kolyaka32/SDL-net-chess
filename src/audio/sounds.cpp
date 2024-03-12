@@ -50,7 +50,11 @@ void Sounds::loadSound(char *_name, SND_names _index){
     }
 
     // Creating sound, setting in array and clearing data
-    sounds[_index] = Mix_LoadWAV_RW(tempRW, 1);
+    sounds[_index] = Mix_LoadWAV_RW(tempRW, 0);
+
+    // Freeing data from sound
+    free(tempRW->hidden.mem.base);
+    SDL_RWclose(tempRW);
 };
 
 //

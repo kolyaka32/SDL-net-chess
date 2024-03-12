@@ -12,7 +12,7 @@ bool restart = false;    // Flag of restarting game with other parameters
 Data data;
 
 // Main function
-int main(int argv, char** args){
+int main(int argv, char **args){
 
     #if MUS_count
     // Infinite playing main game theme

@@ -30,6 +30,7 @@ Font::Font(){
 //
 Font::~Font(){
     // Claering data for font creating
+    free(fontData->hidden.mem.base);
     SDL_FreeRW(fontData);
 }
 

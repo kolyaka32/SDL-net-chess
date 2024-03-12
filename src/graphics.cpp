@@ -66,14 +66,17 @@ void Textures::loadTexture(const char *_name, IMG_names _index){
     }
 
     // Creating surface from data
-    SDL_Surface *tempSurface = IMG_LoadPNG_RW(tempRW);
+    SDL_Surface *tempSurface = IMG_Load_RW(tempRW, 0);
+
+    // Freeing picture data
+    free(tempRW->hidden.mem.base);
+    SDL_RWclose(tempRW);
 
     // Creating texture from surface and setting to it place
     textures[_index] = SDL_CreateTextureFromSurface(renderer, tempSurface);
 
     // Clearing data
     SDL_FreeSurface(tempSurface);
-    SDL_RWclose(tempRW);
 };
 
 // 

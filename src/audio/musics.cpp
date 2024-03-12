@@ -35,6 +35,7 @@ Musics::~Musics(){
         Mix_FreeMusic(musics[i]);
         
         // Clearing data for it
+        free(musicsData[i]->hidden.mem.base);
         SDL_RWclose(musicsData[i]);
     }
 }
