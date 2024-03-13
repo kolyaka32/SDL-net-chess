@@ -1,7 +1,7 @@
 #pragma once
 
 // Extra debug modifiers
-#define DEBUG false
+#define DEBUG true
 #define ARCHIEVE_LOADING !DEBUG
 #define SCROLLER_SOUND SND_count
 #define CONNECTION_LOST_PERCENT 60 * DEBUG

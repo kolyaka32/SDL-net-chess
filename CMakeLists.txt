@@ -71,9 +71,10 @@ add_executable( ${CMAKE_PROJECT_NAME}
     # All game data
     src/data.hpp
 
-    # Main game processes
-    src/process.hpp
-    src/process.cpp
+    # Process cycles
+    # Menu for selecting start option
+    src/selectCycle.hpp
+    src/selectCycle.cpp
 
     # Base game interface
     src/game/base.hpp

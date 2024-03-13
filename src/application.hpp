@@ -4,7 +4,7 @@
 #include "initFile.hpp"
 
 
-class App
+class App : public virtual InitFile
 {
 public:
     SDL_Renderer *renderer;
@@ -14,4 +14,7 @@ public:
     ~App();
     void setColor(SDL_Color color);
     void render();
+    void waitInput();
+    void waitInternet();
+    void waitDraw();
 };

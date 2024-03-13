@@ -1,5 +1,6 @@
 #include "include.hpp"
 #include "define.hpp"
+#include "dataTypes.hpp"
 #include "application.hpp"
 #include "workCodes.hpp"
 
@@ -47,4 +48,30 @@ void App::setColor(SDL_Color color){
 
 void App::render(){
     SDL_RenderPresent(renderer);
+};
+
+void App::waitInput(){
+    const static Uint8 deltaTime = 1000/50;
+    static timer prevTime;
+    if(SDL_GetTicks64() - prevTime > deltaTime){
+        SDL_Delay(prevTime + deltaTime - SDL_GetTicks64());
+        prevTime = SDL_GetTicks64();
+    }
+};
+
+void App::waitInternet(){
+    const static Uint8 deltaTime = 1000/20;
+    static timer prevTime;
+    if(SDL_GetTicks64() - prevTime > deltaTime){
+        SDL_Delay(prevTime + deltaTime - SDL_GetTicks64());
+        prevTime = SDL_GetTicks64();
+    }
+};
+
+void App::waitDraw(){
+    static timer prevTime;
+    if(SDL_GetTicks64() - prevTime > drawFPS){
+        SDL_Delay(prevTime + drawFPS - SDL_GetTicks64());
+        prevTime = SDL_GetTicks64();
+    }
 };

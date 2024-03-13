@@ -1,6 +1,5 @@
 #include "include.hpp"
 #include "define.hpp"
-#include "GUI/baseGUI.hpp"
 #include "process.hpp"
 #include "workCodes.hpp"
 
@@ -13,11 +12,6 @@ Data data;
 
 // Main function
 int main(int argv, char **args){
-
-    #if MUS_count
-    // Infinite playing main game theme
-    //Mix_PlayMusic( Musics[MUS_MENU_THEME], -1 );  
-    #endif
 
     // Starting main process
     //Process process;
@@ -36,6 +30,8 @@ int main(int argv, char **args){
     if(restart){
         restart = false;
         return main(argv, args);
-    }
+    };
+
+    // Finishing main process
 	return NOR_WOR;
 }
