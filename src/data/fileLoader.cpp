@@ -3,22 +3,15 @@
 #include "../workCodes.hpp"
 
 
-// Trying loading data from folder (for testing)
+// Loading data from file system (for testing)
 #if !ARCHIEVE_LOADING
 
-DataLoader::DataLoader(){
-    // Open archive not needed
-}
 
-//
-DataLoader::~DataLoader(){
+// Opening archive not needed
+DataLoader::DataLoader(){}
 
-}
-
-//
-void DataLoader::closeLoader(){
-    // Closing archieve not needed
-}
+// Closing archieve not needed
+void DataLoader::closeLoader(){}
 
 //
 SDL_RWops *DataLoader::loadObject(const char *_name){
@@ -26,10 +19,12 @@ SDL_RWops *DataLoader::loadObject(const char *_name){
     SDL_RWops *tempRW = SDL_RWFromFile(_name, "r");
 
     // Checking file correction
+    #if CHECK_CORRECTION
     if(!tempRW){
         printf("Can't load file '%s'.", _name);
         exit(ERR_FIL_OPN);
     }
+    #endif
 
     // Returning created data structure
     return tempRW;

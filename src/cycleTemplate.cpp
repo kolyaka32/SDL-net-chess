@@ -64,7 +64,7 @@ void CycleTemplate::getInput(){
         }
         
         // Waiting next cycle
-        data.waitInput();
+        data.waitDraw();
     }
 };
 

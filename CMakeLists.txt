@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10.0)
 
-project(tic-tac-toe)  # Main game project
+project(Chess)  # Main game project
 
 # Set source files
 add_executable( ${CMAKE_PROJECT_NAME}

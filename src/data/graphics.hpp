@@ -31,23 +31,27 @@ enum IMG_names{
 #define IMG_count 9
 
 
-//
+// Library for work with any images
 class GraphicsLibrary
 {
 public:
-    GraphicsLibrary();
-    ~GraphicsLibrary();
+    GraphicsLibrary();   // Initialasing graphic library
+    ~GraphicsLibrary();  // Closing graphic library
 };
 
 
-//
+// Class of all loaded textures for use
 class Textures : virtual GraphicsLibrary, public virtual DataLoader
 {
 private:
+    // Loading texture with need name
     void loadTexture(const char *name, IMG_names index);
-    bool checkCorrection();
+
+    #if CHECK_CORRECTION
+    bool checkCorrection();  // Check, if all objects load correct
+    #endif
 public:
     SDL_Texture *textures[IMG_count];  // Array of all textures
-    Textures();
-    ~Textures();
+    Textures();   // Loading all data, need for work with textures
+    ~Textures();  // Clear all data from textures
 };

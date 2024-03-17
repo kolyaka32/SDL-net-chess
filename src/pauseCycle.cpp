@@ -136,7 +136,7 @@ void PauseCycle::getInput(){
         }
         
         // Waiting next cycle
-        data.waitInput();
+        data.waitDraw();
     }
 };
 
@@ -184,14 +184,14 @@ void PauseCycle::draw() const{
 
     // Drawing background
     data.setColor({206, 139, 71, 255});
-    for(coord y=0; y < FIELD_WIDTH+1; ++y)
-        for(coord x=y%2; x < FIELD_WIDTH+1; x+=2){
-            SDL_Rect rect = {(x-1) * CELL_SIDE + offset, (y-1) * CELL_SIDE + offset, CELL_SIDE, CELL_SIDE};
+    for(coord y=0; y <= FIELD_WIDTH; ++y)
+        for(coord x=y%2; x <= FIELD_WIDTH; x+=2){
+            SDL_Rect rect = {(x-1) * CELL_SIDE + offset/2, (y-1) * CELL_SIDE + offset/2, CELL_SIDE, CELL_SIDE};
             SDL_RenderFillRect(data.renderer, &rect);
         }
 
     // Moving background
-    offset = (offset + 1) % CELL_SIDE;
+    offset = (offset + 1) % (CELL_SIDE * 2);
 
     // Bliting title
     data.texts[TXT_PAUSE_TITLE].blit();

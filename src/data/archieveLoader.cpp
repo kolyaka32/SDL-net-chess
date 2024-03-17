@@ -4,18 +4,14 @@
 #include "../workCodes.hpp"
 
 
-// Functions of loading need outside data
-#if ARCHIEVE_LOADING
 // Functions for loading data from archieve
-// Loading need library
+#if ARCHIEVE_LOADING
+
+// Archive with all data
+static zip_t* archive;  
 
 
-// Arcieve local structs
-static zip_t* archive;  // Archive with all data
-
-
-
-//
+// Openning archieve
 DataLoader::DataLoader(){
     // Open archive with need name
     archive = zip_open(DATA_FILE, ZIP_RDONLY, NULL);
@@ -25,24 +21,20 @@ DataLoader::DataLoader(){
     #endif
 
     // Checking openning correction
+    #if CHECK_CORRECTION
     if(!archive){
         printf("Can't load archieve '%s'.", DATA_FILE);
         exit(ERR_FIL_OPN);
     }
+    #endif
 }
 
-//
-DataLoader::~DataLoader(){
-
-}
-
-//
+// Closing archive
 void DataLoader::closeLoader(){
-    // Closing archive
     zip_close(archive);
 }
 
-//
+// Loading object with need name
 SDL_RWops *DataLoader::loadObject(const char *_name){
     // Openning need file
     zip_file_t *file = zip_fopen_encrypted(archive, _name, 0, ARCHIEVE_PASSWORD);
@@ -52,9 +44,11 @@ SDL_RWops *DataLoader::loadObject(const char *_name){
 	zip_stat(archive, _name, 0, &st);
 
     // Checking correction of openned file
+    #if CHECK_CORRECTION
     if(st.size == 0){
         return nullptr;
     }
+    #endif
 
     // Creating buffer for data
     char *buffer = (char*)malloc(sizeof(char) * st.size);
@@ -69,10 +63,12 @@ SDL_RWops *DataLoader::loadObject(const char *_name){
     SDL_RWops *tempRW = SDL_RWFromMem(buffer, st.size);
 
     // Checking correction of loaded object
+    #if CHECK_CORRECTION
     if(!tempRW){
         printf("Can't load object '%s' from arhieve", _name);
         exit(ERR_FIL_OPN);
     }
+    #endif
 
     // Returning created data structure
     return tempRW;

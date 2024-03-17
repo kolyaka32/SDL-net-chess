@@ -1,10 +1,11 @@
 #pragma once
 
-// Extra debug modifiers
+// Debuging modifiers
 #define DEBUG false
+#define CHECK_CORRECTION DEBUG
 #define ARCHIEVE_LOADING !DEBUG
 #define SCROLLER_SOUND SND_count
-#define CONNECTION_LOST_PERCENT 60 * DEBUG
+#define CONNECTION_LOST_PERCENT 60
 
 // System numbers
 #define WINDOWNAME "Chess on SDL"           // System game name

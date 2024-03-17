@@ -4,12 +4,11 @@
 #include "dataLoader.hpp"
 
 
-//
+// Class of window icone
 class Icone : virtual GraphicsLibrary, public virtual DataLoader
 {
 private:
-    bool loadIcone(const char *name);
+    bool loadIcone(const char *name);  // Loading and set icone with need name
 public:
-    Icone();
-    ~Icone();
+    Icone();  // Create and set icone
 };

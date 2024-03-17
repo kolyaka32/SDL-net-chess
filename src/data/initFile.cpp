@@ -8,7 +8,7 @@
 InitFile::InitFile(){
     // Reading file
     std::ifstream inSettings(SETTING_FILE); // Open file to read
-    std::string line;  // Output string line
+    std::string line;  // Input string line
 
     // Setting standart values for variables
     language = LNG_ENGLISH;
@@ -17,6 +17,7 @@ InitFile::InitFile(){
     drawFPS = 60;
     baseIP = "127.0.0.1";
     basePort = "2000";
+    // Base chess start code
     startConfig = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq";
 
     // Reading file until it end
@@ -65,7 +66,8 @@ InitFile::InitFile(){
     inSettings.close();  // Closing reading file
 }
 
-// Saving initialasing file
+
+// Save all settings to init file
 InitFile::~InitFile(){
     // Creating output file
     FILE* outSettings = fopen(SETTING_FILE, "w");
@@ -93,10 +95,10 @@ InitFile::~InitFile(){
     fprintf(outSettings, "effects = %u\n", soundsVolume);                // Writing effects volume
     fprintf(outSettings, "max FPS = %u\n", drawFPS);                     // Writing frames per seconds
 
-    fprintf(outSettings, "\nGame configuration\n");                      // Extra comment
+    fprintf(outSettings, "\nGame configuration:\n");                      // Extra comment
     fprintf(outSettings, "start config = %s\n", startConfig.std::string::c_str());  // Writing starting config (order of figures)
 
-    fprintf(outSettings, "\n# Intrnet base parameters\n");               // Extra comment
+    fprintf(outSettings, "\n# Internet base parameters:\n");               // Extra comment
     fprintf(outSettings, "IP = %s\n", baseIP.std::string::c_str());      // Base connect IP
     fprintf(outSettings, "port = %s\n", basePort.std::string::c_str());  // Base connect port
 

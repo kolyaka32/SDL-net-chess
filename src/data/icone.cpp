@@ -2,26 +2,28 @@
 #include "../workCodes.hpp"
 
 
+// Loading single icone
 Icone::Icone(){
-    if(!loadIcone("img/Game.ico")){
+    if(loadIcone("img/Game.ico")){
+        #if CHECK_CORRECTION
         printf("Can't load game icone");
         exit(ERR_FIL_ICO);
+        #endif
     }
 }
 
-Icone::~Icone(){
-    
-}
-
+// Loading icone with need name
 bool Icone::loadIcone(const char *name){
     // Getting icone data
     SDL_RWops* tempRW = loadObject(name);
 
     // Checking created data
+    #if CHECK_CORRECTION
     if(tempRW == nullptr){
         // Showing error
-        return false;
+        return true;
     }
+    #endif
 
     // Setting window icone
     SDL_Surface *iconeImage = IMG_LoadICO_RW(tempRW);
@@ -30,10 +32,12 @@ bool Icone::loadIcone(const char *name){
     SDL_RWclose(tempRW);
 
     // Checking created image
+    #if CHECK_CORRECTION
     if(iconeImage == nullptr){
         // Showing error
-        return false;
+        return true;
     }
+    #endif
     
     // Setting window icone
     SDL_SetWindowIcon(window, iconeImage);
@@ -42,5 +46,5 @@ bool Icone::loadIcone(const char *name){
     SDL_FreeSurface(iconeImage);
 
     // Showing correct loading
-    return true;
+    return false;
 }

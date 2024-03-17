@@ -14,7 +14,9 @@ class Animations : virtual GraphicsLibrary, public virtual DataLoader
 {
 private:
     void loadAnimation(const char *name, ANI_names index);
+    #if CHECK_CORRECTION
     bool checkCorrection();
+    #endif
 protected:
     IMG_Animation *animations[ANI_count];
 public:

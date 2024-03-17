@@ -6,17 +6,21 @@
 //
 Animations::Animations(){
     // Resetting list of textures
+    #if CHECK_CORRECTION
     memset(animations, 0, ANI_count * sizeof(animations[0]));
+    #endif
 
     // Loading all animations
     //loadAnimation("ani/.gif", ANI_);  // Template
 
 
     // Checking correction of all loaded animations
+    #if CHECK_CORRECTION
     if(!checkCorrection()){
         printf("Wrong count of animations");
         exit(ERR_FIL_ANI);
     }
+    #endif
 }
 
 //
@@ -43,6 +47,7 @@ void Animations::loadAnimation(const char *_name, ANI_names _index){
 };
 
 // 
+#if CHECK_CORRECTION
 bool Animations::checkCorrection(){
     // Setting counter
     Uint8 count = 0;
@@ -57,5 +62,6 @@ bool Animations::checkCorrection(){
     // Returing correction of loaded number
     return count == IMG_count;
 };
+#endif
 
 #endif

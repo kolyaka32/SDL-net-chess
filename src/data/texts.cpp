@@ -5,12 +5,9 @@ Texts::Texts(){
     updateTranslation();
 };
 
-Texts::~Texts(){
-
-}
-
+// Update translations of all texts
 void Texts::updateTranslation(){
-    // Setting fruit skin
+    // Setting window title
     switch (language)
     {
     case LNG_ENGLISH:
@@ -22,11 +19,11 @@ void Texts::updateTranslation(){
         break;
 
     case LNG_GERMAN:
-        SDL_SetWindowTitle(window, "--- на SDL");
+        SDL_SetWindowTitle(window, "Schach на SDL");
         break;
 
     case LNG_BELARUSIAN:
-        SDL_SetWindowTitle(window, "--- на SDL");
+        SDL_SetWindowTitle(window, "Шахматы на SDL");
         break;
     }
     
