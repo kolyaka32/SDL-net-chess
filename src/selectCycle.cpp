@@ -15,9 +15,7 @@ enum {
 
 //
 SelectCycle::SelectCycle(){
-    // Resetting values
-    LMBclick = false;
-    selectedBox = BOX_NORMAL;
+
 };
 
 //
@@ -25,52 +23,6 @@ SelectCycle::~SelectCycle(){
 
 };
 
-//
-void SelectCycle::getInput(){
-    SDL_Event event;
-    while(true){
-        while( SDL_PollEvent(&event) != 0 ){
-            switch (event.type)
-            {
-            case SDL_QUIT:
-                data.running = false;
-                //stop.lock();
-                //running = false;  // Exit from program
-                return;
-
-            case SDL_MOUSEWHEEL:
-                // Mouse position on screen
-                SDL_GetMouseState(&mouseX, &mouseY);  // Getting mouse position
-
-                // Checking scroll on sliders
-                //if(MusicSlider.scroll(event.wheel.y, mouseX, mouseY));
-                //else if(SoundSlider.scroll(event.wheel.y, mouseX, mouseY));
-                break;
-
-            case SDL_KEYDOWN:
-                if (event.key.keysym.sym == SDLK_ESCAPE){
-
-                };
-                break;
-
-            case SDL_MOUSEBUTTONDOWN:
-                // Getting mouse position
-                SDL_GetMouseState(&mouseX, &mouseY);  
-
-                // Getting mouse press 
-                mouseInput();
-                break;
-
-            case SDL_MOUSEBUTTONUP:
-                LMBclick = false; 
-                selectedBox = BOX_NORMAL;
-                break;
-            }
-        }
-        // Waiting next cycle
-        data.waitInput();
-    }
-};
 
 //
 void SelectCycle::mouseInput(){
@@ -115,13 +67,4 @@ void SelectCycle::drawing(){
         // Waiting next cycle
         data.waitDraw();
     }
-};
-
-//
-void SelectCycle::run(){
-    // Waiting for input stop
-    getInput();
-
-    // Stopping all side threads
-    drawThread.detach();
 };

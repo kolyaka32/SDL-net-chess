@@ -73,6 +73,10 @@ add_executable( ${CMAKE_PROJECT_NAME}
     src/data/data.hpp
 
     # Process cycles
+    # Cycle template
+    src/cycleTemplate.hpp
+    src/cycleTemplate.cpp
+    
     # Menu for selecting start option
     src/selectCycle.hpp
     src/selectCycle.cpp

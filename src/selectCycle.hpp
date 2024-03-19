@@ -1,17 +1,10 @@
-#include <thread>
-#include "data/data.hpp"
-#include "GUI/baseGUI.hpp"
+#include "cycleTemplate.hpp"
 
 
 //
-class SelectCycle
+class SelectCycle : public CycleTemplate
 {
 private:
-    std::thread drawThread{this->drawing, this};  // Thread for drawing
-    bool LMBclick;  // Flag of current mouse clicking state
-    int mouseX,mouseY;  // Current position of mouse
-    Uint8 selectedBox;  // Number of which box is currently selected
-
     // Interactable part:
     // Buttons for start variants
     const static Uint8 optionsCount = 4;
@@ -24,13 +17,11 @@ private:
     // Setting menu
     GUI::ImageButton settingButton{0.9, 0.1, IMG_GUI_PAUSE_BUTTON};
 
-protected:
-    // Data for create own cycle (must be overwriten)
-    void getInput();    // Getting all user input (keyboard, mouse...)
-    void mouseInput();  // Checking for any need mouse action
-    void drawing();     // Drawing all needed objects
+    // New overrided cycle functions
+    //void getInput() override;    // Getting all user input (keyboard, mouse...)
+    void mouseInput() override;  // Checking for any need mouse action
+    void drawing() override;     // Drawing all needed objects
 public:
-    SelectCycle();
+    SelectCycle(/* args */);
     ~SelectCycle();
-    void run();         // Start cycle
 };
