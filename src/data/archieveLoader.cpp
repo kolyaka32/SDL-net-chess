@@ -1,8 +1,7 @@
-#include "include.hpp"
 #include "zip.h"
-#include "define.hpp"
+#include "../define.hpp"
 #include "dataLoader.hpp"
-#include "workCodes.hpp"
+#include "../workCodes.hpp"
 
 
 // Functions of loading need outside data

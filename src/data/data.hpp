@@ -15,8 +15,12 @@ class Data : public virtual Textures, public virtual Icone, public virtual Font,
 private:
     // Extra data
 public:
-    bool running;  // Global process run flag
+    bool running = true;  // Global process run flag
+    bool restart = false;  // Global flag of restart current process
     Data(){
+        // Running process
+        running = true;
+        
         // Closing data loader after loading all
         closeLoader();
     };

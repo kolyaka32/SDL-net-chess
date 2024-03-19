@@ -1,3 +1,6 @@
+#pragma once
+
+#include "include.hpp"
 
 // Types of data
 typedef Uint8 coord;       // Type of data for field coordinates

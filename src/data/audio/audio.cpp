@@ -1,8 +1,7 @@
-#include "../include.hpp"
 #include "audio.hpp"
-#include "../workCodes.hpp"
 
 
+//
 AudioLibrary::AudioLibrary(){
     // Initializing all audio library
     if(!Mix_Init(MIX_INIT_OGG | MIX_INIT_FLAC)){
@@ -17,6 +16,7 @@ AudioLibrary::AudioLibrary(){
     }
 }
 
+//
 AudioLibrary::~AudioLibrary(){
     // Closing audio chanel
     Mix_CloseAudio();

@@ -1,8 +1,6 @@
-#include "../include.hpp"
-#include "../define.hpp"
-#include "base.hpp"
+#include "singlePlayer.hpp"
 
-static bool twoPlayers;  // Flag of mode with two players to show text of 1/2 player instead of you
+/*static bool twoPlayers;  // Flag of mode with two players to show text of 1/2 player instead of you
 
 //Uint8 fieldWidth;        // Width and height of field
 //Uint8 winWidth;          // Width, which need for win

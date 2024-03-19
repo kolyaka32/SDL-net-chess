@@ -1,6 +1,5 @@
-#include "include.hpp"
 #include "icone.hpp"
-#include "workCodes.hpp"
+#include "../workCodes.hpp"
 
 
 Icone::Icone(){

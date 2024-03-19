@@ -2,9 +2,10 @@
 
 #include "../include.hpp"
 #include "../define.hpp"
-#include "../graphics.hpp"
-#include "../font.hpp"
-#include "../animations.hpp"
+#include "../dataTypes.hpp"
+#include "../data/graphics.hpp"
+#include "../data/font.hpp"
+#include "../data/animations.hpp"
 
 
 // Namespace of objects for UI

@@ -1,8 +1,6 @@
-#include "include.hpp"
-#include "define.hpp"
-#include "dataTypes.hpp"
 #include "application.hpp"
-#include "workCodes.hpp"
+#include "../define.hpp"
+#include "../workCodes.hpp"
 
 // Function of creating window and renderer for outputing image
 App::App(){
@@ -51,27 +49,31 @@ void App::render(){
 };
 
 void App::waitInput(){
-    const static Uint8 deltaTime = 1000/50;
+    /*const static Uint8 deltaTime = 1000/50;
     static timer prevTime;
     if(SDL_GetTicks64() - prevTime > deltaTime){
         SDL_Delay(prevTime + deltaTime - SDL_GetTicks64());
         prevTime = SDL_GetTicks64();
-    }
+    }*/
+    SDL_Delay(20);
 };
 
 void App::waitInternet(){
-    const static Uint8 deltaTime = 1000/20;
+    /*const static Uint8 deltaTime = 1000/20;
     static timer prevTime;
     if(SDL_GetTicks64() - prevTime > deltaTime){
         SDL_Delay(prevTime + deltaTime - SDL_GetTicks64());
         prevTime = SDL_GetTicks64();
-    }
+    }*/
+
+    SDL_Delay(50);
 };
 
 void App::waitDraw(){
-    static timer prevTime;
+    /*static timer prevTime;
     if(SDL_GetTicks64() - prevTime > drawFPS){
         SDL_Delay(prevTime + drawFPS - SDL_GetTicks64());
         prevTime = SDL_GetTicks64();
-    }
+    }*/
+    SDL_Delay(drawFPS);
 };

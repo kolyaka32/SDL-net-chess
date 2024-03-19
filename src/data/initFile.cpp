@@ -1,6 +1,4 @@
-#include "include.hpp"
 #include <fstream>
-#include "define.hpp"
 
 #include "initFile.hpp"
 #include "texts.hpp"

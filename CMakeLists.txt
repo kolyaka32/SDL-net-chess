@@ -10,48 +10,49 @@ add_executable( ${CMAKE_PROJECT_NAME}
     src/workCodes.hpp
     src/dataTypes.hpp
 
-    # Initialasing data for program
-    src/initFile.hpp
-    src/initFile.cpp
+    # All data for programm
+    # Initialasing data from user (setting file)
+    src/data/initFile.hpp
+    src/data/initFile.cpp
 
     # Main data for render
-    src/application.hpp
-    src/application.cpp
+    src/data/application.hpp
+    src/data/application.cpp
 
     # Data loading system
-    src/dataLoader.hpp
-    src/fileLoader.cpp
-    src/archieveLoader.cpp
+    src/data/dataLoader.hpp
+    src/data/fileLoader.cpp
+    src/data/archieveLoader.cpp
 
     # Base program systems
     # Textures library
-    src/graphics.hpp
-    src/graphics.cpp
+    src/data/graphics.hpp
+    src/data/graphics.cpp
 
     # Game icone loading
-    src/icone.hpp
-    src/icone.cpp
+    src/data/icone.hpp
+    src/data/icone.cpp
 
     # Game animations
-    src/animations.hpp
-    src/animations.cpp
+    src/data/animations.hpp
+    src/data/animations.cpp
 
     # Game type font
-    src/font.hpp
-    src/font.cpp
+    src/data/font.hpp
+    src/data/font.cpp
 
     # All audio
     # Main audio libraries
-    src/audio/audio.hpp
-    src/audio/audio.cpp
+    src/data/audio/audio.hpp
+    src/data/audio/audio.cpp
 
     # Sounds library
-    src/audio/sounds.hpp
-    src/audio/sounds.cpp
+    src/data/audio/sounds.hpp
+    src/data/audio/sounds.cpp
 
     # Musics library
-    src/audio/musics.hpp
-    src/audio/musics.cpp
+    src/data/audio/musics.hpp
+    src/data/audio/musics.cpp
 
     # Base graphic user interface (GUI)
     src/GUI/baseGUI.hpp
@@ -65,11 +66,11 @@ add_executable( ${CMAKE_PROJECT_NAME}
     src/GUI/typeBox.cpp
 
     # Global interface
-    src/texts.hpp
-    src/texts.cpp
+    src/data/texts.hpp
+    src/data/texts.cpp
 
     # All game data
-    src/data.hpp
+    src/data/data.hpp
 
     # Process cycles
     # Menu for selecting start option

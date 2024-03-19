@@ -1,6 +1,4 @@
-#include "../include.hpp"
 #include "sounds.hpp"
-#include "../workCodes.hpp"
 
 // 
 Sounds::Sounds(){

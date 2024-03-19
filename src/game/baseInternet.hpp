@@ -1,11 +1,9 @@
 #pragma once
 
-#include "../include.hpp"
 #include "SDL_net.h"
-#include "../texts.hpp"
 
 // Data for internet connection
-extern UDPsocket socket;          // Socket to send/recieve data
+/*extern UDPsocket socket;          // Socket to send/recieve data
 extern UDPpacket* sendData;       // Packet to send data
 extern UDPpacket* recieveData;    // Packet to recieve data
 

@@ -1,7 +1,6 @@
 #pragma once
 
-#include "include.hpp"
-#include "dataTypes.hpp"
+#include "../dataTypes.hpp"
 #include "dataLoader.hpp"
 
 #define FNT_count 1  // Number of fonts for better count

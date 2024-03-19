@@ -1,11 +1,5 @@
-#include "include.hpp"
-#include "define.hpp"
-#include "process.hpp"
+#include "selectCycle.hpp"
 #include "workCodes.hpp"
-
-// Global running flags
-bool running;            // Flag of main cycle work
-bool restart = false;    // Flag of restarting game with other parameters
 
 // Main process data
 Data data;
@@ -13,25 +7,16 @@ Data data;
 // Main function
 int main(int argv, char **args){
 
-    // Starting main process
-    //Process process;
-    //process.run();
-
-    // Showing base picture
-    SDL_RenderCopy(data.renderer, data.textures[IMG_GUI_FLAG_RUS], NULL, NULL);
-
-    // Rendering
-    data.render();
-
-    // Test program timer
-    SDL_Delay(2000);
+    // Starting selecting cycle
+    SelectCycle cycle;
+    cycle.run();
 
     // Reloading game
-    if(restart){
-        restart = false;
+    if(data.restart){
+        data.restart = false;
         return main(argv, args);
     };
 
     // Finishing main process
 	return NOR_WOR;
-}
+};

@@ -1,7 +1,4 @@
-#include "../include.hpp"
-#include "../define.hpp"
-#include "base.hpp"
-#include "baseInternet.hpp"
+#include "server.hpp"
 
 
 // Global multiplayer variables

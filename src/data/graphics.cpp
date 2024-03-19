@@ -1,6 +1,5 @@
-#include "include.hpp"
 #include "graphics.hpp"
-#include "workCodes.hpp"
+#include "../workCodes.hpp"
 
 
 GraphicsLibrary::GraphicsLibrary(){

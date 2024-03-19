@@ -1,7 +1,6 @@
-#include "include.hpp"
-#include "define.hpp"
+#include "../define.hpp"
 #include "dataLoader.hpp"
-#include "workCodes.hpp"
+#include "../workCodes.hpp"
 
 
 // Trying loading data from folder (for testing)

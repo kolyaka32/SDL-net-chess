@@ -1,9 +1,7 @@
 #pragma once
 
-#include "../include.hpp"
-#include "../dataTypes.hpp"
-#include "../dataLoader.hpp"
 #include "audio.hpp"
+#include "../dataLoader.hpp"
 
 // Names of all music tracks
 enum MUS_names{
