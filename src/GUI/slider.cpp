@@ -4,15 +4,16 @@
 using namespace GUI;
 
 // Slider class
-Slider::Slider(const float Y, Uint16 max, const IMG_names lineImage, const IMG_names buttonImage) : GUItemplate(){
-    texture = data.textures[lineImage];
-    textureButton = data.textures[buttonImage];
+Slider::Slider(float _X, float _Y, Uint16 _startPos, IMG_names _lineImage, IMG_names _buttonImage, Uint16 _max) : GUItemplate(){
+    texture = data.textures[_lineImage];
+    textureButton = data.textures[_buttonImage];
     SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
     SDL_QueryTexture(textureButton, NULL, NULL, &destButton.w, &destButton.h);
-    rect.x = SCREEN_WIDTH / 2 - rect.w / 2; 
-    rect.y = SCREEN_HEIGHT * Y - rect.h / 2; 
-    destButton.y = SCREEN_HEIGHT * Y - destButton.h / 2;
-    maxValue = max;
+    rect.x = SCREEN_WIDTH * _X - rect.w / 2;
+    rect.y = SCREEN_HEIGHT * _Y - rect.h / 2;
+    destButton.y = SCREEN_HEIGHT * _Y - destButton.h / 2;
+    maxValue = _max;
+    state = _startPos;
 };
 
 void Slider::blit(){

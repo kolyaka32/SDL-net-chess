@@ -19,7 +19,7 @@ Musics::Musics(){
     }
 
     // Setting start volume of music
-    Mix_VolumeMusic(MusicVolume);  
+    Mix_VolumeMusic(musicVolume);  
 }
 
 //

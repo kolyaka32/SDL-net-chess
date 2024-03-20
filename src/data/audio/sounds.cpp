@@ -20,7 +20,7 @@ Sounds::Sounds(){
     }
 
     // Setting start volume of effects
-    Mix_Volume(-1, EffectsVolume);
+    Mix_Volume(-1, soundsVolume);
 }
 
 // 

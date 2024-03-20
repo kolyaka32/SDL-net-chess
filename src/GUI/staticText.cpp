@@ -4,7 +4,7 @@
 using namespace GUI;
 
 // Class of static text
-staticText::staticText(const char* _text, textHeight _height, float _x, float _y, SDL_Color _color, ALIGNMENT_types _aligment) : GUItemplate(), text (_text){
+StaticText::StaticText(const char* _text, textHeight _height, float _x, float _y, SDL_Color _color, ALIGNMENT_types _aligment) : text (_text){
     font = data.createFont(_height);
     posX = _x;
     posY = _y;
@@ -31,7 +31,7 @@ inline void writeNumber(char* buffer, int number, Uint8* pos){
     *pos += end;
 };
 
-void staticText::updateText(int number){
+void StaticText::updateText(int number){
     char buffer[BUFFER_SIZE];
     Uint8 start = 0;
     for(Uint8 end = 0; (end != data.language) && (start < BUFFER_SIZE); ++start){
@@ -62,7 +62,7 @@ void staticText::updateText(int number){
     rect.y = SCREEN_HEIGHT * posY - rect.h / 2;
 };
 
-staticText::~staticText(){
+StaticText::~StaticText(){
     SDL_DestroyTexture(texture);
     TTF_CloseFont(font);
 }

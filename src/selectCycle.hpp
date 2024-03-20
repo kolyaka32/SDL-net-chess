@@ -1,5 +1,5 @@
 #include "cycleTemplate.hpp"
-
+#include "GUI/baseGUI.hpp"
 
 //
 class SelectCycle : public CycleTemplate
@@ -19,9 +19,9 @@ private:
 
     // New overrided cycle functions
     //void getInput() override;    // Getting all user input (keyboard, mouse...)
-    void mouseInput() override;  // Checking for any need mouse action
-    void drawing() override;     // Drawing all needed objects
+    Uint8 mouseInput() override;   // Checking for any need mouse action
+    void draw() override;     // Drawing all needed objects
 public:
-    SelectCycle(/* args */);
+    SelectCycle();
     ~SelectCycle();
 };

@@ -5,7 +5,7 @@ using namespace GUI;
 
 
 // Button class
-TextButton::TextButton(float _x, float _y, staticText &_text) : GUItemplate(), topText (_text){
+TextButton::TextButton(float _x, float _y, StaticText &_text) : GUItemplate(), topText (_text){
     // Setting base texture
     texture = data.textures[IMG_GUI_BASE_BUTTON];
     

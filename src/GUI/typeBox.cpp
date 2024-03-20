@@ -26,6 +26,7 @@ typeBox::typeBox(textHeight _height, float _x, float _y, const char* _text, ALIG
     backRect.y = SCREEN_HEIGHT * _y - backRect.h / 2 - 2;
 }
 
+//
 typeBox::~typeBox(){
     SDL_DestroyTexture(texture);
     TTF_CloseFont(font);
@@ -45,6 +46,7 @@ void typeBox::updateTexture(){
     rect.x -= rect.w * aligment / 2;
 }
 
+//
 void typeBox::writeString(char* str, bool freeData){
     // Inserting text from clipboard
     Uint8 clipboardSize = strlen(str);
@@ -74,10 +76,14 @@ void typeBox::writeString(char* str, bool freeData){
     }
 };
 
+// 
 void typeBox::press(SDL_Keycode code){
     static SDL_Keycode preCode;
+
+    // Switching between extra input options
     switch (code)
     {
+    // Functions for deleting text
     case SDLK_BACKSPACE:
         // Coping after caret
         if(caret > 0){
@@ -98,6 +104,7 @@ void typeBox::press(SDL_Keycode code){
         }
         break;
     
+    // Moving caret
     case SDLK_LEFT:
         if(caret > 0){
             std::swap(buffer[caret--], buffer[caret - 1]);
@@ -105,14 +112,25 @@ void typeBox::press(SDL_Keycode code){
         break;
     
     case SDLK_RIGHT:
-        if(caret+1 < length){
+        if(caret + 1 < length){
             std::swap(buffer[caret++], buffer[caret + 1]);
         }
         break;
     
-    // Control-v mode
+    case SDLK_END:
+    case SDLK_PAGEDOWN:
+        std::swap(buffer[caret], buffer[length]);
+        caret = length;
+        break;
+
+    case SDLK_HOME:
+    case SDLK_PAGEUP:
+        std::swap(buffer[caret], buffer[0]);
+        caret = 0;
+        break;
+    
+    // Inserting text from clipboard
     case SDLK_PASTE:
-        // Inserting text from clipboard
         writeString(SDL_GetClipboardText(), true);
         break;
         

@@ -12,8 +12,8 @@ InitFile::InitFile(){
 
     // Setting standart values for variables
     language = LNG_ENGLISH;
-    MusicVolume = MIX_MAX_VOLUME/2;
-    EffectsVolume = MIX_MAX_VOLUME/2;
+    musicVolume = MIX_MAX_VOLUME/2;
+    soundsVolume = MIX_MAX_VOLUME/2;
     drawFPS = 60;
     baseIP = "127.0.0.1";
     basePort = "2000";
@@ -39,10 +39,10 @@ InitFile::InitFile(){
             }
         }
         else if( first == "music" ){
-            MusicVolume = std::stoi( line.substr(line.rfind('=')+2) );
+            musicVolume = std::stoi( line.substr(line.rfind('=')+2) );
         }
         else if( first == "effects" ){
-            EffectsVolume = std::stoi( line.substr(line.rfind('=')+2) );
+            soundsVolume = std::stoi( line.substr(line.rfind('=')+2) );
         }
         else if( first == "max FPS" ){
             drawFPS = std::stoi( line.substr(line.rfind('=')+2) );
@@ -87,8 +87,8 @@ InitFile::~InitFile(){
     }
 
     fprintf(outSettings, "\n# Technical part:\n");                       // Extra comment
-    fprintf(outSettings, "music = %u\n", MusicVolume);                   // Writing music volume
-    fprintf(outSettings, "effects = %u\n", EffectsVolume);               // Writing effects volume
+    fprintf(outSettings, "music = %u\n", musicVolume);                   // Writing music volume
+    fprintf(outSettings, "effects = %u\n", soundsVolume);               // Writing effects volume
     fprintf(outSettings, "max FPS = %u\n", drawFPS);                     // Writing frames per seconds
 
     fprintf(outSettings, "\nGame configuration\n");                        // Extra comment

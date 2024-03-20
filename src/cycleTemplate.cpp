@@ -8,6 +8,10 @@ CycleTemplate::CycleTemplate(){
     // Resetting values
     //LMBclick = false;
     selectedBox = 0;
+
+    // Resetting input
+    SDL_Event event;
+    while( SDL_PollEvent(&event) != 0 );
 };
 
 //
@@ -46,7 +50,10 @@ void CycleTemplate::getInput(){
                 SDL_GetMouseState(&mouseX, &mouseY);  
 
                 // Getting mouse press 
-                mouseInput();
+                if(mouseInput()){
+                    // stopping current process if need
+                    return;
+                }
                 break;
 
             case SDL_MOUSEBUTTONUP:
@@ -55,35 +62,43 @@ void CycleTemplate::getInput(){
                 break;
             }
         }
+        
         // Waiting next cycle
         data.waitInput();
     }
 };
 
 //
-void CycleTemplate::mouseInput(){
+Uint8 CycleTemplate::mouseInput(){
     /*if(startOptions[0].in(mouseX, mouseY)){
-
+        return 1;
     }*/
+
+    // None-return
+    return 0;
 };
 
 //
-void CycleTemplate::drawing(){
+void CycleTemplate::drawCycle(){
     while (true)
     {
-        // Bliting background
-        SDL_RenderClear(data.renderer);
+        // Checking for avalible to run
+        runMutex.lock();
+        runMutex.unlock();
 
-        // Bliting text
-        //data.texts[TXT_].blit();
-
-        // Bliting all to screen
-        data.render();
+        // Drawing need scene
+        draw();
 
         // Waiting next cycle
         data.waitDraw();
     }
 };
+
+//
+void CycleTemplate::draw(){
+    // Template for draw
+
+}
 
 //
 void CycleTemplate::run(){

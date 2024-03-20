@@ -81,6 +81,10 @@ add_executable( ${CMAKE_PROJECT_NAME}
     src/selectCycle.hpp
     src/selectCycle.cpp
 
+    # Pause cycle for settings
+    src/pauseCycle.hpp
+    src/pauseCycle.cpp
+
     # Base game interface
     src/game/base.hpp
     src/game/baseInternet.hpp

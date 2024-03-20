@@ -10,11 +10,16 @@ enum TXT_types{
     TXT_SELECT_SINGLE,   // Singleplayer gamemode
     TXT_SELECT_TWO,      // Two player gamemode
     TXT_SELECT_SERVER,   // Host server
-    TXT_SELECT_CLIENT    // Connect to server
+    TXT_SELECT_CLIENT,   // Connect to server
+
+    // Pause menu
+    TXT_PAUSE_TITLE,
+    TXT_PAUSE_MUSIC,
+    TXT_PAUSE_SOUND,
 };
 
 // Summary text counter
-#define TXT_count 5
+#define TXT_count 8
 
 // Types of language
 enum LNG_types{
@@ -31,7 +36,7 @@ enum LNG_types{
 class Texts : public virtual App, public virtual InitFile
 {
 public:
-    GUI::staticText texts[TXT_count] = {
+    GUI::StaticText texts[TXT_count] = {
         // Selection menu
         {"Tic-tac-toe\nКрестики нолики\nКрестики нолики\nКрестики нолики\n", 
             24, 0.5, 0.1},
@@ -42,6 +47,13 @@ public:
         {"Create server\nСоздать сервер\nCreate server\nСоздать сервер\n", 
             24, 0.5, 0.7},
         {"Connect\nПрисоединится\nConnect\nПрисоединится\n", 
+            24, 0.5, 0.9},
+        
+        {"Pause\nПуза\nConnect\nПрисоединится\n", 
+            24, 0.5, 0.1},
+        {"Music\nМузыка\nConnect\nПрисоединится\n", 
+            24, 0.5, 0.9},
+        {"Sounds\nЗвуки\nConnect\nПрисоединится\n", 
             24, 0.5, 0.9},
     };
 

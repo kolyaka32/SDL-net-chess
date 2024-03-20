@@ -33,7 +33,7 @@ namespace GUI{
 
 
     // Static text on screen with drawing functions
-    class staticText : public virtual GUItemplate
+    class StaticText : public virtual GUItemplate
     {
     private:
         const static Uint8 BUFFER_SIZE = 50;  // Length of buffers for text
@@ -43,9 +43,9 @@ namespace GUI{
         SDL_Color color;           // Base draw color
         TTF_Font *font;            // Font to create texture
     public:
-        staticText(const char* newText, textHeight newSize, float newX, 
+        StaticText(const char* newText, textHeight newSize, float newX, 
             float newY, SDL_Color newColor = WHITE, ALIGNMENT_types newAlignment = MIDLE_text);
-        ~staticText();
+        ~StaticText();
         void updateText(int number = 0);  // Create new texture with displasment '%' to entered number
     };
 
@@ -60,8 +60,8 @@ namespace GUI{
     public:
         Uint16 state;                // Current state of slider
 
-        Slider(float Y, Uint16 max = 255, IMG_names lineImage = IMG_GUI_SLIDER_LINE, 
-            IMG_names buttonImage = IMG_GUI_SLIDER_BUTTON);  // Create slide with need line and button images
+        Slider(float X, float Y, Uint16 startPos = 128, IMG_names lineImage = IMG_GUI_SLIDER_LINE, 
+            IMG_names buttonImage = IMG_GUI_SLIDER_BUTTON, Uint16 max = 255);  // Create slide with need line and button images
         void setValue(int mouseX);                              // Setting new mouse position
         bool scroll(Sint32 wheelY, int mouseX, int mouseY);     // Checking mouse wheel action
         void blit();                                            // Drawing slider with need button position
@@ -82,9 +82,9 @@ namespace GUI{
     class TextButton : public virtual GUItemplate
     {
     private:
-        staticText &topText;     // Pointer to text on this button (shortcut)
+        StaticText &topText;     // Pointer to text on this button (shortcut)
     public:
-        TextButton(float X, float Y, staticText &top);   // Create new button
+        TextButton(float X, float Y, StaticText &top);   // Create new button
         void blit();                      // Drawing current button
     };
 
