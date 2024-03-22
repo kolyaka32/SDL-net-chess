@@ -60,7 +60,7 @@ namespace GUI{
     public:
         Uint16 state;                // Current state of slider
 
-        Slider(float X, float Y, Uint16 startPos = 128, IMG_names lineImage = IMG_GUI_SLIDER_LINE, 
+        Slider(float X, float Y, Uint16 startPos = 0, IMG_names lineImage = IMG_GUI_SLIDER_LINE, 
             IMG_names buttonImage = IMG_GUI_SLIDER_BUTTON, Uint16 max = 255);  // Create slide with need line and button images
         void setValue(int mouseX);                              // Setting new mouse position
         bool scroll(Sint32 wheelY, int mouseX, int mouseY);     // Checking mouse wheel action

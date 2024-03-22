@@ -36,6 +36,9 @@ Uint8 SelectCycle::mouseInput(){
 
         // Unlocking all threads
         runMutex.unlock();
+        SDL_Delay(200);
+
+        // !! problems after unlocking mutex
     }
     else if(startOptions[0].in(mouseX, mouseY)){
 

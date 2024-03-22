@@ -84,10 +84,12 @@ void CycleTemplate::drawCycle(){
     {
         // Checking for avalible to run
         runMutex.lock();
-        runMutex.unlock();
 
         // Drawing need scene
         draw();
+
+        // Allowing to continue work
+        runMutex.unlock();
 
         // Waiting next cycle
         data.waitDraw();
@@ -106,5 +108,6 @@ void CycleTemplate::run(){
     getInput();
 
     // Stopping all side threads
+    runMutex.lock();
     drawThread.detach();
 };
