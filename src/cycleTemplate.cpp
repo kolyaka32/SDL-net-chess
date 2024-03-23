@@ -108,6 +108,6 @@ void CycleTemplate::run(){
     getInput();
 
     // Stopping all side threads
-    runMutex.lock();
+    //runMutex.lock();
     drawThread.detach();
 };

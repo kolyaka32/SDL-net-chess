@@ -54,7 +54,7 @@ void StaticText::updateText(int number){
     }
     buffer[d] = '\0';
     
-    SDL_Surface* surface = TTF_RenderUTF8_Solid(font, buffer, color);
+    SDL_Surface *surface = TTF_RenderUTF8_Solid(font, buffer, color);
     texture = SDL_CreateTextureFromSurface(data.renderer, surface);
     SDL_FreeSurface(surface);
     SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
@@ -64,5 +64,4 @@ void StaticText::updateText(int number){
 
 StaticText::~StaticText(){
     SDL_DestroyTexture(texture);
-    TTF_CloseFont(font);
 }

@@ -16,11 +16,27 @@ public:
 
 
 //
+class DrawFont
+{
+private:
+    TTF_Font *font;
+    textHeight height;
+    // Font_type type;
+public:
+    DrawFont(SDL_RWops *data, textHeight _height);
+    ~DrawFont();
+    bool isNeed(textHeight _height);
+    TTF_Font* getFont();
+};
+
+
+//
 class Font : virtual FontLibrary, protected virtual DataLoader
 {
 private:
-    SDL_RWops *fontData;   // Pointer to data of font
-
+    SDL_RWops *fontData;    // Pointer to data of font
+    DrawFont *fonts[20];  // Array of pointers to fonts
+    Uint8 fontsCount = 0;   // 
     bool loadFont(const char *name);
 public:
     Font();

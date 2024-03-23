@@ -29,7 +29,6 @@ typeBox::typeBox(textHeight _height, float _x, float _y, const char* _text, ALIG
 //
 typeBox::~typeBox(){
     SDL_DestroyTexture(texture);
-    TTF_CloseFont(font);
 }
 
 // Creating new texture
