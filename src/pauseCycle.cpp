@@ -87,7 +87,6 @@ void PauseCycle::getInput(){
             {
             case SDL_QUIT:
                 data.running = false;
-                //runMutex.lock();
                 return;
 
             /*case SDL_MOUSEWHEEL:
@@ -101,7 +100,6 @@ void PauseCycle::getInput(){
 
             case SDL_KEYDOWN:
                 if (event.key.keysym.sym == SDLK_ESCAPE){
-                    //runMutex.lock();
                     return;
                 };
                 break;
@@ -112,7 +110,6 @@ void PauseCycle::getInput(){
 
                 // Getting mouse press 
                 if(mouseInput()){
-                    //runMutex.lock();
                     return;
                 }
                 break;

@@ -13,6 +13,7 @@ private:
     std::thread drawThread{this->drawCycle, this};  // Thread for drawing
 protected:
     // Data for own cycle
+    bool running = true;
     //bool LMBclick;  // Flag of current mouse clicking state
     //bool stop = false;  // Flag of stopping current process
     std::mutex runMutex;  // Mutex for block running for change for another
@@ -26,5 +27,5 @@ protected:
 public:
     CycleTemplate();
     ~CycleTemplate();
-    void run();         // Start cycle
+    void run();  // Start cycle
 };

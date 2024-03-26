@@ -80,7 +80,7 @@ Uint8 CycleTemplate::mouseInput(){
 
 //
 void CycleTemplate::drawCycle(){
-    while (true)
+    while (running)
     {
         // Checking for avalible to run
         runMutex.lock();
@@ -108,6 +108,7 @@ void CycleTemplate::run(){
     getInput();
 
     // Stopping all side threads
-    //runMutex.lock();
-    drawThread.detach();
+    running = false;
+    drawThread.join();
 };
+
