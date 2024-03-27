@@ -97,7 +97,7 @@ void CycleTemplate::drawCycle(){
 };
 
 //
-void CycleTemplate::draw(){
+void CycleTemplate::draw() const{
     // Template for draw
 
 }

@@ -32,32 +32,32 @@ namespace GUI{
     };
 
 
-    // Static text on screen with drawing functions
+    // Static text on screen with drawing and updating functions
     class StaticText : public virtual GUItemplate
     {
     private:
         const static Uint8 BUFFER_SIZE = 50;  // Length of buffers for text
-        const char *text;                // Text to show on screen
-        float posX, posY;          // Relative positions on screen
-        ALIGNMENT_types aligment;  // Aligment type to improve displasment
-        SDL_Color color;           // Base draw color
-        TTF_Font *font;            // Font to create texture
+        const char *text;                     // Text to show on screen
+        const float posX, posY;               // Relative positions on screen
+        const ALIGNMENT_types aligment;       // Aligment type to improve displasment
+        const SDL_Color color;                // Base draw color
+        TTF_Font *font;                       // Font to create texture
     public:
-        StaticText(const char* newText, textHeight newSize, float newX, 
-            float newY, SDL_Color newColor = BLACK, ALIGNMENT_types newAlignment = MIDLE_text);
+        StaticText(const char* text, textHeight size, float X, 
+            float Y, SDL_Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
         ~StaticText();
-        void updateText(int number = 0);  // Create new texture with displasment '%' to entered number
+        void updateText(int number = 0);  // Create new texture with displasment '%' to enter number to display
     };
 
 
-    // Class of slider bar with point on it to control some parameter
+    // Class of slider bar with point on it to control need parameter
     template <typename linkType = Uint8>
     class Slider : public virtual GUItemplate
     {
     private:
         SDL_Texture *textureButton;  // Texture of line (upper part of slider)
         SDL_Rect destButton;         // Place for rendering upper part
-        const Uint16 maxValue;       // Maximal value of state
+        const linkType maxValue;     // Maximal value of state
         linkType &link;              // Pointer to data to control
     public:
         Slider(float X, float Y, linkType &controlData, IMG_names lineImage = IMG_GUI_SLIDER_LINE, 
@@ -65,15 +65,13 @@ namespace GUI{
         ~Slider();
         void setValue(int mouseX);                              // Setting new state from mouse position
         bool scroll(Sint32 wheelY, int mouseX, int mouseY);     // Checking mouse wheel action
-        void blit() const;                                            // Drawing slider with need button position
+        void blit() const;                                      // Drawing slider with need button position
     };
 
 
     // Class of buttons with image on it
     class ImageButton : public virtual GUItemplate
     {
-    private:
-        //
     public:
         ImageButton(float X, float Y, IMG_names textureIndex);   // Create new button
     };
@@ -83,10 +81,10 @@ namespace GUI{
     class TextButton : public virtual GUItemplate
     {
     private:
-        StaticText &topText;     // Pointer to text on this button (shortcut)
+        const StaticText &topText;  // Pointer to text on this button (shortcut)
     public:
         TextButton(float X, float Y, StaticText &top);   // Create new button
-        void blit();                      // Drawing current button
+        void blit() const;                      // Drawing current button
     };
 
 
@@ -128,8 +126,8 @@ namespace GUI{
         const static Uint8 bufferSize = 16;
 
         // Constants from creating
-        ALIGNMENT_types aligment;  // Aligment type for correct placed position
-        SDL_Color color;           // Color of typing text
+        const ALIGNMENT_types aligment;  // Aligment type for correct placed position
+        const SDL_Color color;     // Color of typing text
 
         // Variables
         Uint8 caret;               // Position of place, where user type
@@ -145,7 +143,7 @@ namespace GUI{
         typeBox(textHeight size, float posX, float posY, const char *startText = "", 
             ALIGNMENT_types newAligment = MIDLE_text, SDL_Color newColor = BLACK);
         ~typeBox();                                  // Clearing font and texture
-        void blit();                                 // Function of drawing text with background plate
+        void blit() const;                           // Function of drawing text with background plate
         void writeString(char* str, bool freeData);  // Function of writing any string to buffer at caret position
         void press(SDL_Keycode code);                // Function of processing special keycodes
         void updateCaret();                          // Function of change caret symbol from '|' to ' ' and back

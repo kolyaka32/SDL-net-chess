@@ -4,14 +4,18 @@
 using namespace GUI;
 
 // Class of static text
-StaticText::StaticText(const char* _text, textHeight _height, float _x, float _y, SDL_Color _color, ALIGNMENT_types _aligment) : text (_text){
+// Basic constructor for new object
+StaticText::StaticText(const char* _text, textHeight _height, float _X, float _Y, SDL_Color _color, ALIGNMENT_types _aligment)
+ : text (_text), posX(_X), posY(_Y), aligment(_aligment), color(_color){
     font = data.createFont(_height);
-    posX = _x;
-    posY = _y;
-    aligment = _aligment;
-    color = _color;
 };
 
+// Basic destructor for free dynamic variables
+StaticText::~StaticText(){
+    SDL_DestroyTexture(texture);
+}
+
+//
 inline void writeNumber(char* buffer, int number, Uint8* pos){
     if(number < 0){
         buffer[*pos++] = '-';
@@ -31,6 +35,7 @@ inline void writeNumber(char* buffer, int number, Uint8* pos){
     *pos += end;
 };
 
+//
 void StaticText::updateText(int number){
     char buffer[BUFFER_SIZE];
     Uint8 start = 0;
@@ -62,6 +67,3 @@ void StaticText::updateText(int number){
     rect.y = SCREEN_HEIGHT * posY - rect.h / 2;
 };
 
-StaticText::~StaticText(){
-    SDL_DestroyTexture(texture);
-}

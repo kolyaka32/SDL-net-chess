@@ -23,7 +23,7 @@ protected:
     // Cycle functions for own cycle (must be overriden)
     virtual void getInput();     // Getting all user input (keyboard, mouse...)
     virtual Uint8 mouseInput();  // Checking for any need mouse action
-    virtual void draw();         // Draw all need objects
+    virtual void draw() const;         // Draw all need objects
 public:
     CycleTemplate();
     ~CycleTemplate();

@@ -174,22 +174,18 @@ Uint8 PauseCycle::mouseInput(){
 };
 
 //
-Uint8 offset = 0;
+Uint16 offset = 0;
 
 //
-void PauseCycle::draw(){
+void PauseCycle::draw() const{
     // Bliting background
-    //SDL_SetRenderDrawColor(data.renderer, BACK, 255);
-    //SDL_RenderClear(data.renderer);
-
+    data.setColor({255, 206, 158, 255});
+    SDL_RenderClear(data.renderer);
 
     // Drawing background
-    for(coord x=0; x < FIELD_WIDTH+1; ++x)
-        for(coord y=0; y < FIELD_WIDTH+1; ++y){
-            if((x+y)%2)
-                data.setColor({255, 206, 158, 255});
-            else
-                data.setColor({206, 139, 71, 255});
+    data.setColor({206, 139, 71, 255});
+    for(coord y=0; y < FIELD_WIDTH+1; ++y)
+        for(coord x=y%2; x < FIELD_WIDTH+1; x+=2){
             SDL_Rect rect = {(x-1) * CELL_SIDE + offset, (y-1) * CELL_SIDE + offset, CELL_SIDE, CELL_SIDE};
             SDL_RenderFillRect(data.renderer, &rect);
         }

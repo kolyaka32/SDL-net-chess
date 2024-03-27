@@ -15,7 +15,8 @@ TextButton::TextButton(float _x, float _y, StaticText &_text) : GUItemplate(), t
     rect.y = SCREEN_HEIGHT * _y - rect.h / 2;
 };
 
-void TextButton::blit(){
+//
+void TextButton::blit() const{
     SDL_RenderCopy(data.renderer, texture, NULL, &rect);
     topText.blit();
 };

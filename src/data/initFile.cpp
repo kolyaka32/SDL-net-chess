@@ -47,7 +47,7 @@ InitFile::InitFile(){
         else if( first == "max FPS" ){
             drawFPS = std::stoi( line.substr(line.rfind('=')+2) );
         }
-        else if( first == "Start config" ){
+        else if( first == "start config" ){
             startConfig = line.substr(line.rfind('=')+2);
         }
         else if( first == "IP" ){
@@ -59,6 +59,8 @@ InitFile::InitFile(){
     }
     // Checking of minimal posible values
     SET_MIN(drawFPS, 5);
+    SET_MAX(musicVolume, 255);
+    SET_MAX(soundsVolume, 255);
 
     inSettings.close();  // Closing reading file
 }
@@ -88,11 +90,11 @@ InitFile::~InitFile(){
 
     fprintf(outSettings, "\n# Technical part:\n");                       // Extra comment
     fprintf(outSettings, "music = %u\n", musicVolume);                   // Writing music volume
-    fprintf(outSettings, "effects = %u\n", soundsVolume);               // Writing effects volume
+    fprintf(outSettings, "effects = %u\n", soundsVolume);                // Writing effects volume
     fprintf(outSettings, "max FPS = %u\n", drawFPS);                     // Writing frames per seconds
 
-    fprintf(outSettings, "\nGame configuration\n");                        // Extra comment
-    fprintf(outSettings, "start config = %s\n", startConfig);            // Writing starting config (order of figures)
+    fprintf(outSettings, "\nGame configuration\n");                      // Extra comment
+    fprintf(outSettings, "start config = %s\n", startConfig.std::string::c_str());  // Writing starting config (order of figures)
 
     fprintf(outSettings, "\n# Intrnet base parameters\n");               // Extra comment
     fprintf(outSettings, "IP = %s\n", baseIP.std::string::c_str());      // Base connect IP

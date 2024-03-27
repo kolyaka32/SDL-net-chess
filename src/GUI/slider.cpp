@@ -15,13 +15,13 @@ Slider<linkType>::Slider(float _X, float _Y, linkType &_controlData, IMG_names _
     rect.x = SCREEN_WIDTH * _X - rect.w / 2;
     rect.y = SCREEN_HEIGHT * _Y - rect.h / 2;
     destButton.y = SCREEN_HEIGHT * _Y - destButton.h / 2;
-    destButton.x = rect.x + link * maxValue / rect.w;
+    destButton.x = rect.x + link * rect.w / maxValue - destButton.w / 2;
 };
 
 //
 template <typename linkType>
 Slider<linkType>::~Slider(){
-    link = (destButton.x - rect.x) * maxValue / rect.w;
+    link = (destButton.x - rect.x + destButton.w / 2) * maxValue / rect.w;
 }
 
 //

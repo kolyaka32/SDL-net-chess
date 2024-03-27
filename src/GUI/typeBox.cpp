@@ -5,14 +5,12 @@ using namespace GUI;
 
 
 // Type box class
-typeBox::typeBox(textHeight _height, float _x, float _y, const char* _text, ALIGNMENT_types _aligment, SDL_Color _color){
+typeBox::typeBox(textHeight _height, float _x, float _y, const char* _text, ALIGNMENT_types _aligment, SDL_Color _color)
+ : color(_color), aligment(_aligment){
     font = data.createFont(_height);
     rect.x = SCREEN_WIDTH * _x;
     rect.y = SCREEN_HEIGHT * _y - _height / 2;
     rect.w = rect.h = 0;
-
-    aligment = _aligment;
-    color = _color;
 
     strcpy(buffer, _text);
     length = caret = strlen(buffer);
@@ -149,6 +147,7 @@ void typeBox::press(SDL_Keycode code){
     preCode = code;
 };
 
+//
 void typeBox::select(){
     buffer[length] = '|';
     caret = length++;
@@ -159,6 +158,7 @@ void typeBox::select(){
     SDL_StartTextInput();
 };
 
+//
 void typeBox::removeSelect(){
     // Stoping entering any letters
     SDL_StopTextInput();
@@ -170,13 +170,15 @@ void typeBox::removeSelect(){
     updateTexture();
 };
 
+//
 void typeBox::updateCaret(){
     static char b = ' ';
     std::swap(buffer[caret], b);
     updateTexture();
 };
 
-void typeBox::blit(){
+//
+void typeBox::blit() const{
     // Rendering background picture for better typing
     SDL_RenderCopy(data.renderer, data.textures[IMG_GUI_TYPE_BOX], NULL, &backRect);
 
