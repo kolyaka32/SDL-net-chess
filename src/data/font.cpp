@@ -45,9 +45,11 @@ TTF_Font* DrawFont::getFont(){
 
 //
 Font::Font(){
+    #if DEBUG
     memset(fonts, 0, sizeof(fonts[0])*20);
+    #endif
     // Checking correction of loading current font
-    if(loadFont("fnt/Arial.ttf")){
+    if(loadFont("fnt/PTSans-Regular.ttf")){
         printf("Can't load data for fonts");
         exit(ERR_FIL_FNT);
     }
@@ -70,7 +72,6 @@ TTF_Font *Font::createFont(textHeight _size){
     // Searching for already excisting font with need size
     for(Uint8 i=0; i < fontsCount; ++i){
         if(fonts[i]->isNeed(_size)){
-            fontsCount++;
             return fonts[i]->getFont();
         }
     }

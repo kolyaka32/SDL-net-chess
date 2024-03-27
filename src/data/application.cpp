@@ -55,7 +55,7 @@ void App::waitInput(){
         SDL_Delay(prevTime + deltaTime - SDL_GetTicks64());
         prevTime = SDL_GetTicks64();
     }*/
-    SDL_Delay(20);
+    SDL_Delay(1000/drawFPS);
 };
 
 void App::waitInternet(){
@@ -75,5 +75,5 @@ void App::waitDraw(){
         SDL_Delay(prevTime + drawFPS - SDL_GetTicks64());
         prevTime = SDL_GetTicks64();
     }*/
-    SDL_Delay(drawFPS);
+    SDL_Delay(1000/drawFPS);
 };

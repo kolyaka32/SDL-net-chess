@@ -1,4 +1,5 @@
 #include "graphics.hpp"
+#include "../define.hpp"
 #include "../workCodes.hpp"
 
 
@@ -68,7 +69,10 @@ void Textures::loadTexture(const char *_name, IMG_names _index){
     SDL_Surface *tempSurface = IMG_Load_RW(tempRW, 0);
 
     // Freeing picture data
+    #if !DEBUG
     free(tempRW->hidden.mem.base);
+    #endif
+    
     SDL_RWclose(tempRW);
 
     // Creating texture from surface and setting to it place

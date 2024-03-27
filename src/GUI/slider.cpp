@@ -3,8 +3,11 @@
 
 using namespace GUI;
 
+
 // Slider class
-Slider::Slider(float _X, float _Y, Uint16 _startPos, IMG_names _lineImage, IMG_names _buttonImage, Uint16 _max) : GUItemplate(){
+template <typename linkType>
+Slider<linkType>::Slider(float _X, float _Y, linkType &_controlData, IMG_names _lineImage, IMG_names _buttonImage, linkType _max)
+ : link(_controlData), maxValue(_max){
     texture = data.textures[_lineImage];
     textureButton = data.textures[_buttonImage];
     SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
@@ -12,35 +15,42 @@ Slider::Slider(float _X, float _Y, Uint16 _startPos, IMG_names _lineImage, IMG_n
     rect.x = SCREEN_WIDTH * _X - rect.w / 2;
     rect.y = SCREEN_HEIGHT * _Y - rect.h / 2;
     destButton.y = SCREEN_HEIGHT * _Y - destButton.h / 2;
-    maxValue = _max;
-    state = _startPos;
+    destButton.x = rect.x + link * maxValue / rect.w;
 };
 
-void Slider::blit(){
+//
+template <typename linkType>
+Slider<linkType>::~Slider(){
+    link = (destButton.x - rect.x) * maxValue / rect.w;
+}
+
+//
+template <typename linkType>
+void Slider<linkType>::blit() const{
     SDL_RenderCopy(data.renderer, texture, NULL, &rect);
     SDL_RenderCopy(data.renderer, textureButton, NULL, &destButton);
 };
 
-void Slider::setValue(const int mouseX){
+//
+template <typename linkType>
+void Slider<linkType>::setValue(const int mouseX){
     // Getting new position
     destButton.x = mouseX;
     SET_MAX(destButton.x, rect.x + rect.w);
     SET_MIN(destButton.x, rect.x);
 
-    state = (destButton.x - rect.x) * maxValue / rect.w;
-
     destButton.x -= destButton.w / 2;
 };
 
-bool Slider::scroll(const Sint32 wheelY, const int mouseX, const int mouseY){
-    const static Uint8 deadZone = 1;
-    
+//
+template <typename linkType>
+bool Slider<linkType>::scroll(const Sint32 wheelY, const int mouseX, const int mouseY){
     if(in(mouseX, mouseY)){
-        if(wheelY > deadZone){
-            state++;
+        if(wheelY > 0){
+            setValue(destButton.x + destButton.w/2 + 8);
         }
-        else if(wheelY < deadZone){
-            state--;
+        else{
+            setValue(destButton.x + destButton.w/2 - 8);
         }
         return true;
     }

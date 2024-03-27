@@ -1,5 +1,6 @@
 #include "define.hpp"
 #include "pauseCycle.hpp"
+#include "GUI/slider.cpp"
 
 
 // Types of selected box
@@ -89,14 +90,14 @@ void PauseCycle::getInput(){
                 data.running = false;
                 return;
 
-            /*case SDL_MOUSEWHEEL:
+            case SDL_MOUSEWHEEL:
                 // Mouse position on screen
                 SDL_GetMouseState(&mouseX, &mouseY);  // Getting mouse position
 
                 // Checking scroll on sliders
-                //if(MusicSlider.scroll(event.wheel.y, mouseX, mouseY));
-                //else if(SoundSlider.scroll(event.wheel.y, mouseX, mouseY));
-                break;*/
+                if(musicSlider.scroll(event.wheel.y, mouseX, mouseY));
+                else if(soundSlider.scroll(event.wheel.y, mouseX, mouseY));
+                break;
 
             case SDL_KEYDOWN:
                 if (event.key.keysym.sym == SDLK_ESCAPE){
@@ -106,9 +107,9 @@ void PauseCycle::getInput(){
 
             case SDL_MOUSEBUTTONDOWN:
                 // Getting mouse position
-                SDL_GetMouseState(&mouseX, &mouseY);  
+                SDL_GetMouseState(&mouseX, &mouseY);
 
-                // Getting mouse press 
+                // Getting mouse press
                 if(mouseInput()){
                     return;
                 }
@@ -124,10 +125,12 @@ void PauseCycle::getInput(){
         switch (selectedBox)
         {
         case BOX_MUSIC_SLIDER:
+            SDL_GetMouseState(&mouseX, &mouseY);
             musicSlider.setValue(mouseX);
             break;
 
         case BOX_SOUND_SLIDER:
+            SDL_GetMouseState(&mouseX, &mouseY);
             soundSlider.setValue(mouseX);
             break;
         }
@@ -150,7 +153,7 @@ Uint8 PauseCycle::mouseInput(){
         selectedBox = BOX_MUSIC_SLIDER;
         return 0;
     }
-    else if(musicSlider.in(mouseX, mouseY)){
+    else if(soundSlider.in(mouseX, mouseY)){
         selectedBox = BOX_SOUND_SLIDER;
         return 0;
     }
@@ -171,9 +174,28 @@ Uint8 PauseCycle::mouseInput(){
 };
 
 //
+Uint8 offset = 0;
+
+//
 void PauseCycle::draw(){
     // Bliting background
-    SDL_RenderClear(data.renderer);
+    //SDL_SetRenderDrawColor(data.renderer, BACK, 255);
+    //SDL_RenderClear(data.renderer);
+
+
+    // Drawing background
+    for(coord x=0; x < FIELD_WIDTH+1; ++x)
+        for(coord y=0; y < FIELD_WIDTH+1; ++y){
+            if((x+y)%2)
+                data.setColor({255, 206, 158, 255});
+            else
+                data.setColor({206, 139, 71, 255});
+            SDL_Rect rect = {(x-1) * CELL_SIDE + offset, (y-1) * CELL_SIDE + offset, CELL_SIDE, CELL_SIDE};
+            SDL_RenderFillRect(data.renderer, &rect);
+        }
+
+    // Moving background
+    offset = (offset + 1) % CELL_SIDE;
 
     // Bliting title
     data.texts[TXT_PAUSE_TITLE].blit();
@@ -183,6 +205,13 @@ void PauseCycle::draw(){
     for(Uint8 i=0; i < LNG_count; ++i){
         flags[i].blit();
     };
+
+    // Sliders
+    data.texts[TXT_PAUSE_MUSIC].blit();
+    soundSlider.blit();
+    data.texts[TXT_PAUSE_SOUND].blit();
+    musicSlider.blit();
+
     // Settings menu
     settingButton.blit();
 

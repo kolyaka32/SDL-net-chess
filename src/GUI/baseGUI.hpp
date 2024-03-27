@@ -27,8 +27,8 @@ namespace GUI{
         SDL_Rect rect;
     public:
         GUItemplate();
-        void blit();
-        bool in(const int mouseX, const int mouseY);
+        void blit() const;
+        bool in(const int mouseX, const int mouseY) const;
     };
 
 
@@ -44,27 +44,28 @@ namespace GUI{
         TTF_Font *font;            // Font to create texture
     public:
         StaticText(const char* newText, textHeight newSize, float newX, 
-            float newY, SDL_Color newColor = WHITE, ALIGNMENT_types newAlignment = MIDLE_text);
+            float newY, SDL_Color newColor = BLACK, ALIGNMENT_types newAlignment = MIDLE_text);
         ~StaticText();
         void updateText(int number = 0);  // Create new texture with displasment '%' to entered number
     };
 
 
     // Class of slider bar with point on it to control some parameter
+    template <typename linkType = Uint8>
     class Slider : public virtual GUItemplate
     {
     private:
         SDL_Texture *textureButton;  // Texture of line (upper part of slider)
         SDL_Rect destButton;         // Place for rendering upper part
-        Uint16 maxValue;             // Maximal value of state
+        const Uint16 maxValue;       // Maximal value of state
+        linkType &link;              // Pointer to data to control
     public:
-        Uint16 state;                // Current state of slider
-
-        Slider(float X, float Y, Uint16 startPos = 0, IMG_names lineImage = IMG_GUI_SLIDER_LINE, 
-            IMG_names buttonImage = IMG_GUI_SLIDER_BUTTON, Uint16 max = 255);  // Create slide with need line and button images
-        void setValue(int mouseX);                              // Setting new mouse position
+        Slider(float X, float Y, linkType &controlData, IMG_names lineImage = IMG_GUI_SLIDER_LINE, 
+            IMG_names buttonImage = IMG_GUI_SLIDER_BUTTON, linkType max = 255);  // Create slide with need line and button images
+        ~Slider();
+        void setValue(int mouseX);                              // Setting new state from mouse position
         bool scroll(Sint32 wheelY, int mouseX, int mouseY);     // Checking mouse wheel action
-        void blit();                                            // Drawing slider with need button position
+        void blit() const;                                            // Drawing slider with need button position
     };
 
 
@@ -109,13 +110,12 @@ namespace GUI{
     class Bar : public virtual GUItemplate
     {
     private:
-        //SDL_Rect Back_rect;         // Background rect for second color
-        SDL_Rect Front_rect;        // Front rect for primal color
-        SDL_Rect IconeRect;         // Rect for icone, near bar
-        SDL_Color color;
+        SDL_Rect Front_rect;    // Front rect for primal color
+        SDL_Rect IconeRect;     // Rect for icone, near bar, if need
+        const SDL_Color color;  // Color of front part of bar
     public:
         // Create new bar with it position, primal color and icone near it
-        Bar( const SDL_Rect dest, SDL_Color newColor, IMG_names icone);  
+        Bar( const SDL_Rect dest, SDL_Color color, IMG_names icone = IMG_GUI_PAUSE_BUTTON);
         void blit( int width );  // Drawing bar with icone need width
     };
 

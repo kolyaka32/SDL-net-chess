@@ -38,23 +38,24 @@ class Texts : public virtual App, public virtual InitFile
 public:
     GUI::StaticText texts[TXT_count] = {
         // Selection menu
-        {"Tic-tac-toe\nКрестики нолики\nКрестики нолики\nКрестики нолики\n", 
-            24, 0.5, 0.1},
+        {"Chess\nШахматы\nКрестики нолики\nКрестики нолики\n", 
+            30, 0.5, 0.1, WHITE},
         {"Singleplayer\nОдиночная игра\nSingleplayer\nОдиночная игра\n", 
-            24, 0.5, 0.3},
+            24, 0.5, 0.3, WHITE},
         {"Two players\nДва игрока\nTwo players\nДва игрока\n", 
-            24, 0.5, 0.5},
+            24, 0.5, 0.5, WHITE},
         {"Create server\nСоздать сервер\nCreate server\nСоздать сервер\n", 
-            24, 0.5, 0.7},
+            24, 0.5, 0.7, WHITE},
         {"Connect\nПрисоединится\nConnect\nПрисоединится\n", 
-            24, 0.5, 0.9},
+            24, 0.5, 0.9, WHITE},
         
-        {"Pause\nПуза\nConnect\nПрисоединится\n", 
-            24, 0.5, 0.1},
+        // Pause menu
+        {"Pause\nПауза\nConnect\nПрисоединится\n", 
+            30, 0.5, 0.1},
         {"Music\nМузыка\nConnect\nПрисоединится\n", 
-            24, 0.5, 0.9},
+            30, 0.5, 0.68},
         {"Sounds\nЗвуки\nConnect\nПрисоединится\n", 
-            24, 0.5, 0.9},
+            30, 0.5, 0.83},
     };
 
 public:

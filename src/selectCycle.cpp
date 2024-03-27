@@ -62,6 +62,7 @@ Uint8 SelectCycle::mouseInput(){
 //
 void SelectCycle::draw(){
     // Bliting background
+    data.setColor(BLACK);
     SDL_RenderClear(data.renderer);
 
     // Bliting title

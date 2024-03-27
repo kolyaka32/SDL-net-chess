@@ -5,11 +5,10 @@ using namespace GUI;
 
 
 // Bar class
-Bar::Bar( const SDL_Rect _rect, SDL_Color _color, IMG_names _icone ){
+Bar::Bar( const SDL_Rect _rect, SDL_Color _color, IMG_names _icone ) : color(_color){
     // Base bar
     rect = _rect;
     Front_rect = rect;
-    color = _color;
 
     // Icone part
     if(_icone){
