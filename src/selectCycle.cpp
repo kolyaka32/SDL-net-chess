@@ -15,7 +15,7 @@ enum {
 
 
 //
-SelectCycle::SelectCycle(){
+SelectCycle::SelectCycle() : CycleTemplate(MUS_MENU_THEME){
 
 };
 
@@ -27,20 +27,11 @@ SelectCycle::~SelectCycle(){
 //
 Uint8 SelectCycle::mouseInput(){
     if(settingButton.in(mouseX, mouseY)){
-        // Stopping all current threads
-        runMutex.lock();
+        Uint8 state = runCycle<PauseCycle>();
 
-        // Launching new pause cycle
-        PauseCycle pauseCycle;
-        pauseCycle.run();
-
-        // Unlocking all threads
-        runMutex.unlock();
-
-        // Checking for exit
-        if(!data.running){
-            return 1;
-        }
+        // Continue to play music
+        //data.playMusic(MUS_MENU_THEME);
+        return state;
     }
     else if(startOptions[0].in(mouseX, mouseY)){
 

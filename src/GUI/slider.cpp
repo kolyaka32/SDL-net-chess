@@ -21,25 +21,29 @@ Slider<linkType>::Slider(float _X, float _Y, linkType &_controlData, IMG_names _
 //
 template <typename linkType>
 Slider<linkType>::~Slider(){
-    link = (destButton.x - rect.x + destButton.w / 2) * maxValue / rect.w;
+    //link = (destButton.x - rect.x + destButton.w / 2) * maxValue / rect.w;
 }
 
-//
+// Blitting all slider to screen
 template <typename linkType>
 void Slider<linkType>::blit() const{
     SDL_RenderCopy(data.renderer, texture, NULL, &rect);
     SDL_RenderCopy(data.renderer, textureButton, NULL, &destButton);
 };
 
-//
+// Setting new value of slider
 template <typename linkType>
 void Slider<linkType>::setValue(const int mouseX){
     // Getting new position
     destButton.x = mouseX;
+    // Setting borders for position
     SET_MAX(destButton.x, rect.x + rect.w);
     SET_MIN(destButton.x, rect.x);
 
     destButton.x -= destButton.w / 2;
+
+    // Setting new linked value
+    link = (destButton.x - rect.x + destButton.w / 2) * maxValue / rect.w;
 };
 
 //

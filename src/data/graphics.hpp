@@ -21,14 +21,27 @@ enum IMG_names{
     // Main game part
     // Game field
     IMG_GAME_FIELD,
-    // Game figures
-    IMG_GAME_WHITE_PAWN,
 
-    // WIP
+    // Game figures
+    // White figures
+    IMG_GAME_WHITE_PAWN,
+    IMG_GAME_WHITE_BISHOP,
+    IMG_GAME_WHITE_ROOK,
+    IMG_GAME_WHITE_KNIGHT,
+    IMG_GAME_WHITE_QUEEN,
+    IMG_GAME_WHITE_KING,
+
+    // Black figures
+    IMG_GAME_BLACK_PAWN,
+    IMG_GAME_BLACK_BISHOP,
+    IMG_GAME_BLACK_ROOK,
+    IMG_GAME_BLACK_KNIGHT,
+    IMG_GAME_BLACK_QUEEN,
+    IMG_GAME_BLACK_KING,
 };
 
 // Number of all images
-#define IMG_count 9
+#define IMG_count 22
 
 
 // Library for work with any images
@@ -48,7 +61,7 @@ private:
     void loadTexture(const char *name, IMG_names index);
 
     #if CHECK_CORRECTION
-    bool checkCorrection();  // Check, if all objects load correct
+    void checkCorrection();  // Check, if all objects load correct
     #endif
 public:
     SDL_Texture *textures[IMG_count];  // Array of all textures

@@ -5,10 +5,14 @@
 
 // Names of all music tracks
 enum MUS_names{
+    MUS_START_NONE,  // Track to not start new music
 
+    MUS_MAIN_THEME,  // Main music for game cycles
+    MUS_MENU_THEME,  // Music for menu
 };
 
-#define MUS_count 0
+// Total counter of music (without NONE)
+#define MUS_count 2
 
 
 // Class of all loaded music tracks for play
@@ -19,11 +23,11 @@ private:
     SDL_RWops* musicsData[MUS_count];  // Array of data for music
 
     // Load track with need name
-    void loadMusic(char* name, MUS_names num);
+    void loadMusic(const char* name, const MUS_names num);
     
     // Check correction of loaded tracks
     #if CHECK_CORRECTION
-    bool checkCorrection();
+    void checkCorrection();
     #endif
 public:
     Musics();   // Load all tracks

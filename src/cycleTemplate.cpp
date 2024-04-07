@@ -2,9 +2,8 @@
 
 
 
-
 //
-CycleTemplate::CycleTemplate(){
+CycleTemplate::CycleTemplate(MUS_names _music) : music(_music){
     // Resetting values
     //LMBclick = false;
     selectedBox = 0;
@@ -12,6 +11,11 @@ CycleTemplate::CycleTemplate(){
     // Resetting input
     SDL_Event event;
     while( SDL_PollEvent(&event) != 0 );
+
+    // Starting playing need music (if need)
+    if(music){
+        data.playMusic(music);
+    }
 };
 
 //
@@ -96,10 +100,9 @@ void CycleTemplate::drawCycle(){
     }
 };
 
-//
+// Template for draw
 void CycleTemplate::draw() const{
-    // Template for draw
-
+    
 }
 
 //

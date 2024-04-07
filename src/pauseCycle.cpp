@@ -70,7 +70,7 @@ enum{
 
 
 //
-PauseCycle::PauseCycle(){
+PauseCycle::PauseCycle() : CycleTemplate(MUS_MAIN_THEME){
 
 };
 
@@ -125,13 +125,25 @@ void PauseCycle::getInput(){
         switch (selectedBox)
         {
         case BOX_MUSIC_SLIDER:
+            // Updating music slider state
             SDL_GetMouseState(&mouseX, &mouseY);
             musicSlider.setValue(mouseX);
+            Mix_VolumeMusic(data.musicVolume);
             break;
 
         case BOX_SOUND_SLIDER:
+            // Updating sound slider state
             SDL_GetMouseState(&mouseX, &mouseY);
             soundSlider.setValue(mouseX);
+            Mix_Volume(-1, data.soundsVolume);
+
+            // Playing sound effect for understanding loud
+            #if SCROLLER_SOUND
+            if( SDL_GetTicks64() > nextSound ){
+                data.playSound(SND_TURN);
+                nextSound = SDL_GetTicks64() + 400;
+            }
+            #endif
             break;
         }
         

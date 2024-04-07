@@ -114,7 +114,7 @@ add_executable( ${CMAKE_PROJECT_NAME}
 
 # Static linking standart C/C++ libraries
 set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++")
-set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
+set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ -Bstatic")
 #set(CMAKE_GENERATOR_PLATFORM -A "x64")
 
 # Hidding console

@@ -43,13 +43,31 @@ Textures::Textures(){
     loadTexture("img/GUI/Flag_GER.png", IMG_GUI_FLAG_GER);
     loadTexture("img/GUI/Flag_BEL.png", IMG_GUI_FLAG_BEL);
 
+    // Main game part
+    // Game field
+    loadTexture("img/chess-pack-1/chessboard.png", IMG_GAME_FIELD);
+
+    // Game figures
+    // White figures
+    loadTexture("img/chess-pack-1/w-pawn.png", IMG_GAME_WHITE_PAWN);
+    loadTexture("img/chess-pack-1/w-bishop.png", IMG_GAME_WHITE_BISHOP);
+    loadTexture("img/chess-pack-1/w-rook.png", IMG_GAME_WHITE_ROOK);
+    loadTexture("img/chess-pack-1/w-knight.png", IMG_GAME_WHITE_KNIGHT);
+    loadTexture("img/chess-pack-1/w-queen.png", IMG_GAME_WHITE_QUEEN);
+    loadTexture("img/chess-pack-1/w-king.png", IMG_GAME_WHITE_KING);
+
+    // Black figures
+    loadTexture("img/chess-pack-1/b-pawn.png", IMG_GAME_BLACK_PAWN);
+    loadTexture("img/chess-pack-1/b-bishop.png", IMG_GAME_BLACK_BISHOP);
+    loadTexture("img/chess-pack-1/b-rook.png", IMG_GAME_BLACK_ROOK);
+    loadTexture("img/chess-pack-1/b-knight.png", IMG_GAME_BLACK_KNIGHT);
+    loadTexture("img/chess-pack-1/b-queen.png", IMG_GAME_BLACK_QUEEN);
+    loadTexture("img/chess-pack-1/b-king.png", IMG_GAME_BLACK_KING);
+
 
     // Checking correction of all loaded images
     #if CHECK_CORRECTION
-    if(!checkCorrection()){
-        printf("Wrong count of images");
-        exit(ERR_FIL_IMG);
-    }
+    checkCorrection();
     #endif
 };
 
@@ -77,7 +95,7 @@ void Textures::loadTexture(const char *_name, IMG_names _index){
     SDL_Surface *tempSurface = IMG_Load_RW(tempRW, 0);
 
     // Freeing picture data
-    #if !DEBUG
+    #if ARCHIEVE_LOADING
     free(tempRW->hidden.mem.base);
     #endif
     
@@ -92,18 +110,13 @@ void Textures::loadTexture(const char *_name, IMG_names _index){
 
 // Checking correction of loaded textures
 #if CHECK_CORRECTION
-bool Textures::checkCorrection(){
-    // Setting counter
-    Uint8 count = 0;
-
+void Textures::checkCorrection(){
     // Checking, if all images exist
     for(Uint8 i = 0; i < IMG_count; ++i){
-        if(textures[i]){
-            count++;
+        if(textures[i] == NULL){
+            printf("Wrong texture at %u.", i);
+            exit(ERR_FIL_IMG);
         }
     }
-
-    // Returing correction of loaded number
-    return (count == IMG_count);
 };
 #endif

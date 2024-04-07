@@ -13,7 +13,7 @@ DataLoader::DataLoader(){}
 // Closing archieve not needed
 void DataLoader::closeLoader(){}
 
-//
+// System to load object with need name (from file system)
 SDL_RWops *DataLoader::loadObject(const char *_name){
     // Openning need file
     SDL_RWops *tempRW = SDL_RWFromFile(_name, "r");

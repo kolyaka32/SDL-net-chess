@@ -11,15 +11,12 @@ Musics::Musics(){
     // Loading all sounds
     //loadMusic("mus/.mp3", MUS_);  // Template
 
-    //loadMusic("mus/main_theme.mp3", MUS_MAIN_THEME);
-    //loadMusic("mus/menu_theme.mp3", MUS_MENU_THEME);
+    loadMusic("mus/main_theme.mp3", MUS_MAIN_THEME);
+    loadMusic("mus/menu_theme.mp3", MUS_MENU_THEME);
 
     // Checking correction of loaded tracks
     #if CHECK_CORRECTION
-    if(!checkCorrection()){
-        printf("Wrong count of music");
-        exit(ERR_FIL_MUS);
-    }
+    checkCorrection();
     #endif
 
     // Setting start volume of music
@@ -36,48 +33,55 @@ Musics::~Musics(){
         // Clearing main music track
         Mix_FreeMusic(musics[i]);
         
-        // Clearing data for it
+        // Clearing data from track
+        #if ARCHIEVE_LOADING
         free(musicsData[i]->hidden.mem.base);
+        #endif
+
+        // Closing data
         SDL_RWclose(musicsData[i]);
     }
 }
 
 // Play need music track
 void Musics::playMusic(MUS_names _index){
-    Mix_PlayMusic(musics[_index], -1);
+    Mix_PlayMusic(musics[_index - 1], -1);
 }
 
 // Load track with need name
-void Musics::loadMusic(char *_name, MUS_names _index){
+void Musics::loadMusic(const char *_name, const MUS_names _index){
     // Getting selected file data
-    musicsData[_index] = loadObject(_name);
+    musicsData[_index - 1] = loadObject(_name);
 
     // Checking correction of loaded data
     #if CHECK_CORRECTION
-    if(!musicsData[_index]){
-        printf("Error with loading music file '%s' at %u.", _name, _index);
+    if(!musicsData[_index - 1]){
+        printf("Error with loading music file '%s' at %u.", _name, _index - 1);
         exit(ERR_FIL_MUS);
     }
     #endif
 
     // Creating music, setting in array and clearing data
-    musics[_index] = Mix_LoadMUS_RW(musicsData[_index], 0);
+    musics[_index - 1] = Mix_LoadMUS_RW(musicsData[_index - 1], 0);
+
+    // Checking correction of loaded music
+    #if CHECK_CORRECTION
+    if(!musics[_index - 1]){
+        printf("Error with loading music file '%s' at %u.", _name, _index - 1);
+        exit(ERR_FIL_MUS);
+    }
+    #endif
 };
 
 // Check correction of loaded tracks
 #if CHECK_CORRECTION
-bool Musics::checkCorrection(){
-    // Setting counter
-    Uint8 count = 0;
-
+void Musics::checkCorrection(){
     // Checking, if all music tracks exist
     for(Uint8 i = 0; i < MUS_count; ++i){
-        if(musics[i]){
-            count++;
+        if(musics[i] == NULL){
+            printf("Wrong music track at %u.", i);
+            exit(ERR_FIL_MUS);
         }
     }
-
-    // Returing correction of loaded number
-    return count == MUS_count;
 };
 #endif

@@ -5,10 +5,12 @@
 
 // Names of sound effects
 enum SND_names{
-
+    SND_TURN,   // Sound of player's turn
+    SND_RESET,  // Sound of field reset
 };
 
-#define SND_count 0
+// Total counter of sounds
+#define SND_count 2
 
 
 // Class of all loaded sounds for play
@@ -18,11 +20,11 @@ private:
     Mix_Chunk *sounds[SND_count];  // Array of all sound effects
 
     // Load sound with need name
-    void loadSound(char *name, SND_names num);
+    void loadSound(const char *name, const SND_names num);
 
     // Check correction of loaded sounds
     #if CHECK_CORRECTION
-    bool checkCorrection();
+    void checkCorrection();
     #endif
 public:
     Sounds();   // Loading all sounds

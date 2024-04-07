@@ -11,17 +11,12 @@ Sounds::Sounds(){
     // Loading all sounds
     //loadSound("snd/.wav", SND_);  // Template
 
-    //loadSound("snd/click.wav", SND_CLICK);
-    //loadSound("snd/flagSet.wav", SND_FLAG_SET);
-    //loadSound("snd/loose.wav", SND_LOOSE);
-    //loadSound("snd/win.wav", SND_WIN);
+    loadSound("snd/turn.wav", SND_TURN);
+    loadSound("snd/reset.wav", SND_RESET);
 
     // Checking correction of loading
     #if CHECK_CORRECTION
-    if(!checkCorrection()){
-        printf("Wrong count of sounds");
-        exit(ERR_FIL_SND);
-    }
+    checkCorrection();
     #endif
 
     // Setting start volume of effects
@@ -37,11 +32,11 @@ Sounds::~Sounds(){
 
 // Play need sound
 void Sounds::playSound(SND_names _index){
-    Mix_PlayChannel(-1, sounds[_index], 1);
+    Mix_PlayChannel(-1, sounds[_index], 0);
 }
 
 // Load sound with need name
-void Sounds::loadSound(char *_name, SND_names _index){
+void Sounds::loadSound(const char *_name, const SND_names _index){
     // Getting selected file data
     SDL_RWops *tempRW = loadObject(_name);
 
@@ -59,22 +54,25 @@ void Sounds::loadSound(char *_name, SND_names _index){
     // Freeing data from sound
     free(tempRW->hidden.mem.base);
     SDL_RWclose(tempRW);
+
+    // Checking correction of loaded sound
+    #if CHECK_CORRECTION
+    if(!sounds[_index]){
+        printf("Error with loading sound file '%s' at %u.", _name, _index);
+        exit(ERR_FIL_SND);
+    }
+    #endif
 };
 
 // Check correction of loaded sounds
 #if CHECK_CORRECTION
-bool Sounds::checkCorrection(){
-    // Setting counter
-    Uint8 count = 0;
-
+void Sounds::checkCorrection(){
     // Checking, if all sounds exist
     for(Uint8 i = 0; i < SND_count; ++i){
-        if(sounds[i]){
-            count++;
+        if(sounds[i] == NULL){
+            printf("Wrong sound at %u.", i);
+            exit(ERR_FIL_SND);
         }
     }
-
-    // Returing correction of loaded number
-    return count == SND_count;
 };
 #endif

@@ -8,6 +8,10 @@
 class PauseCycle : public CycleTemplate
 {
 private:
+    // Variables
+    timer nextSound = 0;  // Time to next play sound
+
+    // GUI objects
     // Slider for set music volume
     GUI::Slider<Uint8> musicSlider{0.5, 0.75, data.musicVolume};
     // Slider for set sounds volume
