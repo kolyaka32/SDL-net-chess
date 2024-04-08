@@ -64,6 +64,9 @@ Textures::Textures(){
     loadTexture("img/chess-pack-1/b-queen.png", IMG_GAME_BLACK_QUEEN);
     loadTexture("img/chess-pack-1/b-king.png", IMG_GAME_BLACK_KING);
 
+    // Point, where figure can go
+    loadTexture("img/chess-pack-1/point.png", IMG_GAME_POINT_MOVE_TO);
+
 
     // Checking correction of all loaded images
     #if CHECK_CORRECTION

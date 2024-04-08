@@ -38,10 +38,13 @@ enum IMG_names{
     IMG_GAME_BLACK_KNIGHT,
     IMG_GAME_BLACK_QUEEN,
     IMG_GAME_BLACK_KING,
+
+    // Point, where figure can go
+    IMG_GAME_POINT_MOVE_TO,
 };
 
 // Number of all images
-#define IMG_count 22
+#define IMG_count 23
 
 
 // Library for work with any images

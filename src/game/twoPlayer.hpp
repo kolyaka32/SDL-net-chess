@@ -1,6 +1,14 @@
 
 #pragma once
 
-// Including other game fariations
 #include "base.hpp"
 
+// Creating two player mode
+class TwoPlayerCycle : public GameCycle
+{
+private:
+    
+public:
+    TwoPlayerCycle(){};
+    ~TwoPlayerCycle(){};
+};

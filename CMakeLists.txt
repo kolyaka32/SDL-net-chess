@@ -85,8 +85,22 @@ add_executable( ${CMAKE_PROJECT_NAME}
     src/pauseCycle.hpp
     src/pauseCycle.cpp
 
+    # Game part
+    # Entities for game
+    src/game/entity/figures.hpp
+    # Entity realisations
+    src/game/entity/figureTemplate.cpp
+    #src/game/entity/
+
+    # Game board
+    src/game/entity/board.hpp
+    src/game/entity/board.cpp
+
     # Base game interface
     src/game/base.hpp
+    src/game/base.cpp
+
+    # Base game internat interface
     src/game/baseInternet.hpp
 
     # Singleplayer game cycle

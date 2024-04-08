@@ -1,5 +1,6 @@
 #include "selectCycle.hpp"
 #include "pauseCycle.hpp"
+#include "game/twoPlayer.hpp"
 
 
 // Selectable GUI object
@@ -27,23 +28,24 @@ SelectCycle::~SelectCycle(){
 //
 Uint8 SelectCycle::mouseInput(){
     if(settingButton.in(mouseX, mouseY)){
-        Uint8 state = runCycle<PauseCycle>();
-
-        // Continue to play music
-        //data.playMusic(MUS_MENU_THEME);
-        return state;
+        // Staring pause cycle
+        return runCycle<PauseCycle>();
     }
     else if(startOptions[0].in(mouseX, mouseY)){
-
+        // Staring two-player mode cycle
+        return runCycle<TwoPlayerCycle>();
     }
     else if(startOptions[1].in(mouseX, mouseY)){
-
+        // Staring two-player mode cycle
+        return runCycle<TwoPlayerCycle>();
     }
     else if(startOptions[2].in(mouseX, mouseY)){
-
+        // Staring two-player mode cycle
+        return runCycle<TwoPlayerCycle>();
     }
     else if(startOptions[3].in(mouseX, mouseY)){
-
+        // Staring two-player mode cycle
+        return runCycle<TwoPlayerCycle>();
     }
 
     // None-return

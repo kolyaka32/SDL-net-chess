@@ -16,61 +16,8 @@ enum{
 } SELECTED_BOX_types;
 
 
-
-
-// Pause menu
-/*void pause(){
-
-
-    bool MouseDown = false;
-
-    LNG_types newLanguage = language;
-    Uint8 backMove = 0;
-
-    #if SCROLLER_SOUND
-    time prevSND = SDL_GetTicks64();
-    #endif
-
-
-        int MouseX, MouseY;
-        SDL_GetMouseState(&MouseX, &MouseY);  // Getting mouse position
-        if(MouseDown && inBox == NORMAL_BOX){
-            // Checking on clicking on any of boxes
-            if(MusicSlider.checkIn(MouseX, MouseY)){
-                inBox = MUSIC_SLIDER_BOX;
-            }
-            else if(SoundSlider.checkIn(MouseX, MouseY)){
-                inBox = EFFECT_SLIDER_BOX;
-            }
-        }
-
-        switch(inBox)
-        {
-        case MUSIC_SLIDER_BOX:  // If touch music slider
-            MusicSlider.setValue(MouseX);
-            Mix_VolumeMusic(MusicSlider.state);  // Setting volume of music
-            break;
-        case EFFECT_SLIDER_BOX:  // If touch effects slider
-            SoundSlider.setValue(MouseX);
-            Mix_Volume(-1, SoundSlider.state);  // Setting volume of effects
-            
-            // Playing sound effect for understanding loud
-            #if SCROLLER_SOUND
-            if( SDL_GetTicks64() - prevSND > 200 ){
-                Mix_PlayChannel(-1, Sounds[SND_FLAG_SET], 0);
-                prevSND = SDL_GetTicks64();
-            }
-            #endif
-            break;
-
-        }
-    }
-};*/
-
-
-
 //
-PauseCycle::PauseCycle() : CycleTemplate(MUS_MAIN_THEME){
+PauseCycle::PauseCycle() : CycleTemplate(MUS_START_NONE){
 
 };
 

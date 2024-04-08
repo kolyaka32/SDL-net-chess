@@ -1,7 +1,7 @@
 #pragma once
 
 // Debuging modifiers
-#define DEBUG true
+#define DEBUG false
 #define CHECK_CORRECTION DEBUG
 #define ARCHIEVE_LOADING !DEBUG
 #define SCROLLER_SOUND SND_count
@@ -37,3 +37,4 @@
 #define MIN(a, b) (a < b ? a : b)
 #define SET_MIN(value, min) (value = value < min ? min : value)
 #define SET_MAX(value, max) (value = value > max ? max : value)
+#define sqr(value) (value * value)
