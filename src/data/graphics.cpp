@@ -67,6 +67,10 @@ Textures::Textures(){
     // Point, where figure can go
     loadTexture("img/chess-pack-1/point.png", IMG_GAME_POINT_MOVE_TO);
 
+    // Resetting color of figures
+    for(Uint8 i=IMG_GAME_WHITE_PAWN; i <= IMG_GAME_BLACK_KING;++i){
+        SDL_SetTextureColorMod(textures[i], 0, 0, 0);
+    }
 
     // Checking correction of all loaded images
     #if CHECK_CORRECTION
@@ -110,6 +114,28 @@ void Textures::loadTexture(const char *_name, IMG_names _index){
     // Clearing data
     SDL_FreeSurface(tempSurface);
 };
+
+//
+/*void Textures::createTextureModified(Uint8 _index, Uint8 _src){
+    textures[_index] = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB888, SDL_TEXTUREACCESS_TARGET, CELL_SIDE, CELL_SIDE);
+
+    // 
+    //SDL_SetTextureBlendMode(textures[_index], SDL_BLENDMODE_NONE);
+    SDL_SetRenderTarget(renderer, textures[_index]);
+
+    // Drawing rect for understanding working
+    setColor({20, 20, 20, 20});
+    SDL_Rect rect = {10, 10, 10, 10};
+    SDL_RenderFillRect(renderer, &rect);
+
+
+    //int a2 = SDL_SetTextureColorMod(textures[_index], 255, 20, 10);
+
+    SDL_RenderCopy(renderer, textures[_src], NULL, NULL);
+
+
+    SDL_SetRenderTarget(renderer, nullptr);
+};*/
 
 // Checking correction of loaded textures
 #if CHECK_CORRECTION

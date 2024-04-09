@@ -21,11 +21,14 @@ private:
     Uint8 turn;                                  // Which player is currently turn
     Figure activeCell;                           // Cell, that active (now move by player), or NULL if not
 
-    inline void tryMove(Sint8 X, Sint8 Y);       // Try set point, where you can move
+    // Check, if figure at pos can be attacked
+    inline bool isAttackable(Uint8 pos);
+    // Set points, where you can move or attck
+    inline void tryMove(Sint8 X, Sint8 Y);       
+    inline void tryAttack(Sint8 X, Sint8 Y);      
     inline void setDiagonals(const coord _x, const coord _y);     // 
     inline void setStraight(const coord _x, const coord _y);      // 
-    inline void setAroundKnight(const coord _x, const coord _y);  // 
-    inline void setAroundKing(const coord _x, const coord _y);    // 
+    inline void setAround(const coord _x, const coord _y, const Sint8 pos[][2]);  // 
     
 public:
     Board();

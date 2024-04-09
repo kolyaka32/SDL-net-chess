@@ -30,6 +30,10 @@ enum FIG_names{
 };
 
 
+// Extra names modifires
+#define FIG_RED_TYPE 0x10  // Code of making cell red
+
+
 // Type of cell
 struct Figure
 {
