@@ -53,16 +53,13 @@ void GameCycle::getInput(){
 
 //
 Uint8 GameCycle::mouseInput(){
-    //
-    Uint8 newLanguage = data.language;
-
-    //
+    // Pause button
     /*if(settingButton.in(mouseX, mouseY)){
         return 1;
     }*/
 
     // Clicking on field
-    board.click(mouseX, mouseY);
+    board.click(mouseX / CELL_SIDE, mouseY / CELL_SIDE);
 
     // None-return
     return 0;

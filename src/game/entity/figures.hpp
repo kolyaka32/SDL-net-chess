@@ -30,30 +30,33 @@ enum FIG_names{
 };
 
 
-// Posible coordinats to move
-/*Sint8 FiguresMoves[8][8] = {
-    // Pawn moves
-    {
-
-    }
-};*/
-
-
-
-// Class of single game figures
-/*class FigureTemplate
+// Type of cell
+struct Figure
 {
-private:
-    
-
-protected:
-    coord x, y;  // Figure coordinates
-public:
-    FigureTemplate();
-    ~FigureTemplate();
-
-    virtual void checkAcess(coord X, coord Y);
-
+    Uint8 type;  // Type of current cell
+    Sint8 X, Y;      // Coordinats of current cell
 };
 
-*/
+// Array of king possible ways to go
+const Sint8 kingMoves[8][2] = {
+    {0, 1},
+    {1, 1},
+    {1, 0},
+    {1, -1},
+    {0, -1},
+    {-1, -1},
+    {-1, 0},
+    {-1, 1}
+};
+
+// Array of possible knight ways to go
+const Sint8 knightMoves[8][2] = {
+    {-1, 2},
+    {1, 2},
+    {2, 1},
+    {2, -1},
+    {1, -2},
+    {-1, -2},
+    {-2, -1},
+    {-2, 1}
+};
