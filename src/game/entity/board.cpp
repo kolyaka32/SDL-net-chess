@@ -409,10 +409,10 @@ Uint8 Board::click(const coord _x, const coord _y){
 
                         // Disabling previous cell clearing
                         if(_x < FIELD_WIDTH/2){
-                            activeCell.pos += 1;
+                            activeCell.pos -= 1;
                         }
                         else{
-                            activeCell.pos -= 1;
+                            activeCell.pos += 1;
                         }
                     }
                 }
