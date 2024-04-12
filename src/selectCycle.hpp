@@ -11,10 +11,10 @@ private:
 
     // Buttons for start variants
     GUI::TextButton startOptions[optionsCount] = {
-        {0.5, 0.3, data.texts[TXT_SELECT_SINGLE]},
-        {0.5, 0.5, data.texts[TXT_SELECT_TWO]},
-        {0.5, 0.7, data.texts[TXT_SELECT_SERVER]},
-        {0.5, 0.9, data.texts[TXT_SELECT_CLIENT]},
+        {data.texts[TXT_SELECT_SINGLE]},
+        {data.texts[TXT_SELECT_TWO]},
+        {data.texts[TXT_SELECT_SERVER]},
+        {data.texts[TXT_SELECT_CLIENT]},
     };
     
     // Setting menu button

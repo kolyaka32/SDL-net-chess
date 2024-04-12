@@ -1,10 +1,9 @@
 
 #include "base.hpp"
 
-
 //
 GameCycle::GameCycle() : CycleTemplate(MUS_MAIN_THEME){
-
+    endState = END_NONE;
 };
 
 //
@@ -58,8 +57,30 @@ Uint8 GameCycle::mouseInput(){
         return 1;
     }*/
 
-    // Clicking on field
-    board.click(mouseX / CELL_SIDE, mouseY / CELL_SIDE);
+    // Clicking on field if possible
+    if(endState == END_NONE){
+        // Clicking on field
+        endState = board.click(mouseX / CELL_SIDE, mouseY / CELL_SIDE);
+    }
+    else{
+        // Getting buttons clicks
+        // Game restart
+        if(restartButton.in(mouseX, mouseY)){
+            // Restarting game
+            endState = END_NONE;
+
+            // Resetting field
+            board.reset();
+
+            // Making sound
+            data.playSound(SND_RESET);
+            return 0;
+        }
+        // Going to menu
+        else if(menuButton.in(mouseX, mouseY)){
+            return 1;
+        }
+    }
 
     // None-return
     return 0;
@@ -70,9 +91,18 @@ void GameCycle::draw() const{
     // Bliting field
     board.blit();
 
-    // Bliting title
-    //data.texts[TXT_PAUSE_TITLE].blit();
+    // Bliting game state, if need
+    if(endState != END_NONE){
+        // Bliting end background
+        endBackplate.blit();
 
+        // Bliting text
+        data.texts[TXT_END_WIN + endState].blit();
+
+        // Blitting buttons
+        restartButton.blit();
+        menuButton.blit();
+    }
 
     // Bliting all to screen
     data.render();

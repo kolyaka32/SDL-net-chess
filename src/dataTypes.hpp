@@ -3,7 +3,8 @@
 #include "include.hpp"
 
 // Types of data
-typedef Uint8 coord;       // Type of data for field coordinates
+typedef Uint8 coord;       // Type of data for 1 coordinate of cell
+typedef Uint8 position;    // Type of data for position in array (2 coordinats)
 typedef Uint8 cell;        // Type of cell content
 typedef Uint16 count;      // Type of data for any counters
 

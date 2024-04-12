@@ -29,16 +29,20 @@ enum FIG_names{
     FIG_MOVE_TO,
 };
 
+// Macros for getting position from coordinats
+#define getPos(x, y) ((x) + (y) * FIELD_WIDTH)
+
 
 // Extra names modifires
-#define FIG_RED_TYPE 0x10  // Code of making cell red
+#define FIG_RED_TYPE 0x10   // Code of making cell red (attackable)
+#define FIG_BLUE_TYPE 0x20  // Code of making cell blue (current)
 
 
 // Type of cell
 struct Figure
 {
-    Uint8 type;  // Type of current cell
-    Sint8 X, Y;      // Coordinats of current cell
+    cell type;  // Type of current cell
+    position pos;   // Coordinats of current cell
 };
 
 // Array of king possible ways to go

@@ -5,14 +5,8 @@ using namespace GUI;
 
 
 // Button class
-TextButton::TextButton(float _x, float _y, StaticText &_text) : GUItemplate(), topText (_text){
-    // Setting base texture
-    texture = data.textures[IMG_GUI_BASE_BUTTON];
+TextButton::TextButton(StaticText &_text) : Backplate({_text.rect.x-10, _text.rect.y-1, _text.rect.w+20, _text.rect.h+4}, _text.rect.h/2, 3), topText (_text){
     
-    // Setting destination
-    SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
-    rect.x = SCREEN_WIDTH * _x - rect.w / 2;
-    rect.y = SCREEN_HEIGHT * _y - rect.h / 2;
 };
 
 //

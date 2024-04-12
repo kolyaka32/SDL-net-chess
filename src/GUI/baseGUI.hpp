@@ -42,6 +42,7 @@ namespace GUI{
         const ALIGNMENT_types aligment;       // Aligment type to improve displasment
         const SDL_Color color;                // Base draw color
         TTF_Font *font;                       // Font to create texture
+        friend class TextButton;              // Allowing textbutton to take data
     public:
         StaticText(const char* text, textHeight size, float X, 
             float Y, SDL_Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
@@ -74,17 +75,6 @@ namespace GUI{
     {
     public:
         ImageButton(float X, float Y, IMG_names textureIndex);   // Create new button
-    };
-
-
-    // Class of buttons with text on it
-    class TextButton : public virtual GUItemplate
-    {
-    private:
-        const StaticText &topText;  // Pointer to text on this button (shortcut)
-    public:
-        TextButton(float X, float Y, StaticText &top);   // Create new button
-        void blit() const;                      // Drawing current button
     };
 
 
@@ -149,5 +139,23 @@ namespace GUI{
         void updateCaret();                          // Function of change caret symbol from '|' to ' ' and back
         void select();                               // Function of setting caret for typing after
         void removeSelect();                         // Function of removing caret after typing
+    };
+
+    // Class of backplate for 
+    class Backplate : public virtual GUItemplate
+    {
+    public:
+        Backplate(const SDL_Rect rect, const Uint8 radius, const Uint8 border, const SDL_Color frontColor = {175, 175, 175, 255}, const SDL_Color backColor = BLACK);
+        ~Backplate();
+    };
+
+    // Class of buttons with text on it
+    class TextButton : public virtual Backplate
+    {
+    private:
+        const StaticText &topText;  // Pointer to text on this button (shortcut)
+    public:
+        TextButton(StaticText &top);   // Create new button
+        void blit() const;             // Drawing current button
     };
 }

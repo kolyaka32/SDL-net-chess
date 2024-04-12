@@ -13,7 +13,7 @@ private:
     std::thread drawThread{this->drawCycle, this};  // Thread for drawing
 protected:
     // Data for own cycle
-    bool running = true;    // Flag of running current cycle (for control draw)
+    bool running = false;   // Flag of running current cycle (for control draw)
     std::mutex runMutex;    // Mutex for block running for change for another
     int mouseX, mouseY;     // Current position of mouse
     Uint8 selectedBox;      // Number of which box is currently selected

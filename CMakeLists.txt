@@ -64,6 +64,7 @@ add_executable( ${CMAKE_PROJECT_NAME}
     src/GUI/slider.cpp
     src/GUI/staticText.cpp
     src/GUI/typeBox.cpp
+    src/GUI/roundedBackplate.cpp
 
     # Global interface
     src/data/texts.hpp
@@ -89,8 +90,7 @@ add_executable( ${CMAKE_PROJECT_NAME}
     # Entities for game
     src/game/entity/figures.hpp
     # Entity realisations
-    src/game/entity/figureTemplate.cpp
-    #src/game/entity/
+    src/game/entity/figuresMoves.cpp
 
     # Game board
     src/game/entity/board.hpp

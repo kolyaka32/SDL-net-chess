@@ -28,10 +28,21 @@ enum TXT_types{
     TXT_PAUSE_TITLE,
     TXT_PAUSE_MUSIC,
     TXT_PAUSE_SOUND,
+
+    // End game texts
+    TXT_END_WIN,
+    TXT_END_WIN_1,
+    TXT_END_WIN_2,
+    TXT_END_LOOSE,
+    TXT_END_NOBODY,
+
+    // Buttons texts
+    TXT_BUTTON_RESTART,
+    TXT_BUTTON_MENU,
 };
 
 // Summary text counter
-#define TXT_count 8
+#define TXT_count 15
 
 
 // All static texts
@@ -58,6 +69,24 @@ public:
             30, 0.5, 0.68},
         {"Sounds\nЗвуки\nGeräusche\nГук\n", 
             30, 0.5, 0.83},
+
+        // Game end texts
+        {"Win!\nПобеда!\n-\n",
+            30, 0.5, 0.4, WHITE},
+        {"Fist player win!\nПервый игрок выйграл!\n-\n",
+            30, 0.5, 0.4, WHITE},
+        {"Second player win!\nВторой игрок выйграл!\n-\n",
+            30, 0.5, 0.4, WHITE},
+        {"You loose...\nВы проиграли...\n-\n-\n",
+            30, 0.5, 0.4, WHITE},
+        {"Nobody win\nНичья\n-\n-\n",
+            30, 0.5, 0.4, WHITE},
+
+        // Buttons texts
+        {"Restart\nПерезапустить\n-\n-\n",
+            30, 0.5, 0.5},
+        {"Exit to menu\nВыйти в меню\n-\n-\n",
+            30, 0.5, 0.6},
     };
 
 public:

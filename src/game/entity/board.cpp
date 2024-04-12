@@ -31,7 +31,7 @@ void Board::reset(){
     // rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
 
     // Setting figures on them places by given text
-    Uint8 c = 0;  // Counter of placed
+    position c = 0;  // Counter of placed
 
     // Parsing text for setting figures
     Uint16 i = 0;
@@ -147,21 +147,35 @@ void Board::blit() const{
 
     // Drawing background
     data.setColor({206, 139, 71, 255});
-    for(coord y=0; y < FIELD_WIDTH; ++y)
-        for(coord x=y%2; x < FIELD_WIDTH; x+=2){
+    for(coord y = 0; y < FIELD_WIDTH; ++y)
+        for(coord x = y % 2; x < FIELD_WIDTH; x += 2){
             SDL_Rect rect = {x * CELL_SIDE, y * CELL_SIDE, CELL_SIDE, CELL_SIDE};
             SDL_RenderFillRect(data.renderer, &rect);
         }
     
     // Drawing each figure
-    for(Uint8 y=0; y < FIELD_WIDTH; ++y)
-        for(coord x=0; x < FIELD_WIDTH; ++x){
-            if(figures[y * FIELD_WIDTH + x]){
+    for(coord y = 0; y < FIELD_WIDTH; ++y)
+        for(coord x = 0; x < FIELD_WIDTH; ++x){
+            if(figures[getPos(x, y)]){
                 SDL_Rect rect = {x * CELL_SIDE, y * CELL_SIDE, CELL_SIDE, CELL_SIDE};
-                Uint8 textureIndex = IMG_GAME_WHITE_PAWN - 1 + figures[y * FIELD_WIDTH + x];
+                Uint8 textureIndex = IMG_GAME_WHITE_PAWN - 1 + figures[getPos(x, y)];
 
-                // Checking, if figure attackable
-                if(figures[y * FIELD_WIDTH + x] > FIG_RED_TYPE){
+                // Checking, if figure current (blue)
+                if(figures[getPos(x, y)] > FIG_BLUE_TYPE){
+                    // Changing cell index to normal
+                    textureIndex -= FIG_BLUE_TYPE;
+
+                    // Making it blue
+                    SDL_SetTextureColorMod(data.textures[textureIndex], 0, 0, 255);
+
+                    // Drawing
+                    SDL_RenderCopy(data.renderer, data.textures[textureIndex], NULL, &rect);
+
+                    // Resetting cell color
+                    SDL_SetTextureColorMod(data.textures[textureIndex], 0, 0, 0);
+                }
+                // Checking, if figure attackable (red)
+                else if(figures[getPos(x, y)] > FIG_RED_TYPE){
                     // Changing cell index to normal
                     textureIndex -= FIG_RED_TYPE;
 
@@ -181,210 +195,12 @@ void Board::blit() const{
         }
 };
 
-// Check, if cell at need position can be attacked
-inline bool Board::isAttackable(Uint8 _pos){
-    cell c = figures[_pos];
-    if(!turn){
-        // White turn
-        return (c >= FIG_BLACK_PAWN);
-    }
-    else{
-        // Black turn
-        return (c < FIG_BLACK_PAWN) && c;
-    }
-}
-
-// Flag of board, that it was moven
-bool wasMoven;
-
-// Try set point, where you can move
-inline void Board::tryMove(Sint8 _x, Sint8 _y){
-    // Checking getting over border
-    if(_y < 0 || _y > FIELD_WIDTH){
-        return;
-    }
-    // Setting new state
-    if(figures[_y * FIELD_WIDTH + _x] == FIG_NONE){
-        // Setting new position
-        figures[_y * FIELD_WIDTH + _x] = FIG_MOVE_TO;
-        wasMoven = true;
-    }
-};
-
-// Try set point, where you can move
-inline void Board::tryAttack(Sint8 _x, Sint8 _y){
-    // Checking getting over border
-    if(_x < 0 || _x > FIELD_WIDTH || _y < 0 || _y > FIELD_WIDTH){
-        return;
-    }
-    if(isAttackable(_y * FIELD_WIDTH + _x)){
-        // Setting figure to be attacked
-        figures[_y * FIELD_WIDTH + _x] += FIG_RED_TYPE;
-        wasMoven = true;
-    }
-};
-
-// 
-inline void Board::setDiagonals(const coord _x, const coord _y){
-    // Diagonal to left up
-    for(Sint8 x = _x-1; (x >= 0) && (_y - _x + x >= 0); --x){
-        // Getting new position
-        Uint8 pos = x + (_y - _x + x) * FIELD_WIDTH;
-        // Checking on getting on figure
-        if(figures[pos]){
-            if(isAttackable(pos)){
-                figures[pos] += FIG_RED_TYPE;
-                wasMoven = true;
-            }
-            break;
-        }
-        // Setting point to move to
-        figures[pos] = FIG_MOVE_TO;
-        wasMoven = true;
-    }
-
-    // Diagonal to down right
-    for(Sint8 x = _x+1; (x < FIELD_WIDTH) && (_y - _x + x < FIELD_WIDTH); ++x){
-        // Getting new position
-        Uint8 pos = x + (_y - _x + x) * FIELD_WIDTH;
-        // Checking on getting on figure
-        if(figures[pos]){
-            if(isAttackable(pos)){
-                figures[pos] += FIG_RED_TYPE;
-                wasMoven = true;
-            }
-            break;
-        }
-        // Setting point to move to
-        figures[pos] = FIG_MOVE_TO;
-        wasMoven = true;
-    }
-
-    // Diagonal to down left
-    for(Sint8 x = _x - 1; (x >= 0) && (_y + _x - x < FIELD_WIDTH); --x){
-        // Getting new position
-        Uint8 pos = x + (_y + _x - x) * FIELD_WIDTH;
-        // Checking on getting on figure
-        if(figures[pos]){
-            if(isAttackable(pos)){
-                figures[pos] += FIG_RED_TYPE;
-                wasMoven = true;
-            }
-            break;
-        }
-        // Setting point to move to
-        figures[pos] = FIG_MOVE_TO;
-        wasMoven = true;
-    }
-
-    // Diagonal to up right
-    for(Sint8 x = _x + 1; (x < FIELD_WIDTH) && (_y + _x - x >= 0); ++x){
-        // Getting new position
-        Uint8 pos = x + (_y + _x - x) * FIELD_WIDTH;
-        // Checking on getting on figure
-        if(figures[pos]){
-            if(isAttackable(pos)){
-                figures[pos] += FIG_RED_TYPE;
-                wasMoven = true;
-            }
-            break;
-        }
-        // Setting point to move to
-        figures[pos] = FIG_MOVE_TO;
-        wasMoven = true;
-    }
-};
-
-// 
-inline void Board::setStraight(const coord _x, const coord _y){
-    // To left part
-    for(Sint8 i = _x-1; i >= 0; --i){
-        // Checking on getting on figure
-        if(figures[i + _y * FIELD_WIDTH]){
-            if(isAttackable(i + _y * FIELD_WIDTH)){
-                figures[i + _y * FIELD_WIDTH] += FIG_RED_TYPE;
-                wasMoven = true;
-            }
-            break;
-        }
-        // Setting point to move to
-        figures[i + _y * FIELD_WIDTH] = FIG_MOVE_TO;
-        wasMoven = true;
-    }
-    // To right part
-    for(Sint8 i = _x+1; i < FIELD_WIDTH; ++i){
-        // Checking on getting on figure
-        if(figures[i + _y * FIELD_WIDTH]){
-            if(isAttackable(i + _y * FIELD_WIDTH)){
-                figures[i + _y * FIELD_WIDTH] += FIG_RED_TYPE;
-                wasMoven = true;
-            }
-            break;
-        }
-        // Setting point to move to
-        figures[i + _y * FIELD_WIDTH] = FIG_MOVE_TO;
-        wasMoven = true;
-    }
-
-    // To up part
-    for(Sint8 i = _y-1; i >= 0; --i){
-        // Checking on getting on figure
-        if(figures[_x + i * FIELD_WIDTH]){
-            if(isAttackable(_x + i * FIELD_WIDTH)){
-                figures[_x + i * FIELD_WIDTH] += FIG_RED_TYPE;
-                wasMoven = true;
-            }
-            break;
-        }
-        // Setting point to move to
-        figures[_x + i * FIELD_WIDTH] = FIG_MOVE_TO;
-        wasMoven = true;
-    }
-    // To down part
-    for(Sint8 i = _y+1; i < FIELD_WIDTH; ++i){
-        // Checking on getting on figure
-        if(figures[_x + i * FIELD_WIDTH]){
-            if(isAttackable(_x + i * FIELD_WIDTH)){
-                figures[_x + i * FIELD_WIDTH] += FIG_RED_TYPE;
-                wasMoven = true;
-            }
-            break;
-        }
-        // Setting point to move to
-        figures[_x + i * FIELD_WIDTH] = FIG_MOVE_TO;
-        wasMoven = true;
-    }
-};
-
-// 
-inline void Board::setAround(const coord _x, const coord _y, const Sint8 _moves[][2]){
-    // 
-    for(Uint8 i=0; i < 8; ++i){
-        Sint8 x = _x + _moves[i][0];
-        Sint8 y = _y + _moves[i][1];
-        // Checking on getting over border
-        if( (x >= 0) && (x < FIELD_WIDTH) && (y >= 0) && (y < FIELD_WIDTH)){
-            // Checking on free cell
-            if(figures[x + y * FIELD_WIDTH] == FIG_NONE){
-                figures[x + y * FIELD_WIDTH] = FIG_MOVE_TO;
-                wasMoven = true;
-            }
-            // Checking on attackable cell
-            else if(isAttackable(x + y * FIELD_WIDTH)){
-                figures[x + y * FIELD_WIDTH] += FIG_RED_TYPE;
-                wasMoven = true;
-            }
-        }
-    }
-};
-
 // Clicking on field (grab and put figures)
-void Board::click(const coord _x, const coord _y){
+Uint8 Board::click(const coord _x, const coord _y){
     if(!activeCell.type){
-        // Finding clicked cell and finding new positions
-        activeCell.type = figures[_y * FIELD_WIDTH + _x];
-        activeCell.X = _x;
-        activeCell.Y = _y;
+        // Finding clicked cell, it position
+        activeCell.pos = getPos(_x, _y);
+        activeCell.type = figures[activeCell.pos];
 
         // Resetting flag
         wasMoven = false;
@@ -476,17 +292,23 @@ void Board::click(const coord _x, const coord _y){
         // Checking, if wasn't any move
         if(!wasMoven){
             activeCell.type = FIG_NONE;
-            return;
+            return END_NONE;
         }
+        // Changing color of current cell
+        figures[getPos(_x, _y)] += FIG_BLUE_TYPE;
+        return END_NONE;
     }
     else{
         // Checling, if on old place
-        if(activeCell.Y == _y && activeCell.X == _x){
+        if(activeCell.pos == getPos(_x, _y)){
+            // Disacting current cell
+            figures[getPos(_x, _y)] -= FIG_BLUE_TYPE;
+
             // Returning to first step
             activeCell.type = FIG_NONE;
 
             // Clearing field after turn (resetting figure move to and red type)
-            for(Uint8 i=0; i < fieldSize; ++i){
+            for(position i=0; i < fieldSize; ++i){
                 // Clear points to move
                 if(figures[i] == FIG_MOVE_TO){
                     figures[i] = FIG_NONE;
@@ -496,16 +318,24 @@ void Board::click(const coord _x, const coord _y){
                     figures[i] -= FIG_RED_TYPE;
                 }
             }
-            return;
+            return END_NONE;
         }
         // Checking, if new position allowable
-        else if(figures[_y * FIELD_WIDTH + _x] >= FIG_MOVE_TO){
+        else if(figures[getPos(_x, _y)] >= FIG_MOVE_TO){
+            // Checking on game end (if there king of another command)
+            if(figures[getPos(_x, _y)] == (FIG_RED_TYPE + FIG_BLACK_KING + turn * (FIG_WHITE_KING - FIG_BLACK_KING))){
+                return END_WIN + turn;
+            }
+
             // Setting new position to cell
-            figures[_y * FIELD_WIDTH + _x] = activeCell.type;
-            figures[activeCell.Y * FIELD_WIDTH + activeCell.X] = FIG_NONE;
+            figures[getPos(_x, _y)] = activeCell.type;
+            figures[activeCell.pos] = FIG_NONE;
+
+            // Making sound
+            data.playSound(SND_TURN);
 
             // Clearing field after turn (resetting figure move to and red type)
-            for(Uint8 i=0; i < fieldSize; ++i){
+            for(position i=0; i < fieldSize; ++i){
                 // Clear points to move
                 if(figures[i] == FIG_MOVE_TO){
                     figures[i] = FIG_NONE;
@@ -520,13 +350,10 @@ void Board::click(const coord _x, const coord _y){
             activeCell.type = FIG_NONE;
 
             // Changing moving player
-            if(turn == TURN_WHITE){
-                turn = TURN_BLACK;
-            }
-            else{
-                turn = TURN_WHITE;
-            }
-            return;
+            turn = !turn;
+
+            return END_NONE;
         }
     }
+    return END_NONE;
 };

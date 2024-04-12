@@ -9,7 +9,6 @@ enum IMG_names{
     IMG_GUI_PAUSE_BUTTON,
     IMG_GUI_SLIDER_BUTTON,
     IMG_GUI_SLIDER_LINE,
-    IMG_GUI_BASE_BUTTON,
     IMG_GUI_TYPE_BOX,
 
     // Base flags in settings
@@ -39,29 +38,12 @@ enum IMG_names{
     IMG_GAME_BLACK_QUEEN,
     IMG_GAME_BLACK_KING,
 
-    // Copies of figures in red color (for attack options)
-    // White figures
-    /*IMG_GAME_WHITE_PAWN_RED,
-    IMG_GAME_WHITE_BISHOP_RED,
-    IMG_GAME_WHITE_ROOK_RED,
-    IMG_GAME_WHITE_KNIGHT_RED,
-    IMG_GAME_WHITE_QUEEN_RED,
-    IMG_GAME_WHITE_KING_RED,
-
-    // Black figures
-    IMG_GAME_BLACK_PAWN_RED,
-    IMG_GAME_BLACK_BISHOP_RED,
-    IMG_GAME_BLACK_ROOK_RED,
-    IMG_GAME_BLACK_KNIGHT_RED,
-    IMG_GAME_BLACK_QUEEN_RED,
-    IMG_GAME_BLACK_KING_RED,*/
-
     // Point, where figure can go
     IMG_GAME_POINT_MOVE_TO,
 };
 
 // Number of all images
-#define IMG_count 23
+#define IMG_count 22
 
 
 // Library for work with any images

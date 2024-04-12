@@ -34,7 +34,6 @@ Textures::Textures(){
     loadTexture("img/GUI/esc_button.png", IMG_GUI_PAUSE_BUTTON);
     loadTexture("img/GUI/slider_button.png", IMG_GUI_SLIDER_BUTTON);
     loadTexture("img/GUI/slider_line.png", IMG_GUI_SLIDER_LINE);
-    loadTexture("img/GUI/button.png", IMG_GUI_BASE_BUTTON);
     loadTexture("img/GUI/type_box.png",IMG_GUI_TYPE_BOX);
 
     // Base flags in settings
@@ -114,28 +113,6 @@ void Textures::loadTexture(const char *_name, IMG_names _index){
     // Clearing data
     SDL_FreeSurface(tempSurface);
 };
-
-//
-/*void Textures::createTextureModified(Uint8 _index, Uint8 _src){
-    textures[_index] = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB888, SDL_TEXTUREACCESS_TARGET, CELL_SIDE, CELL_SIDE);
-
-    // 
-    //SDL_SetTextureBlendMode(textures[_index], SDL_BLENDMODE_NONE);
-    SDL_SetRenderTarget(renderer, textures[_index]);
-
-    // Drawing rect for understanding working
-    setColor({20, 20, 20, 20});
-    SDL_Rect rect = {10, 10, 10, 10};
-    SDL_RenderFillRect(renderer, &rect);
-
-
-    //int a2 = SDL_SetTextureColorMod(textures[_index], 255, 20, 10);
-
-    SDL_RenderCopy(renderer, textures[_src], NULL, NULL);
-
-
-    SDL_SetRenderTarget(renderer, nullptr);
-};*/
 
 // Checking correction of loaded textures
 #if CHECK_CORRECTION

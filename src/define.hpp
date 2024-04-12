@@ -1,7 +1,7 @@
 #pragma once
 
 // Debuging modifiers
-#define DEBUG true
+#define DEBUG false
 #define CHECK_CORRECTION DEBUG
 #define ARCHIEVE_LOADING !DEBUG
 #define SCROLLER_SOUND SND_count
@@ -30,11 +30,11 @@
 // Base game colors
 #define BLACK {0, 0, 0, 255}
 #define WHITE {255, 255, 255, 255}
-#define GREY {32, 32, 32, 255}
+#define GREY {170, 170, 170, 255}
 
 // Macroses
 #define MAX(a, b) (a > b ? a : b)
 #define MIN(a, b) (a < b ? a : b)
 #define SET_MIN(value, min) (value = value < min ? min : value)
 #define SET_MAX(value, max) (value = value > max ? max : value)
-#define sqr(value) (value * value)
+#define sqr(value) ((value) * (value))

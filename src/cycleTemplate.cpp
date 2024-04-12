@@ -84,6 +84,13 @@ Uint8 CycleTemplate::mouseInput(){
 
 //
 void CycleTemplate::drawCycle(){
+    // Waiting to finish data loading
+    while(!running){
+        // Waiting
+        SDL_Delay(10);
+    }
+
+    // Running draw cycle
     while (running)
     {
         // Checking for avalible to run
@@ -107,6 +114,9 @@ void CycleTemplate::draw() const{
 
 //
 void CycleTemplate::run(){
+    // Allowing to start work
+    running = true;
+    
     // Waiting for input stop
     getInput();
 
