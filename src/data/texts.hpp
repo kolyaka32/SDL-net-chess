@@ -44,11 +44,27 @@ enum TXT_types{
 // Summary text counter
 #define TXT_count 15
 
+// Names of all framed text buttons
+enum BTN_names{
+    // Selection menu
+    BTN_SELECT_SINGLE,   // Singleplayer gamemode
+    BTN_SELECT_TWO,      // Two player gamemode
+    BTN_SELECT_SERVER,   // Host server
+    BTN_SELECT_CLIENT,   // Connect to server
+
+    // Buttons texts
+    BTN_GAME_RESTART,
+    BTN_GAME_MENU,
+};
+
+#define BTN_count 6
+
 
 // All static texts
 class Texts : public virtual App, public virtual InitFile
 {
 public:
+    // All static texts in game
     GUI::StaticText texts[TXT_count] = {
         // Selection menu
         {"Chess\nШахматы\nSchach\nШахматы\n",
@@ -87,6 +103,19 @@ public:
             30, 0.5, 0.5},
         {"Exit to menu\nВыйти в меню\n-\n-\n",
             30, 0.5, 0.6},
+    };
+    
+    // All framed texts buttons in game
+    GUI::TextButton textButtons[BTN_count] = {
+        // Select options
+        {texts[TXT_SELECT_SINGLE]},
+        {texts[TXT_SELECT_TWO]},
+        {texts[TXT_SELECT_SERVER]},
+        {texts[TXT_SELECT_CLIENT]},
+
+        // Buttons texts
+        {texts[TXT_BUTTON_RESTART]},
+        {texts[TXT_BUTTON_MENU]},
     };
 
 public:

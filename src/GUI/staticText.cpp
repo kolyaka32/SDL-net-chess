@@ -7,7 +7,11 @@ using namespace GUI;
 // Basic constructor for new object
 StaticText::StaticText(const char* _text, textHeight _height, float _X, float _Y, SDL_Color _color, ALIGNMENT_types _aligment)
  : text (_text), posX(_X), posY(_Y), aligment(_aligment), color(_color){
+    // Creating font
     font = data.createFont(_height);
+
+    // First text update
+    updateText();
 };
 
 // Basic destructor for free dynamic variables

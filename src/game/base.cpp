@@ -65,7 +65,7 @@ Uint8 GameCycle::mouseInput(){
     else{
         // Getting buttons clicks
         // Game restart
-        if(restartButton.in(mouseX, mouseY)){
+        if(data.textButtons[BTN_GAME_RESTART].in(mouseX, mouseY)){
             // Restarting game
             endState = END_NONE;
 
@@ -77,7 +77,7 @@ Uint8 GameCycle::mouseInput(){
             return 0;
         }
         // Going to menu
-        else if(menuButton.in(mouseX, mouseY)){
+        else if(data.textButtons[BTN_GAME_MENU].in(mouseX, mouseY)){
             return 1;
         }
     }
@@ -100,8 +100,8 @@ void GameCycle::draw() const{
         data.texts[TXT_END_WIN + endState].blit();
 
         // Blitting buttons
-        restartButton.blit();
-        menuButton.blit();
+        data.textButtons[BTN_GAME_RESTART].blit();
+        data.textButtons[BTN_GAME_MENU].blit();
     }
 
     // Bliting all to screen

@@ -6,7 +6,7 @@ bool Board::isAttackable(const position _pos){
     cell c = figures[_pos];
     if(turn == TURN_WHITE){
         // White turn
-        return (c >= FIG_BLACK_PAWN);
+        return (c >= FIG_BLACK_PAWN) && (c < FIG_RED_TYPE);
     }
     else{
         // Black turn
@@ -144,4 +144,44 @@ void Board::setAround(const coord _x, const coord _y, const Sint8 _moves[][2]){
             }
         }
     }
+};
+
+//
+void Board::setCastlingLeft(const coord _x, const coord _y, const cell _need){
+    // Checking, if all space between is free
+    for(Sint8 x=_x-1; x >= 0; --x){
+        // Check, if need cell
+        if(figures[getPos(x, _y)] == _need){
+            // Set cell to can swap
+            figures[getPos(x, _y)] += FIG_RED_TYPE;
+            // Returning
+            return;
+        }
+        // Check, if place free
+        else if(figures[getPos(x, _y)] != FIG_NONE){
+            return;
+        }
+    }
+    // Return, if don't find need cell
+    return;
+};
+
+//
+void Board::setCastlingRight(const coord _x, const coord _y, const cell _need){
+    // Checking, if all space between is free
+    for(Uint8 x=_x+1; x < FIELD_WIDTH; ++x){
+        // Check, if need cell
+        if(figures[getPos(x, _y)] == _need){
+            // Set cell to can swap
+            figures[getPos(x, _y)] += FIG_RED_TYPE;
+            // Returning
+            return;
+        }
+        // Check, if place free
+        else if(figures[getPos(x, _y)] != FIG_NONE){
+            return;
+        }
+    }
+    // Return, if don't find need cell
+    return;
 };

@@ -31,19 +31,19 @@ Uint8 SelectCycle::mouseInput(){
         // Staring pause cycle
         return runCycle<PauseCycle>();
     }
-    else if(startOptions[0].in(mouseX, mouseY)){
+    else if(data.textButtons[BTN_SELECT_SINGLE].in(mouseX, mouseY)){
         // Staring two-player mode cycle
         return runCycle<TwoPlayerCycle>();
     }
-    else if(startOptions[1].in(mouseX, mouseY)){
+    else if(data.textButtons[BTN_SELECT_TWO].in(mouseX, mouseY)){
         // Staring two-player mode cycle
         return runCycle<TwoPlayerCycle>();
     }
-    else if(startOptions[2].in(mouseX, mouseY)){
+    else if(data.textButtons[BTN_SELECT_SERVER].in(mouseX, mouseY)){
         // Staring two-player mode cycle
         return runCycle<TwoPlayerCycle>();
     }
-    else if(startOptions[3].in(mouseX, mouseY)){
+    else if(data.textButtons[BTN_SELECT_CLIENT].in(mouseX, mouseY)){
         // Staring two-player mode cycle
         return runCycle<TwoPlayerCycle>();
     }
@@ -63,8 +63,8 @@ void SelectCycle::draw() const{
 
     // Blitting buttons
     // Start variants
-    for(Uint8 i=0; i < optionsCount; ++i){
-        startOptions[i].blit();
+    for(Uint8 i=BTN_SELECT_SINGLE; i <= BTN_SELECT_CLIENT; ++i){
+        data.textButtons[i].blit();
     };
     // Settings menu
     settingButton.blit();

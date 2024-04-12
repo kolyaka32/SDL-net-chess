@@ -2,7 +2,7 @@
 
 // Global static texts
 Texts::Texts(){
-    updateTranslation();
+    
 };
 
 // Update translations of all texts
@@ -30,5 +30,10 @@ void Texts::updateTranslation(){
     // Updating texts
     for(Uint8 i = 0; i < TXT_count; ++i){
         texts[i].updateText();
+    }
+
+    // Updating buttons
+    for(Uint8 i = 0; i < BTN_count; ++i){
+        textButtons[i].update();
     }
 }

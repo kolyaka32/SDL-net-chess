@@ -144,6 +144,12 @@ namespace GUI{
     // Class of backplate for 
     class Backplate : public virtual GUItemplate
     {
+    private:
+        const SDL_Color frontColor, backColor;  // Front and back colors of plate
+        const Uint8 rad;  // Radius of rounding
+        const Uint8 bor;  // Border (with back color)
+    protected:
+        void updatePlate(const SDL_Rect rect);  // Update sizes of plate
     public:
         Backplate(const SDL_Rect rect, const Uint8 radius, const Uint8 border, const SDL_Color frontColor = {175, 175, 175, 255}, const SDL_Color backColor = BLACK);
         ~Backplate();
@@ -153,9 +159,10 @@ namespace GUI{
     class TextButton : public virtual Backplate
     {
     private:
-        const StaticText &topText;  // Pointer to text on this button (shortcut)
+        const StaticText &topText;          // Pointer to text on this button (shortcut)
     public:
-        TextButton(StaticText &top);   // Create new button
-        void blit() const;             // Drawing current button
+        TextButton(const StaticText &top);  // Create new button
+        void blit() const;                  // Drawing current button
+        void update();                      // Update object to match text sizes
     };
 }

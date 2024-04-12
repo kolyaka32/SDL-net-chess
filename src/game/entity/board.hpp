@@ -16,6 +16,13 @@ enum END_names{
     END_NOBODY,  // Nobody now can win
 };
 
+// Types of castling
+enum CASTLING_names{
+    CASTLING_W_K = 1,  // If castling possible for white from king side
+    CASTLING_W_Q = 2,  // If castling possible for white from queen side
+    CASTLING_B_K = 4,  // If castling possible for black from king side
+    CASTLING_B_Q = 8,  // If castling possible for black from queen side
+};
 
 // Class of game board to with
 class Board
@@ -26,6 +33,7 @@ private:
     bool turn;                                        // Which player is currently turn
     Figure activeCell;                                // Cell, that active (now move by player), or NULL if not
     bool wasMoven;                                    // Flag of board, that it was moven
+    Uint8 castling;                                    // Data of all now posible varhishes
 
     // Check, if figure at pos can be attacked
     bool isAttackable(const position pos);
@@ -36,6 +44,8 @@ private:
     void setDiagonals(const coord _x, const coord _y);
     void setStraight(const coord _x, const coord _y);
     void setAround(const coord _x, const coord _y, const Sint8 pos[][2]);
+    void setCastlingLeft(const coord _x, const coord _y, const cell need);
+    void setCastlingRight(const coord _x, const coord _y, const cell need);
     
 public:
     Board();

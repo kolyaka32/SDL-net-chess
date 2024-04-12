@@ -6,17 +6,6 @@
 class SelectCycle : public CycleTemplate
 {
 private:
-    // Counter of start variants
-    const static Uint8 optionsCount = 4;
-
-    // Buttons for start variants
-    GUI::TextButton startOptions[optionsCount] = {
-        {data.texts[TXT_SELECT_SINGLE]},
-        {data.texts[TXT_SELECT_TWO]},
-        {data.texts[TXT_SELECT_SERVER]},
-        {data.texts[TXT_SELECT_CLIENT]},
-    };
-    
     // Setting menu button
     GUI::ImageButton settingButton{0.95, 0.05, IMG_GUI_PAUSE_BUTTON};
 

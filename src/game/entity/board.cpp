@@ -14,10 +14,11 @@ Board::~Board(){
 
 //
 void Board::reset(){
-    // Clearing field
-    memset(figures, FIG_NONE, fieldSize);
-    turn = TURN_WHITE;
-    activeCell.type = FIG_NONE;
+    // Clearing data
+    memset(figures, FIG_NONE, fieldSize);  // Resetting all field
+    turn = TURN_WHITE;                     // First move from white figures
+    activeCell.type = FIG_NONE;            // None cell selected
+    castling = 0;                          // All castlings not possible
 
 
     // Forsyth–Edwards Notation
@@ -132,9 +133,22 @@ void Board::reset(){
             turn = TURN_BLACK;
             break;
 
-        // Last part with castling (in work)
-        // 'k', 'K' 'q', 'Q'
+        // Castling posoblity
+        case 'K':
+            castling |= CASTLING_W_K;
+            break;
 
+        case 'Q':
+            castling |= CASTLING_W_Q;
+            break;
+
+        case 'k':
+            castling |= CASTLING_B_K;
+            break;
+
+        case 'q':
+            castling |= CASTLING_B_Q;
+            break;
         }
     }
 };
@@ -230,6 +244,14 @@ Uint8 Board::click(const coord _x, const coord _y){
                 break;
 
             case FIG_WHITE_ROOK:
+                // Check castling
+                if(castling & CASTLING_W_Q){
+                    setCastlingRight(_x, _y, FIG_WHITE_KING);
+                }
+                if(castling & CASTLING_W_K){
+                    setCastlingLeft(_x, _y, FIG_WHITE_KING);
+                }
+                // Main move
                 setStraight(_x, _y);
                 break;
 
@@ -243,6 +265,14 @@ Uint8 Board::click(const coord _x, const coord _y){
                 break;
             
             case FIG_WHITE_KING:
+                // Check castling
+                if(castling & CASTLING_W_Q){
+                    setCastlingLeft(_x, _y, FIG_WHITE_ROOK);
+                }
+                if(castling & CASTLING_W_K){
+                    setCastlingRight(_x, _y, FIG_WHITE_ROOK);
+                }
+                // Main move
                 setAround(_x, _y, kingMoves);
                 break;
             }
@@ -272,6 +302,14 @@ Uint8 Board::click(const coord _x, const coord _y){
                 break;
 
             case FIG_BLACK_ROOK:
+                // Check castling
+                if(castling & CASTLING_B_Q){
+                    setCastlingRight(_x, _y, FIG_BLACK_KING);
+                }
+                if(castling & CASTLING_B_K){
+                    setCastlingLeft(_x, _y, FIG_BLACK_KING);
+                }
+                // Main move
                 setStraight(_x, _y);
                 break;
 
@@ -285,6 +323,14 @@ Uint8 Board::click(const coord _x, const coord _y){
                 break;
             
             case FIG_BLACK_KING:
+                // Check castling
+                if(castling & CASTLING_B_Q){
+                    setCastlingLeft(_x, _y, FIG_BLACK_ROOK);
+                }
+                if(castling & CASTLING_B_K){
+                    setCastlingRight(_x, _y, FIG_BLACK_ROOK);
+                }
+                // Main move
                 setAround(_x, _y, kingMoves);
                 break;
             }
@@ -322,9 +368,103 @@ Uint8 Board::click(const coord _x, const coord _y){
         }
         // Checking, if new position allowable
         else if(figures[getPos(_x, _y)] >= FIG_MOVE_TO){
-            // Checking on game end (if there king of another command)
-            if(figures[getPos(_x, _y)] == (FIG_RED_TYPE + FIG_BLACK_KING + turn * (FIG_WHITE_KING - FIG_BLACK_KING))){
-                return END_WIN + turn;
+            if(turn == TURN_WHITE){
+                // Checking on game end (if there king of another command)
+                if(figures[getPos(_x, _y)] == FIG_RED_TYPE + FIG_BLACK_KING){
+                    return END_WIN + turn;
+                }
+                else if(activeCell.type == FIG_WHITE_ROOK){
+                    // Disabling posible castling for next turns
+                    if(_x < FIELD_WIDTH/2){
+                        castling -= CASTLING_W_Q;
+                    }
+                    else{
+                        castling -= CASTLING_W_K;
+                    }
+                    // Check, if castling
+                    if(figures[getPos(_x, _y)] == FIG_WHITE_KING + FIG_RED_TYPE){
+                        // Disabling posible castling for next turns
+                        castling &= CASTLING_B_Q | CASTLING_B_K;
+
+                        // Swaping figures
+                        figures[activeCell.pos] = FIG_WHITE_KING;
+
+                        // Disabling previous cell clearing
+                        if(activeCell.pos % FIELD_WIDTH < FIELD_WIDTH/2){
+                            activeCell.pos += 1;
+                        }
+                        else{
+                            activeCell.pos -= 1;
+                        }
+                    }
+                }
+                else if(activeCell.type == FIG_WHITE_KING){
+                    // Disabling posible castling for next turns
+                    castling &= CASTLING_B_Q | CASTLING_B_K;
+
+                    // Check, if castling
+                    if(figures[getPos(_x, _y)] == FIG_WHITE_ROOK + FIG_RED_TYPE){
+                        // Swaping figures
+                        figures[activeCell.pos] = FIG_WHITE_ROOK;
+
+                        // Disabling previous cell clearing
+                        if(_x < FIELD_WIDTH/2){
+                            activeCell.pos += 1;
+                        }
+                        else{
+                            activeCell.pos -= 1;
+                        }
+                    }
+                }
+            }
+            else{
+                // Checking on game end (if there king of another command)
+                if(figures[getPos(_x, _y)] == FIG_RED_TYPE + FIG_WHITE_KING){
+                    return END_WIN + turn;
+                }
+                else if(activeCell.type == FIG_BLACK_ROOK){
+                    // Disabling posible castling for next turns
+                    if(_x < FIELD_WIDTH/2){
+                        castling -= CASTLING_B_Q;
+                    }
+                    else{
+                        castling -= CASTLING_B_K;
+                    }
+                    // Check, if castling
+                    if(figures[getPos(_x, _y)] == FIG_BLACK_KING + FIG_RED_TYPE){
+                        // Disabling posible castling for next turns
+                        castling &= CASTLING_W_Q | CASTLING_W_K;
+
+                        // Swaping figures
+                        figures[activeCell.pos] = FIG_BLACK_KING;
+
+                        // Disabling previous cell clearing
+                        if(activeCell.pos % FIELD_WIDTH < FIELD_WIDTH/2){
+                            activeCell.pos += 1;
+                        }
+                        else{
+                            activeCell.pos -= 1;
+                        }
+                    }
+                }
+                else if(activeCell.type == FIG_BLACK_KING){
+                    // Disabling posible castling for next turns
+                    castling &= CASTLING_W_Q | CASTLING_W_K;
+
+                    // Check, if castling
+                    if(figures[getPos(_x, _y)] == FIG_BLACK_ROOK + FIG_RED_TYPE){
+                        // Swaping figures
+                        figures[activeCell.pos] = FIG_BLACK_ROOK;
+
+                        // Disabling previous cell clearing
+                        if(_x < FIELD_WIDTH/2){
+                            activeCell.pos -= 1;
+                        }
+                        else{
+                            activeCell.pos += 1;
+                        }
+                    }
+                }
             }
 
             // Setting new position to cell

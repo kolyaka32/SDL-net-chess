@@ -4,8 +4,23 @@
 using namespace GUI;
 
 //
-Backplate::Backplate(const SDL_Rect _rect, const Uint8 _rad, const Uint8 _bor, const SDL_Color _frontColor, const SDL_Color _backColor){
-    // Creating texture for all work
+Backplate::Backplate(const SDL_Rect _rect, const Uint8 _rad, const Uint8 _bor, const SDL_Color _frontColor, const SDL_Color _backColor)
+: frontColor(_frontColor), backColor(_backColor), rad(_rad), bor(_bor){
+    updatePlate(_rect);
+};
+
+Backplate::~Backplate(){
+    SDL_DestroyTexture(texture);
+};
+
+//
+void Backplate::updatePlate(const SDL_Rect _rect){
+    // Checking, if need clear previous texture
+    if(texture){
+        SDL_DestroyTexture(texture);
+    }
+
+    // Creating new texture for drawing
     texture = SDL_CreateTexture(data.renderer, SDL_PIXELFORMAT_RGB888, SDL_TEXTUREACCESS_TARGET, _rect.w, _rect.h);
     rect = _rect;
 
@@ -14,36 +29,36 @@ Backplate::Backplate(const SDL_Rect _rect, const Uint8 _rad, const Uint8 _bor, c
     SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
 
     // Drawing back part
-    data.setColor(_backColor);
+    data.setColor(backColor);
     SDL_RenderClear(data.renderer);
 
     // Drawing front part
-    data.setColor(_frontColor);
-    SDL_Rect dest = {_bor, _bor, rect.w - _bor * 2, rect.h - _bor * 2};
+    data.setColor(frontColor);
+    SDL_Rect dest = {bor, bor, rect.w - bor * 2, rect.h - bor * 2};
     SDL_RenderFillRect(data.renderer, &dest);
 
     // Clearing front edges
-    data.setColor(_backColor);
-    for(Uint8 y=0; y <= _rad+_bor; ++y){
-        for(Uint8 x=0; x <= _rad+_bor; ++x){
-            if(sqr(y)+sqr(x) >= sqr(_rad-_bor)){
-                SDL_RenderDrawPoint(data.renderer, _rad-x, _rad-y);
-                SDL_RenderDrawPoint(data.renderer, rect.w-_rad+x, _rad-y);
-                SDL_RenderDrawPoint(data.renderer, _rad-x, rect.h-_rad+y);
-                SDL_RenderDrawPoint(data.renderer, rect.w-_rad+x, rect.h-_rad+y);
+    data.setColor(backColor);
+    for(Uint8 y=0; y <= rad+bor; ++y){
+        for(Uint8 x=0; x <= rad+bor; ++x){
+            if(sqr(y)+sqr(x) >= sqr(rad-bor)){
+                SDL_RenderDrawPoint(data.renderer, rad-x, rad-y);
+                SDL_RenderDrawPoint(data.renderer, rect.w-rad+x, rad-y);
+                SDL_RenderDrawPoint(data.renderer, rad-x, rect.h-rad+y);
+                SDL_RenderDrawPoint(data.renderer, rect.w-rad+x, rect.h-rad+y);
             }
         }
     }
 
     // Clearing back edges
     SDL_SetRenderDrawColor(data.renderer, 255, 255, 255, 0);
-    for(Uint8 y=0; y <= _rad; ++y){
-        for(Uint8 x=0; x <= _rad; ++x){
-            if(sqr(y)+sqr(x) >= sqr(_rad)){
-                SDL_RenderDrawPoint(data.renderer, _rad-x, _rad-y);
-                SDL_RenderDrawPoint(data.renderer, rect.w-_rad+x, _rad-y);
-                SDL_RenderDrawPoint(data.renderer, _rad-x, rect.h-_rad+y);
-                SDL_RenderDrawPoint(data.renderer, rect.w-_rad+x, rect.h-_rad+y);
+    for(Uint8 y=0; y <= rad; ++y){
+        for(Uint8 x=0; x <= rad; ++x){
+            if(sqr(y)+sqr(x) >= sqr(rad)){
+                SDL_RenderDrawPoint(data.renderer, rad-x, rad-y);
+                SDL_RenderDrawPoint(data.renderer, rect.w-rad+x, rad-y);
+                SDL_RenderDrawPoint(data.renderer, rad-x, rect.h-rad+y);
+                SDL_RenderDrawPoint(data.renderer, rect.w-rad+x, rect.h-rad+y);
             }
         }
     }
@@ -53,8 +68,4 @@ Backplate::Backplate(const SDL_Rect _rect, const Uint8 _rad, const Uint8 _bor, c
 
     // Resetting render target
     SDL_SetRenderTarget(data.renderer, nullptr);
-};
-
-Backplate::~Backplate(){
-    SDL_DestroyTexture(texture);
 };

@@ -127,12 +127,12 @@ add_executable( ${CMAKE_PROJECT_NAME}
 )
 
 # Static linking standart C/C++ libraries
-set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++")
-set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ -Bstatic")
+set(CMAKE_CXX_STANDARD_LIBRARIES "-static")
+set(CMAKE_EXE_LINKER_FLAGS "-static")
 #set(CMAKE_GENERATOR_PLATFORM -A "x64")
 
 # Hidding console
-set(CMAKE_CXX_FLAGS "-mwindows")
+set(CMAKE_CXX_FLAGS "-mwindows -static")
 
 # Setting other flags
 #set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++ -lwsock32 -lws2_32 -mwindows ${CMAKE_CSS_STANDARD_LIBRARIES}")

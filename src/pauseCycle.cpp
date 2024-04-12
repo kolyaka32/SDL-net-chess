@@ -125,7 +125,14 @@ Uint8 PauseCycle::mouseInput(){
     // Updating texts language
     if(newLanguage != data.language){
         data.language = newLanguage;
+        // Locking drawing for updating
+        runMutex.lock();
+
+        // Updating texture
         data.updateTranslation();
+
+        // Allowing to continue draw
+        runMutex.unlock();
     }
 
     // None-return
