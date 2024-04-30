@@ -96,8 +96,21 @@ void GameCycle::draw() const{
         // Bliting end background
         endBackplate.blit();
 
-        // Bliting text
-        data.texts[TXT_END_WIN + endState].blit();
+        // Bliting text with end state
+        switch (endState)
+        {
+        case END_WIN:
+            data.texts[TXT_END_WIN_1].blit();
+            break;
+        
+        case END_LOOSE:
+            data.texts[TXT_END_WIN_2].blit();
+            break;
+        
+        case END_NOBODY:
+            data.texts[TXT_END_NOBODY].blit();
+            break;
+        }
 
         // Blitting buttons
         data.textButtons[BTN_GAME_RESTART].blit();

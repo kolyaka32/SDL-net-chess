@@ -1,6 +1,10 @@
 #include "selectCycle.hpp"
 #include "pauseCycle.hpp"
+
+// Game variants
 #include "game/twoPlayer.hpp"
+#include "game/server.hpp"
+#include "game/client.hpp"
 
 
 // Selectable GUI object
@@ -33,19 +37,19 @@ Uint8 SelectCycle::mouseInput(){
     }
     else if(data.textButtons[BTN_SELECT_SINGLE].in(mouseX, mouseY)){
         // Staring two-player mode cycle
-        return runCycle<TwoPlayerCycle>();
+        return runCycle<TwoPlayerGameCycle>();
     }
     else if(data.textButtons[BTN_SELECT_TWO].in(mouseX, mouseY)){
         // Staring two-player mode cycle
-        return runCycle<TwoPlayerCycle>();
+        return runCycle<TwoPlayerGameCycle>();
     }
     else if(data.textButtons[BTN_SELECT_SERVER].in(mouseX, mouseY)){
-        // Staring two-player mode cycle
-        return runCycle<TwoPlayerCycle>();
+        // Staring server mode cycle
+        return runCycle<ServerGameCycle>();
     }
     else if(data.textButtons[BTN_SELECT_CLIENT].in(mouseX, mouseY)){
-        // Staring two-player mode cycle
-        return runCycle<TwoPlayerCycle>();
+        // Staring client mode cycle
+        return runCycle<ClientGameCycle>();
     }
 
     // None-return

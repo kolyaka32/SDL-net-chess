@@ -27,13 +27,13 @@ namespace GUI{
         SDL_Rect rect;
     public:
         GUItemplate();
-        void blit() const;
-        bool in(const int mouseX, const int mouseY) const;
+        virtual void blit() const;
+        virtual bool in(const int mouseX, const int mouseY) const;
     };
 
 
     // Static text on screen with drawing and updating functions
-    class StaticText : public virtual GUItemplate
+    class StaticText : public GUItemplate
     {
     private:
         const static Uint8 BUFFER_SIZE = 50;  // Length of buffers for text
@@ -53,7 +53,7 @@ namespace GUI{
 
     // Class of slider bar with point on it to control need parameter
     template <typename linkType = Uint8>
-    class Slider : public virtual GUItemplate
+    class Slider : public GUItemplate
     {
     private:
         SDL_Texture *textureButton;  // Texture of line (upper part of slider)
@@ -66,12 +66,12 @@ namespace GUI{
         ~Slider();
         void setValue(int mouseX);                              // Setting new state from mouse position
         bool scroll(Sint32 wheelY, int mouseX, int mouseY);     // Checking mouse wheel action
-        void blit() const;                                      // Drawing slider with need button position
+        void blit() const override;                             // Drawing slider with need button position
     };
 
 
     // Class of buttons with image on it
-    class ImageButton : public virtual GUItemplate
+    class ImageButton : public GUItemplate
     {
     public:
         ImageButton(float X, float Y, IMG_names textureIndex);   // Create new button
@@ -80,7 +80,7 @@ namespace GUI{
 
     // GIF-animations
     #if ANI_count
-    class GIFAnimation : public virtual GUItemplate
+    class GIFAnimation : public GUItemplate
     {
     private:
         ANI_names type;
@@ -95,7 +95,7 @@ namespace GUI{
 
 
     // Bar to show some charachteristic (like health) with icone
-    class Bar : public virtual GUItemplate
+    class Bar : public GUItemplate
     {
     private:
         SDL_Rect Front_rect;    // Front rect for primal color
@@ -109,7 +109,7 @@ namespace GUI{
 
 
     // Class of box, where user can type text
-    class typeBox : public virtual GUItemplate
+    class typeBox : public GUItemplate
     {
     private:
         // Global class constants
@@ -133,7 +133,7 @@ namespace GUI{
         typeBox(textHeight size, float posX, float posY, const char *startText = "", 
             ALIGNMENT_types newAligment = MIDLE_text, SDL_Color newColor = BLACK);
         ~typeBox();                                  // Clearing font and texture
-        void blit() const;                           // Function of drawing text with background plate
+        void blit() const override;                  // Function of drawing text with background plate
         void writeString(char* str, bool freeData);  // Function of writing any string to buffer at caret position
         void press(SDL_Keycode code);                // Function of processing special keycodes
         void updateCaret();                          // Function of change caret symbol from '|' to ' ' and back
@@ -142,7 +142,7 @@ namespace GUI{
     };
 
     // Class of backplate for 
-    class Backplate : public virtual GUItemplate
+    class Backplate : public GUItemplate
     {
     private:
         const SDL_Color frontColor, backColor;  // Front and back colors of plate
@@ -156,13 +156,13 @@ namespace GUI{
     };
 
     // Class of buttons with text on it
-    class TextButton : public virtual Backplate
+    class TextButton : public Backplate
     {
     private:
         const StaticText &topText;          // Pointer to text on this button (shortcut)
     public:
         TextButton(const StaticText &top);  // Create new button
-        void blit() const;                  // Drawing current button
+        void blit() const override;         // Drawing current button
         void update();                      // Update object to match text sizes
     };
 }

@@ -4,11 +4,11 @@
 #include "base.hpp"
 
 // Creating two player mode
-class TwoPlayerCycle : public GameCycle
+class TwoPlayerGameCycle : public GameCycle
 {
 private:
     
 public:
-    TwoPlayerCycle(){};
-    ~TwoPlayerCycle(){};
+    TwoPlayerGameCycle(){};
+    ~TwoPlayerGameCycle(){};
 };

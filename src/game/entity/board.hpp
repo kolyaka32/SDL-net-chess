@@ -11,7 +11,7 @@ enum TURN_names{
 // Types of current game state
 enum END_names{
     END_NONE,    // Nothing happen
-    END_WIN,   // Win of 1 or current player
+    END_WIN,     // Win of 1 or current player
     END_LOOSE,   // Win of 2 player or loose of current
     END_NOBODY,  // Nobody now can win
 };

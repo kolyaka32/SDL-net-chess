@@ -1,66 +1,46 @@
-/*#include "../include.hpp"
-#include "../define.hpp"
-#include "../values.hpp"
-#include "base.hpp"
-#include "baseInternet.hpp"
+#include "client.hpp"
 
 
+//
+ClientGameCycle::ClientGameCycle()
+{
 
-// Function of trying connect to writed coordinats
-/*static inline void tryConnect(const char* ipText, const char* portText, bool* waiting){
-    IPaddress sendIP;  // IP of reciever
-    if(SDLNet_ResolveHost(&sendIP, ipText, std::stoi(portText)) == 0){
-        // Setting send address
-        sendData->address = sendIP;
-        sendData->len = INTERNET_BUFFER;
-        // Creating socket set to search for new messages
-        SDLNet_SocketSet set = SDLNet_AllocSocketSet(1);
-        SDLNet_UDP_AddSocket(set, socket);
-        
-        // Try send activation code at specifed coordinats
-        send(MES_INIT);
-        
-        // Checking get pachage
-        if(SDLNet_CheckSockets(set, 1000) && SDLNet_UDP_Recv(socket, recieveData)){
-            // If connection correct - starting
-            *waiting = false;
-            // Saving entered parameters for next conncetion
-            baseIP = (std::string)ipText;
-            basePort = (std::string)portText;
-        }
-        else{
-            switch (language)
-            {
-            case LNG_ENGLISH:
-                SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Can't connect", "Can't connect to given address", window);
-                break;
-            
-            case LNG_RUSSIAN:
-                SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Невозможно присоединится", "Невозможно присоединится по указанному адресу", window);
-                break;
-            }
-        }
-        SDLNet_FreeSocketSet(set);
+}
+
+//
+ClientGameCycle::~ClientGameCycle()
+{
+
+}
+
+//
+Uint8 ClientGameCycle::getData(){
+    //
+    switch (recieveData->data[0])
+    {
+    // Code of closing game - going to menu
+    case MES_STOP:
+        showStopConnection();
+        return 1;
+    
+    // Code of applaying last message
+    case MES_APPL:
+        waitApply = false;
+        return 0;
+    
+    // Code of unused/strange message
+    default:
+        return 0;
     }
 }
 
+
+
+
+/*
+
 // Cycle for user enter, where connect to
 static inline Uint8 enteringCycle(){
-    // Creating internal GUI
-    // Boxes for typing text in
-    GUI::typeBox typeBoxes[] = {
-        {20, 0.5, 0.25, baseIP.std::string::c_str()},
-        {20, 0.5, 0.55, basePort.std::string::c_str()}
-    };
-    // Buttons to connect/got to menu
-    GUI::Button connectButton(0.5, 0.7, IMG_MENU_BUTTON, texts + TXT_CLIENT_CONNECT);
-    GUI::Button menuButton(0.5, 0.9, IMG_MENU_BUTTON, texts + TXT_STOP_MENU);
-    // Button initialasing
-    connectButton.init();
-    menuButton.init();
-
-    // Waiting cycle for getting ip and port
-    SDL_Event event;
     
     bool waiting = true;       // Flag of internal cycle
     Uint8 inBox = 0;           // Selected window to interact with (or 0 for none)
@@ -167,95 +147,7 @@ static inline Uint8 enteringCycle(){
 
 // Menu for waiting to go to menu/game restart (from server)
 static inline void stopMenu(){
-    // Creating buttons
-    GUI::Button menuButton = {0.5, 0.9, IMG_MENU_BUTTON, texts + TXT_STOP_MENU};
-    menuButton.init();
 
-    // Starting internal loop of waiting for restart/go to menu
-    bool waiting = true;
-    
-    SDL_Event event;
-    while(waiting){
-        while( SDL_PollEvent(&event) != 0 ){
-            switch (event.type)
-            {
-            case SDL_QUIT:
-                running = false;  // Exit from program
-                runGame = false;
-                return;
-
-            case SDL_MOUSEBUTTONDOWN:
-                int MouseX, MouseY;
-                SDL_GetMouseState(&MouseX, &MouseY);  // Getting mouse position
-
-                if(menuButton.in(MouseX, MouseY)){
-                    // Going to menu
-                    runGame = false;
-                    return;
-                }
-                break;
-            }
-        }
-        // Checking, if need to send NULL-message
-        if(SDL_GetTicks64() > lastMessageSend + MESSAGE_NULL_TIMEOUT){
-            send(MES_NONE);
-        }
-        // Checking, if message wasn't delivered
-        if(waitApply && (SDL_GetTicks64() > lastMessageSend + MESSAGE_APPLY_TIMEOUT)){
-            // Repeat sending
-            SDLNet_UDP_Send(socket, -1, sendData);
-        }
-        // Checking get data
-        if(SDLNet_UDP_Recv(socket, recieveData)){
-            lastMessageArrive = SDL_GetTicks64() + MESSAGE_GET_TIMEOUT;
-            switch (recieveData->data[0])
-            {
-            case MES_STOP:
-                // Going to menu
-                runGame = false;
-                showStopConnection();
-                return;
-            
-            case MES_REST:
-                // Restart game code
-                field.reset();
-                player = 0;
-                start = true;
-                waiting = false;
-                break;
-
-            case MES_APPL:
-                // Last send message arrive normaly
-                waitApply = false;
-                break;
-            };
-        }
-        else{
-            if(SDL_GetTicks64() > lastMessageArrive){
-                // Something wrong with connection
-                runGame = false;
-                showDisconect();
-                return;
-            }
-        }
-
-        // Drawing
-        SDL_RenderClear(process.app.renderer);
-        
-        // Showing end message
-        texts[TXT_STOP_WIN - 1 + gameState].blit();
-        
-        // Showing buttons
-        menuButton.blit();
-
-        // Blitting textures on screen
-        SDL_RenderPresent(process.app.renderer);
-
-        // Delaying time to decrease CPU loading
-        SDL_Delay(1000 / drawFPS);  
-    }
-    // Resetting data
-    gameState = END_NONE;
 }
 
 // Main game cycle
@@ -395,17 +287,6 @@ void multiMainClient(){
     // Setting main game cycle to run after "entering cycle"
     runGame = true;
 
-    // Creating socket to send first data
-    socket = SDLNet_UDP_Open(0);
-    // Simulated packet loss for packets for better testing
-    #if DEBUG
-    SDLNet_UDP_SetPacketLoss(socket, CONNECTION_LOST_PERCENT);
-    #endif
-
-    // Allocating packets
-    sendData = SDLNet_AllocPacket(INTERNET_BUFFER);
-    recieveData = SDLNet_AllocPacket(INTERNET_BUFFER);
-
     // Getting data from user, where connect to
     if(enteringCycle()){
         // Exiting program to menu
@@ -469,21 +350,8 @@ void multiMainClient(){
             winWidth = recieveData->data[2];
             running = false;
         }
-        // Sending code of stopping
-        send(MES_STOP);
-        
-        // Clearing network socket
-        SDLNet_UDP_Close(socket);
-        SDLNet_FreePacket(sendData);
-        SDLNet_FreePacket(recieveData);
-        return;
     }
 
     // Entering main game cycle, where he play
     gameCycle();
-    
-    // Closing port
-    SDLNet_UDP_Close(socket);
-    SDLNet_FreePacket(recieveData);
-    SDLNet_FreePacket(sendData);
 }*/

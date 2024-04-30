@@ -96,13 +96,28 @@ add_executable( ${CMAKE_PROJECT_NAME}
     src/game/entity/board.hpp
     src/game/entity/board.cpp
 
-    # Base game interface
+    # Base game interface (main game part)
     src/game/base.hpp
     src/game/base.cpp
 
-    # Base game internat interface
-    src/game/baseInternet.hpp
+    # Internet connection
+    # Base internet functions
+    src/game/internet/baseInternet.hpp
+    src/game/internet/baseInternet.cpp
 
+    # Internet cycles
+    src/game/internet/internetCycle.hpp
+    src/game/internet/internetCycle.cpp
+
+    # Internet server part
+    src/game/internet/internetServer.hpp
+    src/game/internet/internetServer.cpp
+
+    # Internet client part
+    src/game/internet/internetClient.hpp
+    src/game/internet/internetClient.cpp
+
+    # Game variants
     # Singleplayer game cycle
     src/game/singlePlayer.hpp
     src/game/singlePlayer.cpp

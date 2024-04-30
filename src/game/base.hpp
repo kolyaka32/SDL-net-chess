@@ -6,7 +6,7 @@
 
 
 // Cycle with game template
-class GameCycle : public CycleTemplate
+class GameCycle : public virtual CycleTemplate
 {
 protected:
     Board board;  // Main game field
