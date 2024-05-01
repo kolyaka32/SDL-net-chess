@@ -4,7 +4,11 @@
 
 //
 InternetCycle::InternetCycle(){
-    
+    // Launching process
+    running = true;
+
+    // Stopping from pre-launch
+    gettingMutex.lock();
 }
 
 //
@@ -18,6 +22,9 @@ InternetCycle::~InternetCycle(){
 
 //
 void InternetCycle::lauchCycle(){
+    // Waiting for allowing to start
+    gettingMutex.lock();
+
     // First, waiting start cycle
     while(running){
         // Getting data with check on exit
@@ -29,6 +36,14 @@ void InternetCycle::lauchCycle(){
         // Waiting next cycle (for better process time)
         data.waitDraw();
     }
+
+    // Checking on exit
+    if(!running){
+        return;
+    }
+
+    // Initialasing data for main cycle
+    initConnection();
 
     // Updating times of last sended messages
     lastMessageArrive = SDL_GetTicks64() + MESSAGE_GET_TIMEOUT;
@@ -51,3 +66,8 @@ void InternetCycle::lauchCycle(){
         data.waitDraw();
     }
 }
+
+// Action, launch after connection
+void InternetCycle::initConnection(){
+
+};

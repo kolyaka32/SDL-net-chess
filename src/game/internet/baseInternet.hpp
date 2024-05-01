@@ -6,18 +6,11 @@
 #include "../../define.hpp"
 
 
-// Macros for removing select from typeBox
-/*#define removeTypeBox() if(inBox){\
-    typeBoxes[inBox - 1].removeSelect();\
-    inBox = 0; }*/
-
-
-
 // Types of internet messages
 enum MESSAGE_types{
-    MES_INIT = 0,   // Type of starting server and checking compatibility
-    MES_START = 1,  // Type of starting new round showing which player start
-    MES_NONE = 2,   // Type of nothing for reset connection timer
+    MES_NONE = 0,   // Type of nothing for reset connection timer
+    MES_INIT = 1,   // Type of starting server and checking compatibility
+    MES_START = 2,  // Type of starting new round showing which player start
     MES_TURN = 3,   // Type of setting shape on field, sending to opponent
     MES_STOP = 4,   // Type of closing game and go to menu
     MES_REST = 5,   // Type of restarting game and waiting for new start

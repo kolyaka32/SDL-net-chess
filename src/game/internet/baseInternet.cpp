@@ -136,7 +136,7 @@ Uint8 Internet::startUpdate(){
     // Checking get data
     if(SDLNet_UDP_Recv(socket, recieveData)){
         // Getting data
-        if(recieveData->data[0] == MES_START){
+        if(recieveData->data[0] == MES_INIT){
             // Setting sender to address, from place, where data get from
             sendData->address = recieveData->address;
 

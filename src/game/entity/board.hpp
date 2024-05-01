@@ -11,6 +11,7 @@ enum TURN_names{
 // Types of current game state
 enum END_names{
     END_NONE,    // Nothing happen
+    END_TURN,    // Flag of happened turn, equal to none
     END_WIN,     // Win of 1 or current player
     END_LOOSE,   // Win of 2 player or loose of current
     END_NOBODY,  // Nobody now can win
@@ -53,4 +54,6 @@ public:
     void reset();  // Resetting field for new game
     void blit() const;  // Bliting field at screen
     Uint8 click(const coord X, const coord Y);  // Clicking with mouse on need cell on field
+    Uint8 move(const coord X1, const coord Y1, const coord X2, const coord Y2);  // Simplier mover on field (for internet opponent turn)
+    position getPreviousTurn();  // Return, where was made previous turn
 };

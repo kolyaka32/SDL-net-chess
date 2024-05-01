@@ -57,8 +57,8 @@ Uint8 GameCycle::mouseInput(){
         return 1;
     }*/
 
-    // Clicking on field if possible
-    if(endState == END_NONE){
+    // Checking, if game start
+    if(endState <= END_TURN){
         // Clicking on field
         endState = board.click(mouseX / CELL_SIDE, mouseY / CELL_SIDE);
     }
@@ -92,7 +92,7 @@ void GameCycle::draw() const{
     board.blit();
 
     // Bliting game state, if need
-    if(endState != END_NONE){
+    if(endState > END_TURN){
         // Bliting end background
         endBackplate.blit();
 

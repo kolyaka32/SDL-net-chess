@@ -7,7 +7,26 @@
 class ClientGameCycle : public GameCycle, public InternetClientCycle
 {
 private:
-    Uint8 getData() override;
+    bool waitStart = true;     // Flag of waiting for game start
+    bool waitTurn = false;     // Flag of waiting for another player for turn
+    timer lastTypeBoxUpdate;   // Timer for change symbol of caret
+
+    Uint8 getData() override;  //
+    void initConnection() override;  //
+    void removeSelection();          //
+
+    // Input fields
+    GUI::typeBox typeBoxes[2]{
+        {20, 0.5, 0.2, data.baseIP.std::string::c_str()},
+        {20, 0.5, 0.5, data.basePort.std::string::c_str()}
+    };
+
+protected:
+    // New overrided cycle functions
+    void getInput() override;     // Getting all user input (keyboard, mouse...)
+    Uint8 mouseInput() override;  // Checking for any need mouse action
+    void draw() const override;   // Drawing all needed objects
+
 public:
     ClientGameCycle();
     ~ClientGameCycle();

@@ -39,11 +39,23 @@ enum TXT_types{
     // Buttons texts
     TXT_BUTTON_RESTART,
     TXT_BUTTON_MENU,
+    TXT_BUTTON_CONNECT,
+    TXT_BUTTON_CANCEL,
+
+    // Server texts
+    TXT_SERVER_WAIT,
+    TXT_SERVER_PORT,
+
+    // Client texts
+    TXT_CLIENT_ENTER_IP,
+    TXT_CLIENT_ENTER_PORT,
 };
 
-// Summary text counter
-#define TXT_count 15
+// Summary texts counter
+#define TXT_count 21
 
+
+// Framed buttons
 // Names of all framed text buttons
 enum BTN_names{
     // Selection menu
@@ -55,9 +67,12 @@ enum BTN_names{
     // Buttons texts
     BTN_GAME_RESTART,
     BTN_GAME_MENU,
+    BTN_GAME_CONNECT,
+    BTN_GAME_CANCEL,
 };
 
-#define BTN_count 6
+// Counter of framed text buttons
+#define BTN_count 8
 
 
 // All static texts
@@ -100,9 +115,25 @@ public:
 
         // Buttons texts
         {"Restart\nПерезапустить\n-\n-\n",
-            30, 0.5, 0.5},
+            24, 0.5, 0.5, WHITE},
         {"Exit to menu\nВыйти в меню\n-\n-\n",
-            30, 0.5, 0.6},
+            24, 0.5, 0.6, WHITE},
+        {"Connect\nПрисоединится\n-\n-\n",
+            24, 0.5, 0.7, WHITE},
+        {"Cancel\nОтмена\n-\n-\n",
+            24, 0.5, 0.9, WHITE},
+
+        // Server texts
+        {"Wait for connection\nОжидайте подключения\n-\n-\n",
+            30, 0.5, 0.2, WHITE},
+        {"Your port: %\nВаш порт: %\n-\n-\n",
+            30, 0.5, 0.4, WHITE},
+
+        // Client texts
+        {"Enter IP:\nВведите IP:\n-\n-\n",
+            30, 0.5, 0.1, WHITE},
+        {"Enter port:\nВведите порт:\n-\n-\n",
+            30, 0.5, 0.4, WHITE},
     };
     
     // All framed texts buttons in game
@@ -116,6 +147,8 @@ public:
         // Buttons texts
         {texts[TXT_BUTTON_RESTART]},
         {texts[TXT_BUTTON_MENU]},
+        {texts[TXT_BUTTON_CONNECT]},
+        {texts[TXT_BUTTON_CANCEL]},
     };
 
 public:
