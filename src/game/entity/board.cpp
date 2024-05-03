@@ -502,14 +502,15 @@ Uint8 Board::click(const coord _x, const coord _y){
 
 // Making all like in click, but at once and without help
 Uint8 Board::move(const coord _x1, const coord _y1, const coord _x2, const coord _y2){
-    // Getting current type
-    cell currentType = figures[getPos(_x1, _y1)];
+    // Getting state of current cell
+    activeCell.pos = getPos(_x1, _y1);
+    activeCell.type = figures[activeCell.pos];
 
     // Checking, which color is active
     if(turn == TURN_WHITE){
         // White figures turn
         // Setting positions of cell, where active can go, depend on figure
-        switch (currentType)
+        switch (activeCell.type)
         {
         case FIG_WHITE_PAWN:
             // Basic move
@@ -621,10 +622,8 @@ Uint8 Board::move(const coord _x1, const coord _y1, const coord _x2, const coord
             break;
         }
     }
-
-    // Checking, if get of correct field
+    // Checking, if new position allowable
     if(figures[getPos(_x2, _y2)] >= FIG_MOVE_TO){
-        // Making move
         if(turn == TURN_WHITE){
             // Checking on game end (if there king of another command)
             if(figures[getPos(_x2, _y2)] == FIG_RED_TYPE + FIG_BLACK_KING){
@@ -748,8 +747,13 @@ Uint8 Board::move(const coord _x1, const coord _y1, const coord _x2, const coord
 
         // Changing moving player
         turn = !turn;
+
+        // Shwoing making turn
+        return END_TURN;
     }
-    return END_NONE;
+    else{
+        return END_NONE;
+    }
 }
 
 //

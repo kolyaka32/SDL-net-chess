@@ -27,6 +27,10 @@ Internet::Internet(){
     // Allocating memory to send and recieve packets
     recieveData = SDLNet_AllocPacket(INTERNET_BUFFER);
     sendData = SDLNet_AllocPacket(INTERNET_BUFFER);
+    sendData->len = INTERNET_BUFFER;
+
+    // Setting timer to max value for don't check correction before start
+    lastMessageArrive = (timer)-1;
 }
 
 // Sending close message and deleting all data
@@ -108,6 +112,8 @@ Uint8 Internet::update(){
     if(waitApply && (SDL_GetTicks64() > lastMessageSend + MESSAGE_APPLY_TIMEOUT)){
         // Repeat sending last message
         SDLNet_UDP_Send(socket, -1, sendData);
+        // Updating timer
+        lastMessageSend = SDL_GetTicks64();
     }
     // Checking get data
     if(SDLNet_UDP_Recv(socket, recieveData)){
@@ -123,28 +129,11 @@ Uint8 Internet::update(){
         // Check, if time for arrive is too much
         if(SDL_GetTicks64() > lastMessageArrive){
             // Something wrong with connection
-            showDisconect();
+            //showDisconect();
             return 1;
         }
     }
     // None return
-    return 0;
-};
-
-// Function for getting start message
-Uint8 Internet::startUpdate(){
-    // Checking get data
-    if(SDLNet_UDP_Recv(socket, recieveData)){
-        // Getting data
-        if(recieveData->data[0] == MES_INIT){
-            // Setting sender to address, from place, where data get from
-            sendData->address = recieveData->address;
-
-            // Check on start
-            return 1;
-        }
-    }
-    // None-return
     return 0;
 };
 

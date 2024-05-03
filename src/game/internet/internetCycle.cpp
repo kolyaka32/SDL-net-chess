@@ -24,30 +24,7 @@ InternetCycle::~InternetCycle(){
 void InternetCycle::lauchCycle(){
     // Waiting for allowing to start
     gettingMutex.lock();
-
-    // First, waiting start cycle
-    while(running){
-        // Getting data with check on exit
-        if(startUpdate()){
-            // Starting main cycle
-            break;
-        }
-
-        // Waiting next cycle (for better process time)
-        data.waitDraw();
-    }
-
-    // Checking on exit
-    if(!running){
-        return;
-    }
-
-    // Initialasing data for main cycle
-    initConnection();
-
-    // Updating times of last sended messages
-    lastMessageArrive = SDL_GetTicks64() + MESSAGE_GET_TIMEOUT;
-    lastMessageSend = SDL_GetTicks64() + MESSAGE_NULL_TIMEOUT;
+    gettingMutex.unlock();
     
     // Main getting cycle
     while(running){

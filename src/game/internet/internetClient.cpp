@@ -38,15 +38,17 @@ Uint8 InternetClientCycle::tryConnect(const char* ipText, const char* portText){
             // Saving entered parameters for next conncetion
             data.baseIP = (std::string)ipText;
             data.basePort = (std::string)portText;
-
-            // Breaking wait cycle
+            
+            // Clearing data
+            SDLNet_FreeSocketSet(set);
             return 1;
         }
         else{
+            // Showing message with problems with connection
             showCantConnect();
+            SDLNet_FreeSocketSet(set);
+            return 0;
         }
-        SDLNet_FreeSocketSet(set);
-        return 0;
     }
     // Can't resolve this host
     return 0;

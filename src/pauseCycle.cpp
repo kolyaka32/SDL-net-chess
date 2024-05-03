@@ -29,7 +29,7 @@ PauseCycle::~PauseCycle(){
 //
 void PauseCycle::getInput(){
     SDL_Event event;
-    while(true){
+    while(running){
         while( SDL_PollEvent(&event) != 0 ){
             switch (event.type)
             {

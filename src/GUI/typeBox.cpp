@@ -21,7 +21,7 @@ typeBox::typeBox(textHeight _height, float _x, float _y, const char* _text, ALIG
     // Creating background picture for typing
     SDL_QueryTexture(data.textures[IMG_GUI_TYPE_BOX], NULL, NULL, &backRect.w, &backRect.h);
     backRect.x = SCREEN_WIDTH * _x - backRect.w / 2;
-    backRect.y = SCREEN_HEIGHT * _y - backRect.h / 2 - 2;
+    backRect.y = SCREEN_HEIGHT * _y - backRect.h / 2 + 2;
 }
 
 //

@@ -50,7 +50,6 @@ protected:
     void send(MESSAGE_types type, Uint8 d1 = 0, Uint8 d2 = 0, Uint8 d3 = 0, Uint8 d4 = 0);
     virtual Uint8 getData();       // Template for getting any codes from other side
     Uint8 update();                // Function for updating all states of 
-    Uint8 startUpdate();           // Function for getting start message
 
 public:
     Internet();

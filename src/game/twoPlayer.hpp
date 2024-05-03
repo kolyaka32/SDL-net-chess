@@ -9,6 +9,6 @@ class TwoPlayerGameCycle : public GameCycle
 private:
     
 public:
-    TwoPlayerGameCycle(){};
-    ~TwoPlayerGameCycle(){};
+    TwoPlayerGameCycle();
+    ~TwoPlayerGameCycle();
 };

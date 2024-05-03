@@ -70,7 +70,7 @@ Font::~Font(){
     }
 
     // Clearing data from font creating
-    free(fontData->hidden.mem.base);
+    //free(fontData->hidden.mem.base);
     SDL_FreeRW(fontData);
 }
 

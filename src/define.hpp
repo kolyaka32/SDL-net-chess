@@ -1,11 +1,11 @@
 #pragma once
 
 // Debuging modifiers
-#define DEBUG true
+#define DEBUG false
 #define CHECK_CORRECTION DEBUG
 #define ARCHIEVE_LOADING !DEBUG
 #define SCROLLER_SOUND SND_count
-#define CONNECTION_LOST_PERCENT 20
+#define CONNECTION_LOST_PERCENT 0
 
 // System numbers
 #define WINDOWNAME "Chess on SDL"           // System game name
@@ -19,7 +19,7 @@
 // Internet numbers
 #define BASE_PORT 2000                      // Base port to create/connect
 #define INTERNET_BUFFER 5                   // Size of data to send/recieve by connecion
-#define MESSAGE_GET_TIMEOUT 2000            // Time after which connection is considered lost
+#define MESSAGE_GET_TIMEOUT 4000            // Time after which connection is considered lost
 #define MESSAGE_NULL_TIMEOUT 800            // Time to send NULL message to keep connecion
 #define MESSAGE_APPLY_TIMEOUT 600           // Time to apply arriving message
 

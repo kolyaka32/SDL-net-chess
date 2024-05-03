@@ -8,12 +8,11 @@ class ClientGameCycle : public GameCycle, public InternetClientCycle
 {
 private:
     bool waitStart = true;     // Flag of waiting for game start
-    bool waitTurn = false;     // Flag of waiting for another player for turn
+    bool waitTurn = true;      // Flag of waiting for another player for turn
     timer lastTypeBoxUpdate;   // Timer for change symbol of caret
 
     Uint8 getData() override;  //
-    void initConnection() override;  //
-    void removeSelection();          //
+    void removeSelection();    //
 
     // Input fields
     GUI::typeBox typeBoxes[2]{

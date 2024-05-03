@@ -8,13 +8,14 @@ GameCycle::GameCycle() : CycleTemplate(MUS_MAIN_THEME){
 
 //
 GameCycle::~GameCycle(){
-
+    // Starting playing menu theme
+    data.playMusic(MUS_MENU_THEME);
 };
 
 //
 void GameCycle::getInput(){
     SDL_Event event;
-    while(true){
+    while(running){
         while( SDL_PollEvent(&event) != 0 ){
             switch (event.type)
             {
