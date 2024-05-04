@@ -1,30 +1,36 @@
 # The standard "Chess" game on c++ using SDL2
 
 This repository contains sources for standart chess game, I made based on SDL2 library.
+Mostly this repository is need for my own study, training and preparing for bigger projects.
+Also this creating projects unifed "game engine".
 
 ![Screenshot of game](/screenshots/game-main.png?raw=true)
 
 ## Installing of game
 1. Download archieve from [releases](https://github.com/kolyaka32/SDL-net-chess/releases), unzip and run 'Chess.exe'!
-2. Also you can build project by yourself, watch point 'Instalation for own use'.
+2. You can build project by yourself, watch point 'Instalation for own use'.
 
 
 ## Usage
-Classical game "chess", ported on computer. Rules are simple you need to
-You goal - 
+Classical game "chess" for two players, now ported on computer.
+Rules are simple: your goal to checkmate the opponent's king and save your own.
+You can move all your figures at game field (8x8), each move and attack by his own way.
+Also there some additions:
+* Awalable castling for king and rook;
+* Pawn at edge position conevrt to queen;
 
 Game have 3 game variants: 
-* Singleplayer (only if field width equal 3);
-* Local two-person mode (for two people at one machine, walking in turns);
-* Intrnet two person mode (for two people at two different machines, by LAN);
+* Singleplayer (playing with bot (now not work));
+* Local two-person mode (for two people at one machine);
+* Internet two person mode (for two people at two different machines, by LAN);
 Also you can change start configuration and other usefull things from "settings5.ini" file.
 
 
 ## Supported languages
 * English
 * Russian (Русский)
-* German (Deutsch)
-* Bellarussian (Беларускі)
+* German (Deutsch) (WIP)
+* Bellarussian (Беларускі) (WIP)
 
 
 ## Instalation for own use (windows)
@@ -33,7 +39,7 @@ Also you can change start configuration and other usefull things from "settings5
 3. Install [CMake](https://sourceforge.net/projects/cmake.mirror/);
 4. Download and extract external SDL libraries ([SDL2](https://github.com/libsdl-org/SDL/releases), [SDL image](https://github.com/libsdl-org/SDL_image/releases), [SDL mixer](https://github.com/libsdl-org/SDL_mixer/releases), [SDL ttf](https://github.com/libsdl-org/SDL_ttf/releases), [SDL net](https://github.com/libsdl-org/SDL_net/releases));
 5. Download and extract archieve library - libzip (build by you own), required: 1. [zlib](https://www.zlib.net/), 2. bzip (came with GNU), 3. [libzip itself](https://libzip.org/download/), 4. Build libzip using cmake to folder, 5. Run 'make', 'make install' (as administrator);
-6. (Optional) Code editor [Visual Studio Code](https://code.visualstudio.com/download) (for better usage).
+6. (Optional) Code editor [Visual Studio Code](https://code.visualstudio.com/download) (for better usage) (Recomended to use with plugins on c++ and cmake).
 
 Point 4 with all last builded libraries is located at [releases](https://github.com/kolyaka32/SDL-net-chess/releases) (Development-kit).
 
