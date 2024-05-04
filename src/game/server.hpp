@@ -4,7 +4,7 @@
 #include "internet/internetServer.hpp"
 
 // Main game cycle (start like server)
-class ServerGameCycle : public GameCycle, public InternetServerCycle
+class ServerGameCycle : public InternetServerCycle
 {
 private:
     bool waitStart = true;     // Flag of waiting for game start

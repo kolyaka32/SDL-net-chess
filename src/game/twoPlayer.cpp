@@ -8,5 +8,6 @@ TwoPlayerGameCycle::TwoPlayerGameCycle(){
 
 //
 TwoPlayerGameCycle::~TwoPlayerGameCycle(){
-    
+    // Starting playing menu theme
+    data.playMusic(MUS_MENU_THEME);
 }

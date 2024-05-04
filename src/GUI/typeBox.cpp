@@ -5,23 +5,24 @@ using namespace GUI;
 
 
 // Type box class
-typeBox::typeBox(textHeight _height, float _x, float _y, const char* _text, ALIGNMENT_types _aligment, SDL_Color _color)
- : color(_color), aligment(_aligment){
+typeBox::typeBox(std::mutex& _drawMutex, textHeight _height, float _x, float _y, const char* _text, ALIGNMENT_types _aligment, SDL_Color _color)
+ : color(_color), aligment(_aligment), drawMutex(_drawMutex){
     font = data.createFont(_height);
-    rect.x = SCREEN_WIDTH * _x;
-    rect.y = SCREEN_HEIGHT * _y - _height / 2;
-    rect.w = rect.h = 0;
+    textRect.x = SCREEN_WIDTH * _x;
+    textRect.y = SCREEN_HEIGHT * _y - _height / 2;
+    textRect.w = textRect.h = 0;
 
     strcpy(buffer, _text);
     length = caret = strlen(buffer);
+    // Creating first texture, if there was any text
     if(caret){
         updateTexture();
     }
 
     // Creating background picture for typing
-    SDL_QueryTexture(data.textures[IMG_GUI_TYPE_BOX], NULL, NULL, &backRect.w, &backRect.h);
-    backRect.x = SCREEN_WIDTH * _x - backRect.w / 2;
-    backRect.y = SCREEN_HEIGHT * _y - backRect.h / 2 + 2;
+    SDL_QueryTexture(data.textures[IMG_GUI_TYPE_BOX], NULL, NULL, &rect.w, &rect.h);
+    rect.x = SCREEN_WIDTH * _x - rect.w / 2;
+    rect.y = SCREEN_HEIGHT * _y - rect.h / 2 + 2;
 }
 
 //
@@ -31,6 +32,9 @@ typeBox::~typeBox(){
 
 // Creating new texture
 void typeBox::updateTexture(){
+    // Locking thread, while updating texture
+    drawMutex.lock();
+
     // Creating surface from text
     SDL_Surface* surface = TTF_RenderUTF8_Solid(font, buffer, color);
     // Updating texture
@@ -38,9 +42,12 @@ void typeBox::updateTexture(){
     SDL_FreeSurface(surface);
 
     // Resetting place of text with saving aligment
-    rect.x += rect.w * aligment / 2;
-    SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
-    rect.x -= rect.w * aligment / 2;
+    textRect.x += textRect.w * aligment / 2;
+    SDL_QueryTexture(texture, NULL, NULL, &textRect.w, &textRect.h);
+    textRect.x -= textRect.w * aligment / 2;
+
+    // Unlocking thread for other actions
+    drawMutex.unlock();
 }
 
 //
@@ -149,7 +156,12 @@ void typeBox::press(SDL_Keycode code){
 
 //
 void typeBox::select(){
+    // Setting symbol of caret to line
     buffer[length] = '|';
+    // Resetting swapping caret
+    swapCaret = ' ';
+
+    // Moving end of string
     caret = length++;
     buffer[length] = '\0';
     updateTexture();
@@ -172,16 +184,15 @@ void typeBox::removeSelect(){
 
 //
 void typeBox::updateCaret(){
-    static char b = ' ';
-    std::swap(buffer[caret], b);
+    std::swap(buffer[caret], swapCaret);
     updateTexture();
 };
 
 //
 void typeBox::blit() const{
     // Rendering background picture for better typing
-    SDL_RenderCopy(data.renderer, data.textures[IMG_GUI_TYPE_BOX], NULL, &backRect);
+    SDL_RenderCopy(data.renderer, data.textures[IMG_GUI_TYPE_BOX], NULL, &rect);
 
     // Rendering text
-    SDL_RenderCopy(data.renderer, texture, NULL, &rect);
+    SDL_RenderCopy(data.renderer, texture, NULL, &textRect);
 };

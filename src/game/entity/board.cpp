@@ -368,53 +368,11 @@ Uint8 Board::click(const coord _x, const coord _y){
         }
         // Checking, if new position allowable
         else if(figures[getPos(_x, _y)] >= FIG_MOVE_TO){
+            // Check on game end
             if(turn == TURN_WHITE){
                 // Checking on game end (if there king of another command)
                 if(figures[getPos(_x, _y)] == FIG_RED_TYPE + FIG_BLACK_KING){
                     return END_WIN + turn;
-                }
-                else if(activeCell.type == FIG_WHITE_ROOK){
-                    // Disabling posible castling for next turns
-                    if(_x < FIELD_WIDTH/2){
-                        castling -= CASTLING_W_Q;
-                    }
-                    else{
-                        castling -= CASTLING_W_K;
-                    }
-                    // Check, if castling
-                    if(figures[getPos(_x, _y)] == FIG_WHITE_KING + FIG_RED_TYPE){
-                        // Disabling posible castling for next turns
-                        castling &= CASTLING_B_Q | CASTLING_B_K;
-
-                        // Swaping figures
-                        figures[activeCell.pos] = FIG_WHITE_KING;
-
-                        // Disabling previous cell clearing
-                        if(activeCell.pos % FIELD_WIDTH < FIELD_WIDTH/2){
-                            activeCell.pos += 1;
-                        }
-                        else{
-                            activeCell.pos -= 1;
-                        }
-                    }
-                }
-                else if(activeCell.type == FIG_WHITE_KING){
-                    // Disabling posible castling for next turns
-                    castling &= CASTLING_B_Q | CASTLING_B_K;
-
-                    // Check, if castling
-                    if(figures[getPos(_x, _y)] == FIG_WHITE_ROOK + FIG_RED_TYPE){
-                        // Swaping figures
-                        figures[activeCell.pos] = FIG_WHITE_ROOK;
-
-                        // Disabling previous cell clearing
-                        if(_x < FIELD_WIDTH/2){
-                            activeCell.pos -= 1;
-                        }
-                        else{
-                            activeCell.pos += 1;
-                        }
-                    }
                 }
             }
             else{
@@ -422,49 +380,112 @@ Uint8 Board::click(const coord _x, const coord _y){
                 if(figures[getPos(_x, _y)] == FIG_RED_TYPE + FIG_WHITE_KING){
                     return END_WIN + turn;
                 }
-                else if(activeCell.type == FIG_BLACK_ROOK){
+            }
+            switch (activeCell.type)
+            {
+            case FIG_WHITE_ROOK:
+                // Disabling posible castling for next turns
+                if(_x < FIELD_WIDTH/2){
+                    castling -= CASTLING_W_Q;
+                }
+                else{
+                    castling -= CASTLING_W_K;
+                }
+                // Check, if castling
+                if(figures[getPos(_x, _y)] == FIG_WHITE_KING + FIG_RED_TYPE){
                     // Disabling posible castling for next turns
-                    if(_x < FIELD_WIDTH/2){
-                        castling -= CASTLING_B_Q;
+                    castling &= CASTLING_B_Q | CASTLING_B_K;
+
+                    // Swaping figures
+                    figures[activeCell.pos] = FIG_WHITE_KING;
+
+                    // Disabling previous cell clearing
+                    if(activeCell.pos % FIELD_WIDTH < FIELD_WIDTH/2){
+                        activeCell.pos += 1;
                     }
                     else{
-                        castling -= CASTLING_B_K;
-                    }
-                    // Check, if castling
-                    if(figures[getPos(_x, _y)] == FIG_BLACK_KING + FIG_RED_TYPE){
-                        // Disabling posible castling for next turns
-                        castling &= CASTLING_W_Q | CASTLING_W_K;
-
-                        // Swaping figures
-                        figures[activeCell.pos] = FIG_BLACK_KING;
-
-                        // Disabling previous cell clearing
-                        if(activeCell.pos % FIELD_WIDTH < FIELD_WIDTH/2){
-                            activeCell.pos += 1;
-                        }
-                        else{
-                            activeCell.pos -= 1;
-                        }
+                        activeCell.pos -= 1;
                     }
                 }
-                else if(activeCell.type == FIG_BLACK_KING){
+                break;
+
+            case FIG_WHITE_KING:
+                // Disabling posible castling for next turns
+                castling &= CASTLING_B_Q | CASTLING_B_K;
+
+                // Check, if castling
+                if(figures[getPos(_x, _y)] == FIG_WHITE_ROOK + FIG_RED_TYPE){
+                    // Swaping figures
+                    figures[activeCell.pos] = FIG_WHITE_ROOK;
+
+                    // Disabling previous cell clearing
+                    if(_x < FIELD_WIDTH/2){
+                        activeCell.pos -= 1;
+                    }
+                    else{
+                        activeCell.pos += 1;
+                    }
+                }
+                break;
+
+            case FIG_WHITE_PAWN:
+                // Check, if on last line - convert into queen
+                if(_y == 0){
+                    activeCell.type = FIG_WHITE_QUEEN;
+                }
+                break;
+            
+            case FIG_BLACK_ROOK:
+                // Disabling posible castling for next turns
+                if(_x < FIELD_WIDTH/2){
+                    castling -= CASTLING_B_Q;
+                }
+                else{
+                    castling -= CASTLING_B_K;
+                }
+                // Check, if castling
+                if(figures[getPos(_x, _y)] == FIG_BLACK_KING + FIG_RED_TYPE){
                     // Disabling posible castling for next turns
                     castling &= CASTLING_W_Q | CASTLING_W_K;
 
-                    // Check, if castling
-                    if(figures[getPos(_x, _y)] == FIG_BLACK_ROOK + FIG_RED_TYPE){
-                        // Swaping figures
-                        figures[activeCell.pos] = FIG_BLACK_ROOK;
+                    // Swaping figures
+                    figures[activeCell.pos] = FIG_BLACK_KING;
 
-                        // Disabling previous cell clearing
-                        if(_x < FIELD_WIDTH/2){
-                            activeCell.pos -= 1;
-                        }
-                        else{
-                            activeCell.pos += 1;
-                        }
+                    // Disabling previous cell clearing
+                    if(activeCell.pos % FIELD_WIDTH < FIELD_WIDTH/2){
+                        activeCell.pos += 1;
+                    }
+                    else{
+                        activeCell.pos -= 1;
                     }
                 }
+                break;
+            
+            case FIG_BLACK_KING:
+                // Disabling posible castling for next turns
+                castling &= CASTLING_W_Q | CASTLING_W_K;
+
+                // Check, if castling
+                if(figures[getPos(_x, _y)] == FIG_BLACK_ROOK + FIG_RED_TYPE){
+                    // Swaping figures
+                    figures[activeCell.pos] = FIG_BLACK_ROOK;
+
+                    // Disabling previous cell clearing
+                    if(_x < FIELD_WIDTH/2){
+                        activeCell.pos -= 1;
+                    }
+                    else{
+                        activeCell.pos += 1;
+                    }
+                }
+                break;
+
+            case FIG_BLACK_PAWN:
+                // Check, if on last line - convert into queen
+                if(_y == FIELD_WIDTH-1){
+                    activeCell.type = FIG_WHITE_QUEEN;
+                }
+                break;
             }
 
             // Setting new position to cell
@@ -502,256 +523,28 @@ Uint8 Board::click(const coord _x, const coord _y){
 
 // Making all like in click, but at once and without help
 Uint8 Board::move(const coord _x1, const coord _y1, const coord _x2, const coord _y2){
-    // Getting state of current cell
-    activeCell.pos = getPos(_x1, _y1);
-    activeCell.type = figures[activeCell.pos];
+    // Emulating first click on field
+    click(_x1, _y1);
 
-    // Checking, which color is active
-    if(turn == TURN_WHITE){
-        // White figures turn
-        // Setting positions of cell, where active can go, depend on figure
-        switch (activeCell.type)
-        {
-        case FIG_WHITE_PAWN:
-            // Basic move
-            tryMove(_x1, _y1 - 1);
+    // Emulating second click on field
+    Uint8 state = click(_x2, _y2);
 
-            // Check, if in start position and wasn't any move
-            if(wasMoven && _y1 == FIELD_WIDTH - 2){
-                tryMove(_x1, _y1 - 2);
-            }
-            
-            // Attack positions
-            tryAttack(_x1-1, _y1-1);
-            tryAttack(_x1+1, _y1-1);
-            break;
-
-        case FIG_WHITE_BISHOP:
-            setDiagonals(_x1, _y1);
-            break;
-
-        case FIG_WHITE_ROOK:
-            // Check castling
-            if(castling & CASTLING_W_Q){
-                setCastlingRight(_x1, _y1, FIG_WHITE_KING);
-            }
-            if(castling & CASTLING_W_K){
-                setCastlingLeft(_x1, _y1, FIG_WHITE_KING);
-            }
-            // Main move
-            setStraight(_x1, _y1);
-            break;
-
-        case FIG_WHITE_KNIGHT:
-            setAround(_x1, _y1, knightMoves);
-            break;
-
-        case FIG_WHITE_QUEEN:
-            setDiagonals(_x1, _y1);
-            setStraight(_x1, _y1);
-            break;
-        
-        case FIG_WHITE_KING:
-            // Check castling
-            if(castling & CASTLING_W_Q){
-                setCastlingLeft(_x1, _y1, FIG_WHITE_ROOK);
-            }
-            if(castling & CASTLING_W_K){
-                setCastlingRight(_x1, _y1, FIG_WHITE_ROOK);
-            }
-            // Main move
-            setAround(_x1, _y1, kingMoves);
-            break;
-        }
+    // Check, if there was turn
+    if(state){
+        return state;
     }
-    else
-    {
-        // Black figures turn
-        // Setting positions of cell, where active can go, depend on figure
-        switch (activeCell.type)
-        {
-        case FIG_BLACK_PAWN:
-            // Basic move
-            tryMove(_x1, _y1 + 1);
-
-            // Check, if in start position and wasn't any move
-            if(wasMoven && _y1 == 1){
-                tryMove(_x1, _y1 + 2);
-            }
-            
-            // Attack positions
-            tryAttack(_x1-1, _y1+1);
-            tryAttack(_x1+1, _y1+1);
-            break;
-
-        case FIG_BLACK_BISHOP:
-            setDiagonals(_x1, _y1);
-            break;
-
-        case FIG_BLACK_ROOK:
-            // Check castling
-            if(castling & CASTLING_B_Q){
-                setCastlingRight(_x1, _y1, FIG_BLACK_KING);
-            }
-            if(castling & CASTLING_B_K){
-                setCastlingLeft(_x1, _y1, FIG_BLACK_KING);
-            }
-            // Main move
-            setStraight(_x1, _y1);
-            break;
-
-        case FIG_BLACK_KNIGHT:
-            setAround(_x1, _y1, knightMoves);
-            break;
-
-        case FIG_BLACK_QUEEN:
-            setDiagonals(_x1, _y1);
-            setStraight(_x1, _y1);
-            break;
-        
-        case FIG_BLACK_KING:
-            // Check castling
-            if(castling & CASTLING_B_Q){
-                setCastlingLeft(_x1, _y1, FIG_BLACK_ROOK);
-            }
-            if(castling & CASTLING_B_K){
-                setCastlingRight(_x1, _y1, FIG_BLACK_ROOK);
-            }
-            // Main move
-            setAround(_x1, _y1, kingMoves);
-            break;
-        }
-    }
-    // Checking, if new position allowable
-    if(figures[getPos(_x2, _y2)] >= FIG_MOVE_TO){
-        if(turn == TURN_WHITE){
-            // Checking on game end (if there king of another command)
-            if(figures[getPos(_x2, _y2)] == FIG_RED_TYPE + FIG_BLACK_KING){
-                return END_WIN + turn;
-            }
-            else if(activeCell.type == FIG_WHITE_ROOK){
-                // Disabling posible castling for next turns
-                if(_x2 < FIELD_WIDTH/2){
-                    castling -= CASTLING_W_Q;
-                }
-                else{
-                    castling -= CASTLING_W_K;
-                }
-                // Check, if castling
-                if(figures[getPos(_x2, _y2)] == FIG_WHITE_KING + FIG_RED_TYPE){
-                    // Disabling posible castling for next turns
-                    castling &= CASTLING_B_Q | CASTLING_B_K;
-
-                    // Swaping figures
-                    figures[activeCell.pos] = FIG_WHITE_KING;
-
-                    // Disabling previous cell clearing
-                    if(activeCell.pos % FIELD_WIDTH < FIELD_WIDTH/2){
-                        activeCell.pos += 1;
-                    }
-                    else{
-                        activeCell.pos -= 1;
-                    }
-                }
-            }
-            else if(activeCell.type == FIG_WHITE_KING){
-                // Disabling posible castling for next turns
-                castling &= CASTLING_B_Q | CASTLING_B_K;
-
-                // Check, if castling
-                if(figures[getPos(_x2, _y2)] == FIG_WHITE_ROOK + FIG_RED_TYPE){
-                    // Swaping figures
-                    figures[activeCell.pos] = FIG_WHITE_ROOK;
-
-                    // Disabling previous cell clearing
-                    if(_x2 < FIELD_WIDTH/2){
-                        activeCell.pos -= 1;
-                    }
-                    else{
-                        activeCell.pos += 1;
-                    }
-                }
-            }
-        }
-        else{
-            // Checking on game end (if there king of another command)
-            if(figures[getPos(_x2, _y2)] == FIG_RED_TYPE + FIG_WHITE_KING){
-                return END_WIN + turn;
-            }
-            else if(activeCell.type == FIG_BLACK_ROOK){
-                // Disabling posible castling for next turns
-                if(_x2 < FIELD_WIDTH/2){
-                    castling -= CASTLING_B_Q;
-                }
-                else{
-                    castling -= CASTLING_B_K;
-                }
-                // Check, if castling
-                if(figures[getPos(_x2, _y2)] == FIG_BLACK_KING + FIG_RED_TYPE){
-                    // Disabling posible castling for next turns
-                    castling &= CASTLING_W_Q | CASTLING_W_K;
-
-                    // Swaping figures
-                    figures[activeCell.pos] = FIG_BLACK_KING;
-
-                    // Disabling previous cell clearing
-                    if(activeCell.pos % FIELD_WIDTH < FIELD_WIDTH/2){
-                        activeCell.pos += 1;
-                    }
-                    else{
-                        activeCell.pos -= 1;
-                    }
-                }
-            }
-            else if(activeCell.type == FIG_BLACK_KING){
-                // Disabling posible castling for next turns
-                castling &= CASTLING_W_Q | CASTLING_W_K;
-
-                // Check, if castling
-                if(figures[getPos(_x2, _y2)] == FIG_BLACK_ROOK + FIG_RED_TYPE){
-                    // Swaping figures
-                    figures[activeCell.pos] = FIG_BLACK_ROOK;
-
-                    // Disabling previous cell clearing
-                    if(_x2 < FIELD_WIDTH/2){
-                        activeCell.pos -= 1;
-                    }
-                    else{
-                        activeCell.pos += 1;
-                    }
-                }
-            }
-        }
-
-        // Setting new position to cell
-        figures[getPos(_x2, _y2)] = activeCell.type;
-        figures[activeCell.pos] = FIG_NONE;
-
-        // Making sound
-        data.playSound(SND_TURN);
-
+    else{
         // Clearing field after turn (resetting figure move to and red type)
         for(position i=0; i < fieldSize; ++i){
             // Clear points to move
             if(figures[i] == FIG_MOVE_TO){
                 figures[i] = FIG_NONE;
             }
-            // Clearing red figures
-            else if(figures[i] > FIG_RED_TYPE){
-                figures[i] -= FIG_RED_TYPE;
+            else{
+                // Clearing all extra codes
+                figures[i] &= (FIG_RED_TYPE-1);
             }
         }
-
-        // Disabling moving cell
-        activeCell.type = FIG_NONE;
-
-        // Changing moving player
-        turn = !turn;
-
-        // Shwoing making turn
-        return END_TURN;
-    }
-    else{
         return END_NONE;
     }
 }

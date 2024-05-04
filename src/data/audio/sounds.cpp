@@ -52,7 +52,7 @@ void Sounds::loadSound(const char *_name, const SND_names _index){
     sounds[_index] = Mix_LoadWAV_RW(tempRW, 0);
 
     // Freeing data from sound
-    free(tempRW->hidden.mem.base);
+    //free(tempRW->hidden.mem.base);
     SDL_RWclose(tempRW);
 
     // Checking correction of loaded sound

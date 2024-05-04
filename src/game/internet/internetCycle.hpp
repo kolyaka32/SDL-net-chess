@@ -4,11 +4,11 @@
 #include <mutex>
 
 #include "baseInternet.hpp"
-#include "../../cycleTemplate.hpp"
+#include "../base.hpp"
 
 
 // Class for create process thread for internet connection
-class InternetCycle : public Internet, public virtual CycleTemplate
+class InternetCycle : public Internet, public GameCycle
 {
 private:
     void lauchCycle();  // Main internet cycle

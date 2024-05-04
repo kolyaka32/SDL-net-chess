@@ -3,9 +3,6 @@
 //
 ClientGameCycle::ClientGameCycle()
 {
-    // Starting text inputing
-    SDL_StartTextInput();
-
     // Allowing internet to start
     gettingMutex.unlock();
 }
@@ -14,18 +11,19 @@ ClientGameCycle::ClientGameCycle()
 ClientGameCycle::~ClientGameCycle()
 {
     // Additional stopping text input on case, when was closed at inputting
-    if(waitStart){
-        SDL_StopTextInput();
+    removeSelection();
+
+    // Starting playing menu theme if need
+    if(!waitStart){
+        data.playMusic(MUS_MENU_THEME);
     }
-    // Starting playing menu theme
-    data.playMusic(MUS_MENU_THEME);
 }
 
 // Macros for removing select from typeBox
 void ClientGameCycle::removeSelection(){
     if(selectedBox){
         typeBoxes[selectedBox - 1].removeSelect();
-        selectedBox = 0; 
+        selectedBox = 0;
     }
 }
 
@@ -36,12 +34,18 @@ Uint8 ClientGameCycle::getData(){
     {
     // Code of initialasing connection
     case MES_INIT:
-        // Starting playing main theme
-        data.playMusic(MUS_MAIN_THEME);
+        // Checking, if get first init message
+        if(waitStart){
+            // Starting playing main theme
+            data.playMusic(MUS_MAIN_THEME);
 
-        // Updating times of last sended messages
-        lastMessageArrive = SDL_GetTicks64() + MESSAGE_GET_TIMEOUT;
-        lastMessageSend = SDL_GetTicks64() + MESSAGE_NULL_TIMEOUT;
+            // Setting flag of connection to start game
+            waitStart = false;
+
+            // Updating times of last sended messages
+            lastMessageArrive = SDL_GetTicks64() + MESSAGE_GET_TIMEOUT;
+            lastMessageSend = SDL_GetTicks64() + MESSAGE_NULL_TIMEOUT;
+        }
 
         return 0;
     
@@ -113,6 +117,7 @@ void ClientGameCycle::getInput(){
                     case SDLK_RETURN2:
                     case SDLK_KP_ENTER:
                         removeSelection();
+                        // Trying connect at address
                         tryConnect(typeBoxes[0].buffer, typeBoxes[1].buffer);
                         break;
                     
@@ -139,18 +144,6 @@ void ClientGameCycle::getInput(){
                         return;
                     }
                     break;
-
-                case SDL_MOUSEBUTTONUP:
-                    //LMBclick = false;
-                    selectedBox = 0;
-                    break;
-
-                }
-                // Checking, if need to blink in type box
-                if(selectedBox && (SDL_GetTicks64() > lastTypeBoxUpdate)){
-                    // Updating type box for show place to type
-                    typeBoxes[selectedBox-1].updateCaret();
-                    lastTypeBoxUpdate = SDL_GetTicks64() + 500;
                 }
             }
             else{
@@ -183,9 +176,15 @@ void ClientGameCycle::getInput(){
                     break;
                 }
             }
-            // Waiting next cycle
-            data.waitDraw();
         }
+        // Check, if entering text and need to blink caret in type box
+        if(waitStart && selectedBox && (SDL_GetTicks64() > lastTypeBoxUpdate)){
+            // Updating type box for show place to type
+            typeBoxes[selectedBox - 1].updateCaret();
+            lastTypeBoxUpdate = SDL_GetTicks64() + 500;
+        }
+        // Waiting next cycle
+        data.waitDraw();
     }
 };
 
@@ -199,14 +198,7 @@ Uint8 ClientGameCycle::mouseInput(){
         if(data.textButtons[BTN_GAME_CONNECT].in(mouseX, mouseY)){
             removeSelection();
             // Trying connect at address
-            if(tryConnect(typeBoxes[0].buffer, typeBoxes[1].buffer)){
-                // Changing state of current waiting
-                // Stopping inputing text
-                SDL_StopTextInput();
-
-                // Setting flag of connection to start game
-                waitStart = false;
-            }
+            tryConnect(typeBoxes[0].buffer, typeBoxes[1].buffer);
             return 0;
         }
         // Return to menu button
@@ -222,7 +214,7 @@ Uint8 ClientGameCycle::mouseInput(){
                 // Checking, if box not selected
                 if(selectedBox != i+1){
                     selectedBox = i+1;
-                    typeBoxes[0].select();
+                    typeBoxes[i].select();
                     lastTypeBoxUpdate = SDL_GetTicks64() + 700;
                 }
                 return 0;
@@ -307,11 +299,11 @@ void ClientGameCycle::draw() const{
             switch (endState)
             {
             case END_WIN:
-                data.texts[TXT_END_WIN].blit();
+                data.texts[TXT_END_LOOSE].blit();
                 break;
             
             case END_LOOSE:
-                data.texts[TXT_END_LOOSE].blit();
+                data.texts[TXT_END_WIN].blit();
                 break;
             
             case END_NOBODY:

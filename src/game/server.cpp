@@ -14,7 +14,10 @@ ServerGameCycle::ServerGameCycle()
 //
 ServerGameCycle::~ServerGameCycle()
 {
-
+    // Starting playing menu theme if need
+    if(!waitStart){
+        data.playMusic(MUS_MENU_THEME);
+    }
 }
 
 //

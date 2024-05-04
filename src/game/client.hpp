@@ -4,7 +4,7 @@
 #include "internet/internetClient.hpp"
 
 //
-class ClientGameCycle : public GameCycle, public InternetClientCycle
+class ClientGameCycle : public InternetClientCycle
 {
 private:
     bool waitStart = true;     // Flag of waiting for game start
@@ -16,8 +16,8 @@ private:
 
     // Input fields
     GUI::typeBox typeBoxes[2]{
-        {20, 0.5, 0.2, data.baseIP.std::string::c_str()},
-        {20, 0.5, 0.5, data.basePort.std::string::c_str()}
+        {runMutex, 20, 0.5, 0.2, data.baseIP.std::string::c_str()},
+        {runMutex, 20, 0.5, 0.5, data.basePort.std::string::c_str()}
     };
 
 protected:

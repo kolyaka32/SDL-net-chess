@@ -2,14 +2,13 @@
 #include "base.hpp"
 
 //
-GameCycle::GameCycle() : CycleTemplate(MUS_MAIN_THEME){
+GameCycle::GameCycle() : CycleTemplate(MUS_START_NONE){
     endState = END_NONE;
 };
 
 //
 GameCycle::~GameCycle(){
-    // Starting playing menu theme
-    data.playMusic(MUS_MENU_THEME);
+    
 };
 
 //

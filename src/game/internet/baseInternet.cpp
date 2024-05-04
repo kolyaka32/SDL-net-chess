@@ -129,7 +129,7 @@ Uint8 Internet::update(){
         // Check, if time for arrive is too much
         if(SDL_GetTicks64() > lastMessageArrive){
             // Something wrong with connection
-            //showDisconect();
+            showDisconect();
             return 1;
         }
     }

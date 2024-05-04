@@ -5,7 +5,7 @@
 #define CHECK_CORRECTION DEBUG
 #define ARCHIEVE_LOADING !DEBUG
 #define SCROLLER_SOUND SND_count
-#define CONNECTION_LOST_PERCENT 0
+#define CONNECTION_LOST_PERCENT 50
 
 // System numbers
 #define WINDOWNAME "Chess on SDL"           // System game name
