@@ -29,6 +29,15 @@ enum TXT_types{
     TXT_PAUSE_MUSIC,
     TXT_PAUSE_SOUND,
 
+    // Game turnes
+    // Turnes at one computer
+    TXT_GAME_TURN_FIRST,
+    TXT_GAME_TURN_SECOND,
+
+    // Turnes at internet connection
+    TXT_GAME_TURN_THIS,
+    TXT_GAME_TURN_ANOTHER,
+
     // End game texts
     TXT_END_WIN,
     TXT_END_WIN_1,
@@ -52,7 +61,7 @@ enum TXT_types{
 };
 
 // Summary texts counter
-#define TXT_count 21
+#define TXT_count 25
 
 
 // Framed buttons
@@ -100,6 +109,16 @@ public:
             30, 0.5, 0.68},
         {"Sounds\nЗвуки\nGeräusche\nГук\n", 
             30, 0.5, 0.83},
+
+        // Game turnes
+        {"First player turn\nХод первого игрока\n-\n",
+            24, 0.5, 0.1, WHITE},
+        {"Second player turn\nХод второго игрока\n-\n",
+            24, 0.5, 0.1, WHITE},
+        {"Your turn\nВаш ход\n-\n",
+            24, 0.5, 0.1, WHITE},
+        {"Wait\nОжидайте\n-\n",
+            24, 0.5, 0.1, WHITE},
 
         // Game end texts
         {"Win!\nПобеда!\n-\n",

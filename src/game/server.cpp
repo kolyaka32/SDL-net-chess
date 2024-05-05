@@ -169,6 +169,9 @@ void ServerGameCycle::draw() const{
         // Draw surround letters
         letters.blit();
 
+        // Drawing player state
+        data.texts[TXT_GAME_TURN_THIS + waitTurn].blit();
+
         // Bliting game state, if need
         if(endState > END_TURN){
             // Bliting end background

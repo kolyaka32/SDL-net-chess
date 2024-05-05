@@ -55,5 +55,6 @@ public:
     void blit() const;  // Bliting field at screen
     Uint8 click(const coord X, const coord Y);  // Clicking with mouse on need cell on field
     Uint8 move(const coord X1, const coord Y1, const coord X2, const coord Y2);  // Simplier mover on field (for internet opponent turn)
-    position getPreviousTurn();  // Return, where was made previous turn
+    position getPreviousTurn() const;  // Return, where was made previous turn
+    Uint8 currentTurn() const;         // Return, which person is now active
 };

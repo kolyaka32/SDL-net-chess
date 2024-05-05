@@ -555,6 +555,11 @@ Uint8 Board::move(const coord _x1, const coord _y1, const coord _x2, const coord
 }
 
 //
-position Board::getPreviousTurn(){
+position Board::getPreviousTurn() const{
     return activeCell.pos;
 }
+
+//
+Uint8 Board::currentTurn() const{
+    return turn;
+};

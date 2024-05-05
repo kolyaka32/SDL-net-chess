@@ -94,6 +94,9 @@ void GameCycle::draw() const{
     // Draw surround letters
     letters.blit();
 
+    // Drawing player state
+    data.texts[TXT_GAME_TURN_FIRST + board.currentTurn()].blit();
+
     // Bliting game state, if need
     if(endState > END_TURN){
         // Bliting end background
