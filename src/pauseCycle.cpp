@@ -150,8 +150,8 @@ void PauseCycle::draw() const{
 
     // Drawing background
     data.setColor({206, 139, 71, 255});
-    for(coord y=0; y <= FIELD_WIDTH; ++y)
-        for(coord x=y%2; x <= FIELD_WIDTH; x+=2){
+    for(coord y=0; y <= (SCREEN_HEIGHT / CELL_SIDE + 1); ++y)
+        for(coord x=y%2; x <= (SCREEN_WIDTH / CELL_SIDE + 1); x+=2){
             SDL_Rect rect = {(x-1) * CELL_SIDE + offset/2, (y-1) * CELL_SIDE + offset/2, CELL_SIDE, CELL_SIDE};
             SDL_RenderFillRect(data.renderer, &rect);
         }

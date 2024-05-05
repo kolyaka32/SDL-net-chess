@@ -3,6 +3,7 @@
 #include "../GUI/baseGUI.hpp"
 #include "../cycleTemplate.hpp"
 #include "entity/board.hpp"
+#include "entity/letters.hpp"
 
 
 // Cycle with game template
@@ -11,6 +12,9 @@ class GameCycle : public CycleTemplate
 protected:
     Board board;  // Main game field
     Uint8 endState;  // State of game (end)
+
+    // Extra UI
+    SurroundingLetters letters;  // Letters, that surround field
 
     // GUI objects
     // Button for quit settings menu

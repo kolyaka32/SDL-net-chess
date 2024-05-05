@@ -9,12 +9,16 @@ Backplate::Backplate(const SDL_Rect _rect, const Uint8 _rad, const Uint8 _bor, c
     updatePlate(_rect);
 };
 
+//
 Backplate::~Backplate(){
     SDL_DestroyTexture(texture);
 };
 
 //
 void Backplate::updatePlate(const SDL_Rect _rect){
+    // Locking mutex, while do any actions
+    data.drawMutex.lock();
+
     // Checking, if need clear previous texture
     if(texture){
         SDL_DestroyTexture(texture);
@@ -68,4 +72,7 @@ void Backplate::updatePlate(const SDL_Rect _rect){
 
     // Resetting render target
     SDL_SetRenderTarget(data.renderer, nullptr);
+
+    // Unlocking mutex, after all
+    data.drawMutex.unlock();
 };

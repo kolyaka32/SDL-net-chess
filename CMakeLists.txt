@@ -96,6 +96,10 @@ add_executable( ${CMAKE_PROJECT_NAME}
     src/game/entity/board.hpp
     src/game/entity/board.cpp
 
+    # Game surrounding
+    src/game/entity/letters.hpp
+    src/game/entity/letters.cpp
+
     # Base game interface (main game part)
     src/game/base.hpp
     src/game/base.cpp

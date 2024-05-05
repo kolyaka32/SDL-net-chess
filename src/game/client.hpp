@@ -16,8 +16,8 @@ private:
 
     // Input fields
     GUI::typeBox typeBoxes[2]{
-        {runMutex, 20, 0.5, 0.2, data.baseIP.std::string::c_str()},
-        {runMutex, 20, 0.5, 0.5, data.basePort.std::string::c_str()}
+        {20, 0.5, 0.2, data.baseIP.std::string::c_str()},
+        {20, 0.5, 0.5, data.basePort.std::string::c_str()}
     };
 
 protected:

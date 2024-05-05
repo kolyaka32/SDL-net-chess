@@ -51,9 +51,16 @@ void App::setColor(SDL_Color color){
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 };
 
-// Blitting all buffered objects
+//
 void App::render(){
+    // Blocking any drawing
+    drawMutex.lock();
+
+    // Blitting all buffered objects
     SDL_RenderPresent(renderer);
+
+    // Unlocking for other actions
+    drawMutex.unlock();
 };
 
 // Waiting next cycle for load decrease

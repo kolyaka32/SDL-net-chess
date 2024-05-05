@@ -239,12 +239,12 @@ Uint8 ClientGameCycle::mouseInput(){
                 position previousPos = board.getPreviousTurn();
 
                 // Normal clicking on field
-                endState = board.click(mouseX / CELL_SIDE, mouseY / CELL_SIDE);
+                endState = board.click((mouseX - LEFT_LINE) / CELL_SIDE, (mouseY - UPPER_LINE) / CELL_SIDE);
 
                 // Checking, if need send move
                 if(endState){
                     // Sending turn
-                    send(MES_TURN, previousPos, getPos(mouseX / CELL_SIDE, mouseY / CELL_SIDE));
+                    send(MES_TURN, previousPos, getPos((mouseX - LEFT_LINE) / CELL_SIDE, (mouseY - UPPER_LINE) / CELL_SIDE));
                     
                     // Changing turn
                     waitTurn = true;
@@ -289,6 +289,9 @@ void ClientGameCycle::draw() const{
         // Game variant
         // Bliting field
         board.blit();
+
+        // Draw surround letters
+        letters.blit();
 
         // Bliting game state, if need
         if(endState > END_TURN){

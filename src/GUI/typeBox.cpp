@@ -5,8 +5,8 @@ using namespace GUI;
 
 
 // Type box class
-typeBox::typeBox(std::mutex& _drawMutex, textHeight _height, float _x, float _y, const char* _text, ALIGNMENT_types _aligment, SDL_Color _color)
- : color(_color), aligment(_aligment), drawMutex(_drawMutex){
+typeBox::typeBox(textHeight _height, float _x, float _y, const char* _text, ALIGNMENT_types _aligment, SDL_Color _color)
+ : color(_color), aligment(_aligment){
     font = data.createFont(_height);
     textRect.x = SCREEN_WIDTH * _x;
     textRect.y = SCREEN_HEIGHT * _y - _height / 2;
@@ -33,7 +33,7 @@ typeBox::~typeBox(){
 // Creating new texture
 void typeBox::updateTexture(){
     // Locking thread, while updating texture
-    drawMutex.lock();
+    data.drawMutex.lock();
 
     // Creating surface from text
     SDL_Surface* surface = TTF_RenderUTF8_Solid(font, buffer, color);
@@ -47,7 +47,7 @@ void typeBox::updateTexture(){
     textRect.x -= textRect.w * aligment / 2;
 
     // Unlocking thread for other actions
-    drawMutex.unlock();
+    data.drawMutex.unlock();
 }
 
 //

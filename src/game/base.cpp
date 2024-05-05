@@ -60,7 +60,7 @@ Uint8 GameCycle::mouseInput(){
     // Checking, if game start
     if(endState <= END_TURN){
         // Clicking on field
-        endState = board.click(mouseX / CELL_SIDE, mouseY / CELL_SIDE);
+        endState = board.click((mouseX - LEFT_LINE) / CELL_SIDE, (mouseY - UPPER_LINE) / CELL_SIDE);
     }
     else{
         // Getting buttons clicks
@@ -90,6 +90,9 @@ Uint8 GameCycle::mouseInput(){
 void GameCycle::draw() const{
     // Bliting field
     board.blit();
+
+    // Draw surround letters
+    letters.blit();
 
     // Bliting game state, if need
     if(endState > END_TURN){

@@ -1,7 +1,5 @@
 #pragma once
 
-#include <mutex>
-
 #include "../include.hpp"
 #include "../define.hpp"
 #include "../dataTypes.hpp"
@@ -127,14 +125,13 @@ namespace GUI{
         Uint8 length;              // Length of all text
         TTF_Font *font;            // Font for type text
         SDL_Rect textRect;         // Rectangle of background plate (for better visability)
-        std::mutex& drawMutex;     // Link to draw system, that need to stoped, while texture is updating
 
         void updateTexture();      // System function of creating new texture and updating his position
 
     public:
         char buffer[bufferSize + 1];  // Read only data, which write in this typebox
 
-        typeBox(std::mutex& drawMutex, textHeight size, float posX, float posY, const char *startText = "", 
+        typeBox(textHeight size, float posX, float posY, const char *startText = "", 
             ALIGNMENT_types newAligment = MIDLE_text, SDL_Color newColor = BLACK);
         ~typeBox();                                  // Clearing font and texture
         void blit() const override;                  // Function of drawing text with background plate

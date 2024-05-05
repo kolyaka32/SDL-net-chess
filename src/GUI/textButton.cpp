@@ -16,7 +16,7 @@ void TextButton::blit() const{
     topText.blit();
 };
 
-//
+// Update current text plate
 void TextButton::update(){
     // Updating backplate
     updatePlate({topText.rect.x-10, topText.rect.y-1, topText.rect.w+20, topText.rect.h+4});

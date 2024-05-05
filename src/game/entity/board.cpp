@@ -155,15 +155,20 @@ void Board::reset(){
 
 // 
 void Board::blit() const{
-    // Drawing background
-    data.setColor({255, 206, 158, 255});
+    // Drawing global background
+    data.setColor(BLACK);
     SDL_RenderClear(data.renderer);
 
+    // Drawing field light part
+    data.setColor(FIELD_LIGHT);
+    const static SDL_Rect lightRect = {LEFT_LINE, UPPER_LINE, GAME_WIDTH, GAME_HEIGHT};
+    SDL_RenderFillRect(data.renderer, &lightRect);
+
     // Drawing background
-    data.setColor({206, 139, 71, 255});
+    data.setColor(FIELD_DARK);
     for(coord y = 0; y < FIELD_WIDTH; ++y)
         for(coord x = y % 2; x < FIELD_WIDTH; x += 2){
-            SDL_Rect rect = {x * CELL_SIDE, y * CELL_SIDE, CELL_SIDE, CELL_SIDE};
+            SDL_Rect rect = {LEFT_LINE + x * CELL_SIDE, UPPER_LINE + y * CELL_SIDE, CELL_SIDE, CELL_SIDE};
             SDL_RenderFillRect(data.renderer, &rect);
         }
     
@@ -171,7 +176,7 @@ void Board::blit() const{
     for(coord y = 0; y < FIELD_WIDTH; ++y)
         for(coord x = 0; x < FIELD_WIDTH; ++x){
             if(figures[getPos(x, y)]){
-                SDL_Rect rect = {x * CELL_SIDE, y * CELL_SIDE, CELL_SIDE, CELL_SIDE};
+                SDL_Rect rect = {LEFT_LINE + x * CELL_SIDE, UPPER_LINE + y * CELL_SIDE, CELL_SIDE, CELL_SIDE};
                 Uint8 textureIndex = IMG_GAME_WHITE_PAWN - 1 + figures[getPos(x, y)];
 
                 // Checking, if figure current (blue)

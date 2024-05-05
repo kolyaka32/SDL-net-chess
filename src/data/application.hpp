@@ -1,5 +1,7 @@
 #pragma once
 
+#include <mutex>
+
 #include "../include.hpp"
 #include "initFile.hpp"
 
@@ -8,8 +10,9 @@
 class App : public virtual InitFile
 {
 public:
-    SDL_Renderer *renderer;
-    SDL_Window *window;
+    SDL_Renderer *renderer;  // Renderer for draw any objects at screen
+    SDL_Window *window;      // Main window, where objects draw to
+    std::mutex drawMutex;    // Mutex for bloack any activity, while render
 public:
     App();   // Creating renderer and window
     ~App();  // Close renderer and window
