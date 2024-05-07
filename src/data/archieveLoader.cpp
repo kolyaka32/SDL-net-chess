@@ -1,5 +1,7 @@
 #include "zip.h"
+
 #include "../define.hpp"
+#include "../dataTypes.hpp"
 #include "dataLoader.hpp"
 #include "../workCodes.hpp"
 
@@ -51,7 +53,7 @@ SDL_RWops *DataLoader::loadObject(const char *_name){
     #endif
 
     // Creating buffer for data
-    char *buffer = (char*)malloc(sizeof(char) * st.size);
+    byte* buffer = new byte[st.size];
 
     // Copping data to buffer
     zip_fread(file, buffer, st.size);

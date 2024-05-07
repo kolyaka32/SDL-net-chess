@@ -1,12 +1,7 @@
 #pragma once
 
-#include "figures.hpp"
+#include "figuresMoves.hpp"
 
-// Types of which player is active
-enum TURN_names{
-    TURN_WHITE,
-    TURN_BLACK,
-};
 
 // Types of current game state
 enum END_names{
@@ -17,6 +12,7 @@ enum END_names{
     END_NOBODY,  // Nobody now can win
 };
 
+
 // Types of castling
 enum CASTLING_names{
     CASTLING_W_K = 1,  // If castling possible for white from king side
@@ -25,28 +21,16 @@ enum CASTLING_names{
     CASTLING_B_Q = 8,  // If castling possible for black from queen side
 };
 
+
 // Class of game board to with
-class Board
+class Board : public FiguresMoves
 {
 private:
-    const static Uint8 fieldSize = sqr(FIELD_WIDTH);  // Size of all game field
-    cell figures[fieldSize];                          // Array of figures on field
-    bool turn;                                        // Which player is currently turn
-    Figure activeCell;                                // Cell, that active (now move by player), or NULL if not
-    bool wasMoven;                                    // Flag of board, that it was moven
-    Uint8 castling;                                    // Data of all now posible varhishes
-
-    // Check, if figure at pos can be attacked
-    bool isAttackable(const position pos);
-    bool tryMoveTo(const position pos);
-    // Set points, where you can move or attck
-    void tryMove(Sint8 X, Sint8 Y);
-    void tryAttack(Sint8 X, Sint8 Y);
-    void setDiagonals(const coord _x, const coord _y);
-    void setStraight(const coord _x, const coord _y);
-    void setAround(const coord _x, const coord _y, const Sint8 pos[][2]);
-    void setCastlingLeft(const coord _x, const coord _y, const cell need);
-    void setCastlingRight(const coord _x, const coord _y, const cell need);
+    Figure activeCell;  // Cell, that active (now move by player), or NULL if not
+    Uint8 castling;     // Data of all now posible varhishes
+    
+    void pickFigure(const coord X, const coord Y);    // Function for pick figure from field
+    Uint8 placeFigure(const coord X, const coord Y);  // Function to try put figure back to field
     
 public:
     Board();
@@ -55,6 +39,7 @@ public:
     void blit() const;  // Bliting field at screen
     Uint8 click(const coord X, const coord Y);  // Clicking with mouse on need cell on field
     Uint8 move(const coord X1, const coord Y1, const coord X2, const coord Y2);  // Simplier mover on field (for internet opponent turn)
+    void resetSelection();  // Reset currently selected figure
     position getPreviousTurn() const;  // Return, where was made previous turn
     Uint8 currentTurn() const;         // Return, which person is now active
 };

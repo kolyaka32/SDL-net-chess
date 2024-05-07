@@ -2,28 +2,32 @@
 
 #include <thread>
 #include <mutex>
-#include "data/data.hpp"
 
+#include "data/data.hpp"
+#include "data/idleTimer.hpp"
 
 // Template for any cycles
 class CycleTemplate
 {
 private:
-    void drawCycle();  // Process to run in side thread
+    // Private data for draw
+    void drawCycle();  // Process to draw graphics, run sidely by another thread
     std::thread drawThread{this->drawCycle, this};  // Thread for drawing
+    IdleTimer drawTimer{1000/data.drawFPS};   // Timer to idle in draw cycle
 protected:
-    // Data for own cycle
-    bool running = false;   // Flag of running current cycle (for control draw)
-    std::mutex runMutex;    // Mutex for block running for change for another
+    // Data for cycle
+    bool running = true;    // Flag of running current cycle
+    std::mutex runMutex;    // Mutex for block running of current cycle
+    IdleTimer inputTimer{1000/INPUT_FPS};  // Timer to idle in input cycle
     int mouseX, mouseY;     // Current position of mouse
     Uint8 selectedBox;      // Number of which box is currently selected
-    const MUS_names music;  // Music track to play
+    const MUS_names music;  // Music track to play (or NULL, if not need start)
 
     // Function for run internal cycle
     template <typename Cycle>
     Uint8 runCycle();
 
-    // Cycle functions for own cycle (must be overriden)
+    // Cycle functions for cycle (must be overriden)
     virtual void getInput();     // Getting all user input (keyboard, mouse...)
     virtual Uint8 mouseInput();  // Checking for any need mouse action
     virtual void draw() const;   // Draw all need objects

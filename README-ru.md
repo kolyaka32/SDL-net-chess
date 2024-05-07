@@ -12,12 +12,12 @@
 
 
 ## Использование
-Classical game "chess" for two players, now ported on computer.
-Rules are simple: your goal to checkmate the opponent's king and save your own.
-You can move all your figures at game field (8x8), each move and attack by his own way.
-Also there some additions:
-* Awalable castling for king and rook;
-* Pawn at edge position conevrt to queen;
+Классическая игра "Шахматы" для двух игроков, теперь портированная на коспьютер (ещё и мной).
+Правила игры просты: ваша задача поставить мат противнику и не дать ему сделать того же.
+Вы можете передвигать фигуры по игровому полю (8х8), у каждая из которых ходит и атакует по своему.
+Также есть некоторые дополнительные возмоности:
+* Доступна рокировка, чтобы поменять местами короля и ладью.
+* Пешка, достигшая конца поля превращается в королеву (их может быть больше одной на поле). 
 
 Есть 3 варианта игры: 
 * Однопользовательский (игра с ботом (пока не работает));

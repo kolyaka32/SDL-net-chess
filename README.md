@@ -17,7 +17,7 @@ Rules are simple: your goal to checkmate the opponent's king and save your own.
 You can move all your figures at game field (8x8), each move and attack by his own way.
 Also there some additions:
 * Awalable castling for king and rook;
-* Pawn at edge position conevrt to queen;
+* Pawn at edge position conevrt to queen (can be more than one);
 
 Game have 3 game variants: 
 * Singleplayer (playing with bot (now not work));

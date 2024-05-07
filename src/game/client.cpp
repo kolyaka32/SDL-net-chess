@@ -155,9 +155,18 @@ void ClientGameCycle::getInput(){
                     return;
 
                 case SDL_KEYDOWN:
-                    if (event.key.keysym.sym == SDLK_ESCAPE){
+                    // Switching between keys
+                    switch (event.key.keysym.sym)
+                    {
+                    case SDLK_ESCAPE:
+                        // Clearing selection by escape
+                        board.resetSelection();
+                        break;
+                        
+                    case SDLK_q:
+                        // Quiting to menu
                         return;
-                    };
+                    }
                     break;
 
                 case SDL_MOUSEBUTTONDOWN:
@@ -184,7 +193,7 @@ void ClientGameCycle::getInput(){
             lastTypeBoxUpdate = SDL_GetTicks64() + 500;
         }
         // Waiting next cycle
-        data.waitDraw();
+        inputTimer.sleep();
     }
 };
 

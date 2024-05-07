@@ -9,8 +9,10 @@
 
 // System numbers
 #define WINDOWNAME "Chess on SDL"           // System game name
+// Game field parameters
 #define FIELD_WIDTH 8                       // Number of cells
 #define CELL_SIDE 64                        // Width and height of mine in pixels
+// Widthes and heightes
 #define GAME_WIDTH FIELD_WIDTH * CELL_SIDE  // Width of game area
 #define GAME_HEIGHT GAME_WIDTH              // Height of game area
 #define LETTER_LINE 20                      // Place for letters for field
@@ -20,6 +22,9 @@
 #define DOWN_LINE LETTER_LINE               // Place for field letters
 #define SCREEN_WIDTH (GAME_WIDTH + LEFT_LINE + RIGHT_LINE)  // Width of all screen
 #define SCREEN_HEIGHT (GAME_HEIGHT + UPPER_LINE + DOWN_LINE)  // Height of all screen
+// Basic run frequency
+#define INPUT_FPS 50                        // Frequency of input update
+#define INTERNET_FPS 40                     // Frequency of internet update
 
 // Internet constants
 #define BASE_PORT 2000                      // Base port to create/connect

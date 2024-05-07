@@ -41,6 +41,10 @@ add_executable( ${CMAKE_PROJECT_NAME}
     src/data/font.hpp
     src/data/font.cpp
 
+    # Game idle system
+    src/data/idleTimer.hpp
+    src/data/idleTimer.cpp
+
     # All audio
     # Main audio libraries
     src/data/audio/audio.hpp
@@ -89,7 +93,8 @@ add_executable( ${CMAKE_PROJECT_NAME}
     # Game part
     # Entities for game
     src/game/entity/figures.hpp
-    # Entity realisations
+    # Entities realisations
+    src/game/entity/figuresMoves.hpp
     src/game/entity/figuresMoves.cpp
 
     # Game board

@@ -62,25 +62,3 @@ void App::render(){
     // Unlocking for other actions
     drawMutex.unlock();
 };
-
-// Waiting next cycle for load decrease
-void App::waitInternet(){
-    /*const static Uint8 deltaTime = 1000/20;
-    static timer prevTime;
-    if(SDL_GetTicks64() - prevTime > deltaTime){
-        SDL_Delay(prevTime + deltaTime - SDL_GetTicks64());
-        prevTime = SDL_GetTicks64();
-    }*/
-
-    SDL_Delay(50);
-};
-
-// Waiting next cycle for load decrease
-void App::waitDraw(){
-    /*static timer prevTime;
-    if(SDL_GetTicks64() - prevTime > drawFPS){
-        SDL_Delay(prevTime + drawFPS - SDL_GetTicks64());
-        prevTime = SDL_GetTicks64();
-    }*/
-    SDL_Delay(1000/drawFPS);
-};

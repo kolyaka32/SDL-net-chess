@@ -40,7 +40,7 @@ void InternetCycle::lauchCycle(){
         gettingMutex.unlock();
 
         // Waiting next cycle (for better process time)
-        data.waitDraw();
+        internetTimer.sleep();
     }
 }
 

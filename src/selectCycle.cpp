@@ -6,19 +6,6 @@
 #include "game/server.hpp"
 #include "game/client.hpp"
 
-
-// Selectable GUI object
-enum {
-    BOX_NORMAL,
-    BOX_OPTIONS,
-    BOX_SINGLE,
-    BOX_TWO_PLAYERS,
-    BOX_SERVER,
-    BOX_CLIENT
-} SELECTED_BOX_TYPES;
-
-
-
 //
 SelectCycle::SelectCycle() : CycleTemplate(MUS_MENU_THEME){
 

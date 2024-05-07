@@ -18,6 +18,4 @@ public:
     ~App();  // Close renderer and window
     void setColor(SDL_Color color);  // Setting color for draw
     void render();                   // Blitting all buffered objects
-    void waitInternet();             // Waiting next cycle for load decrease
-    void waitDraw();                 // Waiting next cycle for load decrease
 };

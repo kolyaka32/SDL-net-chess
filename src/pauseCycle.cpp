@@ -95,7 +95,7 @@ void PauseCycle::getInput(){
         }
         
         // Waiting next cycle
-        data.waitDraw();
+        inputTimer.sleep();
     }
 };
 

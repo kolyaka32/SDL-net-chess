@@ -8,10 +8,12 @@ using namespace GUI;
 template <typename linkType>
 Slider<linkType>::Slider(float _X, float _Y, linkType &_controlData, IMG_names _lineImage, IMG_names _buttonImage, linkType _max)
  : link(_controlData), maxValue(_max){
+    // Getting need texture
     texture = data.textures[_lineImage];
     textureButton = data.textures[_buttonImage];
     SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
     SDL_QueryTexture(textureButton, NULL, NULL, &destButton.w, &destButton.h);
+    // Setting it to need place
     rect.x = SCREEN_WIDTH * _X - rect.w / 2;
     rect.y = SCREEN_HEIGHT * _Y - rect.h / 2;
     destButton.y = SCREEN_HEIGHT * _Y - destButton.h / 2;
@@ -21,7 +23,7 @@ Slider<linkType>::Slider(float _X, float _Y, linkType &_controlData, IMG_names _
 //
 template <typename linkType>
 Slider<linkType>::~Slider(){
-    //link = (destButton.x - rect.x + destButton.w / 2) * maxValue / rect.w;
+    
 }
 
 // Blitting all slider to screen

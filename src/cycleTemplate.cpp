@@ -4,8 +4,11 @@
 
 //
 CycleTemplate::CycleTemplate(MUS_names _music) : music(_music){
+    // Start locking for drawing
+    // Need to be unlocked after start main cycle
+    runMutex.lock();
+
     // Resetting values
-    //LMBclick = false;
     selectedBox = 0;
 
     // Resetting input
@@ -68,7 +71,7 @@ void CycleTemplate::getInput(){
         }
         
         // Waiting next cycle
-        data.waitDraw();
+        inputTimer.sleep();
     }
 };
 
@@ -84,12 +87,6 @@ Uint8 CycleTemplate::mouseInput(){
 
 //
 void CycleTemplate::drawCycle(){
-    // Waiting to finish data loading
-    while(!running){
-        // Waiting
-        SDL_Delay(10);
-    }
-
     // Running draw cycle
     while (running)
     {
@@ -102,8 +99,8 @@ void CycleTemplate::drawCycle(){
         // Allowing to continue work
         runMutex.unlock();
 
-        // Waiting next cycle
-        data.waitDraw();
+        // Waiting for next cycle
+        drawTimer.sleep();
     }
 };
 
@@ -115,7 +112,7 @@ void CycleTemplate::draw() const{
 //
 void CycleTemplate::run(){
     // Allowing to start work
-    running = true;
+    runMutex.unlock();
     
     // Waiting for input stop
     getInput();

@@ -4,7 +4,7 @@
 
 
 // Class with letters, placed in collumn
-LettersCollumn::LettersCollumn(const char _startLetter, const Uint8 _length, Uint8 _xOffset, Uint8 _yOffset){
+LettersCollumn::LettersCollumn(const char _startLetter, const Uint8 _length, Sint8 _xOffset, Sint8 _yOffset){
     // Locking thread for start
     data.drawMutex.lock();
 
@@ -12,6 +12,7 @@ LettersCollumn::LettersCollumn(const char _startLetter, const Uint8 _length, Uin
     if(!font){
         font = data.createFont(20);
     }
+
     // Creating main texture
     texture = SDL_CreateTexture(data.renderer, SDL_PIXELFORMAT_RGB888, SDL_TEXTUREACCESS_TARGET, 
         _xOffset ? _length * CELL_SIDE : LETTER_LINE, _yOffset ? _length * CELL_SIDE : LETTER_LINE);
@@ -19,6 +20,17 @@ LettersCollumn::LettersCollumn(const char _startLetter, const Uint8 _length, Uin
     // Setting tearget to render to this texture
     SDL_SetRenderTarget(data.renderer, texture);
     SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
+
+    // Creating texture draw place
+    SDL_Rect dest = {4, -4, 0, 0};
+
+    // Check, if draw form other side
+    if(_xOffset < 0){
+        dest.x += CELL_SIDE*(_length-1);
+    }
+    if(_yOffset < 0){
+        dest.y += CELL_SIDE*(_length-1);
+    }
 
     // Creating collumn of letters
     for(Uint8 i=0; i < _length; ++i){
@@ -28,13 +40,16 @@ LettersCollumn::LettersCollumn(const char _startLetter, const Uint8 _length, Uin
 
         // Creating texture from this surface
         SDL_Texture* letterTexture = SDL_CreateTextureFromSurface(data.renderer, letterSurface);
-
-        // Updating texture parametrs
-        SDL_Rect dest = {_xOffset*i+4, _yOffset*i-4, 0, 0};
+        
+        // Getting texture width and height
         SDL_QueryTexture(letterTexture, NULL, NULL, &dest.w, &dest.h);
 
         // Copying texture to main texture
         SDL_RenderCopy(data.renderer, letterTexture, nullptr, &dest);
+
+        // Updating texture parametrs
+        dest.x += _xOffset;
+        dest.y += _yOffset;
 
         // Freeing temp data
         SDL_DestroyTexture(letterTexture);
