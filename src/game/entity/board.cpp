@@ -387,26 +387,22 @@ Uint8 Board::placeFigure(const coord _x, const coord _y){
     {
     case FIG_WHITE_ROOK:
         // Disabling posible castling for next turns
-        if(_x < FIELD_WIDTH/2){
-            castling -= CASTLING_W_Q;
-        }
-        else{
-            castling -= CASTLING_W_K;
-        }
+        castling &= CASTLING_B_Q | CASTLING_B_K;
+
         // Check, if castling
         if(figures[getPos(_x, _y)] == FIG_WHITE_KING + FIG_RED_TYPE){
-            // Disabling posible castling for next turns
-            castling &= CASTLING_B_Q | CASTLING_B_K;
+            // Clearing current figures
+            figures[activeCell.pos] = FIG_NONE;
+            figures[60] = FIG_NONE;
 
-            // Swaping figures
-            figures[activeCell.pos] = FIG_WHITE_KING;
-
-            // Disabling previous cell clearing
+            // Setting rook to new place
             if(activeCell.pos % FIELD_WIDTH < FIELD_WIDTH/2){
-                activeCell.pos += 1;
+                figures[59] = FIG_WHITE_ROOK;
+                figures[58] = FIG_WHITE_KING;
             }
             else{
-                activeCell.pos -= 1;
+                figures[61] = FIG_WHITE_ROOK;
+                figures[62] = FIG_WHITE_KING;
             }
         }
         break;
@@ -417,48 +413,40 @@ Uint8 Board::placeFigure(const coord _x, const coord _y){
 
         // Check, if castling
         if(figures[getPos(_x, _y)] == FIG_WHITE_ROOK + FIG_RED_TYPE){
-            // Swaping figures
-            figures[activeCell.pos] = FIG_WHITE_ROOK;
+            // Clearing current figures
+            figures[activeCell.pos] = FIG_NONE;
+            figures[_x+56] = FIG_NONE;
 
             // Disabling previous cell clearing
             if(_x < FIELD_WIDTH/2){
-                activeCell.pos -= 1;
+                figures[58] = FIG_WHITE_KING;
+                figures[59] = FIG_WHITE_ROOK;
             }
             else{
-                activeCell.pos += 1;
+                figures[62] = FIG_WHITE_KING;
+                figures[61] = FIG_WHITE_ROOK;
             }
-        }
-        break;
-
-    case FIG_WHITE_PAWN:
-        // Check, if on last line - convert into queen
-        if(_y == 0){
-            activeCell.type = FIG_WHITE_QUEEN;
         }
         break;
     
     case FIG_BLACK_ROOK:
         // Disabling posible castling for next turns
-        if(_x < FIELD_WIDTH/2){
-            castling -= CASTLING_B_Q;
-        }
-        else{
-            castling -= CASTLING_B_K;
-        }
+        castling &= CASTLING_W_Q | CASTLING_W_K;
+
         // Check, if castling
         if(figures[getPos(_x, _y)] == FIG_BLACK_KING + FIG_RED_TYPE){
-            // Disabling posible castling for next turns
-            castling &= CASTLING_W_Q | CASTLING_W_K;
-
-            // Swaping figures
-            figures[activeCell.pos] = FIG_BLACK_KING;
+            // Clearing current figures
+            figures[activeCell.pos] = FIG_NONE;
+            figures[4] = FIG_NONE;
 
             // Disabling previous cell clearing
             if(activeCell.pos % FIELD_WIDTH < FIELD_WIDTH/2){
-                activeCell.pos += 1;
+                figures[3] = FIG_BLACK_ROOK;
+                figures[2] = FIG_BLACK_KING;
             }
             else{
-                activeCell.pos -= 1;
+                figures[5] = FIG_BLACK_ROOK;
+                figures[6] = FIG_BLACK_KING;
             }
         }
         break;
@@ -469,15 +457,18 @@ Uint8 Board::placeFigure(const coord _x, const coord _y){
 
         // Check, if castling
         if(figures[getPos(_x, _y)] == FIG_BLACK_ROOK + FIG_RED_TYPE){
-            // Swaping figures
-            figures[activeCell.pos] = FIG_BLACK_ROOK;
+            // Clearing current figures
+            figures[activeCell.pos] = FIG_NONE;
+            figures[_x] = FIG_NONE;
 
             // Disabling previous cell clearing
             if(_x < FIELD_WIDTH/2){
-                activeCell.pos -= 1;
+                figures[2] = FIG_BLACK_KING;
+                figures[3] = FIG_BLACK_ROOK;
             }
             else{
-                activeCell.pos += 1;
+                figures[6] = FIG_BLACK_KING;
+                figures[5] = FIG_BLACK_ROOK;
             }
         }
         break;
@@ -485,14 +476,20 @@ Uint8 Board::placeFigure(const coord _x, const coord _y){
     case FIG_BLACK_PAWN:
         // Check, if on last line - convert into queen
         if(_y == FIELD_WIDTH-1){
+            activeCell.type = FIG_BLACK_QUEEN;
+        }
+
+    case FIG_WHITE_PAWN:
+        // Check, if on last line - convert into queen
+        if(_y == 0){
             activeCell.type = FIG_WHITE_QUEEN;
         }
-        break;
+    
+    default:
+        // Setting new position to cell
+        figures[getPos(_x, _y)] = activeCell.type;
+        figures[activeCell.pos] = FIG_NONE;
     }
-
-    // Setting new position to cell
-    figures[getPos(_x, _y)] = activeCell.type;
-    figures[activeCell.pos] = FIG_NONE;
 
     // Making sound
     data.playSound(SND_TURN);

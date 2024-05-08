@@ -1,10 +1,11 @@
 # The standard "Chess" game on c++ using SDL2
+[![ru](https://img.shields.io/badge/lang-ru-green.svg)](https://github.com/kolyaka32/SDL-net-chess/blob/main/README-ru.md)
 
 This repository contains sources for standart chess game, I made based on SDL2 library.
 Mostly this repository is need for my own study, training and preparing for bigger projects.
 Also this creating projects unifed "game engine".
 
-![Screenshot of game](/screenshots/game-main.png?raw=true)
+![Screenshot of game](/screenshots/game-main-en.png?raw=true)
 
 ## Installing of game
 1. Download archieve from [releases](https://github.com/kolyaka32/SDL-net-chess/releases), unzip and run 'Chess.exe'!
