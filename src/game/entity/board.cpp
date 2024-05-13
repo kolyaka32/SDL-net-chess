@@ -14,12 +14,10 @@ Board::~Board(){
 
 //
 void Board::reset(){
-    // Clearing data
-    memset(figures, FIG_NONE, sqr(FIELD_WIDTH));  // Resetting all field
-    turn = TURN_WHITE;                            // First move from white figures
-    activeCell.type = FIG_NONE;                   // None cell selected
-    castling = 0;                                 // All castlings not possible
-
+    // Resetting field parametrs
+    resetField();
+    activeCell.type = FIG_NONE;  // None cell selected
+    castling = 0;                // All castlings not possible
 
     // Forsyth–Edwards Notation
     // White figures: pawn = "P", knight = "N", bishop = "B", rook = "R", queen = "Q" and king = "K"
@@ -387,7 +385,12 @@ Uint8 Board::placeFigure(const coord _x, const coord _y){
     {
     case FIG_WHITE_ROOK:
         // Disabling posible castling for next turns
-        castling &= CASTLING_B_Q | CASTLING_B_K;
+        if(_x < FIELD_WIDTH/2){
+            castling |= CASTLING_B_K | CASTLING_B_Q | CASTLING_W_K;
+        }
+        else{
+            castling |= CASTLING_B_K | CASTLING_B_Q | CASTLING_W_Q;
+        }
 
         // Check, if castling
         if(figures[getPos(_x, _y)] == FIG_WHITE_KING + FIG_RED_TYPE){
@@ -404,8 +407,8 @@ Uint8 Board::placeFigure(const coord _x, const coord _y){
                 figures[61] = FIG_WHITE_ROOK;
                 figures[62] = FIG_WHITE_KING;
             }
+            break;
         }
-        break;
 
     case FIG_WHITE_KING:
         // Disabling posible castling for next turns
@@ -426,12 +429,17 @@ Uint8 Board::placeFigure(const coord _x, const coord _y){
                 figures[62] = FIG_WHITE_KING;
                 figures[61] = FIG_WHITE_ROOK;
             }
+            break;
         }
-        break;
     
     case FIG_BLACK_ROOK:
         // Disabling posible castling for next turns
-        castling &= CASTLING_W_Q | CASTLING_W_K;
+        if(_x < FIELD_WIDTH/2){
+            castling |= CASTLING_W_K | CASTLING_W_Q | CASTLING_B_K;
+        }
+        else{
+            castling |= CASTLING_W_K | CASTLING_W_Q | CASTLING_B_Q;
+        }
 
         // Check, if castling
         if(figures[getPos(_x, _y)] == FIG_BLACK_KING + FIG_RED_TYPE){
@@ -448,8 +456,8 @@ Uint8 Board::placeFigure(const coord _x, const coord _y){
                 figures[5] = FIG_BLACK_ROOK;
                 figures[6] = FIG_BLACK_KING;
             }
+            break;
         }
-        break;
     
     case FIG_BLACK_KING:
         // Disabling posible castling for next turns
@@ -470,8 +478,8 @@ Uint8 Board::placeFigure(const coord _x, const coord _y){
                 figures[6] = FIG_BLACK_KING;
                 figures[5] = FIG_BLACK_ROOK;
             }
+            break;
         }
-        break;
 
     case FIG_BLACK_PAWN:
         // Check, if on last line - convert into queen

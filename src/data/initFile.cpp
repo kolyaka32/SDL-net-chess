@@ -60,8 +60,6 @@ InitFile::InitFile(){
     }
     // Checking of minimal posible values
     SET_MIN(drawFPS, 5);
-    SET_MAX(musicVolume, 255);
-    SET_MAX(soundsVolume, 255);
 
     inSettings.close();  // Closing reading file
 }

@@ -4,12 +4,13 @@
 
 //
 CycleTemplate::CycleTemplate(MUS_names _music) : music(_music){
-    // Start locking for drawing
-    // Need to be unlocked after start main cycle
+    // Locking draw function before system load
     runMutex.lock();
 
     // Resetting values
     selectedBox = 0;
+    mouseX = 0;
+    mouseY = 0;
 
     // Resetting input
     SDL_Event event;
@@ -19,11 +20,6 @@ CycleTemplate::CycleTemplate(MUS_names _music) : music(_music){
     if(music){
         data.playMusic(music);
     }
-};
-
-//
-CycleTemplate::~CycleTemplate(){
-
 };
 
 //

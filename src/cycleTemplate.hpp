@@ -33,7 +33,6 @@ protected:
     virtual void draw() const;   // Draw all need objects
 public:
     CycleTemplate(MUS_names music = MUS_START_NONE);
-    ~CycleTemplate();
     void run();  // Start cycle
 };
 

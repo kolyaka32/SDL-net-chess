@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include "../dataTypes.hpp"
 #include "dataLoader.hpp"
 
@@ -20,13 +22,13 @@ class DrawFont
 {
 private:
     TTF_Font *font;
-    textHeight height;
-    // Font_type type;
+    const textHeight height;
+    // const Font_type type;
 public:
     DrawFont(SDL_RWops *data, textHeight _height);  // Creating new font for need purpose
-    ~DrawFont();                      // Clearing data from font
-    bool isNeed(textHeight _height);  // Check, if current font need
-    TTF_Font* getFont();              // Give current font for use for draw
+    ~DrawFont();                                    // Clearing data from font
+    const bool isNeed(textHeight _height) const;    // Check, if current font need
+    TTF_Font* getFont() const;                // Give current font for use for draw
 };
 
 
@@ -34,14 +36,13 @@ public:
 class Font : virtual FontLibrary, protected virtual DataLoader
 {
 private:
-    SDL_RWops *fontData;   // Pointer to data of font
-    DrawFont *fonts[20];   // Array of pointers to all fonts
-    Uint8 fontsCount = 0;  // Summary counter of all loaded fonts
-    bool loadFont(const char *name);  // Loading font with need name
+    SDL_RWops *fontData;                  // Pointer to data of font
+    std::vector<DrawFont*> fonts;         // Vector with all fonts
+    void loadFontData(const char *name);  // Loading font with need name
 public:
     Font();   // Loading all need fonts
     ~Font();  // Clearing data from fonts
 
     // Creating font with need height for draw
-    TTF_Font *createFont(textHeight size);
+    TTF_Font* createFont(textHeight size);
 };

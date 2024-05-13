@@ -4,16 +4,11 @@
 
 // Loading single icone
 Icone::Icone(){
-    if(loadIcone("img/Game.ico")){
-        #if CHECK_CORRECTION
-        printf("Can't load game icone");
-        exit(ERR_FIL_ICO);
-        #endif
-    }
+    loadIcone("img/Game.ico");
 }
 
 // Loading icone with need name
-bool Icone::loadIcone(const char *name){
+void Icone::loadIcone(const char *name){
     // Getting icone data
     SDL_RWops* tempRW = loadObject(name);
 
@@ -21,7 +16,8 @@ bool Icone::loadIcone(const char *name){
     #if CHECK_CORRECTION
     if(tempRW == nullptr){
         // Showing error
-        return true;
+        SDL_Log("Can't load game icone, %s", SDL_GetError());
+        exit(ERR_FIL_ICO);
     }
     #endif
 
@@ -35,7 +31,8 @@ bool Icone::loadIcone(const char *name){
     #if CHECK_CORRECTION
     if(iconeImage == nullptr){
         // Showing error
-        return true;
+        SDL_Log("Can't load game icone, %s", SDL_GetError());
+        exit(ERR_FIL_ICO);
     }
     #endif
     
@@ -44,7 +41,4 @@ bool Icone::loadIcone(const char *name){
 
     // Clearing data of creating
     SDL_FreeSurface(iconeImage);
-
-    // Showing correct loading
-    return false;
 }

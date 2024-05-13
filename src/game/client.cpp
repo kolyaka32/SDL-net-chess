@@ -3,6 +3,9 @@
 //
 ClientGameCycle::ClientGameCycle()
 {
+    // Resetting values
+    lastTypeBoxUpdate = 0;  // Setting to 0 to update as early as can
+
     // Allowing internet to start
     gettingMutex.unlock();
 }

@@ -1,22 +1,10 @@
 #pragma once
 
-#include <SDL_net.h>
+#include <vector>
+#include <initializer_list>
 
-#include "../../dataTypes.hpp"
-#include "../../define.hpp"
+#include "message.hpp"
 
-
-// Types of internet messages
-enum MESSAGE_types{
-    MES_NONE = 0,   // Type of nothing for reset connection timer
-    MES_INIT = 1,   // Type of starting server and checking compatibility
-    MES_START = 2,  // Type of starting new round showing which player start
-    MES_TURN = 3,   // Type of setting shape on field, sending to opponent
-    MES_STOP = 4,   // Type of closing game and go to menu
-    MES_REST = 5,   // Type of restarting game and waiting for new start
-    MES_APPL = 6,   // Type of applying, that last message was get
-    MES_SKIP = 7,   // Type of skipping current round
-};
 
 // Base class of internet library
 class InternetLibrary
@@ -36,6 +24,7 @@ protected:
     UDPpacket* sendData;       // Packet to send data
     UDPpacket* recieveData;    // Packet to recieve data
 
+    // Connection control system
     timer lastMessageArrive;   // Timer, when last message arrive to control connection
     timer lastMessageSend;     // Timer, when last message send to control connection
     bool waitApply;            // Flag of waiting apply message

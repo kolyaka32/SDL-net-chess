@@ -18,13 +18,14 @@ protected:
     cell figures[sqr(FIELD_WIDTH)];   // Array of figures on field
     bool turn;                        // Which player is currently turn
     bool wasMoven;                    // Flag of board, that it was moven
+    void resetField();                // Reset field parametrs
 
     // Check, if figure at pos can be attacked
     bool isAttackable(const position pos);
     bool tryMoveTo(const position pos);
     // Set points, where you can move or attack
-    void tryMove(Sint8 X, Sint8 Y);
-    void tryAttack(Sint8 X, Sint8 Y);
+    void tryMove(const Sint8 X, const Sint8 Y);
+    void tryAttack(const Sint8 X, const Sint8 Y);
     void setDiagonals(const coord _x, const coord _y);
     void setStraight(const coord _x, const coord _y);
     void setAround(const coord _x, const coord _y, const Sint8 pos[][2]);

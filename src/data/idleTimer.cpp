@@ -8,8 +8,6 @@ IdleTimer::IdleTimer(int _sleepTime) : sleepTime(_sleepTime){
 
 //
 void IdleTimer::sleep(){
-    timer cutTime = SDL_GetTicks64();
-
     // Check, if idle need
     if(SDL_GetTicks64() < lastSleep){
         // Sleep rest time

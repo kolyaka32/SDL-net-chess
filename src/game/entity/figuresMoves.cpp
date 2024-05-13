@@ -3,8 +3,16 @@
 
 //
 FiguresMoves::FiguresMoves(){
-
+    resetField();
 }
+
+//
+void FiguresMoves::resetField(){
+    // Clearing data
+    memset(figures, FIG_NONE, sqr(FIELD_WIDTH));  // Resetting all field
+    turn = TURN_WHITE;                            // First move from white figures
+    wasMoven = false;                             // Flag of checking, if was turn
+};
 
 // Check, if cell at need position can be attacked
 bool FiguresMoves::isAttackable(const position _pos){
@@ -20,7 +28,7 @@ bool FiguresMoves::isAttackable(const position _pos){
 }
 
 // Try set point, where you can move
-void FiguresMoves::tryMove(Sint8 _x, Sint8 _y){
+void FiguresMoves::tryMove(const Sint8 _x, const Sint8 _y){
     // Checking getting over border
     if(_y < 0 || _y > FIELD_WIDTH){
         return;
@@ -34,7 +42,7 @@ void FiguresMoves::tryMove(Sint8 _x, Sint8 _y){
 };
 
 // Try set point, where you can move
-void FiguresMoves::tryAttack(Sint8 _x, Sint8 _y){
+void FiguresMoves::tryAttack(const Sint8 _x, const Sint8 _y){
     // Checking getting over border
     if(_x < 0 || _x > FIELD_WIDTH || _y < 0 || _y > FIELD_WIDTH){
         return;

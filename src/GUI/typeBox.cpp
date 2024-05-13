@@ -110,7 +110,7 @@ void typeBox::press(SDL_Keycode code){
     
     // Moving caret
     case SDLK_LEFT:
-        if(caret > 0){
+        if(caret > 1){
             std::swap(buffer[caret--], buffer[caret - 1]);
         }
         break;

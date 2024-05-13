@@ -11,7 +11,7 @@ private:
     bool waitTurn = true;      // Flag of waiting for another player for turn
     timer lastTypeBoxUpdate;   // Timer for change symbol of caret
 
-    Uint8 getData() override;  //
+    Uint8 getData() override;  // Overloaded function of getting internet data
     void removeSelection();    //
 
     // Input fields

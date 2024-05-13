@@ -9,7 +9,7 @@ class ServerGameCycle : public InternetServerCycle
 private:
     bool waitStart = true;     // Flag of waiting for game start
     bool waitTurn = false;     // Flag of waiting for another player for turn
-    Uint8 getData() override;  //
+    Uint8 getData() override;  // Overloaded function of getting internet data
 
 protected:
     // New overrided cycle functions

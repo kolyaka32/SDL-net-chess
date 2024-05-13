@@ -110,6 +110,10 @@ add_executable( ${CMAKE_PROJECT_NAME}
     src/game/base.cpp
 
     # Internet connection
+    # Messages (for send and recieve)
+    src/game/internet/message.hpp
+    src/game/internet/message.cpp
+    
     # Base internet functions
     src/game/internet/baseInternet.hpp
     src/game/internet/baseInternet.cpp

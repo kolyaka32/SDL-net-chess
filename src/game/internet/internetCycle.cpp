@@ -43,8 +43,3 @@ void InternetCycle::lauchCycle(){
         internetTimer.sleep();
     }
 }
-
-// Action, launch after connection
-void InternetCycle::initConnection(){
-
-};
