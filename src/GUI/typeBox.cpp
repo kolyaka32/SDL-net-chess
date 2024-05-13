@@ -6,16 +6,19 @@ using namespace GUI;
 
 // Type box class
 typeBox::typeBox(textHeight _height, float _x, float _y, const char* _text, ALIGNMENT_types _aligment, SDL_Color _color)
- : color(_color), aligment(_aligment){
+: color(_color), aligment(_aligment) {
     font = data.createFont(_height);
     textRect.x = SCREEN_WIDTH * _x;
     textRect.y = SCREEN_HEIGHT * _y - _height / 2;
     textRect.w = textRect.h = 0;
 
-    strcpy(buffer, _text);
-    length = caret = strlen(buffer);
+    // Copying text to caret
+    length = strlen(_text);
+    caret = SET_MAX(length, bufferSize);
+    memcpy(buffer, _text, length);
+
     // Creating first texture, if there was any text
-    if(caret){
+    if (caret) {
         updateTexture();
     }
 
@@ -25,13 +28,13 @@ typeBox::typeBox(textHeight _height, float _x, float _y, const char* _text, ALIG
     rect.y = SCREEN_HEIGHT * _y - rect.h / 2 + 2;
 }
 
-//
-typeBox::~typeBox(){
+// Clearing rest texture
+typeBox::~typeBox() {
     SDL_DestroyTexture(texture);
 }
 
 // Creating new texture
-void typeBox::updateTexture(){
+void typeBox::updateTexture() {
     // Locking thread, while updating texture
     data.drawMutex.lock();
 
@@ -50,23 +53,23 @@ void typeBox::updateTexture(){
     data.drawMutex.unlock();
 }
 
-//
-void typeBox::writeString(char* str, bool freeData){
+// Write need string to buffer with ability to clear source
+void typeBox::writeString(char* str, bool freeData) {
     // Inserting text from clipboard
     Uint8 clipboardSize = strlen(str);
 
     // Checking, if all clipboard can be placed in buffer
-    if(clipboardSize > bufferSize - length){
+    if (clipboardSize > bufferSize - length) {
         clipboardSize = bufferSize - length;
     }
 
     // Moving part after caret at end
-    for(Sint8 i = length; i >= caret; --i){
+    for (Sint8 i = length; i >= caret; --i) {
         buffer[i + clipboardSize] = buffer[i];
     }
 
     // Coping main clipboard text
-    for(Uint8 i=0; i < clipboardSize; ++i){
+    for (Uint8 i=0; i < clipboardSize; ++i) {
         buffer[caret + i] = str[i];
     }
 
@@ -75,23 +78,22 @@ void typeBox::writeString(char* str, bool freeData){
 
     updateTexture();
 
-    if(freeData){
+    if (freeData) {
         SDL_free(str);
     }
-};
+}
 
-// 
-void typeBox::press(SDL_Keycode code){
+// Getting press of need KeyCode
+void typeBox::press(SDL_Keycode code) {
     static SDL_Keycode preCode;
 
     // Switching between extra input options
-    switch (code)
-    {
+    switch (code) {
     // Functions for deleting text
     case SDLK_BACKSPACE:
         // Coping after caret
-        if(caret > 0){
-            for(Uint8 t = --caret; t <= length; t++){
+        if (caret > 0) {
+            for (Uint8 t = --caret; t <= length; t++) {
                 buffer[t] = buffer[t+1];
             }
             length--;
@@ -100,27 +102,30 @@ void typeBox::press(SDL_Keycode code){
 
     case SDLK_DELETE:
         // Coping after caret
-        if(caret < length){
-            for(Uint8 t = caret + 1; t <= length; t++){
+        if (caret < length) {
+            for (Uint8 t = caret + 1; t <= length; t++) {
                 buffer[t] = buffer[t+1];
             }
             length--;
         }
         break;
-    
+
     // Moving caret
     case SDLK_LEFT:
-        if(caret > 1){
-            std::swap(buffer[caret--], buffer[caret - 1]);
+        if (caret > 1) {
+            std::swap(buffer[caret - 1], buffer[caret - 2]);
+            caret--;
         }
         break;
-    
+
     case SDLK_RIGHT:
-        if(caret + 1 < length){
-            std::swap(buffer[caret++], buffer[caret + 1]);
+        if (caret + 1 < length) {
+            std::swap(buffer[caret + 1], buffer[caret + 2]);
+            caret++;
         }
         break;
-    
+
+    // Special keys for faster caret move
     case SDLK_END:
     case SDLK_PAGEDOWN:
         std::swap(buffer[caret], buffer[length]);
@@ -132,30 +137,31 @@ void typeBox::press(SDL_Keycode code){
         std::swap(buffer[caret], buffer[0]);
         caret = 0;
         break;
-    
+
     // Inserting text from clipboard
     case SDLK_PASTE:
         writeString(SDL_GetClipboardText(), true);
         break;
-        
+
     case SDLK_v:
-        if(preCode == SDLK_LCTRL){
+        if (preCode == SDLK_LCTRL) {
             writeString(SDL_GetClipboardText(), true);
         }
         break;
 
     case SDLK_LCTRL:
-        if(preCode == SDLK_v){
+        if (preCode == SDLK_v) {
             writeString(SDL_GetClipboardText(), true);
         }
         break;
-    };
+    }
+    // Updating texture after modifiying text
     updateTexture();
     preCode = code;
-};
+}
 
-//
-void typeBox::select(){
+// Select last letter to create writing symbol
+void typeBox::select() {
     // Setting symbol of caret to line
     buffer[length] = '|';
     // Resetting swapping caret
@@ -168,31 +174,31 @@ void typeBox::select(){
 
     // Starting using keyboard
     SDL_StartTextInput();
-};
+}
 
-//
-void typeBox::removeSelect(){
+// Clear selection of writing symbol
+void typeBox::removeSelect() {
     // Stoping entering any letters
     SDL_StopTextInput();
 
-    for(Uint8 t = caret; t <= length; t++){
+    for (Uint8 t = caret; t <= length; t++) {
         buffer[t] = buffer[t+1];
     }
     length--;
     updateTexture();
-};
+}
 
-//
-void typeBox::updateCaret(){
+// Swapping caret with writing symbol to space and back
+void typeBox::updateCaret() {
     std::swap(buffer[caret], swapCaret);
     updateTexture();
-};
+}
 
-//
-void typeBox::blit() const{
+// Overrided function for draw text and backplate at screen
+void typeBox::blit() const {
     // Rendering background picture for better typing
     SDL_RenderCopy(data.renderer, data.textures[IMG_GUI_TYPE_BOX], NULL, &rect);
 
     // Rendering text
     SDL_RenderCopy(data.renderer, texture, NULL, &textRect);
-};
+}

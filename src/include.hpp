@@ -1,3 +1,4 @@
+#pragma once
 
 // SDL library for graphics, audio and fonts work
 #include <SDL.h>

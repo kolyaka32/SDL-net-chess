@@ -3,72 +3,72 @@
 
 
 // Initializing fonts library
-FontLibrary::FontLibrary(){
-    if(TTF_Init()){
+FontLibrary::FontLibrary() {
+    if (TTF_Init()) {
         #if CHECK_CORRECTION
-        printf("Couldn't initialize font library: %s\n", TTF_GetError());
+        SDL_Log("Couldn't initialize font library: %s\n", TTF_GetError());
         exit(ERR_SDL_FFT);
         #endif
     }
 }
 
 // Closing font library
-FontLibrary::~FontLibrary(){
-	TTF_Quit();
+FontLibrary::~FontLibrary() {
+    TTF_Quit();
 }
 
 
 // Creating new font for need purpose
-DrawFont::DrawFont(SDL_RWops *data, textHeight _height) : height(_height){
+DrawFont::DrawFont(SDL_RWops *data, textHeight _height) : height(_height) {
     // Setting to read file from start
     SDL_RWseek(data, 0, RW_SEEK_SET);
 
     // Creating new font
     font = TTF_OpenFontRW(data, 0, height);
-};
+}
 
 // Clearing data from font
-DrawFont::~DrawFont(){
+DrawFont::~DrawFont() {
     TTF_CloseFont(font);
-};
+}
 
 // Check, if current font need
-const bool DrawFont::isNeed(textHeight _height) const{
-    return (height == _height); // && (type == _type);
-};
+const bool DrawFont::isNeed(textHeight _height) const {
+    return (height == _height);  // && (type == _type);
+}
 
 // Give current font for use for draw
-TTF_Font* DrawFont::getFont() const{
+TTF_Font* DrawFont::getFont() const {
     return font;
-};
+}
 
 
 // Class of all loaded fonts for draw texts
 // Loading all need fonts
-Font::Font(){
+Font::Font() {
     // Loading only font
     loadFontData("fnt/PTSans-Regular.ttf");
 }
 
 // Clearing data from fonts
-Font::~Font(){
+Font::~Font() {
     // Clearing created fonts
-    for(Uint8 i=0; i < fonts.size(); ++i){
+    for (Uint8 i=0; i < fonts.size(); ++i) {
         delete fonts[i];
     }
     // Clear list of all fonts
     fonts.clear();
 
     // Clearing data from font creating
-    //free(fontData->hidden.mem.base);
+    // free(fontData->hidden.mem.base);
     SDL_FreeRW(fontData);
 }
 
 // Creating font with need height for draw
-TTF_Font* Font::createFont(textHeight _size){
+TTF_Font* Font::createFont(textHeight _size) {
     // Searching for already excisting font with need size
-    for(Uint8 i=0; i < fonts.size(); ++i){
-        if(fonts[i]->isNeed(_size)){
+    for (Uint8 i=0; i < fonts.size(); ++i) {
+        if (fonts[i]->isNeed(_size)) {
             return fonts[i]->getFont();
         }
     }
@@ -76,16 +76,16 @@ TTF_Font* Font::createFont(textHeight _size){
     fonts.push_back(new DrawFont(fontData, _size));
 
     return fonts[fonts.size()-1]->getFont();
-};
+}
 
 // Loading font with need name
-void Font::loadFontData(const char *name){
+void Font::loadFontData(const char *name) {
     // Openning font file
     fontData = loadObject(name);
 
     // Check, if loaded normaly
     #if CHECK_CORRECTION
-    if(fontData == nullptr){
+    if (fontData == nullptr) {
         SDL_Log("Can't load data for fonts");
         exit(ERR_FIL_FNT);
     }

@@ -4,7 +4,7 @@
 
 
 // Types of selected box
-enum{  
+enum {
     BOX_NORMAL,
     BOX_MUSIC_SLIDER,
     BOX_SOUND_SLIDER,
@@ -16,23 +16,15 @@ enum{
 } SELECTED_BOX_types;
 
 
-//
-PauseCycle::PauseCycle() : CycleTemplate(MUS_START_NONE){
+// Starting basic template without start any new song
+PauseCycle::PauseCycle() : CycleTemplate(MUS_START_NONE) {}
 
-};
-
-//
-PauseCycle::~PauseCycle(){
-
-};
-
-//
-void PauseCycle::getInput(){
+// Getting special input (with mousewheel and escape button)
+void PauseCycle::getInput() {
     SDL_Event event;
-    while(running){
-        while( SDL_PollEvent(&event) != 0 ){
-            switch (event.type)
-            {
+    while (running) {
+        while ( SDL_PollEvent(&event) != 0 ) {
+            switch (event.type) {
             case SDL_QUIT:
                 data.running = false;
                 return;
@@ -42,14 +34,14 @@ void PauseCycle::getInput(){
                 SDL_GetMouseState(&mouseX, &mouseY);  // Getting mouse position
 
                 // Checking scroll on sliders
-                if(musicSlider.scroll(event.wheel.y, mouseX, mouseY));
-                else if(soundSlider.scroll(event.wheel.y, mouseX, mouseY));
+                if (musicSlider.scroll(event.wheel.y, mouseX, mouseY)) {}
+                else
+                    soundSlider.scroll(event.wheel.y, mouseX, mouseY);
                 break;
 
             case SDL_KEYDOWN:
-                if (event.key.keysym.sym == SDLK_ESCAPE){
+                if (event.key.keysym.sym == SDLK_ESCAPE)
                     return;
-                };
                 break;
 
             case SDL_MOUSEBUTTONDOWN:
@@ -57,20 +49,17 @@ void PauseCycle::getInput(){
                 SDL_GetMouseState(&mouseX, &mouseY);
 
                 // Getting mouse press
-                if(mouseInput()){
+                if (mouseInput())
                     return;
-                }
                 break;
 
             case SDL_MOUSEBUTTONUP:
-                //LMBclick = false;
                 selectedBox = 0;
                 break;
             }
         }
         // Updating selected box
-        switch (selectedBox)
-        {
+        switch (selectedBox) {
         case BOX_MUSIC_SLIDER:
             // Updating music slider state
             SDL_GetMouseState(&mouseX, &mouseY);
@@ -86,44 +75,41 @@ void PauseCycle::getInput(){
 
             // Playing sound effect for understanding loud
             #if SCROLLER_SOUND
-            if( SDL_GetTicks64() > nextSound ){
+            if (SDL_GetTicks64() > nextSound) {
                 data.playSound(SND_TURN);
                 nextSound = SDL_GetTicks64() + 400;
             }
             #endif
             break;
         }
-        
         // Waiting next cycle
         inputTimer.sleep();
     }
-};
+}
 
-//
-Uint8 PauseCycle::mouseInput(){
-    //
+// Getting language change and sound mutting
+Uint8 PauseCycle::mouseInput() {
+    // Setting old language to save
     Uint8 newLanguage = data.language;
 
-    //
-    if(settingButton.in(mouseX, mouseY)){
+    // Checking, if click on sliders or flag
+    if (settingButton.in(mouseX, mouseY)) {
         return 1;
-    }
-    else if(musicSlider.in(mouseX, mouseY)){
+    } else if (musicSlider.in(mouseX, mouseY)) {
         selectedBox = BOX_MUSIC_SLIDER;
         return 0;
-    }
-    else if(soundSlider.in(mouseX, mouseY)){
+    } else if (soundSlider.in(mouseX, mouseY)) {
         selectedBox = BOX_SOUND_SLIDER;
         return 0;
+    } else {
+        for (Uint8 i=0; i < LNG_count; ++i)
+            if (flags[i].in(mouseX, mouseY)) {
+                newLanguage = i;
+            }
     }
-    else for(Uint8 i=0; i < LNG_count; ++i){
-        if(flags[i].in(mouseX, mouseY)){
-            newLanguage = i;
-        }
-    }
-    
+
     // Updating texts language
-    if(newLanguage != data.language){
+    if (newLanguage != data.language) {
         data.language = newLanguage;
         // Locking drawing for updating
         runMutex.lock();
@@ -137,21 +123,21 @@ Uint8 PauseCycle::mouseInput(){
 
     // None-return
     return 0;
-};
+}
 
-//
-Uint16 offset = 0;
+// Extra variables
+Uint16 offset = 0;  // Offset of background cells for create move effect
 
-//
-void PauseCycle::draw() const{
+// Drawing cells background, language buttons and sound options
+void PauseCycle::draw() const {
     // Bliting background
     data.setColor({255, 206, 158, 255});
     SDL_RenderClear(data.renderer);
 
     // Drawing background
     data.setColor({206, 139, 71, 255});
-    for(coord y=0; y <= (SCREEN_HEIGHT / CELL_SIDE + 1); ++y)
-        for(coord x=y%2; x <= (SCREEN_WIDTH / CELL_SIDE + 1); x+=2){
+    for (coord y = 0; y <= SCREEN_HEIGHT / CELL_SIDE + 1; ++y)
+        for (coord x = y % 2; x <= SCREEN_WIDTH / CELL_SIDE + 1; x+=2) {
             SDL_Rect rect = {(x-1) * CELL_SIDE + offset/2, (y-1) * CELL_SIDE + offset/2, CELL_SIDE, CELL_SIDE};
             SDL_RenderFillRect(data.renderer, &rect);
         }
@@ -164,9 +150,9 @@ void PauseCycle::draw() const{
 
     // Blitting buttons
     // Start variants
-    for(Uint8 i=0; i < LNG_count; ++i){
+    for (Uint8 i = 0; i < LNG_count; ++i) {
         flags[i].blit();
-    };
+    }
 
     // Sliders
     data.texts[TXT_PAUSE_MUSIC].blit();
@@ -179,4 +165,4 @@ void PauseCycle::draw() const{
 
     // Bliting all to screen
     data.render();
-};
+}

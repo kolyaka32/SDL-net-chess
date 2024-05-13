@@ -17,7 +17,7 @@ enum LNG_types{
 
 // Types of numerated static texts
 enum TXT_types{
-    // Selection menu 
+    // Selection menu
     TXT_SELECT_TITLE,    // Game name
     TXT_SELECT_SINGLE,   // Singleplayer gamemode
     TXT_SELECT_TWO,      // Two player gamemode
@@ -85,9 +85,8 @@ enum BTN_names{
 
 
 // All static texts
-class Texts : public virtual App, public virtual InitFile
-{
-public:
+class Texts : public virtual App, public virtual InitFile {
+ public:
     // All static texts in game
     GUI::StaticText texts[TXT_count] = {
         // Selection menu
@@ -101,13 +100,13 @@ public:
             24, 0.5, 0.7, WHITE},
         {"Connect\nПрисоединиться\nBeitreten\nДалучыцца\n",
             24, 0.5, 0.9, WHITE},
-        
+
         // Pause menu
-        {"Pause\nПауза\nPause\nПаўза\n", 
+        {"Pause\nПауза\nPause\nПаўза\n",
             30, 0.5, 0.1},
-        {"Music\nМузыка\nDie Musik\nМузыка\n", 
+        {"Music\nМузыка\nDie Musik\nМузыка\n",
             30, 0.5, 0.68},
-        {"Sounds\nЗвуки\nGeräusche\nГук\n", 
+        {"Sounds\nЗвуки\nGeräusche\nГук\n",
             30, 0.5, 0.83},
 
         // Game turnes
@@ -154,23 +153,23 @@ public:
         {"Enter port:\nВведите порт:\n-\n-\n",
             30, 0.5, 0.4, WHITE},
     };
-    
+
     // All framed texts buttons in game
     GUI::TextButton textButtons[BTN_count] = {
         // Select options
-        {texts[TXT_SELECT_SINGLE]},
-        {texts[TXT_SELECT_TWO]},
-        {texts[TXT_SELECT_SERVER]},
-        {texts[TXT_SELECT_CLIENT]},
+        {(GUI::TextButton)texts[TXT_SELECT_SINGLE]},
+        {(GUI::TextButton)texts[TXT_SELECT_TWO]},
+        {(GUI::TextButton)texts[TXT_SELECT_SERVER]},
+        {(GUI::TextButton)texts[TXT_SELECT_CLIENT]},
 
         // Buttons texts
-        {texts[TXT_BUTTON_RESTART]},
-        {texts[TXT_BUTTON_MENU]},
-        {texts[TXT_BUTTON_CONNECT]},
-        {texts[TXT_BUTTON_CANCEL]},
+        {(GUI::TextButton)texts[TXT_BUTTON_RESTART]},
+        {(GUI::TextButton)texts[TXT_BUTTON_MENU]},
+        {(GUI::TextButton)texts[TXT_BUTTON_CONNECT]},
+        {(GUI::TextButton)texts[TXT_BUTTON_CANCEL]},
     };
 
-public:
+ public:
     Texts();   // Create and update all static texts
     void updateTranslation();  // Update translations of all texts
 };

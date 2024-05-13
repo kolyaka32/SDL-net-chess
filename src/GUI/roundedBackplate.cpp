@@ -5,22 +5,22 @@ using namespace GUI;
 
 //
 Backplate::Backplate(const SDL_Rect _rect, const Uint8 _rad, const Uint8 _bor, const SDL_Color _frontColor, const SDL_Color _backColor)
-: frontColor(_frontColor), backColor(_backColor), rad(_rad), bor(_bor){
+: frontColor(_frontColor), backColor(_backColor), rad(_rad), bor(_bor) {
     updatePlate(_rect);
-};
+}
 
 //
-Backplate::~Backplate(){
+Backplate::~Backplate() {
     SDL_DestroyTexture(texture);
-};
+}
 
 //
-void Backplate::updatePlate(const SDL_Rect _rect){
+void Backplate::updatePlate(const SDL_Rect _rect) {
     // Locking mutex, while do any actions
     data.drawMutex.lock();
 
     // Checking, if need clear previous texture
-    if(texture){
+    if (texture) {
         SDL_DestroyTexture(texture);
     }
 
@@ -43,9 +43,9 @@ void Backplate::updatePlate(const SDL_Rect _rect){
 
     // Clearing front edges
     data.setColor(backColor);
-    for(Uint8 y=0; y <= rad+bor; ++y){
-        for(Uint8 x=0; x <= rad+bor; ++x){
-            if(sqr(y)+sqr(x) >= sqr(rad-bor)){
+    for (Uint8 y=0; y <= rad+bor; ++y) {
+        for (Uint8 x=0; x <= rad+bor; ++x) {
+            if (sqr(y)+sqr(x) >= sqr(rad-bor)) {
                 SDL_RenderDrawPoint(data.renderer, rad-x, rad-y);
                 SDL_RenderDrawPoint(data.renderer, rect.w-rad+x, rad-y);
                 SDL_RenderDrawPoint(data.renderer, rad-x, rect.h-rad+y);
@@ -56,9 +56,9 @@ void Backplate::updatePlate(const SDL_Rect _rect){
 
     // Clearing back edges
     SDL_SetRenderDrawColor(data.renderer, 255, 255, 255, 0);
-    for(Uint8 y=0; y <= rad; ++y){
-        for(Uint8 x=0; x <= rad; ++x){
-            if(sqr(y)+sqr(x) >= sqr(rad)){
+    for (Uint8 y=0; y <= rad; ++y) {
+        for (Uint8 x=0; x <= rad; ++x) {
+            if (sqr(y)+sqr(x) >= sqr(rad)) {
                 SDL_RenderDrawPoint(data.renderer, rad-x, rad-y);
                 SDL_RenderDrawPoint(data.renderer, rect.w-rad+x, rad-y);
                 SDL_RenderDrawPoint(data.renderer, rad-x, rect.h-rad+y);
@@ -75,4 +75,4 @@ void Backplate::updatePlate(const SDL_Rect _rect){
 
     // Unlocking mutex, after all
     data.drawMutex.unlock();
-};
+}

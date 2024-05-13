@@ -1,9 +1,8 @@
 #include "cycleTemplate.hpp"
 
 
-
-//
-CycleTemplate::CycleTemplate(MUS_names _music) : music(_music){
+// Reset basic cycle template variables
+CycleTemplate::CycleTemplate(MUS_names _music) : music(_music) {
     // Locking draw function before system load
     runMutex.lock();
 
@@ -14,21 +13,20 @@ CycleTemplate::CycleTemplate(MUS_names _music) : music(_music){
 
     // Resetting input
     SDL_Event event;
-    while( SDL_PollEvent(&event) != 0 );
+    while ( SDL_PollEvent(&event) != 0 ) {}  // Don't do anything
 
     // Starting playing need music (if need)
-    if(music){
+    if (music) {
         data.playMusic(music);
     }
-};
+}
 
-//
-void CycleTemplate::getInput(){
+// Example function for get user input
+void CycleTemplate::getInput() {
     SDL_Event event;
-    while(running){
-        while( SDL_PollEvent(&event) != 0 ){
-            switch (event.type)
-            {
+    while (running) {
+        while ( SDL_PollEvent(&event) != 0 ) {
+            switch (event.type) {
             case SDL_QUIT:
                 data.running = false;
                 return;
@@ -50,42 +48,39 @@ void CycleTemplate::getInput(){
 
             case SDL_MOUSEBUTTONDOWN:
                 // Getting mouse position
-                SDL_GetMouseState(&mouseX, &mouseY);  
+                SDL_GetMouseState(&mouseX, &mouseY);
 
-                // Getting mouse press 
-                if(mouseInput()){
+                // Getting mouse press
+                if (mouseInput()) {
                     // stopping current process if need
                     return;
                 }
                 break;
 
             case SDL_MOUSEBUTTONUP:
-                //LMBclick = false;
                 selectedBox = 0;
                 break;
             }
         }
-        
         // Waiting next cycle
         inputTimer.sleep();
     }
-};
+}
 
-//
-Uint8 CycleTemplate::mouseInput(){
+// Example for getting mouse input
+Uint8 CycleTemplate::mouseInput() {
     /*if(startOptions[0].in(mouseX, mouseY)){
         return 1;
     }*/
 
     // None-return
     return 0;
-};
+}
 
-//
-void CycleTemplate::drawCycle(){
+// Draw function for draw thread
+void CycleTemplate::drawCycle() {
     // Running draw cycle
-    while (running)
-    {
+    while (running) {
         // Checking for avalible to run
         runMutex.lock();
 
@@ -98,23 +93,20 @@ void CycleTemplate::drawCycle(){
         // Waiting for next cycle
         drawTimer.sleep();
     }
-};
-
-// Template for draw
-void CycleTemplate::draw() const{
-    
 }
 
-//
-void CycleTemplate::run(){
+// Empty template for draw
+void CycleTemplate::draw() const {}
+
+// Function for start need cycle
+void CycleTemplate::run() {
     // Allowing to start work
     runMutex.unlock();
-    
+
     // Waiting for input stop
     getInput();
 
     // Stopping all side threads
     running = false;
     drawThread.join();
-};
-
+}

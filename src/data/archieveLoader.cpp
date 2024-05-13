@@ -10,11 +10,11 @@
 #if ARCHIEVE_LOADING
 
 // Archive with all data
-static zip_t* archive;  
+static zip_t* archive;
 
 
 // Openning archieve
-DataLoader::DataLoader(){
+DataLoader::DataLoader() {
     // Open archive with need name
     archive = zip_open(DATA_FILE, ZIP_RDONLY, NULL);
 
@@ -24,30 +24,30 @@ DataLoader::DataLoader(){
 
     // Checking openning correction
     #if CHECK_CORRECTION
-    if(!archive){
-        printf("Can't load archieve '%s'.", DATA_FILE);
+    if (!archive) {
+        SDL_Log("Can't load archieve '%s'.", DATA_FILE);
         exit(ERR_FIL_OPN);
     }
     #endif
 }
 
 // Closing archive
-void DataLoader::closeLoader(){
+void DataLoader::closeLoader() {
     zip_close(archive);
 }
 
 // Loading object with need name
-SDL_RWops *DataLoader::loadObject(const char *_name){
+SDL_RWops *DataLoader::loadObject(const char *_name) {
     // Openning need file
     zip_file_t *file = zip_fopen_encrypted(archive, _name, 0, ARCHIEVE_PASSWORD);
-    
+
     // Getting states of need file
     zip_stat_t st;
-	zip_stat(archive, _name, 0, &st);
+    zip_stat(archive, _name, 0, &st);
 
     // Checking correction of openned file
     #if CHECK_CORRECTION
-    if(st.size == 0){
+    if (st.size == 0) {
         return nullptr;
     }
     #endif
@@ -66,8 +66,8 @@ SDL_RWops *DataLoader::loadObject(const char *_name){
 
     // Checking correction of loaded object
     #if CHECK_CORRECTION
-    if(!tempRW){
-        printf("Can't load object '%s' from arhieve", _name);
+    if (!tempRW) {
+        SDL_Log("Can't load object '%s' from arhieve", _name);
         exit(ERR_FIL_OPN);
     }
     #endif

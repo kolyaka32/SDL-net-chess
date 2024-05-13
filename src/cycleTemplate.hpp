@@ -7,14 +7,14 @@
 #include "data/idleTimer.hpp"
 
 // Template for any cycles
-class CycleTemplate
-{
-private:
+class CycleTemplate {
+ private:
     // Private data for draw
     void drawCycle();  // Process to draw graphics, run sidely by another thread
     std::thread drawThread{this->drawCycle, this};  // Thread for drawing
     IdleTimer drawTimer{1000/data.drawFPS};   // Timer to idle in draw cycle
-protected:
+
+ protected:
     // Data for cycle
     bool running = true;    // Flag of running current cycle
     std::mutex runMutex;    // Mutex for block running of current cycle
@@ -31,15 +31,16 @@ protected:
     virtual void getInput();     // Getting all user input (keyboard, mouse...)
     virtual Uint8 mouseInput();  // Checking for any need mouse action
     virtual void draw() const;   // Draw all need objects
-public:
-    CycleTemplate(MUS_names music = MUS_START_NONE);
+
+ public:
+    explicit CycleTemplate(MUS_names music = MUS_START_NONE);
     void run();  // Start cycle
 };
 
 
 // Realisation of running internal cycle
 template <typename Cycle>
-Uint8 CycleTemplate::runCycle(){
+Uint8 CycleTemplate::runCycle() {
     // Stopping all current threads
     runMutex.lock();
 
@@ -51,15 +52,15 @@ Uint8 CycleTemplate::runCycle(){
     runMutex.unlock();
 
     // Continuing playing music track
-    if(cycle.music){
+    if (cycle.music) {
         data.playMusic(music);
     }
 
     // Checking for exit
-    if(!data.running){
+    if (!data.running) {
         return 1;
     }
 
     // Normal return
     return 0;
-};
+}

@@ -47,26 +47,23 @@ enum IMG_names{
 
 
 // Library for work with any images
-class GraphicsLibrary
-{
-public:
+class GraphicsLibrary {
+ public:
     GraphicsLibrary();   // Initialasing graphic library
     ~GraphicsLibrary();  // Closing graphic library
 };
 
 
 // Class of all loaded textures for use
-class Textures : virtual GraphicsLibrary, public virtual DataLoader
-{
-private:
+class Textures : virtual GraphicsLibrary, public virtual DataLoader {
+ private:
     // Loading texture with need name
     void loadTexture(const char *name, IMG_names index);
-    //void createTextureModified(Uint8 index, Uint8 src);
 
     #if CHECK_CORRECTION
     void checkCorrection();  // Check, if all objects load correct
     #endif
-public:
+ public:
     SDL_Texture *textures[IMG_count];  // Array of all textures
     Textures();   // Loading all data, need for work with textures
     ~Textures();  // Clear all data from textures

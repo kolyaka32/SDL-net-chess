@@ -6,18 +6,17 @@
 Data data;
 
 // Main function
-int main(int argv, char **args){
-
+int main(int argv, char **args) {
     // Starting selecting cycle
     SelectCycle cycle;
     cycle.run();
 
-    // Reloading game
-    if(data.restart){
+    // Reloading game if need
+    if (data.restart) {
         data.restart = false;
         return main(argv, args);
-    };
+    }
 
     // Finishing main process
-	return NOR_WOR;
-};
+    return NOR_WOR;
+}

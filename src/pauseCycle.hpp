@@ -5,9 +5,8 @@
 
 
 // Cycle for select settings variants
-class PauseCycle : public CycleTemplate
-{
-private:
+class PauseCycle : public CycleTemplate {
+ private:
     // Variables
     timer nextSound = 0;  // Time to next play sound
 
@@ -30,7 +29,6 @@ private:
     void getInput() override;    // Getting all user input (keyboard, mouse...)
     Uint8 mouseInput() override;  // Checking for any need mouse action
     void draw() const override;     // Drawing all needed objects
-public:
+ public:
     PauseCycle();   // Start pause cycle
-    ~PauseCycle();  // Close pause cycle
 };

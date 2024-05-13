@@ -5,7 +5,7 @@
 using namespace GUI;
 
 // Tempate function for resetting texture
-GUItemplate::GUItemplate(){
+GUItemplate::GUItemplate() {
     texture = nullptr;
 }
 

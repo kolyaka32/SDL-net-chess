@@ -5,24 +5,27 @@ using namespace GUI;
 
 
 // Bar class
-Bar::Bar( const SDL_Rect _rect, SDL_Color _color, IMG_names _icone ) : color(_color), Front_rect(_rect){
+// Creating bar object
+Bar::Bar(const SDL_Rect _rect, SDL_Color _color, IMG_names _icone)
+: color(_color), Front_rect(_rect) {
     // Base bar
     rect = _rect;
 
     // Icone part
-    if(_icone){
+    if (_icone) {
         texture = data.textures[_icone];  // Texture of icone
         IconeRect = rect;
-        //SDL_QueryTexture(IconeTexture, NULL, NULL, &IconeRect.w, &IconeRect.h);
-        //IconeRect.w = 14;
-        //IconeRect.h = 16;
+        // SDL_QueryTexture(IconeTexture, NULL, NULL, &IconeRect.w, &IconeRect.h);
+        // IconeRect.w = 14;
+        // IconeRect.h = 16;
 
         IconeRect.y -= 2;
         IconeRect.x -= IconeRect.w + 2;
     }
-};
+}
 
-void Bar::blit(int width){
+// Overriding blitting function
+void Bar::blit(int width) {
     // Setting width
     Front_rect.w = width;
 
@@ -35,7 +38,7 @@ void Bar::blit(int width){
     SDL_RenderFillRect(data.renderer, &Front_rect);
 
     // Drawing icone
-    if(texture){
+    if (texture) {
         SDL_RenderCopy(data.renderer, texture, NULL, &IconeRect);
     }
-};
+}

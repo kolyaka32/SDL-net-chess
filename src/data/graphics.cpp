@@ -4,37 +4,37 @@
 
 // Library for work with any images
 // Initialasing SDL graphic library
-GraphicsLibrary::GraphicsLibrary(){
+GraphicsLibrary::GraphicsLibrary() {
     // Initializing image library
-    if(!IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG)){
+    if (!IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG)) {
         #if CHECK_CORRECTION
-        printf("Couldn't initialize image library: %s\n", IMG_GetError());
+        SDL_Log("Couldn't initialize image library: %s\n", IMG_GetError());
         exit(ERR_SDL_IMG);
         #endif
     }
 }
 
 // Closing SDL hraphic library
-GraphicsLibrary::~GraphicsLibrary(){
+GraphicsLibrary::~GraphicsLibrary() {
     IMG_Quit();
 }
 
 
 // Loading all textures
-Textures::Textures(){
+Textures::Textures() {
     // Resetting list of textures
     #if CHECK_CORRECTION
     memset(textures, 0, IMG_count * sizeof(textures[0]));
     #endif
 
     // Loading all images
-    //loadTexture("img/.png", IMG_);  // Template
+    // loadTexture("img/.png", IMG_);  // Template
 
     // Graphic interface sprites
     loadTexture("img/GUI/esc_button.png", IMG_GUI_PAUSE_BUTTON);
     loadTexture("img/GUI/slider_button.png", IMG_GUI_SLIDER_BUTTON);
     loadTexture("img/GUI/slider_line.png", IMG_GUI_SLIDER_LINE);
-    loadTexture("img/GUI/type_box.png",IMG_GUI_TYPE_BOX);
+    loadTexture("img/GUI/type_box.png", IMG_GUI_TYPE_BOX);
 
     // Base flags in settings
     loadTexture("img/GUI/Flag_USA.png", IMG_GUI_FLAG_USA);
@@ -66,8 +66,8 @@ Textures::Textures(){
     // Point, where figure can go
     loadTexture("img/chess-pack-1/point.png", IMG_GAME_POINT_MOVE_TO);
 
-    // Resetting color of figures
-    for(Uint8 i=IMG_GAME_WHITE_PAWN; i <= IMG_GAME_BLACK_KING;++i){
+    // Resetting color for figures
+    for (Uint8 i = IMG_GAME_WHITE_PAWN; i <= IMG_GAME_BLACK_KING; ++i) {
         SDL_SetTextureColorMod(textures[i], 0, 0, 0);
     }
 
@@ -75,24 +75,24 @@ Textures::Textures(){
     #if CHECK_CORRECTION
     checkCorrection();
     #endif
-};
+}
 
 // Clearing all textures after work
-Textures::~Textures(){
-    for(Uint8 i = 0; i < IMG_count; ++i){
+Textures::~Textures() {
+    for (Uint8 i = 0; i < IMG_count; ++i) {
         SDL_DestroyTexture(textures[i]);
     }
 }
 
 // Loading texture with need name
-void Textures::loadTexture(const char *_name, IMG_names _index){
+void Textures::loadTexture(const char *_name, IMG_names _index) {
     // Getting selected picture data
     SDL_RWops *tempRW = loadObject(_name);
 
     // Checking correction of loaded data
     #if CHECK_CORRECTION
-    if(!tempRW){
-        printf("Error with loading image file '%s' at %u.", _name, _index);
+    if (!tempRW) {
+        SDL_Log("Error with loading image file '%s' at %u.", _name, _index);
         exit(ERR_FIL_IMG);
     }
     #endif
@@ -104,7 +104,6 @@ void Textures::loadTexture(const char *_name, IMG_names _index){
     #if ARCHIEVE_LOADING
     free(tempRW->hidden.mem.base);
     #endif
-    
     SDL_RWclose(tempRW);
 
     // Creating texture from surface and setting to it place
@@ -112,17 +111,25 @@ void Textures::loadTexture(const char *_name, IMG_names _index){
 
     // Clearing data
     SDL_FreeSurface(tempSurface);
-};
+
+    // Checking correction of loaded texture
+    #if CHECK_CORRECTION
+    if (textures[_index] == nullptr) {
+        SDL_Log("Error with loading image file '%s' at %u.", _name, _index);
+        exit(ERR_FIL_IMG);
+    }
+    #endif
+}
 
 // Checking correction of loaded textures
 #if CHECK_CORRECTION
-void Textures::checkCorrection(){
+void Textures::checkCorrection() {
     // Checking, if all images exist
-    for(Uint8 i = 0; i < IMG_count; ++i){
-        if(textures[i] == NULL){
-            printf("Wrong texture at %u.", i);
+    for (Uint8 i = 0; i < IMG_count; ++i) {
+        if (textures[i] == NULL) {
+            SDL_Log("Wrong texture at %u.", i);
             exit(ERR_FIL_IMG);
         }
     }
-};
+}
 #endif

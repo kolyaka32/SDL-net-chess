@@ -8,20 +8,20 @@
 
 
 // Opening archive not needed
-DataLoader::DataLoader(){}
+DataLoader::DataLoader() {}
 
 // Closing archieve not needed
-void DataLoader::closeLoader(){}
+void DataLoader::closeLoader() {}
 
 // System to load object with need name (from file system)
-SDL_RWops *DataLoader::loadObject(const char *_name){
+SDL_RWops *DataLoader::loadObject(const char *_name) {
     // Openning need file
     SDL_RWops *tempRW = SDL_RWFromFile(_name, "r");
 
     // Checking file correction
     #if CHECK_CORRECTION
-    if(!tempRW){
-        printf("Can't load file '%s'.", _name);
+    if (!tempRW) {
+        SDL_Log("Can't load file '%s'.", _name);
         exit(ERR_FIL_OPN);
     }
     #endif

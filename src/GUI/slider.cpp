@@ -7,7 +7,7 @@ using namespace GUI;
 // Slider class
 template <typename linkType>
 Slider<linkType>::Slider(float _X, float _Y, linkType &_controlData, IMG_names _lineImage, IMG_names _buttonImage, linkType _max)
- : link(_controlData), maxValue(_max){
+: link(_controlData), maxValue(_max) {
     // Getting need texture
     texture = data.textures[_lineImage];
     textureButton = data.textures[_buttonImage];
@@ -18,24 +18,18 @@ Slider<linkType>::Slider(float _X, float _Y, linkType &_controlData, IMG_names _
     rect.y = SCREEN_HEIGHT * _Y - rect.h / 2;
     destButton.y = SCREEN_HEIGHT * _Y - destButton.h / 2;
     destButton.x = rect.x + link * rect.w / maxValue - destButton.w / 2;
-};
-
-//
-template <typename linkType>
-Slider<linkType>::~Slider(){
-    
 }
 
 // Blitting all slider to screen
 template <typename linkType>
-void Slider<linkType>::blit() const{
+void Slider<linkType>::blit() const {
     SDL_RenderCopy(data.renderer, texture, NULL, &rect);
     SDL_RenderCopy(data.renderer, textureButton, NULL, &destButton);
-};
+}
 
 // Setting new value of slider
 template <typename linkType>
-void Slider<linkType>::setValue(const int mouseX){
+void Slider<linkType>::setValue(const int mouseX) {
     // Getting new position
     destButton.x = mouseX;
     // Setting borders for position
@@ -46,19 +40,18 @@ void Slider<linkType>::setValue(const int mouseX){
 
     // Setting new linked value
     link = (destButton.x - rect.x + destButton.w / 2) * maxValue / rect.w;
-};
+}
 
 //
 template <typename linkType>
-bool Slider<linkType>::scroll(const Sint32 wheelY, const int mouseX, const int mouseY){
-    if(in(mouseX, mouseY)){
-        if(wheelY > 0){
+bool Slider<linkType>::scroll(const Sint32 wheelY, const int mouseX, const int mouseY) {
+    if (in(mouseX, mouseY)) {
+        if (wheelY > 0) {
             setValue(destButton.x + destButton.w/2 + 8);
-        }
-        else{
+        } else {
             setValue(destButton.x + destButton.w/2 - 8);
         }
         return true;
     }
     return false;
-};
+}
