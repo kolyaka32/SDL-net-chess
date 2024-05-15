@@ -1,9 +1,8 @@
 #include "server.hpp"
 
-
-//
-ServerGameCycle::ServerGameCycle()
-{
+// Server game cycle class
+// Setting texture of port box
+ServerGameCycle::ServerGameCycle() {
     // Updating text of created port
     data.texts[TXT_SERVER_PORT].updateText(serverPort);
 
@@ -12,23 +11,21 @@ ServerGameCycle::ServerGameCycle()
 }
 
 //
-ServerGameCycle::~ServerGameCycle()
-{
+ServerGameCycle::~ServerGameCycle() {
     // Starting playing menu theme if need
-    if(!waitStart){
+    if (!waitStart) {
         data.playMusic(MUS_MENU_THEME);
     }
 }
 
 //
-Uint8 ServerGameCycle::getData(){
+Uint8 ServerGameCycle::getData() {
     //
-    switch (recieveData->data[0])
-    {
+    switch (recieveData->data[0]) {
     // Code of start connection with other side
     case MES_INIT:
         // Checking, if need start
-        if(waitStart){
+        if (waitStart) {
             // Setting sender address to place, where was send from
             sendData->address = recieveData->address;
 
@@ -50,13 +47,13 @@ Uint8 ServerGameCycle::getData(){
     // Code of turn of another player
     case MES_TURN:
         // Checking, if current turn of another player
-        if(waitTurn && endState <= END_TURN){
+        if (waitTurn && endState <= END_TURN) {
             // Making opponent turn
-            endState = board.move(recieveData->data[1] % FIELD_WIDTH, recieveData->data[1] / FIELD_WIDTH, 
+            endState = board.move(recieveData->data[1] % FIELD_WIDTH, recieveData->data[1] / FIELD_WIDTH,
                 recieveData->data[2] % FIELD_WIDTH, recieveData->data[2] / FIELD_WIDTH);
-            
+
             // Checking, if there was a move
-            if(endState){
+            if (endState) {
                 // Allowing current player to move
                 waitTurn = false;
             }
@@ -67,7 +64,7 @@ Uint8 ServerGameCycle::getData(){
     case MES_STOP:
         showStopConnection();
         return 1;
-    
+
     // Code of applaying last message
     case MES_APPL:
         waitApply = false;
@@ -81,27 +78,26 @@ Uint8 ServerGameCycle::getData(){
 
 
 //
-Uint8 ServerGameCycle::mouseInput(){
+Uint8 ServerGameCycle::mouseInput() {
     // Different draw variants
-    if(waitStart){
+    if (waitStart) {
         // Connecting menu
         // Check on connect cancel
-        if(data.textButtons[BTN_GAME_CANCEL].in(mouseX, mouseY)){
+        if (data.textButtons[BTN_GAME_CANCEL].in(mouseX, mouseY)) {
             // Closing connection
             return 1;
         }
-    }
-    else{
+    } else {
         // Game variant
         // Pause button
-        /*if(settingButton.in(mouseX, mouseY)){
+        /*if (settingButton.in(mouseX, mouseY)) {
             return 1;
         }*/
 
         // Clicking on field if possible
-        if(endState <= END_TURN){
+        if (endState <= END_TURN) {
             // Checking, if current turn this player
-            if(!waitTurn){
+            if (!waitTurn) {
                 // Getting previous click
                 position previousPos = board.getPreviousTurn();
 
@@ -109,19 +105,19 @@ Uint8 ServerGameCycle::mouseInput(){
                 endState = board.click((mouseX - LEFT_LINE) / CELL_SIDE, (mouseY - UPPER_LINE) / CELL_SIDE);
 
                 // Checking, if need send move
-                if(endState){
+                if (endState) {
                     // Sedning turn
-                    send(MES_TURN, previousPos, getPos((mouseX - LEFT_LINE) / CELL_SIDE, (mouseY - UPPER_LINE) / CELL_SIDE));
-                    
+                    send(MES_TURN, previousPos,
+                        getPos((mouseX - LEFT_LINE) / CELL_SIDE, (mouseY - UPPER_LINE) / CELL_SIDE));
+
                     // Changing turn
                     waitTurn = true;
                 }
             }
-        }
-        else{
+        } else {
             // Getting buttons clicks
             // Game restart
-            if(data.textButtons[BTN_GAME_RESTART].in(mouseX, mouseY)){
+            if (data.textButtons[BTN_GAME_RESTART].in(mouseX, mouseY)) {
                 // Resetting flags
                 endState = END_NONE;
                 waitTurn = false;
@@ -134,20 +130,19 @@ Uint8 ServerGameCycle::mouseInput(){
 
                 // Making sound
                 data.playSound(SND_RESET);
-            }
-            // Going to menu
-            else if(data.textButtons[BTN_GAME_MENU].in(mouseX, mouseY)){
+            } else if (data.textButtons[BTN_GAME_MENU].in(mouseX, mouseY)) {
+                // Going to menu
                 return 1;
             }
         }
     }
     return 0;
-};
+}
 
 //
-void ServerGameCycle::draw() const{
+void ServerGameCycle::draw() const {
     // Different draw variants
-    if(waitStart){
+    if (waitStart) {
         // Connecting menu
         // Drawing background
         data.setColor(BLACK);
@@ -160,8 +155,7 @@ void ServerGameCycle::draw() const{
 
         // Rendering at screen
         data.render();
-    }
-    else{
+    } else {
         // Game variant
         // Bliting field
         board.blit();
@@ -173,21 +167,20 @@ void ServerGameCycle::draw() const{
         data.texts[TXT_GAME_TURN_THIS + waitTurn].blit();
 
         // Bliting game state, if need
-        if(endState > END_TURN){
+        if (endState > END_TURN) {
             // Bliting end background
             endBackplate.blit();
 
             // Bliting text with end state
-            switch (endState)
-            {
+            switch (endState) {
             case END_WIN:
                 data.texts[TXT_END_WIN].blit();
                 break;
-            
+
             case END_LOOSE:
                 data.texts[TXT_END_LOOSE].blit();
                 break;
-            
+
             case END_NOBODY:
                 data.texts[TXT_END_NOBODY].blit();
                 break;
@@ -201,4 +194,4 @@ void ServerGameCycle::draw() const{
         // Bliting all to screen
         data.render();
     }
-};
+}

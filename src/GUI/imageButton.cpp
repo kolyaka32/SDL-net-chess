@@ -5,7 +5,7 @@ using namespace GUI;
 
 
 // Button class
-ImageButton::ImageButton(float _x, float _y, IMG_names _index) : GUItemplate(){
+ImageButton::ImageButton(float _x, float _y, IMG_names _index) : GUItemplate() {
     // Setting base texture
     texture = data.textures[_index];
     // Setting destination

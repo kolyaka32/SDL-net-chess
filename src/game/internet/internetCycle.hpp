@@ -11,15 +11,15 @@
 // Class for create process thread for internet connection
 class InternetCycle : public Internet, public GameCycle
 {
-private:
+ private:
     IdleTimer internetTimer{1000/INTERNET_FPS};  // Timer to idle in internet cycle
     void lauchCycle();  // Main internet cycle for side thread
 
-protected:
+ protected:
     std::thread gettingCycle{this->lauchCycle, this};  // Thread with running internet connection
     std::mutex gettingMutex;                          // Mutex for control workflow
 
-public:
+ public:
     InternetCycle();
     ~InternetCycle();
 };

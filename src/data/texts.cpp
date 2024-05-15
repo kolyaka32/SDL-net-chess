@@ -1,10 +1,9 @@
 #include "texts.hpp"
 
 // Global static texts
-Texts::Texts(){
+Texts::Texts() {
     // Setting window title
-    switch (language)
-    {
+    switch (language) {
     case LNG_ENGLISH:
         SDL_SetWindowTitle(window, "Chess on SDL");
         break;
@@ -21,13 +20,12 @@ Texts::Texts(){
         SDL_SetWindowTitle(window, "Шахматы на SDL");
         break;
     }
-};
+}
 
 // Update translations of all texts
-void Texts::updateTranslation(){
+void Texts::updateTranslation() {
     // Setting window title
-    switch (language)
-    {
+    switch (language) {
     case LNG_ENGLISH:
         SDL_SetWindowTitle(window, "Chess on SDL");
         break;
@@ -44,14 +42,14 @@ void Texts::updateTranslation(){
         SDL_SetWindowTitle(window, "Шахматы на SDL");
         break;
     }
-    
+
     // Updating texts
-    for(Uint8 i = 0; i < TXT_count; ++i){
+    for (Uint8 i = 0; i < TXT_count; ++i) {
         texts[i].updateText();
     }
 
     // Updating buttons
-    for(Uint8 i = 0; i < BTN_count; ++i){
+    for (Uint8 i = 0; i < BTN_count; ++i) {
         textButtons[i].update();
     }
 }

@@ -4,11 +4,10 @@
 
 
 // Class of game server
-class InternetServerCycle : public InternetCycle
-{
-protected:
+class InternetServerCycle : public InternetCycle {
+ protected:
     Uint16 serverPort = BASE_PORT;  // Port, where server was created
-public:
+
+ public:
     InternetServerCycle();
-    ~InternetServerCycle();
 };

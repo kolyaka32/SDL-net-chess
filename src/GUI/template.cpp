@@ -10,12 +10,12 @@ GUItemplate::GUItemplate() {
 }
 
 // Template function for draw
-void GUItemplate::blit() const{
+void GUItemplate::blit() const {
     SDL_RenderCopy(data.renderer, texture, NULL, &rect);
 };
 
 // Template function for check, if mouse press in object
-bool GUItemplate::in(const int mouseX, const int mouseY) const{
+bool GUItemplate::in(const int mouseX, const int mouseY) const {
     return ((mouseX > rect.x && mouseX < rect.x + rect.w) &&
         (mouseY > rect.y && mouseY < rect.y + rect.h));
 };

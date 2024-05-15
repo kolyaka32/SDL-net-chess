@@ -11,15 +11,15 @@ enum TURN_names{
 
 
 // Interface of figures moves
-class FiguresMoves
-{
-protected:
+class FiguresMoves {
+ protected:
     // Data for moves
     cell figures[sqr(FIELD_WIDTH)];   // Array of figures on field
     bool turn;                        // Which player is currently turn
     bool wasMoven;                    // Flag of board, that it was moven
     void resetField();                // Reset field parametrs
 
+    // Functions for interact with board
     // Check, if figure at pos can be attacked
     bool isAttackable(const position pos);
     bool tryMoveTo(const position pos);
@@ -31,6 +31,7 @@ protected:
     void setAround(const coord _x, const coord _y, const Sint8 pos[][2]);
     void setCastlingLeft(const coord _x, const coord _y, const cell need);
     void setCastlingRight(const coord _x, const coord _y, const cell need);
-public:
+
+ public:
     FiguresMoves();
 };

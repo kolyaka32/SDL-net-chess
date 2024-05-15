@@ -5,11 +5,11 @@
 
 
 // Class with letters, placed in collumn
-class LettersCollumn
-{
-private:
+class LettersCollumn {
+ private:
     TTF_Font* font = nullptr;  // Font for draw any letters
-public:
+
+ public:
     LettersCollumn(const char startLetter, const Uint8 length, Sint8 xOffset, Sint8 yOffset);
     ~LettersCollumn();
 
@@ -18,12 +18,12 @@ public:
 
 
 // Class of drawing board frame with letters for better UI
-class SurroundingLetters
-{
-private:
+class SurroundingLetters {
+ private:
     const LettersCollumn numberCollumn{'1', 8, 0, -CELL_SIDE};  // Vertical column with numbers
     const LettersCollumn letterCollumn{'A', 8, CELL_SIDE, 0};  // Horizontal column with letters
-public:
+
+ public:
     SurroundingLetters();
     ~SurroundingLetters();
     void blit() const;

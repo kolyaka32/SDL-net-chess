@@ -7,10 +7,8 @@
 
 
 // Class for working with audio
-class AudioLibrary
-{
-public:
+class AudioLibrary {
+ public:
     AudioLibrary();   // Initialasing audio library
     ~AudioLibrary();  // Closing audio library
 };
-

@@ -1,9 +1,11 @@
+#include <string>
+
 #include "internetClient.hpp"
 
 
 // Client part
 //
-InternetClientCycle::InternetClientCycle(){
+InternetClientCycle::InternetClientCycle() {
     // Creating socket to get data
     socket = SDLNet_UDP_Open(0);
 
@@ -14,36 +16,33 @@ InternetClientCycle::InternetClientCycle(){
 }
 
 //
-InternetClientCycle::~InternetClientCycle(){
-
-}
+InternetClientCycle::~InternetClientCycle() {}
 
 //
-Uint8 InternetClientCycle::tryConnect(const char* ipText, const char* portText){
+Uint8 InternetClientCycle::tryConnect(const char* ipText, const char* portText) {
     IPaddress sendIP;  // IP of reciever
-    if(SDLNet_ResolveHost(&sendIP, ipText, std::stoi(portText)) == 0){
+    if (SDLNet_ResolveHost(&sendIP, ipText, std::stoi(portText)) == 0) {
         // Setting send address
         sendData->address = sendIP;
 
         // Creating socket set to search for new messages
         SDLNet_SocketSet set = SDLNet_AllocSocketSet(1);
         SDLNet_UDP_AddSocket(set, socket);
-        
+
         // Try send activation code at specifed coordinats
         send(MES_INIT);
-        
+
         // Checking get pachage
-        if(SDLNet_CheckSockets(set, 1000) && SDLNet_UDP_Recv(socket, recieveData)){
+        if (SDLNet_CheckSockets(set, 1000) && SDLNet_UDP_Recv(socket, recieveData)) {
             // Connection correct
             // Saving entered parameters for next conncetion
             data.baseIP = (std::string)ipText;
             data.basePort = (std::string)portText;
-            
+
             // Clearing data
             SDLNet_FreeSocketSet(set);
             return 1;
-        }
-        else{
+        } else {
             // Showing message with problems with connection
             showCantConnect();
             SDLNet_FreeSocketSet(set);

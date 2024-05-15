@@ -9,22 +9,21 @@
 
 
 // Library for work with fonts
-class FontLibrary
-{
-public:
+class FontLibrary {
+ public:
     FontLibrary();   // Initialasing font library
     ~FontLibrary();  // Closing font library
 };
 
 
 // Class of loaded fonts
-class DrawFont
-{
-private:
+class DrawFont {
+ private:
     TTF_Font *font;
     const textHeight height;
     // const Font_type type;
-public:
+
+ public:
     DrawFont(SDL_RWops *data, textHeight _height);  // Creating new font for need purpose
     ~DrawFont();                                    // Clearing data from font
     const bool isNeed(textHeight _height) const;    // Check, if current font need
@@ -33,13 +32,13 @@ public:
 
 
 // Class of all loaded fonts for draw texts
-class Font : virtual FontLibrary, protected virtual DataLoader
-{
-private:
+class Font : virtual FontLibrary, protected virtual DataLoader {
+ private:
     SDL_RWops *fontData;                  // Pointer to data of font
     std::vector<DrawFont*> fonts;         // Vector with all fonts
     void loadFontData(const char *name);  // Loading font with need name
-public:
+
+ public:
     Font();   // Loading all need fonts
     ~Font();  // Clearing data from fonts
 

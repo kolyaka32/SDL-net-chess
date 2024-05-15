@@ -7,18 +7,16 @@
 
 
 // Base class of internet library
-class InternetLibrary
-{
-public:
+class InternetLibrary {
+ public:
     InternetLibrary();
     ~InternetLibrary();
 };
 
 
 // Base class for work with internet connection
-class Internet : InternetLibrary
-{
-protected:
+class Internet : InternetLibrary {
+ protected:
     // Data for internet work
     UDPsocket socket;          // Socket to send/recieve data
     UDPpacket* sendData;       // Packet to send data
@@ -34,13 +32,13 @@ protected:
     void showStopConnection();  // Function of showing connection normal stop
     void showCantConnect();     // Function of showing message of problems with connection
 
-protected:
+ protected:
     // Function for sending any data
     void send(MESSAGE_types type, Uint8 d1 = 0, Uint8 d2 = 0, Uint8 d3 = 0, Uint8 d4 = 0);
     virtual Uint8 getData();       // Template for getting any codes from other side
-    Uint8 update();                // Function for updating all states of 
+    Uint8 update();                // Function for updating all states of
 
-public:
+ public:
     Internet();
     ~Internet();
 };

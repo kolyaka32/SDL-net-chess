@@ -14,9 +14,8 @@ enum SND_names{
 
 
 // Class of all loaded sounds for play
-class Sounds : virtual AudioLibrary, public virtual InitFile, public virtual DataLoader
-{
-private:
+class Sounds : virtual AudioLibrary, public virtual InitFile, public virtual DataLoader {
+ private:
     Mix_Chunk *sounds[SND_count];  // Array of all sound effects
 
     // Load sound with need name
@@ -26,7 +25,8 @@ private:
     #if CHECK_CORRECTION
     void checkCorrection();
     #endif
-public:
+
+ public:
     Sounds();   // Loading all sounds
     ~Sounds();  // Clear all data
     void playSound(SND_names track);  // Play need sound

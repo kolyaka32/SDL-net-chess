@@ -1,15 +1,15 @@
 #include "message.hpp"
 
 //
-/*Message::Message(const MESSAGE_types _type) : type(_type){};
+/*Message::Message(const MESSAGE_types _type) : type(_type) {};
 
 //
-Message::~Message(){
+Message::~Message() {
 
 }
 
 //
-void Message::send(UDPpacket* _packet){
+void Message::send(UDPpacket* _packet) {
     // Copying data to send buffer
     memcpy(_packet->data, data, INTERNET_BUFFER);
 
@@ -18,7 +18,7 @@ void Message::send(UDPpacket* _packet){
 };
 
 //
-const bool Message::checkTime() const{
+const bool Message::checkTime() const {
     return SDL_GetTicks64() > lastSended;
 };
 */

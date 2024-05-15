@@ -36,12 +36,12 @@ void CycleTemplate::getInput() {
                 SDL_GetMouseState(&mouseX, &mouseY);  // Getting mouse position
 
                 // Checking scroll on sliders
-                //if(MusicSlider.scroll(event.wheel.y, mouseX, mouseY));
-                //else if(SoundSlider.scroll(event.wheel.y, mouseX, mouseY));
+                //if (MusicSlider.scroll(event.wheel.y, mouseX, mouseY));
+                //else if (SoundSlider.scroll(event.wheel.y, mouseX, mouseY));
                 break;*/
 
             /*case SDL_KEYDOWN:
-                if (event.key.keysym.sym == SDLK_ESCAPE){
+                if (event.key.keysym.sym == SDLK_ESCAPE) {
 
                 };
                 break;*/
@@ -69,7 +69,7 @@ void CycleTemplate::getInput() {
 
 // Example for getting mouse input
 Uint8 CycleTemplate::mouseInput() {
-    /*if(startOptions[0].in(mouseX, mouseY)){
+    /*if (startOptions[0].in(mouseX, mouseY)) {
         return 1;
     }*/
 

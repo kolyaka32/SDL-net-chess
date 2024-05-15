@@ -4,14 +4,10 @@
 
 
 // Class of game client
-class InternetClientCycle : public InternetCycle
-{
-private:
-    
-public:
+class InternetClientCycle : public InternetCycle {
+ public:
     InternetClientCycle();
     ~InternetClientCycle();
 
     Uint8 tryConnect(const char* ipText, const char* portText);  // Return 1, if connected
 };
-

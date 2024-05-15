@@ -23,22 +23,22 @@ enum CASTLING_names{
 
 
 // Class of game board to with
-class Board : public FiguresMoves
-{
-private:
+class Board : public FiguresMoves {
+ private:
     Figure activeCell;  // Cell, that active (now move by player), or NULL if not
     Uint8 castling;     // Data of all now posible varhishes
-    
+
     void pickFigure(const coord X, const coord Y);    // Function for pick figure from field
     Uint8 placeFigure(const coord X, const coord Y);  // Function to try put figure back to field
-    
-public:
+
+ public:
     Board();
     ~Board();
     void reset();  // Resetting field for new game
     void blit() const;  // Bliting field at screen
     Uint8 click(const coord X, const coord Y);  // Clicking with mouse on need cell on field
-    Uint8 move(const coord X1, const coord Y1, const coord X2, const coord Y2);  // Simplier mover on field (for internet opponent turn)
+    // Simplier mover on field (for internet opponent turn)
+    Uint8 move(const coord X1, const coord Y1, const coord X2, const coord Y2);
     void resetSelection();  // Reset currently selected figure
     position getPreviousTurn() const;  // Return, where was made previous turn
     Uint8 currentTurn() const;         // Return, which person is now active

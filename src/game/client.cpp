@@ -1,8 +1,7 @@
 #include "client.hpp"
 
 //
-ClientGameCycle::ClientGameCycle()
-{
+ClientGameCycle::ClientGameCycle() {
     // Resetting values
     lastTypeBoxUpdate = 0;  // Setting to 0 to update as early as can
 
@@ -11,34 +10,32 @@ ClientGameCycle::ClientGameCycle()
 }
 
 //
-ClientGameCycle::~ClientGameCycle()
-{
+ClientGameCycle::~ClientGameCycle() {
     // Additional stopping text input on case, when was closed at inputting
     removeSelection();
 
     // Starting playing menu theme if need
-    if(!waitStart){
+    if (!waitStart) {
         data.playMusic(MUS_MENU_THEME);
     }
 }
 
 // Macros for removing select from typeBox
-void ClientGameCycle::removeSelection(){
-    if(selectedBox){
+void ClientGameCycle::removeSelection() {
+    if (selectedBox) {
         typeBoxes[selectedBox - 1].removeSelect();
         selectedBox = 0;
     }
 }
 
 //
-Uint8 ClientGameCycle::getData(){
+Uint8 ClientGameCycle::getData() {
     //
-    switch (recieveData->data[0])
-    {
+    switch (recieveData->data[0]) {
     // Code of initialasing connection
     case MES_INIT:
         // Checking, if get first init message
-        if(waitStart){
+        if (waitStart) {
             // Starting playing main theme
             data.playMusic(MUS_MAIN_THEME);
 
@@ -51,7 +48,7 @@ Uint8 ClientGameCycle::getData(){
         }
 
         return 0;
-    
+
     // Code of starting game
     case MES_START:
     case MES_REST:
@@ -67,13 +64,13 @@ Uint8 ClientGameCycle::getData(){
     // Code of turn of another player
     case MES_TURN:
         // Checking, if current turn of another player
-        if(waitTurn && endState <= END_TURN){
+        if (waitTurn && endState <= END_TURN) {
             // Making opponent turn
-            endState = board.move(recieveData->data[1] % FIELD_WIDTH, recieveData->data[1] / FIELD_WIDTH, 
+            endState = board.move(recieveData->data[1] % FIELD_WIDTH, recieveData->data[1] / FIELD_WIDTH,
                 recieveData->data[2] % FIELD_WIDTH, recieveData->data[2] / FIELD_WIDTH);
 
             // Allowing current player to move
-            if(endState){
+            if (endState) {
                 waitTurn = false;
             }
         }
@@ -83,7 +80,7 @@ Uint8 ClientGameCycle::getData(){
     case MES_STOP:
         showStopConnection();
         return 1;
-    
+
     // Code of applaying last message
     case MES_APPL:
         waitApply = false;
@@ -96,26 +93,24 @@ Uint8 ClientGameCycle::getData(){
 }
 
 //
-void ClientGameCycle::getInput(){
+void ClientGameCycle::getInput() {
     SDL_Event event;
-    while(running){
-        while( SDL_PollEvent(&event) != 0 ){
+    while (running) {
+        while ( SDL_PollEvent(&event) != 0 ) {
             // Checking on game variant
-            if(waitStart){
+            if (waitStart) {
                 // Entering data variant
-                switch (event.type)
-                {
+                switch (event.type) {
                 case SDL_QUIT:
                     data.running = false;
                     return;
 
                 case SDL_KEYDOWN:
-                    switch (event.key.keysym.sym)
-                    {
+                    switch (event.key.keysym.sym) {
                     case SDLK_ESCAPE:
                         removeSelection();
                         break;
-                    
+
                     case SDLK_RETURN:
                     case SDLK_RETURN2:
                     case SDLK_KP_ENTER:
@@ -123,9 +118,9 @@ void ClientGameCycle::getInput(){
                         // Trying connect at address
                         tryConnect(typeBoxes[0].buffer, typeBoxes[1].buffer);
                         break;
-                    
+
                     default:
-                        if(selectedBox){
+                        if (selectedBox) {
                             typeBoxes[selectedBox - 1].press(event.key.keysym.sym);
                         }
                     }
@@ -133,7 +128,7 @@ void ClientGameCycle::getInput(){
 
                 case SDL_TEXTINPUT:
                     // Typing text on which object is selected
-                    if(selectedBox){
+                    if (selectedBox) {
                         typeBoxes[selectedBox - 1].writeString(event.text.text, false);
                     }
                     break;
@@ -143,29 +138,26 @@ void ClientGameCycle::getInput(){
                     SDL_GetMouseState(&mouseX, &mouseY);
 
                     // Getting mouse press
-                    if(mouseInput()){
+                    if (mouseInput()) {
                         return;
                     }
                     break;
                 }
-            }
-            else{
+            } else {
                 // Main game cycle
-                switch (event.type)
-                {
+                switch (event.type) {
                 case SDL_QUIT:
                     data.running = false;
                     return;
 
                 case SDL_KEYDOWN:
                     // Switching between keys
-                    switch (event.key.keysym.sym)
-                    {
+                    switch (event.key.keysym.sym) {
                     case SDLK_ESCAPE:
                         // Clearing selection by escape
                         board.resetSelection();
                         break;
-                        
+
                     case SDLK_q:
                         // Quiting to menu
                         return;
@@ -177,20 +169,19 @@ void ClientGameCycle::getInput(){
                     SDL_GetMouseState(&mouseX, &mouseY);
 
                     // Getting mouse press
-                    if(mouseInput()){
+                    if (mouseInput()) {
                         return;
                     }
                     break;
 
                 case SDL_MOUSEBUTTONUP:
-                    //LMBclick = false;
                     selectedBox = 0;
                     break;
                 }
             }
         }
         // Check, if entering text and need to blink caret in type box
-        if(waitStart && selectedBox && (SDL_GetTicks64() > lastTypeBoxUpdate)){
+        if (waitStart && selectedBox && (SDL_GetTicks64() > lastTypeBoxUpdate)) {
             // Updating type box for show place to type
             typeBoxes[selectedBox - 1].updateCaret();
             lastTypeBoxUpdate = SDL_GetTicks64() + 500;
@@ -198,33 +189,31 @@ void ClientGameCycle::getInput(){
         // Waiting next cycle
         inputTimer.sleep();
     }
-};
+}
 
 
 //
-Uint8 ClientGameCycle::mouseInput(){
+Uint8 ClientGameCycle::mouseInput() {
     // Different draw variants
-    if(waitStart){
+    if (waitStart) {
         // Connecting menu
         // Connect to server button
-        if(data.textButtons[BTN_GAME_CONNECT].in(mouseX, mouseY)){
+        if (data.textButtons[BTN_GAME_CONNECT].in(mouseX, mouseY)) {
             removeSelection();
             // Trying connect at address
             tryConnect(typeBoxes[0].buffer, typeBoxes[1].buffer);
             return 0;
-        }
-        // Return to menu button
-        else if(data.textButtons[BTN_GAME_CANCEL].in(mouseX, mouseY)){
+        } else if (data.textButtons[BTN_GAME_CANCEL].in(mouseX, mouseY)) {
             // Returning to menu
             removeSelection();
             return 1;
         }
         // Selecting need box
-        for(Uint8 i=0; i < 2; ++i){
+        for (Uint8 i=0; i < 2; ++i) {
             // Checking, if click on that box
-            if(typeBoxes[i].in(mouseX, mouseY)){
+            if (typeBoxes[i].in(mouseX, mouseY)) {
                 // Checking, if box not selected
-                if(selectedBox != i+1){
+                if (selectedBox != i+1) {
                     selectedBox = i+1;
                     typeBoxes[i].select();
                     lastTypeBoxUpdate = SDL_GetTicks64() + 700;
@@ -235,18 +224,17 @@ Uint8 ClientGameCycle::mouseInput(){
         // If press on somewhere else on field - resetting selection
         removeSelection();
         return 0;
-    }
-    else{
+    } else {
         // Game variantwaitTurn = true;
         // Pause button
-        /*if(settingButton.in(mouseX, mouseY)){
+        /*if (settingButton.in(mouseX, mouseY)) {
             return 1;
         }*/
 
         // Clicking on field if possible
-        if(endState <= END_TURN){
+        if (endState <= END_TURN) {
             // Checking, if current turn this player
-            if(!waitTurn){
+            if (!waitTurn) {
                 // Getting previous click
                 position previousPos = board.getPreviousTurn();
 
@@ -254,29 +242,29 @@ Uint8 ClientGameCycle::mouseInput(){
                 endState = board.click((mouseX - LEFT_LINE) / CELL_SIDE, (mouseY - UPPER_LINE) / CELL_SIDE);
 
                 // Checking, if need send move
-                if(endState){
+                if (endState) {
                     // Sending turn
-                    send(MES_TURN, previousPos, getPos((mouseX - LEFT_LINE) / CELL_SIDE, (mouseY - UPPER_LINE) / CELL_SIDE));
-                    
+                    send(MES_TURN, previousPos,
+                        getPos((mouseX - LEFT_LINE) / CELL_SIDE, (mouseY - UPPER_LINE) / CELL_SIDE));
+
                     // Changing turn
                     waitTurn = true;
                 }
             }
-        }
-        else{
+        } else {
             // Checking exit to menu
-            if(data.textButtons[BTN_GAME_MENU].in(mouseX, mouseY)){
+            if (data.textButtons[BTN_GAME_MENU].in(mouseX, mouseY)) {
                 return 1;
             }
         }
     }
     return 0;
-};
+}
 
 //
-void ClientGameCycle::draw() const{
+void ClientGameCycle::draw() const {
     // Different draw variants
-    if(waitStart){
+    if (waitStart) {
         // Connecting menu
         // Drawing background
         data.setColor(BLACK);
@@ -296,8 +284,7 @@ void ClientGameCycle::draw() const{
 
         // Rendering at screen
         data.render();
-    }
-    else{
+    } else {
         // Game variant
         // Bliting field
         board.blit();
@@ -309,21 +296,20 @@ void ClientGameCycle::draw() const{
         data.texts[TXT_GAME_TURN_THIS + waitTurn].blit();
 
         // Bliting game state, if need
-        if(endState > END_TURN){
+        if (endState > END_TURN) {
             // Bliting end background
             endBackplate.blit();
 
             // Bliting text with end state
-            switch (endState)
-            {
+            switch (endState) {
             case END_WIN:
                 data.texts[TXT_END_LOOSE].blit();
                 break;
-            
+
             case END_LOOSE:
                 data.texts[TXT_END_WIN].blit();
                 break;
-            
+
             case END_NOBODY:
                 data.texts[TXT_END_NOBODY].blit();
                 break;
@@ -336,4 +322,4 @@ void ClientGameCycle::draw() const{
         // Bliting all to screen
         data.render();
     }
-};
+}
