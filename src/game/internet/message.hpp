@@ -1,5 +1,12 @@
+/*
+ * Copyright (C) 2024, Kazankov Nikolay 
+ * <nik.kazankov.05@mail.ru>
+ */
+
 #pragma once
 
+#include <vector>
+#include <initializer_list>
 #include <SDL_net.h>
 
 #include "../../dataTypes.hpp"
@@ -17,22 +24,187 @@ enum MESSAGE_types{
     MES_SKIP = 7,   // Type of skipping current round
 };
 
-// Class of internet messages to send and recieve
-/*class Message
+
+// Type of data for save message data
+struct Message
 {
-private:
-    // Message data
-    const MESSAGE_types type;  // Type of message
-    const byte data[INTERNET_BUFFER];  // Data to send
+    byte* data;  // Message data
+    Uint8 size;  // Size of this data
 
     // Data for control sending
     timer lastSended;  // Timer, when message was lastly send
-public:
-    Message(const MESSAGE_types type = MES_NONE);
-    ~Message();
-    void send(UDPpacket* packet);  // Function of setting data to send
-    const bool checkTime() const;
-
-    friend class BaseInternet;  // Making data acessesable for sending
 };
-*/
+
+
+// Class for send messages
+class MessageSender {
+ private:
+    // Vector with all sended messages, which must be confirm
+    std::vector<Message> confirmMessages;
+
+    // Global id counter for control sended messages
+    Uint8 ID;
+
+    // Function for send need message
+    void send(Message& message);  
+
+ protected:
+    // Data for internet work
+    UDPsocket socket;          // Socket to send/recieve data
+
+    // Packet to send data
+    UDPpacket sendData;
+
+    // Timer, when last message send to control connection
+    timer lastMessageSend;
+    
+    void applyMessage(Uint8 id);  // Setting message with this id as applied
+    void checkResend();           // Function for check, if need resend any of the messages
+
+ public:
+    MessageSender();
+    ~MessageSender();
+    // Function for create and send new message
+    template <typename T = Uint8>
+    void sendNew(const MESSAGE_types type = MES_NONE, const std::initializer_list<T> list = {});
+
+    // Function for create and send new message without appliying it after
+    template <typename T = Uint8>
+    void sendWithoutApply(const MESSAGE_types type = MES_NONE,
+        const std::initializer_list<T> list = {});
+};
+
+
+// Function for send data with need type and size
+template <typename T>
+void MessageSender::sendNew(const MESSAGE_types type, const std::initializer_list<T> list){
+    // Check, if can't get this message
+    if(list.size() * sizeof(T) + 2 > INTERNET_BUFFER){
+        // Show, that function incorrect
+        throw "Wrong size of sended message";
+    }
+    // Creating send packet
+    confirmMessages.push_back(Message());
+
+    // Getting new message link for easyier acess
+    Message& current = confirmMessages.back();
+
+    // Setting it size
+    current.size = list.size() * sizeof(T) + 2;
+
+    // Setting timer to send as fast as can
+    //current.lastSended = 0;
+
+    // Creating send data
+    current.data = new byte[current.size];
+
+    // Setting type of send message
+    current.data[0] = type;
+
+    // Setting ID of message to confirm at return
+    current.data[1] = ID;
+    // Changin ID
+    ID = (ID + 1) % 128;
+
+    // Check, if need copy data
+    if(current.size > 2){
+        // Select, which type we should send
+        switch (sizeof(T))
+        {
+        // Smallest one-byte types
+        case sizeof(Uint8):
+            // Simple coping memory
+            memcpy(current.data + 2 , list.begin(), list.size() - 2);
+            break;
+
+        // Two-bytes types
+        case sizeof(Uint16):
+            // Coping each number to it position
+            for(Uint8 i=0; i < list.size(); ++i){
+                //SDLNet_Write16(list.begin() + i*2, current.data + 2 + 2*i);
+            }
+
+        // Four-bytes types
+        case sizeof(Uint32):
+            // Coping each number to it position
+            for(Uint8 i=0; i < list.size(); ++i){
+                //SDLNet_Write32((list.begin() + i*4), current.data + 2 + 4*i);
+            }
+        
+        // Unknown size
+        default:
+            throw "Unknown size of message";
+            break;
+        }
+    }
+
+    // Sending this message
+    send(current);
+}
+
+// Function for send data with need type and size without applying after
+template <typename T>
+void MessageSender::sendWithoutApply(const MESSAGE_types type,
+    const std::initializer_list<T> list) {
+    // Check, if can't get this message
+    if(list.size() * sizeof(T) + 2 > INTERNET_BUFFER){
+        // Show, that function incorrect
+        throw "Wrong size of sended message";
+    }
+    // Creating send message
+    Message current;
+
+    // Setting it size
+    current.size = list.size() * sizeof(T) + 2;
+
+    // Creating send data
+    current.data = new byte[current.size];
+
+    // Setting type of send message
+    current.data[0] = type;
+
+    // Setting ID of message to confirm at return
+    current.data[1] = ID;
+    // Changin ID to next
+    ID = (ID + 1) % 128;
+
+    // Check, if need copy data
+    if(current.size > 2){
+        // Select, which type we should send
+        switch (sizeof(T))
+        {
+        // Smallest one-byte types
+        case sizeof(Uint8):
+            // Simple coping memory
+            for(Uint8 i = 0; T c : list){
+                current.data[i+2] = c;
+            }
+            break;
+
+        // Two-bytes types
+        case sizeof(Uint16):
+            // Coping each number to it position
+            for(Uint8 i=0; i < list.size(); ++i){
+                //SDLNet_Write16(list.begin() + i*2, current.data + 2 + 2*i);
+            }
+
+        // Four-bytes types
+        case sizeof(Uint32):
+            // Coping each number to it position
+            for(Uint8 i=0; i < list.size(); ++i){
+                //SDLNet_Write32((list.begin() + i*4), current.data + 2 + 4*i);
+            }
+        
+        // Unknown size
+        default:
+            throw "Unknown size of message";
+            break;
+        }
+    }
+
+    // Sending this message
+    send(current);
+
+    // Clearing it
+    delete[] current.data;
+}

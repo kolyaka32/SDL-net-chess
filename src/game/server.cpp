@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2024, Kazankov Nikolay 
+ * <nik.kazankov.05@mail.ru>
+ */
+
 #include "server.hpp"
 
 // Server game cycle class
@@ -27,10 +32,10 @@ Uint8 ServerGameCycle::getData() {
         // Checking, if need start
         if (waitStart) {
             // Setting sender address to place, where was send from
-            sendData->address = recieveData->address;
+            sendData.address = recieveData->address;
 
             // Sending init message
-            send(MES_INIT);
+            sendNew(MES_INIT);
 
             // Setting flag of connection to start game
             waitStart = false;
@@ -67,7 +72,7 @@ Uint8 ServerGameCycle::getData() {
 
     // Code of applaying last message
     case MES_APPL:
-        waitApply = false;
+        applyMessage(recieveData->data[1]);
         return 0;
 
     // Code of unused/strange message
@@ -107,8 +112,8 @@ Uint8 ServerGameCycle::mouseInput() {
                 // Checking, if need send move
                 if (endState) {
                     // Sedning turn
-                    send(MES_TURN, previousPos,
-                        getPos((mouseX - LEFT_LINE) / CELL_SIDE, (mouseY - UPPER_LINE) / CELL_SIDE));
+                    sendNew(MES_TURN, {previousPos,
+                        (Uint8)getPos((mouseX - LEFT_LINE) / CELL_SIDE, (mouseY - UPPER_LINE) / CELL_SIDE)});
 
                     // Changing turn
                     waitTurn = true;
@@ -126,7 +131,7 @@ Uint8 ServerGameCycle::mouseInput() {
                 board.reset();
 
                 // Sending reset flag
-                send(MES_REST);
+                sendNew(MES_REST);
 
                 // Making sound
                 data.playSound(SND_RESET);

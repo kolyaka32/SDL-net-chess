@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2024, Kazankov Nikolay 
+ * <nik.kazankov.05@mail.ru>
+ */
+
 #pragma once
 
 // Including standart output to print this codes

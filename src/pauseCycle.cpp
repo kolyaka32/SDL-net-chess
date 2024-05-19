@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2024, Kazankov Nikolay 
+ * <nik.kazankov.05@mail.ru>
+ */
+
 #include "define.hpp"
 #include "pauseCycle.hpp"
 #include "GUI/slider.cpp"
@@ -23,7 +28,7 @@ PauseCycle::PauseCycle() : CycleTemplate(MUS_START_NONE) {}
 void PauseCycle::getInput() {
     SDL_Event event;
     while (running) {
-        while ( SDL_PollEvent(&event) != 0 ) {
+        while ( data.getEvent(&event) != 0 ) {
             switch (event.type) {
             case SDL_QUIT:
                 data.running = false;

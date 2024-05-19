@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2024, Kazankov Nikolay 
+ * <nik.kazankov.05@mail.ru>
+ */
+
 #include "../data/data.hpp"
 #include "baseGUI.hpp"
 
@@ -16,6 +21,7 @@ typeBox::typeBox(textHeight _height, float _x, float _y, const char* _text, ALIG
     length = strlen(_text);
     caret = SET_MAX(length, bufferSize);
     memcpy(buffer, _text, length);
+    buffer[length] = '\0';
 
     // Creating first texture, if there was any text
     if (caret) {

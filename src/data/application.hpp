@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2024, Kazankov Nikolay 
+ * <nik.kazankov.05@mail.ru>
+ */
+
 #pragma once
 
 #include <mutex>
@@ -17,4 +22,5 @@ class App : public virtual InitFile {
     ~App();                          // Close renderer and window
     void setColor(SDL_Color color);  // Setting color for draw
     void render();                   // Blitting all buffered objects
+    int getEvent(SDL_Event* event); // Customised function for getting events
 };

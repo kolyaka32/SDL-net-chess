@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2024, Kazankov Nikolay 
+ * <nik.kazankov.05@mail.ru>
+ */
+
 #include "../data/data.hpp"
 #include "baseGUI.hpp"
 
@@ -12,7 +17,7 @@ StaticText::StaticText(const char* _text, textHeight _height, float _X, float _Y
 
     // First text update
     updateText();
-};
+}
 
 // Basic destructor for free dynamic variables
 StaticText::~StaticText() {

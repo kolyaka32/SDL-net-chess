@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2024, Kazankov Nikolay 
+ * <nik.kazankov.05@mail.ru>
+ */
+
 #include "cycleTemplate.hpp"
 
 
@@ -13,7 +18,7 @@ CycleTemplate::CycleTemplate(MUS_names _music) : music(_music) {
 
     // Resetting input
     SDL_Event event;
-    while ( SDL_PollEvent(&event) != 0 ) {}  // Don't do anything
+    while ( data.getEvent(&event) != 0 ) {}  // Don't do anything
 
     // Starting playing need music (if need)
     if (music) {
@@ -25,7 +30,7 @@ CycleTemplate::CycleTemplate(MUS_names _music) : music(_music) {
 void CycleTemplate::getInput() {
     SDL_Event event;
     while (running) {
-        while ( SDL_PollEvent(&event) != 0 ) {
+        while ( data.getEvent(&event) != 0 ) {
             switch (event.type) {
             case SDL_QUIT:
                 data.running = false;

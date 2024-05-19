@@ -134,8 +134,8 @@ add_executable( ${CMAKE_PROJECT_NAME}
 
     # Game variants
     # Singleplayer game cycle
-    src/game/singlePlayer.hpp
-    src/game/singlePlayer.cpp
+    # src/game/singlePlayer.hpp
+    # src/game/singlePlayer.cpp
 
     # Two-player game cycle
     src/game/twoPlayer.hpp

@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2024, Kazankov Nikolay 
+ * <nik.kazankov.05@mail.ru>
+ */
+
 #include "application.hpp"
 #include "../define.hpp"
 #include "../workCodes.hpp"
@@ -62,4 +67,18 @@ void App::render() {
 
     // Unlocking for other actions
     drawMutex.unlock();
+}
+
+// Getting SDL events some better
+int App::getEvent(SDL_Event* _event){
+    // Locking thread
+    drawMutex.lock();
+
+    int result = SDL_PollEvent(_event);
+
+    // Unlocking threa back
+    drawMutex.unlock();
+
+    // Returning rest value
+    return result;
 }

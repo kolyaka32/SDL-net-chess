@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2024, Kazankov Nikolay 
+ * <nik.kazankov.05@mail.ru>
+ */
+
 #include "baseInternet.hpp"
 #include "../../data/data.hpp"
 #include "../../workCodes.hpp"
@@ -26,40 +31,34 @@ InternetLibrary::~InternetLibrary() {
 Internet::Internet() {
     // Allocating memory to send and recieve packets
     recieveData = SDLNet_AllocPacket(INTERNET_BUFFER);
-    sendData = SDLNet_AllocPacket(INTERNET_BUFFER);
-    sendData->len = INTERNET_BUFFER;
 
     // Setting timer to max value for don't check correction before start
     lastMessageArrive = (timer)-1;
-
-    // Resetting appling flag
-    waitApply = false;
 }
 
 // Sending close message and deleting all data
 Internet::~Internet() {
     // Sending message of server disabling connection
-    send(MES_STOP);
+    sendNew(MES_STOP);
 
     // Closing port
     SDLNet_UDP_Close(socket);
 
     // Freeing all packets
     SDLNet_FreePacket(recieveData);
-    SDLNet_FreePacket(sendData);
 }
 
 //
 void Internet::showDisconect() {
     switch (data.language) {
     case LNG_ENGLISH:
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING,
-            "Disconect", "Your connection lost, server disconect", data.window);
+        //SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING,
+        //    "Disconect", "Your connection lost, server disconect", data.window);
         break;
 
     case LNG_RUSSIAN:
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING,
-            "Соединение потеряно", "Соединение потерено, сервер отключён", data.window);
+        //SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING,
+        //    "Соединение потеряно", "Соединение потерено, сервер отключён", data.window);
         break;
     }
 }
@@ -95,7 +94,7 @@ void Internet::showCantConnect() {
 }
 
 // Macros for sending message
-void Internet::send(MESSAGE_types type, Uint8 d1, Uint8 d2, Uint8 d3, Uint8 d4) {
+/*void Internet::send(MESSAGE_types type, Uint8 d1, Uint8 d2, Uint8 d3, Uint8 d4) {
     sendData->data[0] = type;
     sendData->data[1] = d1;
     sendData->data[2] = d2;
@@ -105,39 +104,49 @@ void Internet::send(MESSAGE_types type, Uint8 d1, Uint8 d2, Uint8 d3, Uint8 d4) 
 
     lastMessageSend = SDL_GetTicks64();
     waitApply = true;
-}
+}*/
 
 //
 Uint8 Internet::update() {
+    // Locking thread
+    data.drawMutex.lock();
+
     // Checking, if need to send NULL-message
-    if (SDL_GetTicks64() > lastMessageSend + MESSAGE_NULL_TIMEOUT) {
-        send(MES_NONE);
-        return 0;
+    if (SDL_GetTicks64() > lastMessageSend) {
+        sendWithoutApply(MES_NONE);
     }
-    // Checking, if message wasn't delivered
-    if (waitApply && (SDL_GetTicks64() > lastMessageSend + MESSAGE_APPLY_TIMEOUT)) {
-        // Repeat sending last message
-        SDLNet_UDP_Send(socket, -1, sendData);
-        // Updating timer
-        lastMessageSend = SDL_GetTicks64();
-    }
-    // Checking get data
+
+    // Checking, if messages wasn't delivered
+    checkResend();
+    
+    // Checking if get new data
     if (SDLNet_UDP_Recv(socket, recieveData)) {
+        // Sending, that message was applied
+        sendWithoutApply(MES_APPL, {recieveData->data[1]});
+
         // Getting data
         if (getData()) {
+            // Stopping after special commands
+            // Unlocking thread
+            data.drawMutex.unlock();
             return 1;
         }
-        // Normal return
+        // Resetting arriving timer
         lastMessageArrive = SDL_GetTicks64() + MESSAGE_GET_TIMEOUT;
-        return 0;
     } else {
         // Check, if time for arrive is too much
         if (SDL_GetTicks64() > lastMessageArrive) {
             // Something wrong with connection
             showDisconect();
+
+            // Unlocking thread
+            data.drawMutex.unlock();
             return 1;
         }
     }
+    // Unlocking thread
+    data.drawMutex.unlock();
+    
     // None return
     return 0;
 }
@@ -152,7 +161,7 @@ Uint8 Internet::getData() {
 
     // Code of applaying last message
     case MES_APPL:
-        waitApply = false;
+        applyMessage(recieveData->data[1]);
         return 0;
 
     // Strange/unknown code

@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2024, Kazankov Nikolay 
+ * <nik.kazankov.05@mail.ru>
+ */
+
 #pragma once
 
 #include "../../define.hpp"
@@ -24,7 +29,7 @@ enum FIG_names{
     FIG_BLACK_KNIGHT,
     FIG_BLACK_QUEEN,
     FIG_BLACK_KING,
-    
+
     // Point, where you can move to
     FIG_MOVE_TO,
 };
@@ -39,8 +44,7 @@ enum FIG_names{
 
 
 // Type of cell
-struct Figure
-{
+struct Figure {
     cell type;  // Type of current cell
     position pos;   // Coordinats of current cell
 };

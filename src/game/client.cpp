@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2024, Kazankov Nikolay 
+ * <nik.kazankov.05@mail.ru>
+ */
+
 #include "client.hpp"
 
 //
@@ -83,7 +88,7 @@ Uint8 ClientGameCycle::getData() {
 
     // Code of applaying last message
     case MES_APPL:
-        waitApply = false;
+        applyMessage(recieveData->data[1]);
         return 0;
 
     // Code of unused/strange message
@@ -96,7 +101,8 @@ Uint8 ClientGameCycle::getData() {
 void ClientGameCycle::getInput() {
     SDL_Event event;
     while (running) {
-        while ( SDL_PollEvent(&event) != 0 ) {
+        // Getting events
+        while (data.getEvent(&event)) {
             // Checking on game variant
             if (waitStart) {
                 // Entering data variant
@@ -244,8 +250,8 @@ Uint8 ClientGameCycle::mouseInput() {
                 // Checking, if need send move
                 if (endState) {
                     // Sending turn
-                    send(MES_TURN, previousPos,
-                        getPos((mouseX - LEFT_LINE) / CELL_SIDE, (mouseY - UPPER_LINE) / CELL_SIDE));
+                    sendNew(MES_TURN, {(Uint8)previousPos,
+                        (Uint8)getPos((mouseX - LEFT_LINE) / CELL_SIDE, (mouseY - UPPER_LINE) / CELL_SIDE)});
 
                     // Changing turn
                     waitTurn = true;

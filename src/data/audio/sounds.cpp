@@ -1,6 +1,11 @@
+/*
+ * Copyright (C) 2024, Kazankov Nikolay 
+ * <nik.kazankov.05@mail.ru>
+ */
+
 #include "sounds.hpp"
 
-
+// Sound class
 // Loading all sounds
 Sounds::Sounds() {
     // Resetting list of sounds
@@ -42,7 +47,7 @@ void Sounds::loadSound(const char *_name, const SND_names _index) {
 
     // Checking correction of loaded data
     #if CHECK_CORRECTION
-    if (tempRW = nullptr) {
+    if (tempRW == nullptr) {
         SDL_Log("Error with loading sound file '%s' at %u.", _name, _index);
         exit(ERR_FIL_SND);
     }

@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2024, Kazankov Nikolay 
+ * <nik.kazankov.05@mail.ru>
+ */
 
 #include "base.hpp"
 
@@ -13,7 +17,7 @@ GameCycle::~GameCycle() {}
 void GameCycle::getInput() {
     SDL_Event event;
     while (running) {
-        while ( SDL_PollEvent(&event) != 0 ) {
+        while ( data.getEvent(&event) ) {
             switch (event.type) {
             case SDL_QUIT:
                 data.running = false;

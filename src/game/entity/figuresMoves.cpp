@@ -1,12 +1,17 @@
+/*
+ * Copyright (C) 2024, Kazankov Nikolay 
+ * <nik.kazankov.05@mail.ru>
+ */
+
 #include "figuresMoves.hpp"
 
-
-//
+// Figures moves class
+// Firstly resetting all figures
 FiguresMoves::FiguresMoves() {
     resetField();
 }
 
-//
+// Function of clearinf all field data
 void FiguresMoves::resetField() {
     // Clearing data
     memset(figures, FIG_NONE, sqr(FIELD_WIDTH));  // Resetting all field
