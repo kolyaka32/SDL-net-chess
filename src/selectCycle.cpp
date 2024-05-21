@@ -15,7 +15,7 @@
 SelectCycle::SelectCycle() : CycleTemplate(MUS_MENU_THEME) {}
 
 // Getting selected button
-Uint8 SelectCycle::mouseInput() {
+bool SelectCycle::getMouseInput() {
     if (settingButton.in(mouseX, mouseY)) {
         // Staring pause cycle
         return runCycle<PauseCycle>();
@@ -34,7 +34,7 @@ Uint8 SelectCycle::mouseInput() {
     }
 
     // None-return
-    return 0;
+    return false;
 }
 
 // Drawing background with all buttons

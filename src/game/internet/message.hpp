@@ -57,16 +57,17 @@ class MessageSender {
 
     // Timer, when last message send to control connection
     timer lastMessageSend;
-    
+
     void applyMessage(Uint8 id);  // Setting message with this id as applied
-    void checkResend();           // Function for check, if need resend any of the messages
+    void checkNeedResend();       // Function for check, if need resend any of the messages
 
  public:
     MessageSender();
     ~MessageSender();
     // Function for create and send new message
     template <typename T = Uint8>
-    void sendNew(const MESSAGE_types type = MES_NONE, const std::initializer_list<T> list = {});
+    void sendNew(const MESSAGE_types type = MES_NONE,
+        const std::initializer_list<T> list = {});
 
     // Function for create and send new message without appliying it after
     template <typename T = Uint8>
@@ -77,9 +78,9 @@ class MessageSender {
 
 // Function for send data with need type and size
 template <typename T>
-void MessageSender::sendNew(const MESSAGE_types type, const std::initializer_list<T> list){
+void MessageSender::sendNew(const MESSAGE_types _type, const std::initializer_list<T> _list){
     // Check, if can't get this message
-    if(list.size() * sizeof(T) + 2 > INTERNET_BUFFER){
+    if(_list.size() * sizeof(T) + 2 > INTERNET_BUFFER){
         // Show, that function incorrect
         throw "Wrong size of sended message";
     }
@@ -90,7 +91,7 @@ void MessageSender::sendNew(const MESSAGE_types type, const std::initializer_lis
     Message& current = confirmMessages.back();
 
     // Setting it size
-    current.size = list.size() * sizeof(T) + 2;
+    current.size = _list.size() * sizeof(T) + 2;
 
     // Setting timer to send as fast as can
     //current.lastSended = 0;
@@ -99,7 +100,7 @@ void MessageSender::sendNew(const MESSAGE_types type, const std::initializer_lis
     current.data = new byte[current.size];
 
     // Setting type of send message
-    current.data[0] = type;
+    current.data[0] = _type;
 
     // Setting ID of message to confirm at return
     current.data[1] = ID;
@@ -114,21 +115,21 @@ void MessageSender::sendNew(const MESSAGE_types type, const std::initializer_lis
         // Smallest one-byte types
         case sizeof(Uint8):
             // Simple coping memory
-            memcpy(current.data + 2 , list.begin(), list.size() - 2);
+            memcpy(current.data + 2 , _list.begin(), _list.size());
             break;
 
         // Two-bytes types
         case sizeof(Uint16):
             // Coping each number to it position
-            for(Uint8 i=0; i < list.size(); ++i){
-                //SDLNet_Write16(list.begin() + i*2, current.data + 2 + 2*i);
+            for(Uint8 i=0; i < _list.size(); ++i){
+                //SDLNet_Write16((Uint16)(_list + i*2), current.data + 2 + i*2);
             }
 
         // Four-bytes types
         case sizeof(Uint32):
             // Coping each number to it position
-            for(Uint8 i=0; i < list.size(); ++i){
-                //SDLNet_Write32((list.begin() + i*4), current.data + 2 + 4*i);
+            for(Uint8 i=0; i < _list.size(); ++i){
+                //SDLNet_Write32((Uint32)(_list + i*4), current.data + 2 + i*4);
             }
         
         // Unknown size
@@ -144,10 +145,10 @@ void MessageSender::sendNew(const MESSAGE_types type, const std::initializer_lis
 
 // Function for send data with need type and size without applying after
 template <typename T>
-void MessageSender::sendWithoutApply(const MESSAGE_types type,
-    const std::initializer_list<T> list) {
+void MessageSender::sendWithoutApply(const MESSAGE_types _type,
+    const std::initializer_list<T> _list) {
     // Check, if can't get this message
-    if(list.size() * sizeof(T) + 2 > INTERNET_BUFFER){
+    if(_list.size() * sizeof(T) + 2 > INTERNET_BUFFER){
         // Show, that function incorrect
         throw "Wrong size of sended message";
     }
@@ -155,16 +156,17 @@ void MessageSender::sendWithoutApply(const MESSAGE_types type,
     Message current;
 
     // Setting it size
-    current.size = list.size() * sizeof(T) + 2;
+    current.size = _list.size() * sizeof(T) + 2;
 
     // Creating send data
     current.data = new byte[current.size];
 
     // Setting type of send message
-    current.data[0] = type;
+    current.data[0] = _type;
 
     // Setting ID of message to confirm at return
     current.data[1] = ID;
+
     // Changin ID to next
     ID = (ID + 1) % 128;
 
@@ -176,23 +178,21 @@ void MessageSender::sendWithoutApply(const MESSAGE_types type,
         // Smallest one-byte types
         case sizeof(Uint8):
             // Simple coping memory
-            for(Uint8 i = 0; T c : list){
-                current.data[i+2] = c;
-            }
+            memcpy(current.data+2, _list.begin(), _list.size());
             break;
 
         // Two-bytes types
         case sizeof(Uint16):
             // Coping each number to it position
-            for(Uint8 i=0; i < list.size(); ++i){
-                //SDLNet_Write16(list.begin() + i*2, current.data + 2 + 2*i);
+            for(Uint8 i=0; i < _list.size(); ++i){
+                //SDLNet_Write16((Uint16)(_list + i*2), current.data + 2 + i*2);
             }
 
         // Four-bytes types
         case sizeof(Uint32):
             // Coping each number to it position
-            for(Uint8 i=0; i < list.size(); ++i){
-                //SDLNet_Write32((list.begin() + i*4), current.data + 2 + 4*i);
+            for(Uint8 i=0; i < _list.size(); ++i){
+                //SDLNet_Write32((Uint32)(_list + i*4), current.data + 2 + i*4);
             }
         
         // Unknown size

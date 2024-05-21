@@ -10,9 +10,6 @@
 ServerGameCycle::ServerGameCycle() {
     // Updating text of created port
     data.texts[TXT_SERVER_PORT].updateText(serverPort);
-
-    // Allowing internet to start
-    gettingMutex.unlock();
 }
 
 //
@@ -24,7 +21,7 @@ ServerGameCycle::~ServerGameCycle() {
 }
 
 //
-Uint8 ServerGameCycle::getData() {
+bool ServerGameCycle::getData() {
     //
     switch (recieveData->data[0]) {
     // Code of start connection with other side
@@ -83,14 +80,14 @@ Uint8 ServerGameCycle::getData() {
 
 
 //
-Uint8 ServerGameCycle::mouseInput() {
+bool ServerGameCycle::getMouseInput() {
     // Different draw variants
     if (waitStart) {
         // Connecting menu
         // Check on connect cancel
         if (data.textButtons[BTN_GAME_CANCEL].in(mouseX, mouseY)) {
             // Closing connection
-            return 1;
+            return true;
         }
     } else {
         // Game variant
@@ -137,11 +134,11 @@ Uint8 ServerGameCycle::mouseInput() {
                 data.playSound(SND_RESET);
             } else if (data.textButtons[BTN_GAME_MENU].in(mouseX, mouseY)) {
                 // Going to menu
-                return 1;
+                return true;
             }
         }
     }
-    return 0;
+    return false;
 }
 
 //

@@ -27,9 +27,9 @@ class GameCycle : public CycleTemplate {
     GUI::Backplate endBackplate{{70, 150, SCREEN_WIDTH - 140, SCREEN_HEIGHT - 300}, 40, 5};
 
     // New overrided cycle functions
-    void getInput() override;     // Getting all user input (keyboard, mouse...)
-    Uint8 mouseInput() override;  // Checking for any need mouse action
-    void draw() const override;   // Drawing all needed objects
+    bool getMouseInput() override;    // Getting mouse clicking
+    bool getKeysInput(SDL_Keysym& key) override;  // Getting keys pressing
+    void draw() const override;       // Drawing all needed objects
 
  public:
     GameCycle();   // Start game cycle

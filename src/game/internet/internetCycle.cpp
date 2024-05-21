@@ -7,43 +7,51 @@
 
 
 //
-InternetCycle::InternetCycle() {
-    // Launching process
-    running = true;
-
-    // Stopping from pre-launch
-    gettingMutex.lock();
-}
+InternetCycle::InternetCycle() {}
 
 //
-InternetCycle::~InternetCycle() {
-    // Stopping all working proceses
-    running = false;
+InternetCycle::~InternetCycle() {}
 
-    // Closing thread
-    gettingCycle.join();
+// Function for start need cycle
+void InternetCycle::run() {
+    // Starting main cycle
+    while (running){
+        // Getting user input
+        getInput();
+
+        // Updating internet module
+        updateInternet();
+
+        // Updating other stuff
+        update();
+
+        // Drawing interface
+        draw();
+
+        // Standing in idle state
+        idleTimer.sleep();
+    }    
 }
 
-//
-void InternetCycle::lauchCycle() {
-    // Waiting for allowing to start
-    gettingMutex.lock();
-    gettingMutex.unlock();
+// Updating internet connection
+void InternetCycle::updateInternet(){
+    // Check, if too much time since last message send
+    checkSendTimeout();
 
-    // Main getting cycle
-    while (running) {
-        // Waiting for posobility for get data
-        gettingMutex.lock();
+    // Checking, if messages wasn't delivered
+    checkNeedResend();
+    
+    // Check, if get new message
+    if(checkGetMessage()){
+        // Stopping cycle
+        running = false;
+        return;
+    }
 
-        // Getting data with check on exit
-        if (update()) {
-            running = false;
-        }
-
-        // Unlocking mutex for another actions
-        gettingMutex.unlock();
-
-        // Waiting next cycle (for better process time)
-        internetTimer.sleep();
+    // Check, if lost connection from other side
+    if(checkDisconect()){
+        // Stopping cycle
+        running = false;
+        return;
     }
 }

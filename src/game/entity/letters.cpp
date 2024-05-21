@@ -10,9 +10,6 @@
 
 // Class with letters, placed in collumn
 LettersCollumn::LettersCollumn(const char _startLetter, const Uint8 _length, Sint8 _xOffset, Sint8 _yOffset) {
-    // Locking thread for start
-    data.drawMutex.lock();
-
     // Creating font (if need)
     if (!font) {
         font = data.createFont(20);
@@ -66,21 +63,12 @@ LettersCollumn::LettersCollumn(const char _startLetter, const Uint8 _length, Sin
 
     // Unlocking render
     SDL_SetRenderTarget(data.renderer, nullptr);
-
-    // Resetting mutex
-    data.drawMutex.unlock();
 }
 
 // Savely clear all rest data
 LettersCollumn::~LettersCollumn() {
-    // Locking any side processes
-    data.drawMutex.lock();
-
     // Clearing texture
     SDL_DestroyTexture(texture);
-
-    // Unlocking side proceses after work
-    data.drawMutex.unlock();
 }
 
 

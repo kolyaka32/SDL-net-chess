@@ -93,79 +93,63 @@ void Internet::showCantConnect() {
     }
 }
 
-// Macros for sending message
-/*void Internet::send(MESSAGE_types type, Uint8 d1, Uint8 d2, Uint8 d3, Uint8 d4) {
-    sendData->data[0] = type;
-    sendData->data[1] = d1;
-    sendData->data[2] = d2;
-    sendData->data[3] = d3;
-    sendData->data[4] = d4;
-    SDLNet_UDP_Send(socket, -1, sendData);
-
-    lastMessageSend = SDL_GetTicks64();
-    waitApply = true;
-}*/
-
-//
-Uint8 Internet::update() {
-    // Locking thread
-    data.drawMutex.lock();
-
+// Check, if too much time since last message send
+void Internet::checkSendTimeout(){
     // Checking, if need to send NULL-message
     if (SDL_GetTicks64() > lastMessageSend) {
         sendWithoutApply(MES_NONE);
     }
+}
 
-    // Checking, if messages wasn't delivered
-    checkResend();
-    
+// Check, if get new message 
+bool Internet::checkGetMessage(){
     // Checking if get new data
     if (SDLNet_UDP_Recv(socket, recieveData)) {
         // Sending, that message was applied
         sendWithoutApply(MES_APPL, {recieveData->data[1]});
 
-        // Getting data
+        // Getting data from message
         if (getData()) {
             // Stopping after special commands
-            // Unlocking thread
-            data.drawMutex.unlock();
-            return 1;
+            return true;
         }
         // Resetting arriving timer
         lastMessageArrive = SDL_GetTicks64() + MESSAGE_GET_TIMEOUT;
-    } else {
-        // Check, if time for arrive is too much
-        if (SDL_GetTicks64() > lastMessageArrive) {
-            // Something wrong with connection
-            showDisconect();
-
-            // Unlocking thread
-            data.drawMutex.unlock();
-            return 1;
-        }
     }
-    // Unlocking thread
-    data.drawMutex.unlock();
-    
-    // None return
-    return 0;
+    // None-return
+    return false;
 }
 
+// Check, if lost connection from other side
+bool Internet::checkDisconect(){
+    // Check, if time for arrive is too much
+    if (SDL_GetTicks64() > lastMessageArrive) {
+        // Something wrong with connection
+        showDisconect();
+
+        // Stopping process
+        return true;
+    }
+    // Nothing happen
+    return false;
+}
+
+
 // Template for function for getting data
-Uint8 Internet::getData() {
+bool Internet::getData() {
     switch (recieveData->data[0]) {
     // Code of closing game - going to menu
     case MES_STOP:
         showStopConnection();
-        return 1;
+        return true;
 
     // Code of applaying last message
     case MES_APPL:
         applyMessage(recieveData->data[1]);
-        return 0;
+        return false;
 
     // Strange/unknown code
     default:
-        return 0;
+        return false;
     }
 }

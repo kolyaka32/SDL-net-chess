@@ -16,8 +16,9 @@ class SelectCycle : public CycleTemplate {
     GUI::ImageButton settingButton{0.95, 0.05, IMG_GUI_PAUSE_BUTTON};
 
     // New overrided cycle functions
-    Uint8 mouseInput() override;    // Checking for any need mouse action
+    bool getMouseInput() override;   // Checking for any need mouse action
     void draw() const override;     // Drawing all needed objects
+
  public:
     SelectCycle();   // Create selecting cycle
 };

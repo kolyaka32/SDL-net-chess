@@ -21,14 +21,8 @@ StaticText::StaticText(const char* _text, textHeight _height, float _X, float _Y
 
 // Basic destructor for free dynamic variables
 StaticText::~StaticText() {
-    // Locking mutex, while do any actions
-    data.drawMutex.lock();
-
     // Destroying texture
     SDL_DestroyTexture(texture);
-
-    // Unlocking mutex after all actions
-    data.drawMutex.unlock();
 }
 
 //
@@ -54,9 +48,6 @@ inline void writeNumber(char* buffer, int number, Uint8* pos) {
 
 //
 void StaticText::updateText(int number) {
-    // Locking mutex, while do any actions
-    data.drawMutex.lock();
-
     // Creating text, base on buffer number
     char buffer[BUFFER_SIZE];
     Uint8 start = 0;
@@ -85,7 +76,4 @@ void StaticText::updateText(int number) {
     SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
     rect.x = SCREEN_WIDTH * posX - (rect.w * aligment / 2);
     rect.y = SCREEN_HEIGHT * posY - rect.h / 2;
-
-    // Unlocking mutex after work
-    data.drawMutex.unlock();
 }

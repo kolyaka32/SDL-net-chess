@@ -9,9 +9,6 @@
 ClientGameCycle::ClientGameCycle() {
     // Resetting values
     lastTypeBoxUpdate = 0;  // Setting to 0 to update as early as can
-
-    // Allowing internet to start
-    gettingMutex.unlock();
 }
 
 //
@@ -34,7 +31,7 @@ void ClientGameCycle::removeSelection() {
 }
 
 //
-Uint8 ClientGameCycle::getData() {
+bool ClientGameCycle::getData() {
     //
     switch (recieveData->data[0]) {
     // Code of initialasing connection
@@ -97,109 +94,82 @@ Uint8 ClientGameCycle::getData() {
     }
 }
 
-//
-void ClientGameCycle::getInput() {
-    SDL_Event event;
-    while (running) {
-        // Getting events
-        while (data.getEvent(&event)) {
-            // Checking on game variant
-            if (waitStart) {
-                // Entering data variant
-                switch (event.type) {
-                case SDL_QUIT:
-                    data.running = false;
-                    return;
-
-                case SDL_KEYDOWN:
-                    switch (event.key.keysym.sym) {
-                    case SDLK_ESCAPE:
-                        removeSelection();
-                        break;
-
-                    case SDLK_RETURN:
-                    case SDLK_RETURN2:
-                    case SDLK_KP_ENTER:
-                        removeSelection();
-                        // Trying connect at address
-                        tryConnect(typeBoxes[0].buffer, typeBoxes[1].buffer);
-                        break;
-
-                    default:
-                        if (selectedBox) {
-                            typeBoxes[selectedBox - 1].press(event.key.keysym.sym);
-                        }
-                    }
-                    break;
-
-                case SDL_TEXTINPUT:
-                    // Typing text on which object is selected
-                    if (selectedBox) {
-                        typeBoxes[selectedBox - 1].writeString(event.text.text, false);
-                    }
-                    break;
-
-                case SDL_MOUSEBUTTONDOWN:
-                    // Getting mouse position
-                    SDL_GetMouseState(&mouseX, &mouseY);
-
-                    // Getting mouse press
-                    if (mouseInput()) {
-                        return;
-                    }
-                    break;
-                }
-            } else {
-                // Main game cycle
-                switch (event.type) {
-                case SDL_QUIT:
-                    data.running = false;
-                    return;
-
-                case SDL_KEYDOWN:
-                    // Switching between keys
-                    switch (event.key.keysym.sym) {
-                    case SDLK_ESCAPE:
-                        // Clearing selection by escape
-                        board.resetSelection();
-                        break;
-
-                    case SDLK_q:
-                        // Quiting to menu
-                        return;
-                    }
-                    break;
-
-                case SDL_MOUSEBUTTONDOWN:
-                    // Getting mouse position
-                    SDL_GetMouseState(&mouseX, &mouseY);
-
-                    // Getting mouse press
-                    if (mouseInput()) {
-                        return;
-                    }
-                    break;
-
-                case SDL_MOUSEBUTTONUP:
-                    selectedBox = 0;
-                    break;
-                }
+// Getting text input
+bool ClientGameCycle::getAnotherInput(SDL_Event& event) {
+    // Checking on game variant
+    if (waitStart) {
+        // Entering data variant
+        switch (event.type) {
+        case SDL_TEXTINPUT:
+            // Typing text on which object is selected
+            if (selectedBox) {
+                typeBoxes[selectedBox - 1].writeString(event.text.text, false);
             }
+            return false;
         }
-        // Check, if entering text and need to blink caret in type box
-        if (waitStart && selectedBox && (SDL_GetTicks64() > lastTypeBoxUpdate)) {
-            // Updating type box for show place to type
-            typeBoxes[selectedBox - 1].updateCaret();
-            lastTypeBoxUpdate = SDL_GetTicks64() + 500;
+    }
+    return false;
+}
+
+// Example for getting keys input
+bool ClientGameCycle::getKeysInput(SDL_Keysym& key) {
+    // Check game variant
+    if(waitStart){
+        // Entering mode
+        switch (key.sym)
+        {
+        case SDLK_ESCAPE:
+            // Removing selection from
+            removeSelection();
+            return false;
+        
+        case SDLK_RETURN:
+        case SDLK_RETURN2:
+        case SDLK_KP_ENTER:
+            removeSelection();
+            // Trying connect at address
+            tryConnect(typeBoxes[0].buffer, typeBoxes[1].buffer);
+            return false;
+
+        default:
+            // Typing in selected box
+            if (selectedBox) {
+                typeBoxes[selectedBox - 1].press(key.sym);
+            }
+            return false;
         }
-        // Waiting next cycle
-        inputTimer.sleep();
+    } else{
+        switch (key.sym)
+        {
+        case SDLK_ESCAPE:
+            // Clearing selection by escape
+            board.resetSelection();
+            return false;
+
+        case SDLK_q:
+            // Quiting to menu
+            return true;
+
+        default:
+            // None-return
+            return false;
+        }
+    }
+}
+
+// Updating text caret
+void ClientGameCycle::update(){
+    // Check, if entering text and need to blink caret in type box
+    if (waitStart && selectedBox && (SDL_GetTicks64() > lastTypeBoxUpdate)) {
+        // Updating type box for show place to type
+        typeBoxes[selectedBox - 1].updateCaret();
+        lastTypeBoxUpdate = SDL_GetTicks64() + 500;
     }
 }
 
 
 //
-Uint8 ClientGameCycle::mouseInput() {
+bool ClientGameCycle::getMouseInput() {
     // Different draw variants
     if (waitStart) {
         // Connecting menu

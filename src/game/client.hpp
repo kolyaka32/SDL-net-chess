@@ -17,7 +17,7 @@ class ClientGameCycle : public InternetClientCycle {
     bool waitTurn = true;      // Flag of waiting for another player for turn
     timer lastTypeBoxUpdate;   // Timer for change symbol of caret
 
-    Uint8 getData() override;  // Overloaded function of getting internet data
+    bool getData() override;  // Overloaded function of getting internet data
     void removeSelection();    //
 
     // Input fields
@@ -28,9 +28,12 @@ class ClientGameCycle : public InternetClientCycle {
 
  protected:
     // New overrided cycle functions
-    void getInput() override;     // Getting all user input (keyboard, mouse...)
-    Uint8 mouseInput() override;  // Checking for any need mouse action
-    void draw() const override;   // Drawing all needed objects
+    // Getting special user input
+    bool getMouseInput() override;  // Checking for any need mouse action
+    bool getKeysInput(SDL_Keysym& key) override;  // Checking for any keys actions
+    bool getAnotherInput(SDL_Event& event) override;  
+    void draw() const override;     // Drawing all needed objects
+    void update() override;         // Special update
 
  public:
     ClientGameCycle();

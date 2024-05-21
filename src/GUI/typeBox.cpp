@@ -41,9 +41,6 @@ typeBox::~typeBox() {
 
 // Creating new texture
 void typeBox::updateTexture() {
-    // Locking thread, while updating texture
-    data.drawMutex.lock();
-
     // Creating surface from text
     SDL_Surface* surface = TTF_RenderUTF8_Solid(font, buffer, color);
     // Updating texture
@@ -54,9 +51,6 @@ void typeBox::updateTexture() {
     textRect.x += textRect.w * aligment / 2;
     SDL_QueryTexture(texture, NULL, NULL, &textRect.w, &textRect.h);
     textRect.x -= textRect.w * aligment / 2;
-
-    // Unlocking thread for other actions
-    data.drawMutex.unlock();
 }
 
 // Write need string to buffer with ability to clear source

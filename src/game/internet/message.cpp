@@ -51,8 +51,8 @@ void MessageSender::applyMessage(Uint8 id){
     }
 }
 
-//
-void MessageSender::checkResend(){
+// Resend all messages, which wasn't applied
+void MessageSender::checkNeedResend(){
     // Checking all messages for getting over timer
     for(Uint8 i=0; i < confirmMessages.size(); ++i){
         if(confirmMessages[i].lastSended > SDL_GetTicks64()){

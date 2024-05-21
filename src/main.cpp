@@ -14,6 +14,8 @@ Data data;
 int main(int argv, char **args) {
     // Starting selecting cycle
     SelectCycle cycle;
+
+    // Running cycle
     cycle.run();
 
     // Reloading game if need

@@ -13,52 +13,29 @@ GameCycle::GameCycle() : CycleTemplate(MUS_START_NONE) {
 //
 GameCycle::~GameCycle() {}
 
-//
-void GameCycle::getInput() {
-    SDL_Event event;
-    while (running) {
-        while ( data.getEvent(&event) ) {
-            switch (event.type) {
-            case SDL_QUIT:
-                data.running = false;
-                return;
 
-            case SDL_KEYDOWN:
-                // Switching between keys
-                switch (event.key.keysym.sym) {
-                case SDLK_ESCAPE:
-                    // Clearing selection by escape
-                    board.resetSelection();
-                    break;
+// Example for getting keys input
+bool GameCycle::getKeysInput(SDL_Keysym& key) {
+    // Searching for key press
+    switch (key.sym)
+    {
+    case SDLK_ESCAPE:
+        // Clearing selection by escape
+        board.resetSelection();
+        return false;
 
-                case SDLK_q:
-                    // Quiting to menu
-                    return;
-                }
-                break;
+    case SDLK_q:
+        // Quiting to menu
+        return true;
 
-            case SDL_MOUSEBUTTONDOWN:
-                // Getting mouse position
-                SDL_GetMouseState(&mouseX, &mouseY);
-
-                // Getting mouse press
-                if (mouseInput()) {
-                    return;
-                }
-                break;
-
-            case SDL_MOUSEBUTTONUP:
-                selectedBox = 0;
-                break;
-            }
-        }
-        // Waiting next cycle
-        inputTimer.sleep();
+    default:
+        // None-return
+        return false;
     }
 }
 
-//
-Uint8 GameCycle::mouseInput() {
+// Getting mouse clicking
+bool GameCycle::getMouseInput() {
     // Pause button
     /*if (settingButton.in(mouseX, mouseY)) {
         return 1;
@@ -80,15 +57,16 @@ Uint8 GameCycle::mouseInput() {
 
             // Making sound
             data.playSound(SND_RESET);
-            return 0;
+            return false;
+
         } else if (data.textButtons[BTN_GAME_MENU].in(mouseX, mouseY)) {
             // Going to menu
-            return 1;
+            return true;
         }
     }
 
     // None-return
-    return 0;
+    return false;
 }
 
 //

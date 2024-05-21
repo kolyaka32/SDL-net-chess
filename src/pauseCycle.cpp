@@ -25,87 +25,64 @@ enum {
 PauseCycle::PauseCycle() : CycleTemplate(MUS_START_NONE) {}
 
 // Getting special input (with mousewheel and escape button)
-void PauseCycle::getInput() {
-    SDL_Event event;
-    while (running) {
-        while ( data.getEvent(&event) != 0 ) {
-            switch (event.type) {
-            case SDL_QUIT:
-                data.running = false;
-                return;
+bool PauseCycle::getAnotherInput(SDL_Event& event) {
+    switch (event.type) {
+    case SDL_MOUSEWHEEL:
+        // Mouse position on screen
+        SDL_GetMouseState(&mouseX, &mouseY);  // Getting mouse position
+        // Checking scroll on sliders
+        if (musicSlider.scroll(event.wheel.y, mouseX, mouseY)) {}
+        else
+            soundSlider.scroll(event.wheel.y, mouseX, mouseY);
+        return false;
+    
+    default:
+        // None-return
+        return false;
+    }
+}
 
-            case SDL_MOUSEWHEEL:
-                // Mouse position on screen
-                SDL_GetMouseState(&mouseX, &mouseY);  // Getting mouse position
+// Special update of selected box
+void PauseCycle::update(){
+    switch (selectedBox) {
+    case BOX_MUSIC_SLIDER:
+        // Updating music slider state
+        SDL_GetMouseState(&mouseX, &mouseY);
+        musicSlider.setValue(mouseX);
+        Mix_VolumeMusic(data.musicVolume);
+        break;
 
-                // Checking scroll on sliders
-                if (musicSlider.scroll(event.wheel.y, mouseX, mouseY)) {}
-                else
-                    soundSlider.scroll(event.wheel.y, mouseX, mouseY);
-                break;
+    case BOX_SOUND_SLIDER:
+        // Updating sound slider state
+        SDL_GetMouseState(&mouseX, &mouseY);
+        soundSlider.setValue(mouseX);
+        Mix_Volume(-1, data.soundsVolume);
 
-            case SDL_KEYDOWN:
-                if (event.key.keysym.sym == SDLK_ESCAPE)
-                    return;
-                break;
-
-            case SDL_MOUSEBUTTONDOWN:
-                // Getting mouse position
-                SDL_GetMouseState(&mouseX, &mouseY);
-
-                // Getting mouse press
-                if (mouseInput())
-                    return;
-                break;
-
-            case SDL_MOUSEBUTTONUP:
-                selectedBox = 0;
-                break;
-            }
+        // Playing sound effect for understanding loud
+        #if SCROLLER_SOUND
+        if (SDL_GetTicks64() > nextSound) {
+            data.playSound(SND_TURN);
+            nextSound = SDL_GetTicks64() + 400;
         }
-        // Updating selected box
-        switch (selectedBox) {
-        case BOX_MUSIC_SLIDER:
-            // Updating music slider state
-            SDL_GetMouseState(&mouseX, &mouseY);
-            musicSlider.setValue(mouseX);
-            Mix_VolumeMusic(data.musicVolume);
-            break;
-
-        case BOX_SOUND_SLIDER:
-            // Updating sound slider state
-            SDL_GetMouseState(&mouseX, &mouseY);
-            soundSlider.setValue(mouseX);
-            Mix_Volume(-1, data.soundsVolume);
-
-            // Playing sound effect for understanding loud
-            #if SCROLLER_SOUND
-            if (SDL_GetTicks64() > nextSound) {
-                data.playSound(SND_TURN);
-                nextSound = SDL_GetTicks64() + 400;
-            }
-            #endif
-            break;
-        }
-        // Waiting next cycle
-        inputTimer.sleep();
+        #endif
+        break;
     }
 }
 
 // Getting language change and sound mutting
-Uint8 PauseCycle::mouseInput() {
+bool PauseCycle::getMouseInput() {
     // Setting old language to save
     Uint8 newLanguage = data.language;
 
     // Checking, if click on sliders or flag
     if (settingButton.in(mouseX, mouseY)) {
-        return 1;
+        return true;
     } else if (musicSlider.in(mouseX, mouseY)) {
         selectedBox = BOX_MUSIC_SLIDER;
-        return 0;
+        return false;
     } else if (soundSlider.in(mouseX, mouseY)) {
         selectedBox = BOX_SOUND_SLIDER;
-        return 0;
+        return false;
     } else {
         for (Uint8 i=0; i < LNG_count; ++i)
             if (flags[i].in(mouseX, mouseY)) {
@@ -115,19 +92,30 @@ Uint8 PauseCycle::mouseInput() {
 
     // Updating texts language
     if (newLanguage != data.language) {
+        // Update language state
         data.language = newLanguage;
-        // Locking drawing for updating
-        runMutex.lock();
 
         // Updating texture
         data.updateTranslation();
-
-        // Allowing to continue draw
-        runMutex.unlock();
     }
 
     // None-return
-    return 0;
+    return false;
+}
+
+// Getting button escape from pause
+bool PauseCycle::getKeysInput(SDL_Keysym& key) {
+    switch (key.sym)
+    {
+    case SDLK_ESCAPE:
+        // Stopping ruuning by escape
+        running = false;
+        return true;
+
+    default:
+        // None-return
+        return false;
+    }
 }
 
 // Extra variables

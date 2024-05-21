@@ -57,28 +57,7 @@ void App::setColor(SDL_Color color) {
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 }
 
-//
+// Blitting all buffered objects
 void App::render() {
-    // Blocking any drawing
-    drawMutex.lock();
-
-    // Blitting all buffered objects
     SDL_RenderPresent(renderer);
-
-    // Unlocking for other actions
-    drawMutex.unlock();
-}
-
-// Getting SDL events some better
-int App::getEvent(SDL_Event* _event){
-    // Locking thread
-    drawMutex.lock();
-
-    int result = SDL_PollEvent(_event);
-
-    // Unlocking threa back
-    drawMutex.unlock();
-
-    // Returning rest value
-    return result;
 }
