@@ -17,7 +17,8 @@ class SelectCycle : public CycleTemplate {
 
     // New overrided cycle functions
     bool getMouseInput() override;   // Checking for any need mouse action
-    void draw() const override;     // Drawing all needed objects
+    bool getKeysInput(SDL_Keysym& key) override;  // Checking for any keys actions
+    void draw() const override;      // Drawing all needed objects
 
  public:
     SelectCycle();   // Create selecting cycle

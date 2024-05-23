@@ -44,15 +44,15 @@ bool ServerGameCycle::getData() {
             lastMessageArrive = SDL_GetTicks64() + MESSAGE_GET_TIMEOUT;
             lastMessageSend = SDL_GetTicks64() + MESSAGE_NULL_TIMEOUT;
         }
-        return 0;
+        return false;
 
     // Code of turn of another player
     case MES_TURN:
         // Checking, if current turn of another player
         if (waitTurn && endState <= END_TURN) {
             // Making opponent turn
-            endState = board.move(recieveData->data[1] % FIELD_WIDTH, recieveData->data[1] / FIELD_WIDTH,
-                recieveData->data[2] % FIELD_WIDTH, recieveData->data[2] / FIELD_WIDTH);
+            endState = board.move(recieveData->data[2] % FIELD_WIDTH, recieveData->data[2] / FIELD_WIDTH,
+                recieveData->data[3] % FIELD_WIDTH, recieveData->data[3] / FIELD_WIDTH);
 
             // Checking, if there was a move
             if (endState) {
@@ -60,21 +60,11 @@ bool ServerGameCycle::getData() {
                 waitTurn = false;
             }
         }
-        return 0;
-
-    // Code of closing game - going to menu
-    case MES_STOP:
-        showStopConnection();
-        return 1;
-
-    // Code of applaying last message
-    case MES_APPL:
-        applyMessage(recieveData->data[1]);
-        return 0;
+        return false;
 
     // Code of unused/strange message
     default:
-        return 0;
+        return false;
     }
 }
 

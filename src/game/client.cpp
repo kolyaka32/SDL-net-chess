@@ -48,7 +48,6 @@ bool ClientGameCycle::getData() {
             lastMessageArrive = SDL_GetTicks64() + MESSAGE_GET_TIMEOUT;
             lastMessageSend = SDL_GetTicks64() + MESSAGE_NULL_TIMEOUT;
         }
-
         return 0;
 
     // Code of starting game
@@ -60,7 +59,6 @@ bool ClientGameCycle::getData() {
 
         // Resetting flag of current player
         waitTurn = true;
-
         return 0;
 
     // Code of turn of another player
@@ -68,8 +66,8 @@ bool ClientGameCycle::getData() {
         // Checking, if current turn of another player
         if (waitTurn && endState <= END_TURN) {
             // Making opponent turn
-            endState = board.move(recieveData->data[1] % FIELD_WIDTH, recieveData->data[1] / FIELD_WIDTH,
-                recieveData->data[2] % FIELD_WIDTH, recieveData->data[2] / FIELD_WIDTH);
+            endState = board.move(recieveData->data[2] % FIELD_WIDTH, recieveData->data[2] / FIELD_WIDTH,
+                recieveData->data[3] % FIELD_WIDTH, recieveData->data[3] / FIELD_WIDTH);
 
             // Allowing current player to move
             if (endState) {
@@ -77,20 +75,10 @@ bool ClientGameCycle::getData() {
             }
         }
         return 0;
-
-    // Code of closing game - going to menu
-    case MES_STOP:
-        showStopConnection();
-        return 1;
-
-    // Code of applaying last message
-    case MES_APPL:
-        applyMessage(recieveData->data[1]);
-        return 0;
-
-    // Code of unused/strange message
+    
+    // Strange/unused code
     default:
-        return 0;
+        return false;
     }
 }
 
@@ -122,7 +110,7 @@ bool ClientGameCycle::getKeysInput(SDL_Keysym& key) {
             // Removing selection from
             removeSelection();
             return false;
-        
+
         case SDLK_RETURN:
         case SDLK_RETURN2:
         case SDLK_KP_ENTER:
@@ -138,7 +126,7 @@ bool ClientGameCycle::getKeysInput(SDL_Keysym& key) {
             }
             return false;
         }
-    } else{
+    } else {
         switch (key.sym)
         {
         case SDLK_ESCAPE:

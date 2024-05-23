@@ -14,10 +14,11 @@ Musics::Musics() {
     #endif
 
     // Loading all sounds
-    // loadMusic("mus/.mp3", MUS_);  // Template
+    // loadMusic(".mp3", MUS_);  // Template
 
-    loadMusic("mus/main_theme.mp3", MUS_MAIN_THEME);
-    loadMusic("mus/menu_theme.mp3", MUS_MENU_THEME);
+    loadMusic("main_theme.mp3", MUS_MAIN_THEME);
+    loadMusic("menu_theme.mp3", MUS_MENU_THEME);
+    loadMusic("singlePlayer.mp3", MUS_SINGLEPLAYER);
 
     // Checking correction of loaded tracks
     #if CHECK_CORRECTION
@@ -54,9 +55,9 @@ void Musics::playMusic(MUS_names _index) {
 }
 
 // Load track with need name
-void Musics::loadMusic(const char *_name, const MUS_names _index) {
+void Musics::loadMusic(const std::string _name, const MUS_names _index) {
     // Getting selected file data
-    musicsData[_index - 1] = loadObject(_name);
+    musicsData[_index - 1] = loadObject("mus/" + _name);
 
     // Checking correction of loaded data
     #if CHECK_CORRECTION

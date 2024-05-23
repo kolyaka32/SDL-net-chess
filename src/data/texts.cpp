@@ -29,6 +29,21 @@ Texts::Texts() {
 
 // Update translations of all texts
 void Texts::updateTranslation() {
+    updateTitle();
+    
+    // Updating texts
+    for (Uint8 i = 0; i < TXT_count; ++i) {
+        texts[i].updateText();
+    }
+
+    // Updating buttons
+    for (Uint8 i = 0; i < BTN_count; ++i) {
+        textButtons[i].update();
+    }
+}
+
+// Updating title depend on language
+void Texts::updateTitle(){
     // Setting window title
     switch (language) {
     case LNG_ENGLISH:
@@ -46,15 +61,5 @@ void Texts::updateTranslation() {
     case LNG_BELARUSIAN:
         SDL_SetWindowTitle(window, "Шахматы на SDL");
         break;
-    }
-
-    // Updating texts
-    for (Uint8 i = 0; i < TXT_count; ++i) {
-        texts[i].updateText();
-    }
-
-    // Updating buttons
-    for (Uint8 i = 0; i < BTN_count; ++i) {
-        textButtons[i].update();
     }
 }

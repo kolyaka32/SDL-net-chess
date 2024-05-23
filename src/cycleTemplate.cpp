@@ -54,11 +54,6 @@ void CycleTemplate::getInput() {
             }
             break;
 
-        // Resetting selected box
-        case SDL_MOUSEBUTTONUP:
-            selectedBox = 0;
-            break;
-
         // Getting mouse presses
         case SDL_KEYDOWN:
             if (getKeysInput(event.key.keysym)){
@@ -94,10 +89,10 @@ bool CycleTemplate::getMouseInput() {
 bool CycleTemplate::getKeysInput(SDL_Keysym& key) {
     switch (key.sym)
     {
-    /*case SDLK_ESCAPE:
+    case SDLK_ESCAPE:
         // Stopping ruuning by escape
         running = false;
-        return true;*/
+        return true;
 
     default:
         // None-return

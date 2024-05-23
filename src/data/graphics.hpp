@@ -63,7 +63,7 @@ class GraphicsLibrary {
 class Textures : virtual GraphicsLibrary, public virtual DataLoader {
  private:
     // Loading texture with need name
-    void loadTexture(const char *name, IMG_names index);
+    void loadTexture(const std::string name, const IMG_names index);
 
     #if CHECK_CORRECTION
     void checkCorrection();  // Check, if all objects load correct

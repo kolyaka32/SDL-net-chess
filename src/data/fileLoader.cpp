@@ -3,6 +3,8 @@
  * <nik.kazankov.05@mail.ru>
  */
 
+#include "cstring"
+
 #include "../define.hpp"
 #include "dataLoader.hpp"
 #include "../workCodes.hpp"
@@ -19,9 +21,9 @@ DataLoader::DataLoader() {}
 void DataLoader::closeLoader() {}
 
 // System to load object with need name (from file system)
-SDL_RWops *DataLoader::loadObject(const char *_name) {
+SDL_RWops *DataLoader::loadObject(const std::string _name) {
     // Openning need file
-    SDL_RWops *tempRW = SDL_RWFromFile(_name, "r");
+    SDL_RWops *tempRW = SDL_RWFromFile(("../" + _name).std::string::c_str(), "r");
 
     // Checking file correction
     #if CHECK_CORRECTION

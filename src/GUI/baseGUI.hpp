@@ -89,7 +89,7 @@ namespace GUI {
      public:
         GIFAnimation(SDL_Rect destination, ANI_names type);
         ~GIFAnimation();
-        void blit();
+        void update();
     };
     #endif
 

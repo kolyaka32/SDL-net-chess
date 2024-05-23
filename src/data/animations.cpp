@@ -17,8 +17,9 @@ Animations::Animations() {
     #endif
 
     // Loading all animations
-    // loadAnimation("ani/.gif", ANI_);  // Template
+    // loadAnimation(".gif", ANI_);  // Template
 
+    loadAnimation("singlePlayer.gif", ANI_SINGLEPLAYER);  // Template
 
     // Checking correction of all loaded animations
     #if CHECK_CORRECTION
@@ -35,14 +36,15 @@ Animations::~Animations() {
 }
 
 //
-void Animations::loadAnimation(const char *_name, ANI_names _index) {
+void Animations::loadAnimation(const std::string _name, ANI_names _index) {
     // Getting selected animation data
-    SDL_RWops *tempRW = loadObject(_name);
+    SDL_RWops *tempRW = loadObject("ani/" + _name);
 
     // Checking correction of loaded data
     #if CHECK_CORRECTION
     if (!tempRW) {
         SDL_Log("Error with loading animation file '%s' at %u.", _name, _index);
+        throw "Can't load object";
         exit(ERR_FIL_IMG);
     }
     #endif
@@ -52,7 +54,7 @@ void Animations::loadAnimation(const char *_name, ANI_names _index) {
 
     // Checking correction of loaded animation
     #if CHECK_CORRECTION
-    if (animations[i] == nullptr) {
+    if (animations[_index] == nullptr) {
         SDL_Log("Error with loading animation file '%s' at %u.", _name, _index);
         exit(ERR_FIL_IMG);
     }

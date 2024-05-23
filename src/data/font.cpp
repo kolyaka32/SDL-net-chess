@@ -84,7 +84,7 @@ TTF_Font* Font::createFont(textHeight _size) {
 }
 
 // Loading font with need name
-void Font::loadFontData(const char *name) {
+void Font::loadFontData(const std::string name) {
     // Openning font file
     fontData = loadObject(name);
 

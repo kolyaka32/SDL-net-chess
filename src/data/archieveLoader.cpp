@@ -42,13 +42,13 @@ void DataLoader::closeLoader() {
 }
 
 // Loading object with need name
-SDL_RWops *DataLoader::loadObject(const char *_name) {
+SDL_RWops *DataLoader::loadObject(const std::string _name) {
     // Openning need file
-    zip_file_t *file = zip_fopen_encrypted(archive, _name, 0, ARCHIEVE_PASSWORD);
+    zip_file_t *file = zip_fopen_encrypted(archive, _name.std::string::c_str(), 0, ARCHIEVE_PASSWORD);
 
     // Getting states of need file
     zip_stat_t st;
-    zip_stat(archive, _name, 0, &st);
+    zip_stat(archive, _name.std::string::c_str(), 0, &st);
 
     // Checking correction of openned file
     #if CHECK_CORRECTION

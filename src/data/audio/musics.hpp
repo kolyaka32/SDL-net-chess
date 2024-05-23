@@ -14,10 +14,12 @@ enum MUS_names{
 
     MUS_MAIN_THEME,  // Main music for game cycles
     MUS_MENU_THEME,  // Music for menu
+
+    MUS_SINGLEPLAYER,  // Special music for singleplayer mode
 };
 
 // Total counter of music (without NONE)
-#define MUS_count 2
+#define MUS_count 3
 
 
 // Class of all loaded music tracks for play
@@ -27,7 +29,7 @@ class Musics : virtual AudioLibrary, public virtual InitFile, public virtual Dat
     SDL_RWops* musicsData[MUS_count];  // Array of data for music
 
     // Load track with need name
-    void loadMusic(const char* name, const MUS_names num);
+    void loadMusic(const std::string name, const MUS_names num);
 
     // Check correction of loaded tracks
     #if CHECK_CORRECTION

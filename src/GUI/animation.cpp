@@ -25,12 +25,11 @@ GIFAnimation::~GIFAnimation() {
 }
 
 //
-void GIFAnimation::blit() {
-    texture = SDL_CreateTextureFromSurface(renderer, animations[type]->frames[frame]);
-    SDL_RenderCopy(renderer, texture, NULL, &rect);
-    if (SDL_GetTicks64() > prevTick + animations[type]->delays[frame]) {
-        frame = (frame + 1) % animations[type]->count;
-        prevTick = SDL_GetTicks64();
+void GIFAnimation::update() {
+    if (SDL_GetTicks64() > prevTick) {
+        frame = (frame + 1) % data.animations[type]->count;
+        texture = SDL_CreateTextureFromSurface(data.renderer, data.animations[type]->frames[frame]);
+        prevTick = SDL_GetTicks64() + data.animations[type]->delays[frame] / 10;
     }
 }
 

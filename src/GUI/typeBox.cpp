@@ -93,7 +93,7 @@ void typeBox::press(SDL_Keycode code) {
     case SDLK_BACKSPACE:
         // Coping after caret
         if (caret > 0) {
-            for (Uint8 t = --caret; t <= length; t++) {
+            for (Uint8 t = --caret; t <= length; ++t) {
                 buffer[t] = buffer[t+1];
             }
             length--;
@@ -103,7 +103,7 @@ void typeBox::press(SDL_Keycode code) {
     case SDLK_DELETE:
         // Coping after caret
         if (caret < length) {
-            for (Uint8 t = caret + 1; t <= length; t++) {
+            for (Uint8 t = caret + 1; t <= length; ++t) {
                 buffer[t] = buffer[t+1];
             }
             length--;
@@ -113,14 +113,14 @@ void typeBox::press(SDL_Keycode code) {
     // Moving caret
     case SDLK_LEFT:
         if (caret > 1) {
-            std::swap(buffer[caret - 1], buffer[caret - 2]);
+            std::swap(buffer[caret], buffer[caret - 1]);
             caret--;
         }
         break;
 
     case SDLK_RIGHT:
         if (caret + 1 < length) {
-            std::swap(buffer[caret + 1], buffer[caret + 2]);
+            std::swap(buffer[caret], buffer[caret + 1]);
             caret++;
         }
         break;
@@ -128,14 +128,24 @@ void typeBox::press(SDL_Keycode code) {
     // Special keys for faster caret move
     case SDLK_END:
     case SDLK_PAGEDOWN:
-        std::swap(buffer[caret], buffer[length]);
-        caret = length;
+        // Copy all after caret
+        for (Uint8 t = caret; t < length; ++t) {
+            buffer[t] = buffer[t+1];
+        }
+        caret = length - 1;
+        buffer[caret] = '|';
+        swapCaret = ' ';
         break;
 
     case SDLK_HOME:
     case SDLK_PAGEUP:
-        std::swap(buffer[caret], buffer[0]);
+        // Copy all before caret
+        for (Uint8 t = caret; t > 0; --t) {
+            buffer[t+1] = buffer[t];
+        }
         caret = 0;
+        buffer[caret] = '|';
+        swapCaret = ' ';
         break;
 
     // Inserting text from clipboard

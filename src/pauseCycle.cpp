@@ -27,6 +27,11 @@ PauseCycle::PauseCycle() : CycleTemplate(MUS_START_NONE) {}
 // Getting special input (with mousewheel and escape button)
 bool PauseCycle::getAnotherInput(SDL_Event& event) {
     switch (event.type) {
+    // Resetting selected box
+        case SDL_MOUSEBUTTONUP:
+        selectedBox = 0;
+        return false;
+    
     case SDL_MOUSEWHEEL:
         // Mouse position on screen
         SDL_GetMouseState(&mouseX, &mouseY);  // Getting mouse position
@@ -101,21 +106,6 @@ bool PauseCycle::getMouseInput() {
 
     // None-return
     return false;
-}
-
-// Getting button escape from pause
-bool PauseCycle::getKeysInput(SDL_Keysym& key) {
-    switch (key.sym)
-    {
-    case SDLK_ESCAPE:
-        // Stopping ruuning by escape
-        running = false;
-        return true;
-
-    default:
-        // None-return
-        return false;
-    }
 }
 
 // Extra variables

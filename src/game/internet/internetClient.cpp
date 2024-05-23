@@ -47,12 +47,13 @@ Uint8 InternetClientCycle::tryConnect(const char* ipText, const char* portText) 
             // Clearing data
             SDLNet_FreeSocketSet(set);
             return 1;
-        } else {
+        }
+        /* else {
             // Showing message with problems with connection
             showCantConnect();
             SDLNet_FreeSocketSet(set);
             return 0;
-        }
+        }*/
     }
     // Can't resolve this host
     return 0;

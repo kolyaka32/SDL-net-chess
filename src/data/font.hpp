@@ -41,7 +41,7 @@ class Font : virtual FontLibrary, protected virtual DataLoader {
  private:
     SDL_RWops *fontData;                  // Pointer to data of font
     std::vector<DrawFont*> fonts;         // Vector with all fonts
-    void loadFontData(const char *name);  // Loading font with need name
+    void loadFontData(const std::string name);  // Loading font with need name
 
  public:
     Font();   // Loading all need fonts

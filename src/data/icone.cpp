@@ -9,13 +9,13 @@
 
 // Loading single icone
 Icone::Icone() {
-    loadIcone("img/Game.ico");
+    loadIcone("Game.ico");
 }
 
 // Loading icone with need name
-void Icone::loadIcone(const char *name) {
+void Icone::loadIcone(const std::string name) {
     // Getting icone data
-    SDL_RWops* tempRW = loadObject(name);
+    SDL_RWops* tempRW = loadObject("img/" + name);
 
     // Checking created data
     #if CHECK_CORRECTION

@@ -34,7 +34,6 @@ class PauseCycle : public CycleTemplate {
     void draw() const override;                      // Drawing all needed objects
     void update() override;                          // Getting special objects update
     bool getMouseInput() override;                   // Checking for any mouse actions
-    bool getKeysInput(SDL_Keysym& key) override;     // Checking for any keys actions
     bool getAnotherInput(SDL_Event& event) override;  // Getting all rest user input
 
  public:

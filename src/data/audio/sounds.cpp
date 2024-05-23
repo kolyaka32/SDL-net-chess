@@ -16,8 +16,8 @@ Sounds::Sounds() {
     // Loading all sounds
     // loadSound("snd/.wav", SND_);  // Template
 
-    loadSound("snd/turn.wav", SND_TURN);
-    loadSound("snd/reset.wav", SND_RESET);
+    loadSound("turn.wav", SND_TURN);
+    loadSound("reset.wav", SND_RESET);
 
     // Checking correction of loading
     #if CHECK_CORRECTION
@@ -36,14 +36,14 @@ Sounds::~Sounds() {
 }
 
 // Play need sound
-void Sounds::playSound(SND_names _index) {
+void Sounds::playSound(const SND_names _index) {
     Mix_PlayChannel(-1, sounds[_index], 0);
 }
 
 // Load sound with need name
-void Sounds::loadSound(const char *_name, const SND_names _index) {
+void Sounds::loadSound(const std::string _name, const SND_names _index) {
     // Getting selected file data
-    SDL_RWops *tempRW = loadObject(_name);
+    SDL_RWops *tempRW = loadObject("snd/" + _name);
 
     // Checking correction of loaded data
     #if CHECK_CORRECTION

@@ -24,7 +24,7 @@ class Sounds : virtual AudioLibrary, public virtual InitFile, public virtual Dat
     Mix_Chunk *sounds[SND_count];  // Array of all sound effects
 
     // Load sound with need name
-    void loadSound(const char *name, const SND_names num);
+    void loadSound(const std::string name, const SND_names index);
 
     // Check correction of loaded sounds
     #if CHECK_CORRECTION
@@ -34,5 +34,5 @@ class Sounds : virtual AudioLibrary, public virtual InitFile, public virtual Dat
  public:
     Sounds();   // Loading all sounds
     ~Sounds();  // Clear all data
-    void playSound(SND_names track);  // Play need sound
+    void playSound(const SND_names track);  // Play need sound
 };

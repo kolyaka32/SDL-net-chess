@@ -177,4 +177,5 @@ class Texts : public virtual App, public virtual InitFile {
  public:
     Texts();   // Create and update all static texts
     void updateTranslation();  // Update translations of all texts
+    void updateTitle();        // Update window title
 };

@@ -7,6 +7,7 @@
 #include "pauseCycle.hpp"
 
 // Game variants
+#include "game/singlePlayer.hpp"
 #include "game/twoPlayer.hpp"
 #include "game/server.hpp"
 #include "game/client.hpp"
@@ -21,7 +22,7 @@ bool SelectCycle::getMouseInput() {
         return runCycle<PauseCycle>();
     } else if (data.textButtons[BTN_SELECT_SINGLE].in(mouseX, mouseY)) {
         // Staring two-player mode cycle
-        return runCycle<TwoPlayerGameCycle>();
+        return runCycle<SinglePlayerGameCycle>();
     } else if (data.textButtons[BTN_SELECT_TWO].in(mouseX, mouseY)) {
         // Staring two-player mode cycle
         return runCycle<TwoPlayerGameCycle>();
@@ -35,6 +36,20 @@ bool SelectCycle::getMouseInput() {
 
     // None-return
     return false;
+}
+
+// Example for getting keys input
+bool SelectCycle::getKeysInput(SDL_Keysym& key) {
+    switch (key.sym)
+    {
+    case SDLK_ESCAPE:
+        // Running pause menu
+        return runCycle<PauseCycle>();
+
+    default:
+        // None-return
+        return false;
+    }
 }
 
 // Drawing background with all buttons

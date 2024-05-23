@@ -93,9 +93,6 @@ void MessageSender::sendNew(const MESSAGE_types _type, const std::initializer_li
     // Setting it size
     current.size = _list.size() * sizeof(T) + 2;
 
-    // Setting timer to send as fast as can
-    //current.lastSended = 0;
-
     // Creating send data
     current.data = new byte[current.size];
 

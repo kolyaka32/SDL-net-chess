@@ -33,43 +33,43 @@ Textures::Textures() {
     #endif
 
     // Loading all images
-    // loadTexture("img/.png", IMG_);  // Template
+    // loadTexture(".png", IMG_);  // Template
 
     // Graphic interface sprites
-    loadTexture("img/GUI/esc_button.png", IMG_GUI_PAUSE_BUTTON);
-    loadTexture("img/GUI/slider_button.png", IMG_GUI_SLIDER_BUTTON);
-    loadTexture("img/GUI/slider_line.png", IMG_GUI_SLIDER_LINE);
-    loadTexture("img/GUI/type_box.png", IMG_GUI_TYPE_BOX);
+    loadTexture("GUI/esc_button.png", IMG_GUI_PAUSE_BUTTON);
+    loadTexture("GUI/slider_button.png", IMG_GUI_SLIDER_BUTTON);
+    loadTexture("GUI/slider_line.png", IMG_GUI_SLIDER_LINE);
+    loadTexture("GUI/type_box.png", IMG_GUI_TYPE_BOX);
 
     // Base flags in settings
-    loadTexture("img/GUI/Flag_USA.png", IMG_GUI_FLAG_USA);
-    loadTexture("img/GUI/Flag_RUS.png", IMG_GUI_FLAG_RUS);
-    loadTexture("img/GUI/Flag_GER.png", IMG_GUI_FLAG_GER);
-    loadTexture("img/GUI/Flag_BEL.png", IMG_GUI_FLAG_BEL);
+    loadTexture("GUI/Flag_USA.png", IMG_GUI_FLAG_USA);
+    loadTexture("GUI/Flag_RUS.png", IMG_GUI_FLAG_RUS);
+    loadTexture("GUI/Flag_GER.png", IMG_GUI_FLAG_GER);
+    loadTexture("GUI/Flag_BEL.png", IMG_GUI_FLAG_BEL);
 
     // Main game part
     // Game field
-    loadTexture("img/chess-pack-1/chessboard.png", IMG_GAME_FIELD);
+    loadTexture("chess-pack-1/chessboard.png", IMG_GAME_FIELD);
 
     // Game figures
     // White figures
-    loadTexture("img/chess-pack-1/w-pawn.png", IMG_GAME_WHITE_PAWN);
-    loadTexture("img/chess-pack-1/w-bishop.png", IMG_GAME_WHITE_BISHOP);
-    loadTexture("img/chess-pack-1/w-rook.png", IMG_GAME_WHITE_ROOK);
-    loadTexture("img/chess-pack-1/w-knight.png", IMG_GAME_WHITE_KNIGHT);
-    loadTexture("img/chess-pack-1/w-queen.png", IMG_GAME_WHITE_QUEEN);
-    loadTexture("img/chess-pack-1/w-king.png", IMG_GAME_WHITE_KING);
+    loadTexture("chess-pack-1/w-pawn.png", IMG_GAME_WHITE_PAWN);
+    loadTexture("chess-pack-1/w-bishop.png", IMG_GAME_WHITE_BISHOP);
+    loadTexture("chess-pack-1/w-rook.png", IMG_GAME_WHITE_ROOK);
+    loadTexture("chess-pack-1/w-knight.png", IMG_GAME_WHITE_KNIGHT);
+    loadTexture("chess-pack-1/w-queen.png", IMG_GAME_WHITE_QUEEN);
+    loadTexture("chess-pack-1/w-king.png", IMG_GAME_WHITE_KING);
 
     // Black figures
-    loadTexture("img/chess-pack-1/b-pawn.png", IMG_GAME_BLACK_PAWN);
-    loadTexture("img/chess-pack-1/b-bishop.png", IMG_GAME_BLACK_BISHOP);
-    loadTexture("img/chess-pack-1/b-rook.png", IMG_GAME_BLACK_ROOK);
-    loadTexture("img/chess-pack-1/b-knight.png", IMG_GAME_BLACK_KNIGHT);
-    loadTexture("img/chess-pack-1/b-queen.png", IMG_GAME_BLACK_QUEEN);
-    loadTexture("img/chess-pack-1/b-king.png", IMG_GAME_BLACK_KING);
+    loadTexture("chess-pack-1/b-pawn.png", IMG_GAME_BLACK_PAWN);
+    loadTexture("chess-pack-1/b-bishop.png", IMG_GAME_BLACK_BISHOP);
+    loadTexture("chess-pack-1/b-rook.png", IMG_GAME_BLACK_ROOK);
+    loadTexture("chess-pack-1/b-knight.png", IMG_GAME_BLACK_KNIGHT);
+    loadTexture("chess-pack-1/b-queen.png", IMG_GAME_BLACK_QUEEN);
+    loadTexture("chess-pack-1/b-king.png", IMG_GAME_BLACK_KING);
 
     // Point, where figure can go
-    loadTexture("img/chess-pack-1/point.png", IMG_GAME_POINT_MOVE_TO);
+    loadTexture("chess-pack-1/point.png", IMG_GAME_POINT_MOVE_TO);
 
     // Resetting color for figures
     for (Uint8 i = IMG_GAME_WHITE_PAWN; i <= IMG_GAME_BLACK_KING; ++i) {
@@ -90,14 +90,15 @@ Textures::~Textures() {
 }
 
 // Loading texture with need name
-void Textures::loadTexture(const char *_name, IMG_names _index) {
+void Textures::loadTexture(const std::string _name, const IMG_names _index) {
     // Getting selected picture data
-    SDL_RWops *tempRW = loadObject(_name);
+    SDL_RWops *tempRW = loadObject("img/" + _name);
 
     // Checking correction of loaded data
     #if CHECK_CORRECTION
     if (!tempRW) {
         SDL_Log("Error with loading image file '%s' at %u.", _name, _index);
+        throw "Error with loading image file";
         exit(ERR_FIL_IMG);
     }
     #endif

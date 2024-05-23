@@ -52,13 +52,13 @@ Internet::~Internet() {
 void Internet::showDisconect() {
     switch (data.language) {
     case LNG_ENGLISH:
-        //SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING,
-        //    "Disconect", "Your connection lost, server disconect", data.window);
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING,
+            "Disconect", "Your connection lost, server disconect", data.window);
         break;
 
     case LNG_RUSSIAN:
-        //SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING,
-        //    "Соединение потеряно", "Соединение потерено, сервер отключён", data.window);
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING,
+            "Соединение потеряно", "Соединение потерено, сервер отключён", data.window);
         break;
     }
 }
@@ -107,16 +107,32 @@ bool Internet::checkGetMessage(){
     if (SDLNet_UDP_Recv(socket, recieveData)) {
         // Sending, that message was applied
         sendWithoutApply(MES_APPL, {recieveData->data[1]});
-
-        // Getting data from message
-        if (getData()) {
-            // Stopping after special commands
-            return true;
-        }
+        
         // Resetting arriving timer
         lastMessageArrive = SDL_GetTicks64() + MESSAGE_GET_TIMEOUT;
+
+        // Checking on default messages
+        switch (recieveData->data[0])
+        {
+        // Code of nothing
+        case MES_NONE:
+            return false;
+
+        // Code of closing game - going to menu
+        case MES_STOP:
+            showStopConnection();
+            return true;
+
+        // Code of applaying last message
+        case MES_APPL:
+            applyMessage(recieveData->data[1]);
+            return false;
+
+        // Code of other messages
+        default:
+            return getData();
+        }
     }
-    // None-return
     return false;
 }
 

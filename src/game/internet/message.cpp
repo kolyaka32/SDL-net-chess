@@ -14,9 +14,14 @@ MessageSender::MessageSender() {
     sendData.maxlen = INTERNET_BUFFER;
 }
 
-//
+// Clearing data
 MessageSender::~MessageSender() {
-
+    // Clearing dynamic memory
+    for(Uint8 i=0; i < confirmMessages.size(); ++i){
+        delete[] confirmMessages[i].data;
+    }
+    // Clearing rest messages
+    confirmMessages.clear();
 }
 
 //

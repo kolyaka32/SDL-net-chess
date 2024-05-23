@@ -18,7 +18,7 @@
 class DataLoader : public virtual App {
  protected:
     // Load object with need name
-    SDL_RWops *loadObject(const char *name);
+    SDL_RWops *loadObject(const std::string name);
  public:
     DataLoader();        // Initialasing system to load objects (openning archieve)
     void closeLoader();  // Closing loader after loading all
