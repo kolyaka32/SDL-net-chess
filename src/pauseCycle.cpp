@@ -36,9 +36,11 @@ bool PauseCycle::getAnotherInput(SDL_Event& event) {
         // Mouse position on screen
         SDL_GetMouseState(&mouseX, &mouseY);  // Getting mouse position
         // Checking scroll on sliders
-        if (musicSlider.scroll(event.wheel.y, mouseX, mouseY)) {}
-        else
-            soundSlider.scroll(event.wheel.y, mouseX, mouseY);
+        if (musicSlider.scroll(event.wheel.y, mouseX, mouseY)) {
+            Mix_VolumeMusic(data.musicVolume);
+        } else if(soundSlider.scroll(event.wheel.y, mouseX, mouseY)) {
+            Mix_Volume(-1, data.soundsVolume);
+        }
         return false;
     
     default:
