@@ -33,6 +33,7 @@ namespace GUI {
         GUItemplate();
         virtual void blit() const;
         virtual bool in(const int mouseX, const int mouseY) const;
+        
     };
 
 

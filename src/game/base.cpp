@@ -17,8 +17,7 @@ GameCycle::~GameCycle() {}
 // Example for getting keys input
 bool GameCycle::getKeysInput(SDL_Keysym& key) {
     // Searching for key press
-    switch (key.sym)
-    {
+    switch (key.sym) {
     case SDLK_ESCAPE:
         // Clearing selection by escape
         board.resetSelection();

@@ -75,7 +75,7 @@ bool ClientGameCycle::getData() {
             }
         }
         return 0;
-    
+
     // Strange/unused code
     default:
         return false;
@@ -102,10 +102,9 @@ bool ClientGameCycle::getAnotherInput(SDL_Event& event) {
 // Example for getting keys input
 bool ClientGameCycle::getKeysInput(SDL_Keysym& key) {
     // Check game variant
-    if(waitStart){
+    if (waitStart) {
         // Entering mode
-        switch (key.sym)
-        {
+        switch (key.sym) {
         case SDLK_ESCAPE:
             // Removing selection from
             removeSelection();
@@ -127,8 +126,7 @@ bool ClientGameCycle::getKeysInput(SDL_Keysym& key) {
             return false;
         }
     } else {
-        switch (key.sym)
-        {
+        switch (key.sym) {
         case SDLK_ESCAPE:
             // Clearing selection by escape
             board.resetSelection();
@@ -146,7 +144,7 @@ bool ClientGameCycle::getKeysInput(SDL_Keysym& key) {
 }
 
 // Updating text caret
-void ClientGameCycle::update(){
+void ClientGameCycle::update() {
     // Check, if entering text and need to blink caret in type box
     if (waitStart && selectedBox && (SDL_GetTicks64() > lastTypeBoxUpdate)) {
         // Updating type box for show place to type

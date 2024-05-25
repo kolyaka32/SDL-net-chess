@@ -31,7 +31,7 @@ class ClientGameCycle : public InternetClientCycle {
     // Getting special user input
     bool getMouseInput() override;  // Checking for any need mouse action
     bool getKeysInput(SDL_Keysym& key) override;  // Checking for any keys actions
-    bool getAnotherInput(SDL_Event& event) override;  
+    bool getAnotherInput(SDL_Event& event) override;  // Getting rest input
     void draw() const override;     // Drawing all needed objects
     void update() override;         // Special update
 

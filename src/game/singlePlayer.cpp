@@ -1,14 +1,19 @@
+/*
+ * Copyright (C) 2024, Kazankov Nikolay 
+ * <nik.kazankov.05@mail.ru>
+ */
+
 #include "singlePlayer.hpp"
 
 
 //
 SinglePlayerGameCycle::SinglePlayerGameCycle()
-: CycleTemplate(MUS_MAIN_THEME), width(data.animations[0]->w), 
-height(data.animations[0]->h) {
+: CycleTemplate(MUS_MAIN_THEME), width(data.animations[0]->w), height(data.animations[0]->h) {
     frame = 0;
     prevFrameUpdate = SDL_GetTicks64() + 400;
 }
 
+// Resetting data after all animations
 SinglePlayerGameCycle::~SinglePlayerGameCycle() {
     // Resetting title
     data.updateTitle();
@@ -27,12 +32,12 @@ void SinglePlayerGameCycle::update() {
     // Checking, if need to change state
     if (SDL_GetTicks64() > prevFrameUpdate) {
         // Changing length until reach need width
-        if(currentWidth < width){
+        if (currentWidth < width) {
             // Increasing field width
             currentWidth++;
-            
+
             // Waiting for full width
-            if(currentWidth == width){
+            if (currentWidth == width) {
                 // Setting updated window title
                 switch (data.language) {
                 case LNG_ENGLISH:
@@ -84,23 +89,22 @@ void SinglePlayerGameCycle::draw() const {
     srand(currentWidth);
 
     //
-    for(Uint16 y=0; y < currentHeight; ++y){
-        for(Uint16 x=0; x < currentWidth; ++x){
+    for (Uint16 y=0; y < currentHeight; ++y) {
+        for (Uint16 x=0; x < currentWidth; ++x) {
             // Drawing need figure
             SDL_FRect dest = {x * cellLength + LETTER_LINE, y * cellLength  + 182, cellLength, cellLength};
 
             // Drawing rect for field
-            if((x+y)%2){
+            if ((x+y)%2) {
                 data.setColor(FIELD_LIGHT);
-            }
-            else{
+            } else {
                 data.setColor(FIELD_DARK);
             }
 
             SDL_RenderFillRectF(data.renderer, &dest);
 
             // Checkig, if need to make free cell
-            if(currentWidth == width || (rand() % width < currentWidth)){
+            if (currentWidth == width || (rand() % width < currentWidth)) {
                 SDL_Texture* curTexture = data.textures[IMG_GAME_BLACK_PAWN + rand() % 6];
 
                 //
