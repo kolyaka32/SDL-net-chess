@@ -33,25 +33,26 @@ namespace GUI {
         GUItemplate();
         virtual void blit() const;
         virtual bool in(const int mouseX, const int mouseY) const;
-        
+        virtual void updateLocation();
     };
 
 
     // Static text on screen with drawing and updating functions
     class StaticText : public GUItemplate {
      private:
-        const static Uint8 BUFFER_SIZE = 50;  // Length of buffers for text
-        const char *text;                     // Text to show on screen
+        const char *text;                     // Text to create from
         const float posX, posY;               // Relative positions on screen
         const ALIGNMENT_types aligment;       // Aligment type to improve displasment
         const SDL_Color color;                // Base draw color
         TTF_Font *font;                       // Font to create texture
+        char *bufferText;                     // Current text to show
         friend class TextButton;              // Allowing textbutton to take data
      public:
         StaticText(const char* text, textHeight size, float X,
             float Y, SDL_Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
         ~StaticText();
-        void updateText(int number = 0);  // Create new texture with displasment '%' to enter number to display
+        void updateLocation() override;
+        void updateText(const unsigned count=0, ...);  // Create new texture
     };
 
 
@@ -162,7 +163,7 @@ namespace GUI {
      public:
         explicit TextButton(const StaticText &top);  // Create new button
         void blit() const override;                  // Drawing current button
-        void update();                               // Update object to match text sizes
+        void updateLocation() override;              // Update object to match text sizes
     };
 
 }  // namespace GUI

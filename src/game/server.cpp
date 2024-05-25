@@ -9,7 +9,7 @@
 // Setting texture of port box
 ServerGameCycle::ServerGameCycle() {
     // Updating text of created port
-    data.texts[TXT_SERVER_PORT].updateText(serverPort);
+    data.texts[TXT_SERVER_PORT].updateText(1, serverPort);
 }
 
 //

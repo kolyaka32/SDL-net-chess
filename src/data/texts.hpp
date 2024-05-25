@@ -95,67 +95,67 @@ class Texts : public virtual App, public virtual InitFile {
     // All static texts in game
     GUI::StaticText texts[TXT_count] = {
         // Selection menu
-        {"Chess\nШахматы\nSchach\nШахматы\n",
+        {"Chess\0Шахматы\0Schach\0Шахматы",
             30, 0.5, 0.1, WHITE},
-        {"Singleplayer\nОдиночная игра\nEinzelspiel\nАдзіночная гульня\n",
+        {"Singleplayer\0Одиночная игра\0Einzelspiel\0Адзіночная гульня",
             24, 0.5, 0.3, WHITE},
-        {"Two players\nДва игрока\nZwei Spieler\nДва гульца\n",
+        {"Two players\0Два игрока\0Zwei Spieler\0Два гульца",
             24, 0.5, 0.5, WHITE},
-        {"Create server\nСоздать сервер\nServer erstellen\nСтварыць сервер\n",
+        {"Create server\0Создать сервер\0Server erstellen\0Стварыць сервер",
             24, 0.5, 0.7, WHITE},
-        {"Connect\nПрисоединиться\nBeitreten\nДалучыцца\n",
+        {"Connect\0Присоединиться\0Beitreten\0Далучыцца",
             24, 0.5, 0.9, WHITE},
 
         // Pause menu
-        {"Pause\nПауза\nPause\nПаўза\n",
+        {"Pause\0Пауза\0Pause\0Паўза",
             30, 0.5, 0.1},
-        {"Music\nМузыка\nDie Musik\nМузыка\n",
+        {"Music\0Музыка\0Die Musik\0Музыка",
             30, 0.5, 0.68},
-        {"Sounds\nЗвуки\nGeräusche\nГук\n",
+        {"Sounds\0Звуки\0Geräusche\0Гук",
             30, 0.5, 0.83},
 
         // Game turnes
-        {"First player turn\nХод первого игрока\n-\n",
+        {"First player turn\0Ход первого игрока\0-\0-",
             24, 0.5, 0.1, WHITE},
-        {"Second player turn\nХод второго игрока\n-\n",
+        {"Second player turn\0Ход второго игрока\0-\0-",
             24, 0.5, 0.1, WHITE},
-        {"Your turn\nВаш ход\n-\n",
+        {"Your turn\0Ваш ход\0-\0-",
             24, 0.5, 0.1, WHITE},
-        {"Wait\nОжидайте\n-\n",
+        {"Wait\0Ожидайте\0-\0-",
             24, 0.5, 0.1, WHITE},
 
         // Game end texts
-        {"Win!\nПобеда!\n-\n",
+        {"Win!\0Победа!\0-\0",
             30, 0.5, 0.4, WHITE},
-        {"Fist player win!\nПервый игрок выйграл!\n-\n",
+        {"Fist player win!\0Первый игрок выйграл!\0-\0-",
             30, 0.5, 0.4, WHITE},
-        {"Second player win!\nВторой игрок выйграл!\n-\n",
+        {"Second player win!\0Второй игрок выйграл!\0-\0-",
             30, 0.5, 0.4, WHITE},
-        {"You loose...\nВы проиграли...\n-\n-\n",
+        {"You loose...\0Вы проиграли...\0-\0-",
             30, 0.5, 0.4, WHITE},
-        {"Nobody win\nНичья\n-\n-\n",
+        {"Nobody win\0Ничья\0-\0-",
             30, 0.5, 0.4, WHITE},
 
         // Buttons texts
-        {"Restart\nПерезапустить\n-\n-\n",
+        {"Restart\0Перезапустить\0-\0-",
             24, 0.5, 0.5, WHITE},
-        {"Exit to menu\nВыйти в меню\n-\n-\n",
+        {"Exit to menu\0Выйти в меню\0-\0-",
             24, 0.5, 0.6, WHITE},
-        {"Connect\nПрисоединится\n-\n-\n",
+        {"Connect\0Присоединится\0-\0-",
             24, 0.5, 0.7, WHITE},
-        {"Cancel\nОтмена\n-\n-\n",
+        {"Cancel\0Отмена\0-\0-",
             24, 0.5, 0.9, WHITE},
 
         // Server texts
-        {"Wait for connection\nОжидайте подключения\n-\n-\n",
+        {"Wait for connection\0Ожидайте подключения\0-\0-",
             30, 0.5, 0.2, WHITE},
-        {"Your port: %\nВаш порт: %\n-\n-\n",
+        {"Your port: %u\0Ваш порт: %u\0-%u\0-%u",
             30, 0.5, 0.4, WHITE},
 
         // Client texts
-        {"Enter IP:\nВведите IP:\n-\n-\n",
+        {"Enter IP:\0Введите IP:\0-\0-",
             30, 0.5, 0.1, WHITE},
-        {"Enter port:\nВведите порт:\n-\n-\n",
+        {"Enter port:\0Введите порт:\0-\0-",
             30, 0.5, 0.4, WHITE},
     };
 
