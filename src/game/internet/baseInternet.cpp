@@ -14,6 +14,7 @@ InternetLibrary::InternetLibrary() {
     if (SDLNet_Init()) {
         #if CHECK_CORRECTION
         SDL_Log("Couldn't initialise internet library: %s\n", SDLNet_GetError());
+        throw initException("Couldn't initialise internet library");
         exit(ERR_SDL_NET);
         #endif
     }

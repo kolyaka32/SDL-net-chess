@@ -63,6 +63,7 @@ void Musics::loadMusic(const std::string _name, const MUS_names _index) {
     #if CHECK_CORRECTION
     if (!musicsData[_index - 1]) {
         SDL_Log("Error with loading music file '%s' at %u.", _name, _index - 1);
+        throw loadException("Error with loading music file");
         exit(ERR_FIL_MUS);
     }
     #endif
@@ -74,6 +75,7 @@ void Musics::loadMusic(const std::string _name, const MUS_names _index) {
     #if CHECK_CORRECTION
     if (musics[_index - 1] == nullptr) {
         SDL_Log("Error with loading music file '%s' at %u.", _name, _index - 1);
+        throw loadException("Error with loading music file");
         exit(ERR_FIL_MUS);
     }
     #endif
@@ -86,6 +88,7 @@ void Musics::checkCorrection() {
     for (Uint8 i = 0; i < MUS_count; ++i) {
         if (musics[i] == NULL) {
             SDL_Log("Wrong music track at %u.", i);
+            throw loadException("Wrong count of music files");
             exit(ERR_FIL_MUS);
         }
     }

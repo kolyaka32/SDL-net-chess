@@ -467,19 +467,17 @@ Uint8 Board::placeFigure(const coord _x, const coord _y) {
             break;
         }
 
-    case FIG_BLACK_PAWN:
+    default:
         // Check, if on last line - convert into queen
-        if (_y == FIELD_WIDTH-1) {
+        if (FIG_BLACK_PAWN && _y == FIELD_WIDTH - 1) {
             activeCell.type = FIG_BLACK_QUEEN;
         }
 
-    case FIG_WHITE_PAWN:
         // Check, if on last line - convert into queen
-        if (_y == 0) {
+        if (FIG_WHITE_PAWN && _y == 0) {
             activeCell.type = FIG_WHITE_QUEEN;
         }
 
-    default:
         // Setting new position to cell
         figures[getPos(_x, _y)] = activeCell.type;
         figures[activeCell.pos] = FIG_NONE;

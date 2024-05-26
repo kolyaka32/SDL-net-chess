@@ -20,8 +20,8 @@ void Icone::loadIcone(const std::string name) {
     // Checking created data
     #if CHECK_CORRECTION
     if (tempRW == nullptr) {
-        // Showing error
         SDL_Log("Can't load game icone, %s", SDL_GetError());
+        throw loadException("Error with loading game icone");
         exit(ERR_FIL_ICO);
     }
     #endif
@@ -35,8 +35,8 @@ void Icone::loadIcone(const std::string name) {
     // Checking created image
     #if CHECK_CORRECTION
     if (iconeImage == nullptr) {
-        // Showing error
         SDL_Log("Can't load game icone, %s", SDL_GetError());
+        throw loadException("Error with loading game icone");
         exit(ERR_FIL_ICO);
     }
     #endif

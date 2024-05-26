@@ -26,7 +26,7 @@ class CycleTemplate {
 
     // Cycle functions for cycle (should be overriden)
     // Main run functions
-    void getInput();     // Getting all user input
+    void getInput();            // Getting all user input
     virtual void draw() const;  // Draw all need objects
     virtual void update();      // Getting special objects update (if need)
 
