@@ -45,6 +45,9 @@ class CycleTemplate {
 // Realisation of running internal cycle
 template <class Cycle>
 bool CycleTemplate::runCycle() {
+    // Entering cycle for correct updations
+    data.updateList.enterCycle();
+
     // Launching new cycle
     Cycle cycle;
 
@@ -60,6 +63,9 @@ bool CycleTemplate::runCycle() {
     if (!data.running) {
         return true;
     }
+
+    // Exiting updation cycle
+    data.updateList.exitCycle();
 
     // Normal return
     return false;

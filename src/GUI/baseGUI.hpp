@@ -8,6 +8,7 @@
 #include "../include.hpp"
 #include "../define.hpp"
 #include "../dataTypes.hpp"
+#include "../data/languages.hpp"
 #include "../data/graphics.hpp"
 #include "../data/font.hpp"
 #include "../data/animations.hpp"
@@ -52,7 +53,8 @@ namespace GUI {
             float Y, SDL_Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
         ~StaticText();
         void updateLocation() override;
-        void updateText(const unsigned count=0, ...);  // Create new texture
+        void updateLocationArgs(const unsigned count, ...);  // Create new texture
+        void updateTexture();  // Updating texture
     };
 
 
@@ -68,9 +70,9 @@ namespace GUI {
         // Create slide with need line and button images
         Slider(float X, float Y, linkType &controlData, IMG_names lineImage = IMG_GUI_SLIDER_LINE,
             IMG_names buttonImage = IMG_GUI_SLIDER_BUTTON, linkType max = 255);
-        void setValue(int mouseX);                              // Setting new state from mouse position
-        bool scroll(Sint32 wheelY, int mouseX, int mouseY);     // Checking mouse wheel action
-        void blit() const override;                             // Drawing slider with need button position
+        void setValue(int mouseX);                           // Setting new state from mouse position
+        bool scroll(Sint32 wheelY, int mouseX, int mouseY);  // Checking mouse wheel action
+        void blit() const override;                          // Drawing slider with need button position
     };
 
 
@@ -153,17 +155,20 @@ namespace GUI {
      public:
         Backplate(const SDL_Rect rect, const Uint8 radius, const Uint8 border,
             const SDL_Color frontColor = {175, 175, 175, 255}, const SDL_Color backColor = BLACK);
+        Backplate(const Uint8 radius, const Uint8 border, const SDL_Color frontColor = {175, 175, 175, 255}, 
+            const SDL_Color backColor = BLACK);
         ~Backplate();
     };
 
     // Class of buttons with text on it
     class TextButton : public Backplate {
      private:
-        const StaticText &topText;                   // Pointer to text on this button (shortcut)
+        const StaticText topText;
      public:
-        explicit TextButton(const StaticText &top);  // Create new button
-        void blit() const override;                  // Drawing current button
-        void updateLocation() override;              // Update object to match text sizes
+        TextButton(const char* text, textHeight size, float X, float Y, 
+            SDL_Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
+        void blit() const override;      // Drawing current button
+        void updateLocation() override;  // Update object to match text sizes
     };
 
 }  // namespace GUI

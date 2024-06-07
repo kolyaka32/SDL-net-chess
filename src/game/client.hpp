@@ -19,6 +19,16 @@ class ClientGameCycle : public InternetClientCycle {
 
     bool getData() override;  // Overloaded function of getting internet data
     void removeSelection();    //
+    
+    // GUI objects
+    GUI::StaticText enterIPText{"Enter IP:\0Введите IP:\0-\0-",
+       30, 0.5, 0.1, WHITE};
+    GUI::StaticText enterPortText{"Enter port:\0Введите порт:\0-\0-",
+       30, 0.5, 0.4, WHITE};
+    GUI::TextButton cancelButton{"Cancel\0Отмена\0-\0-",
+       24, 0.5, 0.9, WHITE};
+    GUI::TextButton connectButton{"Connect\0Присоединится\0-\0-",
+       24, 0.5, 0.7, WHITE};
 
     // Input fields
     GUI::typeBox typeBoxes[2]{

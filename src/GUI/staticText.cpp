@@ -16,7 +16,10 @@ StaticText::StaticText(const char* _text, textHeight _height, float _X, float _Y
     font = data.createFont(_height);
 
     // Updating rect height for correct button
-    updateText();
+    updateLocation();
+
+    // Adding item to global updation list
+    data.updateList.add(this);
 }
 
 // Clearing rest data
@@ -31,7 +34,17 @@ StaticText::~StaticText() {
 }
 
 //
-void StaticText::updateText(const unsigned count, ...) {
+void StaticText::updateTexture() {
+    SDL_Surface *surface = TTF_RenderUTF8_Solid(font, bufferText, color);
+    texture = SDL_CreateTextureFromSurface(data.renderer, surface);
+    SDL_FreeSurface(surface);
+    SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
+    rect.x = SCREEN_WIDTH * posX - (rect.w * aligment / 2);
+    rect.y = SCREEN_HEIGHT * posY - rect.h / 2;
+}
+
+//
+void StaticText::updateLocationArgs(const unsigned count, ...) {
     // Clearing previous buffer
     if(bufferText){
         delete[] bufferText;
@@ -44,11 +57,12 @@ void StaticText::updateText(const unsigned count, ...) {
         // Parsing text to it end
         for(; *start++;);
     }
-    // Getting need size
-    size_t size = strlen(start) + 1 + count;
-
+    // Getting arguments
     va_list args;
     va_start(args, count);
+    
+    // Getting size of string
+    size_t size = _vscprintf(start, args);
 
     // Creating buffer for text
     bufferText = new char[size];
@@ -57,15 +71,31 @@ void StaticText::updateText(const unsigned count, ...) {
     va_end(args);
 
     // Updating texture
-    updateLocation();
+    updateTexture();
 }
 
-// Text texture
-void StaticText::updateLocation(){
-    SDL_Surface *surface = TTF_RenderUTF8_Solid(font, bufferText, color);
-    texture = SDL_CreateTextureFromSurface(data.renderer, surface);
-    SDL_FreeSurface(surface);
-    SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
-    rect.x = SCREEN_WIDTH * posX - (rect.w * aligment / 2);
-    rect.y = SCREEN_HEIGHT * posY - rect.h / 2;
+//
+void StaticText::updateLocation() {
+    // Clearing previous buffer
+    if(bufferText){
+        delete[] bufferText;
+        bufferText = nullptr;
+    }
+
+    // Finding need text for this language
+    const char* start = text;
+    for (Uint8 lan = LNG_ENGLISH; lan != data.language; ++lan) {
+        // Parsing text to it end
+        for(; *start++;);
+    }
+
+    // Getting need size
+    size_t size = strlen(start) + 1;
+
+    // Creating buffer for text
+    bufferText = new char[size];
+    strcpy(bufferText, start);
+
+    // Updating texture
+    updateTexture();
 }

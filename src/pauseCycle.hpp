@@ -16,10 +16,17 @@ class PauseCycle : public CycleTemplate {
     timer nextSound = 0;  // Time to next play sound
 
     // GUI objects
-    // Slider for set music volume
+    GUI::StaticText titleText{"Pause\0Пауза\0Pause\0Паўза",
+        30, 0.5, 0.1};
+    GUI::StaticText musicText{"Music\0Музыка\0Die Musik\0Музыка",
+        30, 0.5, 0.68};
+    GUI::StaticText soundText{"Sounds\0Звуки\0Geräusche\0Гук",
+        30, 0.5, 0.83};
+    
+    // Sliders
     GUI::Slider<Uint8> musicSlider{0.5, 0.75, data.musicVolume};
-    // Slider for set sounds volume
     GUI::Slider<Uint8> soundSlider{0.5, 0.9, data.soundsVolume};
+
     // Flags for select language
     GUI::ImageButton flags[LNG_count] = {
         {0.3, 0.25, IMG_GUI_FLAG_USA},

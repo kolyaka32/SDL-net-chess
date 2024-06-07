@@ -160,12 +160,12 @@ bool ClientGameCycle::getMouseInput() {
     if (waitStart) {
         // Connecting menu
         // Connect to server button
-        if (data.textButtons[BTN_GAME_CONNECT].in(mouseX, mouseY)) {
+        if (connectButton.in(mouseX, mouseY)) {
             removeSelection();
             // Trying connect at address
             tryConnect(typeBoxes[0].buffer, typeBoxes[1].buffer);
             return 0;
-        } else if (data.textButtons[BTN_GAME_CANCEL].in(mouseX, mouseY)) {
+        } else if (cancelButton.in(mouseX, mouseY)) {
             // Returning to menu
             removeSelection();
             return 1;
@@ -215,7 +215,7 @@ bool ClientGameCycle::getMouseInput() {
             }
         } else {
             // Checking exit to menu
-            if (data.textButtons[BTN_GAME_MENU].in(mouseX, mouseY)) {
+            if (menuButton.in(mouseX, mouseY)) {
                 return 1;
             }
         }
@@ -233,16 +233,16 @@ void ClientGameCycle::draw() const {
         SDL_RenderClear(data.renderer);
 
         // Draw text plates
-        data.texts[TXT_CLIENT_ENTER_IP].blit();
-        data.texts[TXT_CLIENT_ENTER_PORT].blit();
+        enterIPText.blit();
+        enterPortText.blit();
 
         // Drawing entering fields
         typeBoxes[0].blit();
         typeBoxes[1].blit();
 
         // Drawing button for connect and exit
-        data.textButtons[BTN_GAME_CONNECT].blit();
-        data.textButtons[BTN_GAME_CANCEL].blit();
+        connectButton.blit();
+        cancelButton.blit();
 
         // Rendering at screen
         data.render();
@@ -255,7 +255,7 @@ void ClientGameCycle::draw() const {
         letters.blit();
 
         // Drawing player state
-        data.texts[TXT_GAME_TURN_THIS + waitTurn].blit();
+        playersTurnsTexts[waitTurn + 2].blit();
 
         // Bliting game state, if need
         if (endState > END_TURN) {
@@ -265,20 +265,20 @@ void ClientGameCycle::draw() const {
             // Bliting text with end state
             switch (endState) {
             case END_WIN:
-                data.texts[TXT_END_LOOSE].blit();
+                looseText.blit();
                 break;
 
             case END_LOOSE:
-                data.texts[TXT_END_WIN].blit();
+                winText.blit();
                 break;
 
             case END_NOBODY:
-                data.texts[TXT_END_NOBODY].blit();
+                nobodyWinText.blit();
                 break;
             }
 
             // Blitting buttons (without restart option)
-            data.textButtons[BTN_GAME_MENU].blit();
+            menuButton.blit();
         }
 
         // Bliting all to screen

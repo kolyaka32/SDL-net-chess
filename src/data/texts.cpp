@@ -5,6 +5,50 @@
 
 #include "texts.hpp"
 
+
+// Class of updation
+UpdateList::UpdateList() {
+
+}
+
+UpdateList::~UpdateList() {
+
+}
+
+// Adding new pointer to array
+void UpdateList::add(GUI::GUItemplate* object) {
+    // Adding new item, if possible
+    if (size < maxSize) {
+        languageUpdateList[size] = object;
+        size++; 
+    }
+}
+
+// Entering internal cycle
+void UpdateList::enterCycle() {
+    // Setting new null elemnt to control
+    languageUpdateList[size] = nullptr;
+    size++;
+}
+
+// Exiting internal cycle
+void UpdateList::exitCycle() {
+    // Clearing allow to previous nullptr
+    for (; (size > 0) && (languageUpdateList[size]); --size);
+}
+
+// Updating all allowable objects
+void UpdateList::update() {
+   // Updating all objects
+    for (Uint8 i=0; i < size; ++i) {
+        if(languageUpdateList[i]){
+            languageUpdateList[i]->updateLocation();
+        }
+    }
+}
+
+
+// Texts class
 // Global static texts
 Texts::Texts() {
     updateTitle();
@@ -15,14 +59,7 @@ void Texts::updateTranslation() {
     updateTitle();
     
     // Updating texts
-    for (Uint8 i = 0; i < TXT_count; ++i) {
-        texts[i].updateText();
-    }
-
-    // Updating buttons
-    for (Uint8 i = 0; i < BTN_count; ++i) {
-        textButtons[i].updateLocation();
-    }
+    updateList.update();
 }
 
 // Updating title depend on language

@@ -14,6 +14,11 @@ Backplate::Backplate(const SDL_Rect _rect, const Uint8 _rad, const Uint8 _bor, c
     updatePlate(_rect);
 }
 
+Backplate::Backplate(const Uint8 _rad, const Uint8 _bor, const SDL_Color _frontColor, const SDL_Color _backColor)
+: frontColor(_frontColor), backColor(_backColor), rad(_rad), bor(_bor) {
+    rect = {0, 0, 0, 0};
+}
+
 //
 Backplate::~Backplate() {
     SDL_DestroyTexture(texture);

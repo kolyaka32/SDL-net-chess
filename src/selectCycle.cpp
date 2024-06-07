@@ -18,23 +18,18 @@ SelectCycle::SelectCycle() : CycleTemplate(MUS_MENU_THEME) {}
 // Getting selected button
 bool SelectCycle::getMouseInput() {
     if (settingButton.in(mouseX, mouseY)) {
-        // Staring pause cycle
         return runCycle<PauseCycle>();
-    } else if (data.textButtons[BTN_SELECT_SINGLE].in(mouseX, mouseY)) {
-        // Staring two-player mode cycle
+    } else if (singleplayerButton.in(mouseX, mouseY)) {
         return runCycle<SinglePlayerGameCycle>();
-    } else if (data.textButtons[BTN_SELECT_TWO].in(mouseX, mouseY)) {
-        // Staring two-player mode cycle
+    } else if (twoPlayerButton.in(mouseX, mouseY)) {
         return runCycle<TwoPlayerGameCycle>();
-    } else if (data.textButtons[BTN_SELECT_SERVER].in(mouseX, mouseY)) {
-        // Staring server mode cycle
+    } else if (serverButton.in(mouseX, mouseY)) {
         return runCycle<ServerGameCycle>();
-    } else if (data.textButtons[BTN_SELECT_CLIENT].in(mouseX, mouseY)) {
-        // Staring client mode cycle
+    } else if (connectButton.in(mouseX, mouseY)) {
         return runCycle<ClientGameCycle>();
     }
 
-    // None-return
+    // Nothing allowable pressed
     return false;
 }
 
@@ -59,13 +54,14 @@ void SelectCycle::draw() const {
     SDL_RenderClear(data.renderer);
 
     // Bliting title
-    data.texts[TXT_SELECT_TITLE].blit();
+    titleText.blit();
 
-    // Blitting buttons
-    // Start variants
-    for (Uint8 i=BTN_SELECT_SINGLE; i <= BTN_SELECT_CLIENT; ++i) {
-        data.textButtons[i].blit();
-    }
+    // Blitting start buttons
+    singleplayerButton.blit();
+    twoPlayerButton.blit();
+    serverButton.blit();
+    connectButton.blit();
+
     // Settings menu
     settingButton.blit();
 

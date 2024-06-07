@@ -47,7 +47,7 @@ bool GameCycle::getMouseInput() {
     } else {
         // Getting buttons clicks
         // Game restart
-        if (data.textButtons[BTN_GAME_RESTART].in(mouseX, mouseY)) {
+        if (restartButton.in(mouseX, mouseY)) {
             // Restarting game
             endState = END_NONE;
 
@@ -58,7 +58,7 @@ bool GameCycle::getMouseInput() {
             data.playSound(SND_RESET);
             return false;
 
-        } else if (data.textButtons[BTN_GAME_MENU].in(mouseX, mouseY)) {
+        } else if (menuButton.in(mouseX, mouseY)) {
             // Going to menu
             return true;
         }
@@ -77,7 +77,7 @@ void GameCycle::draw() const {
     letters.blit();
 
     // Drawing player state
-    data.texts[TXT_GAME_TURN_FIRST + board.currentTurn()].blit();
+    playersTurnsTexts[board.currentTurn()].blit();
 
     // Bliting game state, if need
     if (endState > END_TURN) {
@@ -87,21 +87,21 @@ void GameCycle::draw() const {
         // Bliting text with end state
         switch (endState) {
         case END_WIN:
-            data.texts[TXT_END_WIN_1].blit();
+            firstWinText.blit();
             break;
 
         case END_LOOSE:
-            data.texts[TXT_END_WIN_2].blit();
+            secondWinText.blit();
             break;
 
         case END_NOBODY:
-            data.texts[TXT_END_NOBODY].blit();
+            nobodyWinText.blit();
             break;
         }
 
         // Blitting buttons
-        data.textButtons[BTN_GAME_RESTART].blit();
-        data.textButtons[BTN_GAME_MENU].blit();
+        restartButton.blit();
+        menuButton.blit();
     }
 
     // Bliting all to screen

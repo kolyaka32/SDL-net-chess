@@ -9,7 +9,7 @@
 // Setting texture of port box
 ServerGameCycle::ServerGameCycle() {
     // Updating text of created port
-    data.texts[TXT_SERVER_PORT].updateText(1, serverPort);
+    portText.updateLocationArgs(1, serverPort);
 }
 
 //
@@ -75,7 +75,7 @@ bool ServerGameCycle::getMouseInput() {
     if (waitStart) {
         // Connecting menu
         // Check on connect cancel
-        if (data.textButtons[BTN_GAME_CANCEL].in(mouseX, mouseY)) {
+        if (cancelButton.in(mouseX, mouseY)) {
             // Closing connection
             return true;
         }
@@ -109,7 +109,7 @@ bool ServerGameCycle::getMouseInput() {
         } else {
             // Getting buttons clicks
             // Game restart
-            if (data.textButtons[BTN_GAME_RESTART].in(mouseX, mouseY)) {
+            if (restartButton.in(mouseX, mouseY)) {
                 // Resetting flags
                 endState = END_NONE;
                 waitTurn = false;
@@ -122,7 +122,7 @@ bool ServerGameCycle::getMouseInput() {
 
                 // Making sound
                 data.playSound(SND_RESET);
-            } else if (data.textButtons[BTN_GAME_MENU].in(mouseX, mouseY)) {
+            } else if (menuButton.in(mouseX, mouseY)) {
                 // Going to menu
                 return true;
             }
@@ -133,22 +133,21 @@ bool ServerGameCycle::getMouseInput() {
 
 //
 void ServerGameCycle::draw() const {
-    // Different draw variants
+    // Connecting menu
     if (waitStart) {
-        // Connecting menu
         // Drawing background
         data.setColor(BLACK);
         SDL_RenderClear(data.renderer);
 
         // Draw text plates
-        data.texts[TXT_SERVER_WAIT].blit();
-        data.texts[TXT_SERVER_PORT].blit();
-        data.textButtons[BTN_GAME_CANCEL].blit();
+        waitText.blit();
+        portText.blit();
+        cancelButton.blit();
 
         // Rendering at screen
         data.render();
+    // Gameplay variant
     } else {
-        // Game variant
         // Bliting field
         board.blit();
 
@@ -156,7 +155,7 @@ void ServerGameCycle::draw() const {
         letters.blit();
 
         // Drawing player state
-        data.texts[TXT_GAME_TURN_THIS + waitTurn].blit();
+        playersTurnsTexts[waitTurn + 2].blit();
 
         // Bliting game state, if need
         if (endState > END_TURN) {
@@ -166,21 +165,21 @@ void ServerGameCycle::draw() const {
             // Bliting text with end state
             switch (endState) {
             case END_WIN:
-                data.texts[TXT_END_WIN].blit();
+                winText.blit();
                 break;
 
             case END_LOOSE:
-                data.texts[TXT_END_LOOSE].blit();
+                looseText.blit();
                 break;
 
             case END_NOBODY:
-                data.texts[TXT_END_NOBODY].blit();
+                nobodyWinText.blit();
                 break;
             }
 
             // Blitting buttons
-            data.textButtons[BTN_GAME_RESTART].blit();
-            data.textButtons[BTN_GAME_MENU].blit();
+            restartButton.blit();
+            menuButton.blit();
         }
 
         // Bliting all to screen

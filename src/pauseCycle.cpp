@@ -131,7 +131,7 @@ void PauseCycle::draw() const {
     offset = (offset + 1) % (CELL_SIDE * 2);
 
     // Bliting title
-    data.texts[TXT_PAUSE_TITLE].blit();
+    titleText.blit();
 
     // Blitting buttons
     // Start variants
@@ -140,9 +140,9 @@ void PauseCycle::draw() const {
     }
 
     // Sliders
-    data.texts[TXT_PAUSE_MUSIC].blit();
+    musicText.blit();
     soundSlider.blit();
-    data.texts[TXT_PAUSE_SOUND].blit();
+    soundText.blit();
     musicSlider.blit();
 
     // Settings menu
