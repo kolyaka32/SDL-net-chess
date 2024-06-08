@@ -31,7 +31,7 @@ DataLoader::DataLoader() {
     #if CHECK_CORRECTION
     if (!archive) {
         SDL_Log("Can't load archieve '%s'.", DATA_FILE);
-        throw loadException("Can't load archieve");
+        throw "Can't load archieve";
         exit(ERR_FIL_OPN);
     }
     #endif
@@ -74,7 +74,7 @@ SDL_RWops *DataLoader::loadObject(const std::string _name) {
     #if CHECK_CORRECTION
     if (!tempRW) {
         SDL_Log("Can't load object '%s' from arhieve", _name);
-        throw loadException("Can't load object from arhieve");
+        throw "Can't load object from arhieve";
         exit(ERR_FIL_OPN);
     }
     #endif

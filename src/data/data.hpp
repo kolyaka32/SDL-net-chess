@@ -19,7 +19,7 @@ class Data :
 public Textures, public Icone, public Font,
 public Sounds, public Musics, public Animations, public Texts {
  public:
-    bool running = true;   // Global process run flag
+    bool appRunning = true;   // Global process run flag
     bool restart = false;  // Global flag of restart current process
     // Initialasing process data
     Data(){

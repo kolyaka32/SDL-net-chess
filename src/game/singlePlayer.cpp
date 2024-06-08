@@ -4,12 +4,11 @@
  */
 
 #include "singlePlayer.hpp"
-
+#include "../pauseCycle.hpp"
 
 //
 SinglePlayerGameCycle::SinglePlayerGameCycle()
 : CycleTemplate(MUS_MAIN_THEME), width(data.animations[0]->w), height(data.animations[0]->h) {
-    frame = 0;
     prevFrameUpdate = SDL_GetTicks64() + 400;
 }
 
@@ -25,6 +24,17 @@ SinglePlayerGameCycle::~SinglePlayerGameCycle() {
     for (Uint8 i = IMG_GAME_WHITE_PAWN; i <= IMG_GAME_BLACK_KING; ++i) {
         SDL_SetTextureColorMod(data.textures[i], 0, 0, 0);
     }
+}
+
+// Getting mouse clicking
+bool SinglePlayerGameCycle::getMouseInput() {
+    if (settingButton.in(mouseX, mouseY)) {
+        runCycle<PauseCycle>();
+    } else if (exitButton.in(mouseX, mouseY)) {
+        return true;
+    }
+
+    return false;
 }
 
 //
@@ -81,6 +91,10 @@ void SinglePlayerGameCycle::draw() const {
     // Bliting background
     data.setColor(BLACK);
     SDL_RenderClear(data.renderer);
+
+    // Drawing buttons
+    settingButton.blit();
+    exitButton.blit();
 
     //
     const Uint8* frameData = (Uint8*)data.animations[type]->frames[frame][0].pixels;

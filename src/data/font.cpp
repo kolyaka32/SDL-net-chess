@@ -12,7 +12,7 @@ FontLibrary::FontLibrary() {
     if (TTF_Init()) {
         #if CHECK_CORRECTION
         SDL_Log("Couldn't initialize font library: %s\n", TTF_GetError());
-        throw initException("Couldn't init font library");
+        throw "Couldn't init font library";
         exit(ERR_SDL_FFT);
         #endif
     }
@@ -93,7 +93,7 @@ void Font::loadFontData(const std::string name) {
     #if CHECK_CORRECTION
     if (fontData == nullptr) {
         SDL_Log("Can't load data for fonts");
-        throw loadException("Can't load data for fonts");
+        throw "Can't load data for fonts";
         exit(ERR_FIL_FNT);
     }
     #endif

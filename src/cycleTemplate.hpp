@@ -37,8 +37,7 @@ class CycleTemplate {
 
  public:
     explicit CycleTemplate(MUS_names music = MUS_START_NONE);
-    // Main run cycle
-    virtual void run();  
+    virtual void run();  // Main run cycle 
 };
 
 
@@ -60,7 +59,7 @@ bool CycleTemplate::runCycle() {
     }
 
     // Checking for exit
-    if (!data.running) {
+    if (!data.appRunning) {
         return true;
     }
 

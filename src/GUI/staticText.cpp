@@ -25,7 +25,7 @@ StaticText::StaticText(const char* _text, textHeight _height, float _X, float _Y
 // Clearing rest data
 StaticText::~StaticText() {
     // Clearing buffer
-    if(bufferText){
+    if (bufferText) {
         delete[] bufferText;
         bufferText = nullptr;
     }
@@ -46,7 +46,7 @@ void StaticText::updateTexture() {
 //
 void StaticText::updateLocationArgs(const unsigned count, ...) {
     // Clearing previous buffer
-    if(bufferText){
+    if (bufferText) {
         delete[] bufferText;
         bufferText = nullptr;
     }

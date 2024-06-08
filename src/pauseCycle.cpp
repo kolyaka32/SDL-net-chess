@@ -28,7 +28,7 @@ PauseCycle::PauseCycle() : CycleTemplate(MUS_START_NONE) {}
 bool PauseCycle::getAnotherInput(SDL_Event& event) {
     switch (event.type) {
     // Resetting selected box
-        case SDL_MOUSEBUTTONUP:
+    case SDL_MOUSEBUTTONUP:
         selectedBox = 0;
         return false;
     

@@ -12,6 +12,7 @@ enum IMG_names{
     // Base part
     // Graphic interface sprites
     IMG_GUI_PAUSE_BUTTON,
+    IMG_GUI_QUIT_BUTTON,
     IMG_GUI_SLIDER_BUTTON,
     IMG_GUI_SLIDER_LINE,
     IMG_GUI_TYPE_BOX,
@@ -48,7 +49,7 @@ enum IMG_names{
 };
 
 // Number of all images
-#define IMG_count 22
+#define IMG_count 23
 
 
 // Library for work with any images

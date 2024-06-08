@@ -36,24 +36,6 @@ Uint8 InternetClientCycle::tryConnect(const char* ipText, const char* portText) 
 
         // Try send activation code at specifed coordinats
         sendNew(MES_INIT);
-
-        // Checking get pachage
-        if (SDLNet_CheckSockets(set, 1000) && SDLNet_UDP_Recv(socket, recieveData)) {
-            // Connection correct
-            // Saving entered parameters for next conncetion
-            data.baseIP = (std::string)ipText;
-            data.basePort = (std::string)portText;
-
-            // Clearing data
-            SDLNet_FreeSocketSet(set);
-            return 1;
-        }
-        /* else {
-            // Showing message with problems with connection
-            showCantConnect();
-            SDLNet_FreeSocketSet(set);
-            return 0;
-        }*/
     }
     // Can't resolve this host
     return 0;

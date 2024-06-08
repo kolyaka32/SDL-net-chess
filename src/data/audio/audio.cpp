@@ -12,7 +12,7 @@ AudioLibrary::AudioLibrary() {
     if (!Mix_Init(MIX_INIT_OGG | MIX_INIT_FLAC)) {
         #if CHECK_CORRECTION
         SDL_Log("Couldn't initialize audio library: %d\n", Mix_GetError());
-        throw initException("Couldn't initialize audio library");
+        throw "Couldn't initialize audio library";
         exit(ERR_SDL_SND);
         #endif
     }
@@ -21,7 +21,7 @@ AudioLibrary::AudioLibrary() {
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048)) {
         #if CHECK_CORRECTION
         SDL_Log("Couldn't initialase audio chanel.\n");
-        throw loadException("Couldn't initialase audio chanel");
+        throw "Couldn't initialase audio chanel";
         exit(ERR_INI_SND);
         #endif
     }

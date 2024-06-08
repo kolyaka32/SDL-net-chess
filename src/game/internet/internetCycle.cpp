@@ -40,7 +40,7 @@ void InternetCycle::updateInternet(){
 
     // Checking, if messages wasn't delivered
     checkNeedResend();
-    
+
     // Check, if get new message
     if(checkGetMessage()){
         // Stopping cycle

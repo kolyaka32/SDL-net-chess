@@ -33,7 +33,7 @@ void Board::reset() {
     // rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
 
     // Setting figures on them places by given text
-    position c = 0;  // Counter of placed
+    position c = 0;  // Counter of place on field
 
     // Parsing text for setting figures
     Uint16 i = 0;
@@ -397,8 +397,8 @@ Uint8 Board::placeFigure(const coord _x, const coord _y) {
                 figures[61] = FIG_WHITE_ROOK;
                 figures[62] = FIG_WHITE_KING;
             }
-            break;
         }
+        break;
 
     case FIG_WHITE_KING:
         // Disabling posible castling for next turns
@@ -418,8 +418,8 @@ Uint8 Board::placeFigure(const coord _x, const coord _y) {
                 figures[62] = FIG_WHITE_KING;
                 figures[61] = FIG_WHITE_ROOK;
             }
-            break;
         }
+        break;
 
     case FIG_BLACK_ROOK:
         // Disabling posible castling for next turns
@@ -443,8 +443,8 @@ Uint8 Board::placeFigure(const coord _x, const coord _y) {
                 figures[5] = FIG_BLACK_ROOK;
                 figures[6] = FIG_BLACK_KING;
             }
-            break;
         }
+        break;
 
     case FIG_BLACK_KING:
         // Disabling posible castling for next turns
@@ -464,24 +464,26 @@ Uint8 Board::placeFigure(const coord _x, const coord _y) {
                 figures[6] = FIG_BLACK_KING;
                 figures[5] = FIG_BLACK_ROOK;
             }
-            break;
         }
+        break;
 
-    default:
+    case FIG_BLACK_PAWN:
         // Check, if on last line - convert into queen
-        if (FIG_BLACK_PAWN && _y == FIELD_WIDTH - 1) {
+        if (_y == FIELD_WIDTH - 1) {
             activeCell.type = FIG_BLACK_QUEEN;
         }
+        break;
 
+    case FIG_WHITE_PAWN:
         // Check, if on last line - convert into queen
-        if (FIG_WHITE_PAWN && _y == 0) {
+        if (_y == 0) {
             activeCell.type = FIG_WHITE_QUEEN;
         }
-
-        // Setting new position to cell
-        figures[getPos(_x, _y)] = activeCell.type;
-        figures[activeCell.pos] = FIG_NONE;
+        break;
     }
+    // Setting new position to cell
+    figures[getPos(_x, _y)] = activeCell.type;
+    figures[activeCell.pos] = FIG_NONE;
 
     // Making sound
     data.playSound(SND_TURN);

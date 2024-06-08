@@ -14,7 +14,7 @@ GraphicsLibrary::GraphicsLibrary() {
     if (!IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG)) {
         #if CHECK_CORRECTION
         SDL_Log("Couldn't initialize image library: %s\n", IMG_GetError());
-        throw initException("Couldn't initialize image library");
+        throw "Couldn't initialize image library";
         exit(ERR_SDL_IMG);
         #endif
     }
@@ -38,6 +38,7 @@ Textures::Textures() {
 
     // Graphic interface sprites
     loadTexture("GUI/esc_button.png", IMG_GUI_PAUSE_BUTTON);
+    loadTexture("GUI/quit_button.png", IMG_GUI_QUIT_BUTTON);
     loadTexture("GUI/slider_button.png", IMG_GUI_SLIDER_BUTTON);
     loadTexture("GUI/slider_line.png", IMG_GUI_SLIDER_LINE);
     loadTexture("GUI/type_box.png", IMG_GUI_TYPE_BOX);
@@ -99,7 +100,7 @@ void Textures::loadTexture(const std::string _name, const IMG_names _index) {
     #if CHECK_CORRECTION
     if (!tempRW) {
         SDL_Log("Error with loading image file '%s' at %u.", _name, _index);
-        throw loadException("Error with loading image file");
+        throw "Error with loading image file";
         exit(ERR_FIL_IMG);
     }
     #endif
@@ -123,7 +124,7 @@ void Textures::loadTexture(const std::string _name, const IMG_names _index) {
     #if CHECK_CORRECTION
     if (textures[_index] == nullptr) {
         SDL_Log("Error with loading image file '%s' at %u.", _name, _index);
-        throw loadException("Error with loading image file");
+        throw "Error with loading image file";
         exit(ERR_FIL_IMG);
     }
     #endif
@@ -136,7 +137,7 @@ void Textures::checkCorrection() {
     for (Uint8 i = 0; i < IMG_count; ++i) {
         if (textures[i] == NULL) {
             SDL_Log("Wrong texture at %u.", i);
-            throw loadException("Wrong texture count");
+            throw "Wrong texture count";
             exit(ERR_FIL_IMG);
         }
     }

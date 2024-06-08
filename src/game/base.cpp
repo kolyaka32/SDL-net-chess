@@ -4,6 +4,7 @@
  */
 
 #include "base.hpp"
+#include "../pauseCycle.hpp"
 
 //
 GameCycle::GameCycle() : CycleTemplate(MUS_START_NONE) {
@@ -35,10 +36,13 @@ bool GameCycle::getKeysInput(SDL_Keysym& key) {
 
 // Getting mouse clicking
 bool GameCycle::getMouseInput() {
-    // Pause button
-    /*if (settingButton.in(mouseX, mouseY)) {
-        return 1;
-    }*/
+    // Buttons
+    if (settingButton.in(mouseX, mouseY)) {
+        runCycle<PauseCycle>();
+        return false;
+    } else if (exitButton.in(mouseX, mouseY)) {
+        return true;
+    }
 
     // Checking, if game start
     if (endState <= END_TURN) {
@@ -78,6 +82,10 @@ void GameCycle::draw() const {
 
     // Drawing player state
     playersTurnsTexts[board.currentTurn()].blit();
+
+    // Drawing buttons
+    settingButton.blit();
+    exitButton.blit();
 
     // Bliting game state, if need
     if (endState > END_TURN) {

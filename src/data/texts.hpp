@@ -13,7 +13,7 @@
 class UpdateList
 {
 private:
-    const static Uint8 maxSize = 20;
+    const static Uint8 maxSize = 30;
     Uint8 size = 0;
     GUI::GUItemplate* languageUpdateList[maxSize];
 

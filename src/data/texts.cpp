@@ -34,7 +34,7 @@ void UpdateList::enterCycle() {
 // Exiting internal cycle
 void UpdateList::exitCycle() {
     // Clearing allow to previous nullptr
-    for (; (size > 0) && (languageUpdateList[size]); --size);
+    for (; (size > 0) && (languageUpdateList[--size]););
 }
 
 // Updating all allowable objects

@@ -187,11 +187,15 @@ bool ClientGameCycle::getMouseInput() {
         removeSelection();
         return 0;
     } else {
-        // Game variantwaitTurn = true;
+        // Game variant
         // Pause button
         /*if (settingButton.in(mouseX, mouseY)) {
             return 1;
         }*/
+        // Quit to menu
+        if (exitButton.in(mouseX, mouseY)) {
+            return true;
+        }
 
         // Clicking on field if possible
         if (endState <= END_TURN) {
@@ -256,6 +260,9 @@ void ClientGameCycle::draw() const {
 
         // Drawing player state
         playersTurnsTexts[waitTurn + 2].blit();
+
+        // Drawing exit button
+        exitButton.blit();
 
         // Bliting game state, if need
         if (endState > END_TURN) {

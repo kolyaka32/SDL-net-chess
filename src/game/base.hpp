@@ -37,7 +37,9 @@ class GameCycle : public CycleTemplate {
       {"Wait\0Ожидайте\0-\0-",
          24, 0.5, 0.1, WHITE}
     };
-    
+
+    // Ending options
+    GUI::Backplate endBackplate{{70, 150, SCREEN_WIDTH - 140, SCREEN_HEIGHT - 300}, 40, 5};
     GUI::StaticText winText{"Win!\0Победа!\0-\0",
        30, 0.5, 0.4, WHITE};
     GUI::StaticText firstWinText{"Fist player win!\0Первый игрок выйграл!\0-\0-",
@@ -48,11 +50,10 @@ class GameCycle : public CycleTemplate {
        30, 0.5, 0.4, WHITE};
     GUI::StaticText nobodyWinText{"Nobody win\0Ничья\0-\0-",
        30, 0.5, 0.4, WHITE};
-      
+
     // Button for quit settings menu
-    // GUI::ImageButton settingButton{0.95, 0.05, IMG_GUI_PAUSE_BUTTON};
-    // Ending options
-    GUI::Backplate endBackplate{{70, 150, SCREEN_WIDTH - 140, SCREEN_HEIGHT - 300}, 40, 5};
+    GUI::ImageButton settingButton{0.95, 0.05, IMG_GUI_PAUSE_BUTTON};
+    GUI::ImageButton exitButton{0.05, 0.05, IMG_GUI_QUIT_BUTTON};
 
     // New overrided cycle functions
     bool getMouseInput() override;    // Getting mouse clicking

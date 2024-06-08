@@ -13,7 +13,7 @@ App::App() {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)) {
         #if CHECK_CORRECTION
         SDL_Log("Couldn't initialise SDL main library: %s\n", SDL_GetError());
-        throw initException("Couldn't initialise SDL main library");
+        throw "Couldn't initialise SDL main library";
         exit(ERR_SDL_SDL);
         #endif
     }
@@ -24,7 +24,7 @@ App::App() {
     #if CHECK_CORRECTION
     if (window == NULL) {
         SDL_Log("Couldn't create window: %s\n", SDL_GetError());
-        throw initException("Couldn't create window");
+        throw "Couldn't create window";
         exit(ERR_INI_WIN);
     }
     #endif
@@ -34,7 +34,7 @@ App::App() {
     #if CHECK_CORRECTION
     if (renderer == NULL) {
         SDL_Log("Couldn't create renderer: %s\n", SDL_GetError());
-        throw initException("Couldn't create renderer");
+        throw "Couldn't create renderer";
         exit(ERR_INI_REN);
     }
     #endif

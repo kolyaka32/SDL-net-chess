@@ -35,7 +35,7 @@ void CycleTemplate::getInput() {
         // Code of program exiting
         case SDL_QUIT:
             // Stopping program at all
-            data.running = false;
+            data.appRunning = false;
 
             // Stopping current cycle
             running = false;

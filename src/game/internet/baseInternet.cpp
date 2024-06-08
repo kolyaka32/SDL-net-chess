@@ -14,7 +14,7 @@ InternetLibrary::InternetLibrary() {
     if (SDLNet_Init()) {
         #if CHECK_CORRECTION
         SDL_Log("Couldn't initialise internet library: %s\n", SDLNet_GetError());
-        throw initException("Couldn't initialise internet library");
+        throw "Couldn't initialise internet library";
         exit(ERR_SDL_NET);
         #endif
     }
@@ -105,10 +105,7 @@ void Internet::checkSendTimeout(){
 // Check, if get new message 
 bool Internet::checkGetMessage(){
     // Checking if get new data
-    if (SDLNet_UDP_Recv(socket, recieveData)) {
-        // Sending, that message was applied
-        sendWithoutApply(MES_APPL, {recieveData->data[1]});
-        
+    while (SDLNet_UDP_Recv(socket, recieveData)) {
         // Resetting arriving timer
         lastMessageArrive = SDL_GetTicks64() + MESSAGE_GET_TIMEOUT;
 
@@ -126,11 +123,15 @@ bool Internet::checkGetMessage(){
 
         // Code of applaying last message
         case MES_APPL:
-            applyMessage(recieveData->data[1]);
+            applyMessage(recieveData->data[2]);
             return false;
 
         // Code of other messages
         default:
+            // Sending, that message was delivered
+            sendWithoutApply(MES_APPL, {recieveData->data[1]});
+
+            // Checking get data
             return getData();
         }
     }
@@ -155,16 +156,6 @@ bool Internet::checkDisconect(){
 // Template for function for getting data
 bool Internet::getData() {
     switch (recieveData->data[0]) {
-    // Code of closing game - going to menu
-    case MES_STOP:
-        showStopConnection();
-        return true;
-
-    // Code of applaying last message
-    case MES_APPL:
-        applyMessage(recieveData->data[1]);
-        return false;
-
     // Strange/unknown code
     default:
         return false;
