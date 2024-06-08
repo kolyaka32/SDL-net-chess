@@ -373,6 +373,7 @@ Uint8 Board::placeFigure(const coord _x, const coord _y) {
             return END_WIN + turn;
         }
     }
+    bool makeMove = true;  // Flag of happened castling
     // Check on special moves (castling and pawn transform)
     switch (activeCell.type) {
     case FIG_WHITE_ROOK:
@@ -385,6 +386,7 @@ Uint8 Board::placeFigure(const coord _x, const coord _y) {
 
         // Check, if castling
         if (figures[getPos(_x, _y)] == FIG_WHITE_KING + FIG_RED_TYPE) {
+            makeMove = false;
             // Clearing current figures
             figures[activeCell.pos] = FIG_NONE;
             figures[60] = FIG_NONE;
@@ -406,6 +408,7 @@ Uint8 Board::placeFigure(const coord _x, const coord _y) {
 
         // Check, if castling
         if (figures[getPos(_x, _y)] == FIG_WHITE_ROOK + FIG_RED_TYPE) {
+            makeMove = false;
             // Clearing current figures
             figures[activeCell.pos] = FIG_NONE;
             figures[_x+56] = FIG_NONE;
@@ -431,6 +434,7 @@ Uint8 Board::placeFigure(const coord _x, const coord _y) {
 
         // Check, if castling
         if (figures[getPos(_x, _y)] == FIG_BLACK_KING + FIG_RED_TYPE) {
+            makeMove = false;
             // Clearing current figures
             figures[activeCell.pos] = FIG_NONE;
             figures[4] = FIG_NONE;
@@ -452,6 +456,7 @@ Uint8 Board::placeFigure(const coord _x, const coord _y) {
 
         // Check, if castling
         if (figures[getPos(_x, _y)] == FIG_BLACK_ROOK + FIG_RED_TYPE) {
+            makeMove = false;
             // Clearing current figures
             figures[activeCell.pos] = FIG_NONE;
             figures[_x] = FIG_NONE;
@@ -481,9 +486,11 @@ Uint8 Board::placeFigure(const coord _x, const coord _y) {
         }
         break;
     }
-    // Setting new position to cell
-    figures[getPos(_x, _y)] = activeCell.type;
-    figures[activeCell.pos] = FIG_NONE;
+    // Setting new position to cell (if wasn't castling)
+    if (makeMove) {
+        figures[getPos(_x, _y)] = activeCell.type;
+        figures[activeCell.pos] = FIG_NONE;
+    }
 
     // Making sound
     data.playSound(SND_TURN);
