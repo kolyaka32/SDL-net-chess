@@ -112,36 +112,44 @@ namespace GUI {
 
 
     // Class of box, where user can type text
-    class typeBox : public GUItemplate {
+    class TypeBox : public GUItemplate {
         // Global class constants
         const static Uint8 bufferSize = 16;
 
      private:
         // Constants from creating
         const ALIGNMENT_types aligment;  // Aligment type for correct placed position
-        const SDL_Color color;     // Color of typing text
+        const SDL_Color color;      // Color of typing text
 
-        // Variables
-        char swapCaret;            // Byte for swap with caret
-        Uint8 caret;               // Position of place, where user type
-        Uint8 length;              // Length of all text
-        TTF_Font *font;            // Font for type text
-        SDL_Rect textRect;         // Rectangle of background plate (for better visability)
+        char buffer[bufferSize+1];  // String, that was typed
+        char clipboardText[bufferSize];  // Copying string for clipboard
+        char swapCaret;             // Byte for swap with caret
+        int caret = 0;              // Position of place, where user type
+        int selectLength = 0;       // Length of selected box
+        Uint8 length;               // Length of all text
+        TTF_Font *font;             // Font for type text
+        SDL_Rect textRect;          // Rectangle of background plate (for better visability)
+        SDL_Keycode preCode;        // Code of key, that was previously pressed
 
-        void updateTexture();      // System function of creating new texture and updating his position
+        void updateTexture();       // Function for creat new texture and updat it position
+        void writeClipboard();      // Function for writing clipboard content after caret
+        void copyToClipboard();     // Function for writing selected text to clipboard
+        void selectAll();           // Select all text
+        void deleteSelected();      // Function for clearing selected part
 
      public:
-        char buffer[bufferSize + 1];  // Read only data, which write in this typebox
-
-        typeBox(textHeight size, float posX, float posY, const char *startText = "",
+        TypeBox(textHeight size, float posX, float posY, const char *startText = "",
             ALIGNMENT_types newAligment = MIDLE_text, SDL_Color newColor = BLACK);
-        ~typeBox();                                  // Clearing font and texture
-        void blit() const override;                  // Function of drawing text with background plate
-        void writeString(char* str, bool freeData);  // Function of writing any string to buffer at caret position
-        void press(SDL_Keycode code);                // Function of processing special keycodes
-        void updateCaret();                          // Function of change caret symbol from '|' to ' ' and back
-        void select();                               // Function of setting caret for typing after
-        void removeSelect();                         // Function of removing caret after typing
+        ~TypeBox();                         // Clearing font and texture
+        void blit() const override;         // Function of drawing text with background plate
+        const char* getString() const;      // Function of getting typed string
+        void writeString(const char* str);  // Function of writing any string to buffer at caret position
+        void press(SDL_Keycode code);       // Function of processing special keycodes
+        void resetPress(SDL_Keycode code);  // Resetting pressing on any button
+        void updateCaret();                 // Function of change caret symbol from '|' to ' ' and back
+        void updateSelection(int mouseX);   // Function of updating selecting text
+        void select(int mouseX);            // Function of setting caret for typing after
+        void removeSelect();                // Function of removing caret after typing
     };
 
     // Class of backplate for
