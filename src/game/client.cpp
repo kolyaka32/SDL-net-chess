@@ -27,6 +27,7 @@ void ClientGameCycle::removeSelection() {
     if (selectedBox) {
         typeBoxes[selectedBox - 1].removeSelect();
         selectedBox = 0;
+        selecting = false;
     }
 }
 
@@ -91,8 +92,19 @@ bool ClientGameCycle::getAnotherInput(SDL_Event& event) {
         case SDL_TEXTINPUT:
             // Typing text on which object is selected
             if (selectedBox) {
-                typeBoxes[selectedBox - 1].writeString(event.text.text, false);
+                typeBoxes[selectedBox - 1].writeString(event.text.text);
             }
+            return false;
+
+        // Checking, if mouse was unclicked (for end selection)
+        case SDL_MOUSEBUTTONUP:
+            //
+            selecting = false;
+            return false;
+
+        // Check, if key was unclicked
+        case SDL_KEYUP:
+            typeBoxes[selectedBox - 1].resetPress(event.key.keysym.sym);
             return false;
         }
     }
@@ -106,7 +118,6 @@ bool ClientGameCycle::getKeysInput(SDL_Keysym& key) {
         // Entering mode
         switch (key.sym) {
         case SDLK_ESCAPE:
-            // Removing selection from
             removeSelection();
             return false;
 
@@ -115,11 +126,12 @@ bool ClientGameCycle::getKeysInput(SDL_Keysym& key) {
         case SDLK_KP_ENTER:
             removeSelection();
             // Trying connect at address
-            tryConnect(typeBoxes[0].buffer, typeBoxes[1].buffer);
+            tryConnect(typeBoxes[0].getString(), typeBoxes[1].getString());
             return false;
 
         default:
             // Typing in selected box
+            selecting = false;
             if (selectedBox) {
                 typeBoxes[selectedBox - 1].press(key.sym);
             }
@@ -135,18 +147,19 @@ bool ClientGameCycle::getKeysInput(SDL_Keysym& key) {
         case SDLK_q:
             // Quiting to menu
             return true;
-
-        default:
-            // None-return
-            return false;
         }
     }
+    return false;
 }
 
 // Updating text caret
 void ClientGameCycle::update() {
-    // Check, if entering text and need to blink caret in type box
-    if (waitStart && selectedBox && (SDL_GetTicks64() > lastTypeBoxUpdate)) {
+    // Check, if selecting text
+    if (selecting) {
+        SDL_GetMouseState(&mouseX, nullptr);
+        typeBoxes[selectedBox - 1].updateSelection(mouseX);
+    } else if (waitStart && selectedBox && (SDL_GetTicks64() > lastTypeBoxUpdate)) {
+        // Check, if entering text and need to blink caret in type box
         // Updating type box for show place to type
         typeBoxes[selectedBox - 1].updateCaret();
         lastTypeBoxUpdate = SDL_GetTicks64() + 500;
@@ -163,29 +176,30 @@ bool ClientGameCycle::getMouseInput() {
         if (connectButton.in(mouseX, mouseY)) {
             removeSelection();
             // Trying connect at address
-            tryConnect(typeBoxes[0].buffer, typeBoxes[1].buffer);
-            return 0;
+            tryConnect(typeBoxes[0].getString(), typeBoxes[1].getString());
+            return false;
         } else if (cancelButton.in(mouseX, mouseY)) {
             // Returning to menu
             removeSelection();
-            return 1;
+            return true;
         }
         // Selecting need box
         for (Uint8 i=0; i < 2; ++i) {
             // Checking, if click on that box
             if (typeBoxes[i].in(mouseX, mouseY)) {
-                // Checking, if box not selected
-                if (selectedBox != i+1) {
-                    selectedBox = i+1;
-                    typeBoxes[i].select();
-                    lastTypeBoxUpdate = SDL_GetTicks64() + 700;
-                }
-                return 0;
+                // Removing previous selection
+                removeSelection();
+                // New selection
+                selectedBox = i+1;
+                typeBoxes[i].select(mouseX);
+                selecting = true;
+                lastTypeBoxUpdate = SDL_GetTicks64() + 700;
+                return false;
             }
         }
         // If press on somewhere else on field - resetting selection
         removeSelection();
-        return 0;
+        return false;
     } else {
         // Game variant
         // Pause button
@@ -220,11 +234,11 @@ bool ClientGameCycle::getMouseInput() {
         } else {
             // Checking exit to menu
             if (menuButton.in(mouseX, mouseY)) {
-                return 1;
+                return true;
             }
         }
     }
-    return 0;
+    return false;
 }
 
 //
