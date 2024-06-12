@@ -156,9 +156,15 @@ add_executable( ${CMAKE_PROJECT_NAME}
     src/set.rc
 )
 
+
+# Add all c source files under the src directory
+#file(GLOB SOURCES "src/*.cpp")
+#add_executable(${PROJECT_NAME} ${SOURCES})
+
+
 # Static linking standart C/C++ libraries
-set(CMAKE_CXX_STANDARD_LIBRARIES "-static")
-set(CMAKE_EXE_LINKER_FLAGS "-static")
+#set(CMAKE_CXX_STANDARD_LIBRARIES "-static") # !!!!!! not working with libzip
+#set(CMAKE_EXE_LINKER_FLAGS "-static")       # !!!!!! not working with libzip
 #set(CMAKE_GENERATOR_PLATFORM -A "x64")
 
 # Hidding console
@@ -176,36 +182,26 @@ set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++")
 
 # Including external libraries
 set(CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
-
-
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/sdl2)
-#set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/sdl2/")
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 # Finding place of external libraries
 # Including SDL-family
-find_package(SDL2 REQUIRED)
-find_package(SDL2_image REQUIRED)
-find_package(SDL2_ttf REQUIRED)
-find_package(SDL2_mixer REQUIRED)
-find_package(SDL2_net REQUIRED)
+find_package(SDL2 CONFIG REQUIRED)
+find_package(SDL2_image CONFIG REQUIRED)
+find_package(SDL2_ttf CONFIG REQUIRED)
+find_package(SDL2_mixer CONFIG REQUIRED)
+find_package(SDL2_net CONFIG REQUIRED)
 
 # Including libzip
 find_package(libzip CONFIG REQUIRED)
 
 # Including external included directories
-target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIRS})
-target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_IMAGE_INCLUDE_DIRS})
-target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_TTF_INCLUDE_DIRS})
-target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_MIXER_INCLUDE_DIRS})
-target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_NET_INCLUDE_DIRS})
+include_directories(${SDL2_INCLUDE_DIRS})
 
 # Including linked libraries
-#target_link_libraries(${CMAKE_PROJECT_NAME} ${SDL2_LIBRARIES})
-#target_link_libraries(${CMAKE_PROJECT_NAME} ${SDL2_IMAGE_LIBRARIES})
-#target_link_libraries(${CMAKE_PROJECT_NAME} ${SDL2_TTF_LIBRARIES})
-#target_link_libraries(${CMAKE_PROJECT_NAME} ${SDL2_MIXER_LIBRARIES})
-#target_link_libraries(${CMAKE_PROJECT_NAME} ${SDL2_NET_LIBRARIES})
-
-
-target_link_libraries(${PROJECT_NAME} SDL2::Main SDL2::Image SDL2::TTF SDL2::Mixer SDL2::Net)
-target_link_libraries(${CMAKE_PROJECT_NAME} ${libzip_LIBRARIES} libzip::zip)
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${SDL2_LIBRARIES})
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE SDL2_image::SDL2_image)
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE SDL2_ttf::SDL2_ttf)
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE SDL2_mixer::SDL2_mixer)
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE SDL2_net::SDL2_net)
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${libzip_LIBRARIES} libzip::zip)

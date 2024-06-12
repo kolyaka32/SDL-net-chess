@@ -3,6 +3,9 @@
  * <nik.kazankov.05@mail.ru>
  */
 
+#include <cstdlib>
+#include <cstring>
+
 #include "figuresMoves.hpp"
 
 // Figures moves class
