@@ -6,7 +6,7 @@
 #pragma once
 
 // Debuging modifiers
-#define DEBUG false
+#define DEBUG true
 #define CHECK_CORRECTION DEBUG
 #define ARCHIEVE_LOADING !DEBUG
 #define SCROLLER_SOUND SND_count
