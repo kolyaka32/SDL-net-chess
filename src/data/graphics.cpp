@@ -99,7 +99,7 @@ void Textures::loadTexture(const std::string _name, const IMG_names _index) {
     // Checking correction of loaded data
     #if CHECK_CORRECTION
     if (!tempRW) {
-        SDL_Log("Error with loading image file '%s' at %u.", _name, _index);
+        SDL_Log("Error with loading image file '%s' at %u.", _name.std::string::c_str(), _index);
         throw "Error with loading image file";
         exit(ERR_FIL_IMG);
     }
@@ -123,7 +123,7 @@ void Textures::loadTexture(const std::string _name, const IMG_names _index) {
     // Checking correction of loaded texture
     #if CHECK_CORRECTION
     if (textures[_index] == nullptr) {
-        SDL_Log("Error with loading image file '%s' at %u.", _name, _index);
+        SDL_Log("Error with loading image file '%s' at %u.", _name.std::string::c_str(), _index);
         throw "Error with loading image file";
         exit(ERR_FIL_IMG);
     }

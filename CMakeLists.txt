@@ -156,13 +156,19 @@ add_executable( ${CMAKE_PROJECT_NAME}
     src/set.rc
 )
 
+
+# Add all c source files under the src directory
+#file(GLOB SOURCES "src/*.cpp")
+#add_executable(${PROJECT_NAME} ${SOURCES})
+
+
 # Static linking standart C/C++ libraries
-set(CMAKE_CXX_STANDARD_LIBRARIES "-static")
-set(CMAKE_EXE_LINKER_FLAGS "-static")
+#set(CMAKE_CXX_STANDARD_LIBRARIES "-static") # !!!!!! not working with libzip
+#set(CMAKE_EXE_LINKER_FLAGS "-static")       # !!!!!! not working with libzip
 #set(CMAKE_GENERATOR_PLATFORM -A "x64")
 
 # Hidding console
-set(CMAKE_CXX_FLAGS "-mwindows -static")
+#set(CMAKE_CXX_FLAGS "-mwindows -static")
 
 # Setting other flags
 #set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++ -lwsock32 -lws2_32 -mwindows ${CMAKE_CSS_STANDARD_LIBRARIES}")
@@ -175,7 +181,8 @@ set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++")
 #set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
 
 # Including external libraries
-set(CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+set(CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 # Finding place of external libraries
 # Including SDL-family
@@ -192,7 +199,8 @@ find_package(libzip CONFIG REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
 
 # Including linked libraries
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${SDL2_LIBRARIES} SDL2_image::SDL2_image)
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${SDL2_LIBRARIES})
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE SDL2_image::SDL2_image)
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE SDL2_ttf::SDL2_ttf)
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE SDL2_mixer::SDL2_mixer)
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE SDL2_net::SDL2_net)

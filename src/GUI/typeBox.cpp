@@ -3,6 +3,8 @@
  * <nik.kazankov.05@mail.ru>
  */
 
+#include <cstdlib>
+#include <cstring>
 #include "../data/data.hpp"
 #include "baseGUI.hpp"
 

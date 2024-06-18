@@ -43,7 +43,7 @@ void Animations::loadAnimation(const std::string _name, ANI_names _index) {
     // Checking correction of loaded data
     #if CHECK_CORRECTION
     if (!tempRW) {
-        SDL_Log("Error with loading animation file '%s' at %u.", _name, _index);
+        SDL_Log("Error with loading animation file '%s' at %u.", _name.std::string::c_str(), _index);
         throw "Can't load animation";
         exit(ERR_FIL_IMG);
     }
@@ -55,7 +55,7 @@ void Animations::loadAnimation(const std::string _name, ANI_names _index) {
     // Checking correction of loaded animation
     #if CHECK_CORRECTION
     if (animations[_index] == nullptr) {
-        SDL_Log("Error with loading animation file '%s' at %u.", _name, _index);
+        SDL_Log("Error with loading animation file '%s' at %u.", _name.std::string::c_str(), _index);
         throw "Can't load animation";
         exit(ERR_FIL_IMG);
     }

@@ -48,7 +48,7 @@ void Sounds::loadSound(const std::string _name, const SND_names _index) {
     // Checking correction of loaded data
     #if CHECK_CORRECTION
     if (tempRW == nullptr) {
-        SDL_Log("Error with loading sound file '%s' at %u.", _name, _index);
+        SDL_Log("Error with loading sound file '%s' at %u.", _name.std::string::c_str(), _index);
         throw "Error with loading sound file";
         exit(ERR_FIL_SND);
     }
@@ -64,7 +64,7 @@ void Sounds::loadSound(const std::string _name, const SND_names _index) {
     // Checking correction of loaded sound
     #if CHECK_CORRECTION
     if (sounds[_index] == nullptr) {
-        SDL_Log("Error with loading sound file '%s' at %u.", _name, _index);
+        SDL_Log("Error with loading sound file '%s' at %u.", _name.std::string::c_str(), _index);
         throw "Error with loading sound file";
         exit(ERR_FIL_SND);
     }

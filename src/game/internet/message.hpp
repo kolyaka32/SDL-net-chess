@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <cstdlib>
+#include <cstring>
 #include <vector>
 #include <initializer_list>
 #include <SDL_net.h>

@@ -28,7 +28,7 @@ SDL_RWops *DataLoader::loadObject(const std::string _name) {
     // Checking file correction
     #if CHECK_CORRECTION
     if (!tempRW) {
-        SDL_Log("Can't load file '%s'.", _name);
+        SDL_Log("Can't load file '%s'.", _name.std::string::c_str());
         throw "Couldn't load file directly";
         exit(ERR_FIL_OPN);
     }

@@ -3,6 +3,10 @@
  * <nik.kazankov.05@mail.ru>
  */
 
+#include <cstdlib>
+#include <stdio.h>
+#include <cstring>
+
 #include "../data/data.hpp"
 #include "baseGUI.hpp"
 
@@ -26,7 +30,7 @@ StaticText::StaticText(const char* _text, textHeight _height, float _X, float _Y
 StaticText::~StaticText() {
     // Clearing buffer
     if (bufferText) {
-        delete[] bufferText;
+        free(bufferText);
         bufferText = nullptr;
     }
     // Clearing texture
@@ -47,7 +51,7 @@ void StaticText::updateTexture() {
 void StaticText::updateLocationArgs(const unsigned count, ...) {
     // Clearing previous buffer
     if (bufferText) {
-        delete[] bufferText;
+        free(bufferText);
         bufferText = nullptr;
     }
 
@@ -61,12 +65,8 @@ void StaticText::updateLocationArgs(const unsigned count, ...) {
     va_list args;
     va_start(args, count);
     
-    // Getting size of string
-    size_t size = _vscprintf(start, args);
-
-    // Creating buffer for text
-    bufferText = new char[size];
-    vsprintf(bufferText, start, args);
+    // Creating new buffer for text with arguments
+    vasprintf(&bufferText, start, args);
 
     va_end(args);
 
@@ -78,7 +78,7 @@ void StaticText::updateLocationArgs(const unsigned count, ...) {
 void StaticText::updateLocation() {
     // Clearing previous buffer
     if(bufferText){
-        delete[] bufferText;
+        free(bufferText);
         bufferText = nullptr;
     }
 
