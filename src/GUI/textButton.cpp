@@ -10,7 +10,7 @@ using namespace GUI;
 
 
 // Button class
-TextButton::TextButton(const char* _text, textHeight _size, float _X, float _Y, 
+TextButton::TextButton(const char* _text, textHeight _size, float _X, float _Y,
     SDL_Color _color, ALIGNMENT_types _alignment)
 : topText(_text, _size, _X, _Y, _color, _alignment), Backplate(_size*0.75, 3) {
     updateLocation();

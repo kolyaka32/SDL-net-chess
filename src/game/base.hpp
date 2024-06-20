@@ -56,9 +56,9 @@ class GameCycle : public CycleTemplate {
     GUI::ImageButton exitButton{0.05, 0.05, IMG_GUI_QUIT_BUTTON};
 
     // New overrided cycle functions
-    bool getMouseInput() override;    // Getting mouse clicking
-    bool getKeysInput(SDL_Keysym& key) override;  // Getting keys pressing
-    void draw() const override;       // Drawing all needed objects
+    bool getMouseInput() override;
+    bool getKeysInput(const SDL_Keysym& key) override;
+    void draw() const override;
 
  public:
     GameCycle();   // Start game cycle

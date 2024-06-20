@@ -28,9 +28,9 @@ class SelectCycle : public CycleTemplate {
     GUI::ImageButton settingButton{0.95, 0.05, IMG_GUI_PAUSE_BUTTON};
 
     // New overrided cycle functions
-    bool getMouseInput() override;   // Checking for any need mouse action
-    bool getKeysInput(SDL_Keysym& key) override;  // Checking for any keys actions
-    void draw() const override;      // Drawing all needed objects
+    bool getMouseInput() override;
+    bool getKeysInput(const SDL_Keysym& key) override;
+    void draw() const override;
 
  public:
     SelectCycle();   // Create selecting cycle

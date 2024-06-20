@@ -10,7 +10,7 @@
 // Function of creating window and renderer for outputing image
 App::App() {
     // Initialising main SDL libarary
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)) {
+    if (SDL_Init(SDL_INIT_EVERYTHING)) {
         #if CHECK_CORRECTION
         SDL_Log("Couldn't initialise SDL main library: %s\n", SDL_GetError());
         throw "Couldn't initialise SDL main library";

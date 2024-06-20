@@ -9,7 +9,8 @@
 using namespace GUI;
 
 //
-Backplate::Backplate(const SDL_Rect _rect, const Uint8 _rad, const Uint8 _bor, const SDL_Color _frontColor, const SDL_Color _backColor)
+Backplate::Backplate(const SDL_Rect _rect, const Uint8 _rad,
+    const Uint8 _bor, const SDL_Color _frontColor, const SDL_Color _backColor)
 : frontColor(_frontColor), backColor(_backColor), rad(_rad), bor(_bor) {
     updatePlate(_rect);
 }

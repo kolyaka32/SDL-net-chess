@@ -11,7 +11,7 @@ AudioLibrary::AudioLibrary() {
     // Initializing all audio library
     if (!Mix_Init(MIX_INIT_OGG | MIX_INIT_FLAC)) {
         #if CHECK_CORRECTION
-        SDL_Log("Couldn't initialize audio library: %d\n", Mix_GetError());
+        SDL_Log("Couldn't initialize audio library: %s\n", Mix_GetError());
         throw "Couldn't initialize audio library";
         exit(ERR_SDL_SND);
         #endif

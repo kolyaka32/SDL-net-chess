@@ -22,10 +22,10 @@ class PauseCycle : public CycleTemplate {
         30, 0.5, 0.68};
     GUI::StaticText soundText{"Sounds\0Звуки\0Geräusche\0Гук",
         30, 0.5, 0.83};
-    
+
     // Sliders
-    GUI::Slider<Uint8> musicSlider{0.5, 0.75, data.musicVolume};
-    GUI::Slider<Uint8> soundSlider{0.5, 0.9, data.soundsVolume};
+    GUI::Slider musicSlider{0.5, 0.75, &data.musicVolume};
+    GUI::Slider soundSlider{0.5, 0.9, &data.soundsVolume};
 
     // Flags for select language
     GUI::ImageButton flags[LNG_count] = {
@@ -41,7 +41,7 @@ class PauseCycle : public CycleTemplate {
     void draw() const override;                      // Drawing all needed objects
     void update() override;                          // Getting special objects update
     bool getMouseInput() override;                   // Checking for any mouse actions
-    bool getAnotherInput(SDL_Event& event) override;  // Getting all rest user input
+    bool getAnotherInput(const SDL_Event& event) override;  // Getting all rest user input
 
  public:
     PauseCycle();   // Start pause cycle

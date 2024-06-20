@@ -15,7 +15,7 @@ InternetCycle::~InternetCycle() {}
 // Function for start need cycle
 void InternetCycle::run() {
     // Starting main cycle
-    while (running){
+    while (running) {
         // Getting user input
         getInput();
 
@@ -30,11 +30,11 @@ void InternetCycle::run() {
 
         // Standing in idle state
         idleTimer.sleep();
-    }    
+    }
 }
 
 // Updating internet connection
-void InternetCycle::updateInternet(){
+void InternetCycle::updateInternet() {
     // Check, if too much time since last message send
     checkSendTimeout();
 
@@ -42,14 +42,14 @@ void InternetCycle::updateInternet(){
     checkNeedResend();
 
     // Check, if get new message
-    if(checkGetMessage()){
+    if (checkGetMessage()) {
         // Stopping cycle
         running = false;
         return;
     }
 
     // Check, if lost connection from other side
-    if(checkDisconect()){
+    if (checkDisconect()) {
         // Stopping cycle
         running = false;
         return;

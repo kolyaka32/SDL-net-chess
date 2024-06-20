@@ -29,9 +29,8 @@ void CycleTemplate::getInput() {
     static SDL_Event event;
 
     // Getting input
-    while (SDL_PollEvent(&event)){
-        switch (event.type)
-        {
+    while (SDL_PollEvent(&event)) {
+        switch (event.type) {
         // Code of program exiting
         case SDL_QUIT:
             // Stopping program at all
@@ -47,7 +46,7 @@ void CycleTemplate::getInput() {
             SDL_GetMouseState(&mouseX, &mouseY);
 
             // Getting mouse press
-            if (getMouseInput()){
+            if (getMouseInput()) {
                 // Stopping run cycle
                 running = false;
                 return;
@@ -56,7 +55,7 @@ void CycleTemplate::getInput() {
 
         // Getting mouse presses
         case SDL_KEYDOWN:
-            if (getKeysInput(event.key.keysym)){
+            if (getKeysInput(event.key.keysym)) {
                 // Closing cycle, if need
                 running = false;
                 return;
@@ -86,9 +85,8 @@ bool CycleTemplate::getMouseInput() {
 }
 
 // Example for getting keys input
-bool CycleTemplate::getKeysInput(SDL_Keysym& key) {
-    switch (key.sym)
-    {
+bool CycleTemplate::getKeysInput(const SDL_Keysym& key) {
+    switch (key.sym) {
     case SDLK_ESCAPE:
         // Stopping ruuning by escape
         running = false;
@@ -101,7 +99,7 @@ bool CycleTemplate::getKeysInput(SDL_Keysym& key) {
 }
 
 // Example function for get user input
-bool CycleTemplate::getAnotherInput(SDL_Event& event) {
+bool CycleTemplate::getAnotherInput(const SDL_Event& event) {
     switch (event.type) {
     /*case SDL_MOUSEWHEEL:
         // Mouse position on screen
@@ -120,7 +118,7 @@ bool CycleTemplate::getAnotherInput(SDL_Event& event) {
 // Function for start need cycle
 void CycleTemplate::run() {
     // Starting main cycle
-    while (running){
+    while (running) {
         // Getting user input
         getInput();
 
@@ -132,5 +130,5 @@ void CycleTemplate::run() {
 
         // Standing in idle state
         idleTimer.sleep();
-    }    
+    }
 }

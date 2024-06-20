@@ -84,7 +84,7 @@ bool ClientGameCycle::getData() {
 }
 
 // Getting text input
-bool ClientGameCycle::getAnotherInput(SDL_Event& event) {
+bool ClientGameCycle::getAnotherInput(const SDL_Event& event) {
     // Checking on game variant
     if (waitStart) {
         // Entering data variant
@@ -112,7 +112,7 @@ bool ClientGameCycle::getAnotherInput(SDL_Event& event) {
 }
 
 // Example for getting keys input
-bool ClientGameCycle::getKeysInput(SDL_Keysym& key) {
+bool ClientGameCycle::getKeysInput(const SDL_Keysym& key) {
     // Check game variant
     if (waitStart) {
         // Entering mode

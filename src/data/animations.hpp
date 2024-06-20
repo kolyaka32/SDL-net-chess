@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <string>
+
 #include "graphics.hpp"
 #include "dataLoader.hpp"
 
@@ -17,7 +19,7 @@
 
 // Names of sound effects in array to use
 enum ANI_names{
-   ANI_SINGLEPLAYER,
+     ANI_SINGLEPLAYER,
 };
 
 // Base class with all animations

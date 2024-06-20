@@ -62,7 +62,7 @@ void Musics::loadMusic(const std::string _name, const MUS_names _index) {
     // Checking correction of loaded data
     #if CHECK_CORRECTION
     if (!musicsData[_index - 1]) {
-        SDL_Log("Error with loading music file '%s' at %u.", _name, _index - 1);
+        SDL_Log("Error with loading music file '%s' at %u.", _name.std::string::c_str(), _index - 1);
         throw "Error with loading music file";
         exit(ERR_FIL_MUS);
     }
@@ -74,7 +74,7 @@ void Musics::loadMusic(const std::string _name, const MUS_names _index) {
     // Checking correction of loaded music
     #if CHECK_CORRECTION
     if (musics[_index - 1] == nullptr) {
-        SDL_Log("Error with loading music file '%s' at %u.", _name, _index - 1);
+        SDL_Log("Error with loading music file '%s' at %u.", _name.std::string::c_str(), _index - 1);
         throw "Error with loading music file";
         exit(ERR_FIL_MUS);
     }

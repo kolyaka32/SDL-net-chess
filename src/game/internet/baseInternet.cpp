@@ -95,23 +95,22 @@ void Internet::showCantConnect() {
 }
 
 // Check, if too much time since last message send
-void Internet::checkSendTimeout(){
+void Internet::checkSendTimeout() {
     // Checking, if need to send NULL-message
     if (SDL_GetTicks64() > lastMessageSend) {
         sendWithoutApply(MES_NONE);
     }
 }
 
-// Check, if get new message 
-bool Internet::checkGetMessage(){
+// Check, if get new message
+bool Internet::checkGetMessage() {
     // Checking if get new data
     while (SDLNet_UDP_Recv(socket, recieveData)) {
         // Resetting arriving timer
         lastMessageArrive = SDL_GetTicks64() + MESSAGE_GET_TIMEOUT;
 
         // Checking on default messages
-        switch (recieveData->data[0])
-        {
+        switch (recieveData->data[0]) {
         // Code of nothing
         case MES_NONE:
             return false;
@@ -139,7 +138,7 @@ bool Internet::checkGetMessage(){
 }
 
 // Check, if lost connection from other side
-bool Internet::checkDisconect(){
+bool Internet::checkDisconect() {
     // Check, if time for arrive is too much
     if (SDL_GetTicks64() > lastMessageArrive) {
         // Something wrong with connection

@@ -3,6 +3,8 @@
  * <nik.kazankov.05@mail.ru>
  */
 
+#include <cstdlib>
+#include <cstring>
 #include "../data/data.hpp"
 #include "baseGUI.hpp"
 
@@ -45,12 +47,12 @@ void TypeBox::updateTexture() {
     SDL_Surface* mainSurface = TTF_RenderUTF8_Solid(font, buffer, color);
 
     //
-    if(selectLength){
+    if (selectLength) {
         char t = '\0';
         SDL_Surface* inverseSurface = nullptr;
         SDL_Rect inverseRect = {0, 0, 0, 0};
 
-        if(selectLength > 0){
+        if (selectLength > 0) {
             std::swap(buffer[caret+1], t);
             TTF_SizeUTF8(font, buffer, &inverseRect.x, &inverseRect.h);
             std::swap(buffer[caret+1], t);
@@ -109,10 +111,6 @@ void TypeBox::writeString(const char* str) {
 
     length += clipboardSize;
     caret += clipboardSize;
-    // Clearing selected
-    if (caret + selectLength < 0) {
-        throw "Error";
-    }
     updateTexture();
 }
 
@@ -126,7 +124,7 @@ void TypeBox::writeClipboard() {
 
 // Copying selected text to clipboard
 void TypeBox::copyToClipboard() {
-    if (selectLength < 0){
+    if (selectLength < 0) {
         memcpy(&clipboardText, buffer + caret + selectLength, abs(selectLength));
     } else {
         memcpy(&clipboardText, buffer + caret + 1, abs(selectLength));
@@ -135,10 +133,9 @@ void TypeBox::copyToClipboard() {
     SDL_SetClipboardText(clipboardText);
 }
 
-//
 void TypeBox::selectAll() {
     char t = buffer[caret];
-    for (int i=caret-1; i >= 0; --i){
+    for (int i=caret-1; i >= 0; --i) {
         buffer[i+1] = buffer[i];
     }
     buffer[0] = t;
@@ -146,9 +143,8 @@ void TypeBox::selectAll() {
     selectLength = length-1;
 }
 
-//
 void TypeBox::deleteSelected() {
-    if(selectLength < 0){
+    if (selectLength < 0) {
         for (int i=caret; i <= length; ++i) {
             buffer[i + selectLength] = buffer[i];
         }
@@ -171,31 +167,23 @@ void TypeBox::press(SDL_Keycode code) {
     case SDLK_BACKSPACE:
         // Coping after caret
         if (selectLength == 0) {
-            if(caret == 0){
+            if (caret == 0) {
                 return;
             }
             selectLength = -1;
         }
         deleteSelected();
-        // Clearing selected
-        if (caret + selectLength < 0) {
-            throw "Error";
-        }
         break;
 
     case SDLK_DELETE:
         // Coping after caret
         if (selectLength == 0) {
-            if (caret == length-1){
+            if (caret == length - 1) {
                 return;
             }
             selectLength = 1;
         }
         deleteSelected();
-        // Clearing selected
-        if (caret + selectLength < 0) {
-            throw "Error";
-        }
         break;
 
     // Moving caret
@@ -215,7 +203,7 @@ void TypeBox::press(SDL_Keycode code) {
 
     case SDLK_RIGHT:
         if (preCode == SDLK_LSHIFT) {
-            if (selectLength < length - caret - 1){
+            if (selectLength < length - caret - 1) {
                 selectLength++;
             }
         } else {
@@ -271,7 +259,7 @@ void TypeBox::press(SDL_Keycode code) {
         break;
 
     case SDLK_c:
-        if(preCode == SDLK_LCTRL) {
+        if (preCode == SDLK_LCTRL) {
             copyToClipboard();
         } else {
             preCode = code;
@@ -298,7 +286,7 @@ void TypeBox::press(SDL_Keycode code) {
 
 // Check, if need reset previous code
 void TypeBox::resetPress(SDL_Keycode code) {
-    if (code == preCode){
+    if (code == preCode) {
         preCode = 0;
     }
 }
@@ -349,7 +337,7 @@ void TypeBox::updateCaret() {
 void TypeBox::updateSelection(int _mouseX) {
     // Check on borders
     TTF_MeasureUTF8(font, buffer, _mouseX - textRect.x, nullptr, &selectLength);
-    if(selectLength <= caret) {
+    if (selectLength <= caret) {
         SET_MIN(selectLength, 0);
         selectLength -= caret;
     } else {

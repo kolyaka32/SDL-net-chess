@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <cstdlib>
+#include <cstring>
 #include <vector>
 #include <initializer_list>
 #include <SDL_net.h>
@@ -26,8 +28,7 @@ enum MESSAGE_types{
 
 
 // Type of data for save message data
-struct Message
-{
+struct Message {
     byte* data;  // Message data
     Uint8 size;  // Size of this data
 
@@ -46,7 +47,7 @@ class MessageSender {
     Uint8 ID;
 
     // Function for send need message
-    void send(Message& message);  
+    void send(Message& message);
 
  protected:
     // Data for internet work
@@ -78,9 +79,9 @@ class MessageSender {
 
 // Function for send data with need type and size
 template <typename T>
-void MessageSender::sendNew(const MESSAGE_types _type, const std::initializer_list<T> _list){
+void MessageSender::sendNew(const MESSAGE_types _type, const std::initializer_list<T> _list) {
     // Check, if can't get this message
-    if(_list.size() * sizeof(T) + 2 > INTERNET_BUFFER){
+    if (_list.size() * sizeof(T) + 2 > INTERNET_BUFFER) {
         // Show, that function incorrect
         throw "Wrong size of sended message";
     }
@@ -105,10 +106,9 @@ void MessageSender::sendNew(const MESSAGE_types _type, const std::initializer_li
     ID = (ID + 1) % 128;
 
     // Check, if need copy data
-    if(current.size > 2){
+    if (current.size > 2) {
         // Select, which type we should send
-        switch (sizeof(T))
-        {
+        switch (sizeof(T)) {
         // Smallest one-byte types
         case sizeof(Uint8):
             // Simple coping memory
@@ -118,17 +118,17 @@ void MessageSender::sendNew(const MESSAGE_types _type, const std::initializer_li
         // Two-bytes types
         case sizeof(Uint16):
             // Coping each number to it position
-            for(Uint8 i=0; i < _list.size(); ++i){
-                //SDLNet_Write16((Uint16)(_list + i*2), current.data + 2 + i*2);
+            for (Uint8 i=0; i < _list.size(); ++i) {
+                // SDLNet_Write16((Uint16)(_list + i*2), current.data + 2 + i*2);
             }
 
         // Four-bytes types
         case sizeof(Uint32):
             // Coping each number to it position
-            for(Uint8 i=0; i < _list.size(); ++i){
-                //SDLNet_Write32((Uint32)(_list + i*4), current.data + 2 + i*4);
+            for (Uint8 i=0; i < _list.size(); ++i) {
+                // SDLNet_Write32((Uint32)(_list + i*4), current.data + 2 + i*4);
             }
-        
+
         // Unknown size
         default:
             throw "Unknown size of message";
@@ -145,7 +145,7 @@ template <typename T>
 void MessageSender::sendWithoutApply(const MESSAGE_types _type,
     const std::initializer_list<T> _list) {
     // Check, if can't get this message
-    if(_list.size() * sizeof(T) + 2 > INTERNET_BUFFER){
+    if (_list.size() * sizeof(T) + 2 > INTERNET_BUFFER) {
         // Show, that function incorrect
         throw "Wrong size of sended message";
     }
@@ -168,10 +168,9 @@ void MessageSender::sendWithoutApply(const MESSAGE_types _type,
     ID = (ID + 1) % 128;
 
     // Check, if need copy data
-    if(current.size > 2){
+    if (current.size > 2) {
         // Select, which type we should send
-        switch (sizeof(T))
-        {
+        switch (sizeof(T)) {
         // Smallest one-byte types
         case sizeof(Uint8):
             // Simple coping memory
@@ -181,17 +180,17 @@ void MessageSender::sendWithoutApply(const MESSAGE_types _type,
         // Two-bytes types
         case sizeof(Uint16):
             // Coping each number to it position
-            for(Uint8 i=0; i < _list.size(); ++i){
-                //SDLNet_Write16((Uint16)(_list + i*2), current.data + 2 + i*2);
+            for (Uint8 i=0; i < _list.size(); ++i) {
+                // SDLNet_Write16((Uint16)(_list + i*2), current.data + 2 + i*2);
             }
 
         // Four-bytes types
         case sizeof(Uint32):
             // Coping each number to it position
-            for(Uint8 i=0; i < _list.size(); ++i){
-                //SDLNet_Write32((Uint32)(_list + i*4), current.data + 2 + i*4);
+            for (Uint8 i=0; i < _list.size(); ++i) {
+                // SDLNet_Write32((Uint32)(_list + i*4), current.data + 2 + i*4);
             }
-        
+
         // Unknown size
         default:
             throw "Unknown size of message";

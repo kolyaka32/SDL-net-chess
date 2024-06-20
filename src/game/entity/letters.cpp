@@ -16,7 +16,7 @@ LettersCollumn::LettersCollumn(const char _startLetter, const Uint8 _length, Sin
     }
 
     // Creating main texture
-    SDL_Surface* tempSurface = SDL_CreateRGBSurface(0, _xOffset ? _length * CELL_SIDE : LETTER_LINE, 
+    SDL_Surface* tempSurface = SDL_CreateRGBSurface(0, _xOffset ? _length * CELL_SIDE : LETTER_LINE,
         _yOffset ? _length * CELL_SIDE : LETTER_LINE, 32, 0, 0, 0, 0);
 
     // Creating texture draw place

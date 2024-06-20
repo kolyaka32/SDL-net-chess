@@ -5,7 +5,6 @@
 
 #include "define.hpp"
 #include "pauseCycle.hpp"
-#include "GUI/slider.cpp"
 
 
 // Types of selected box
@@ -25,24 +24,24 @@ enum {
 PauseCycle::PauseCycle() : CycleTemplate(MUS_START_NONE) {}
 
 // Getting special input (with mousewheel and escape button)
-bool PauseCycle::getAnotherInput(SDL_Event& event) {
+bool PauseCycle::getAnotherInput(const SDL_Event& event) {
     switch (event.type) {
     // Resetting selected box
     case SDL_MOUSEBUTTONUP:
         selectedBox = 0;
         return false;
-    
+
     case SDL_MOUSEWHEEL:
         // Mouse position on screen
         SDL_GetMouseState(&mouseX, &mouseY);  // Getting mouse position
         // Checking scroll on sliders
         if (musicSlider.scroll(event.wheel.y, mouseX, mouseY)) {
             Mix_VolumeMusic(data.musicVolume);
-        } else if(soundSlider.scroll(event.wheel.y, mouseX, mouseY)) {
+        } else if (soundSlider.scroll(event.wheel.y, mouseX, mouseY)) {
             Mix_Volume(-1, data.soundsVolume);
         }
         return false;
-    
+
     default:
         // None-return
         return false;
@@ -50,7 +49,7 @@ bool PauseCycle::getAnotherInput(SDL_Event& event) {
 }
 
 // Special update of selected box
-void PauseCycle::update(){
+void PauseCycle::update() {
     switch (selectedBox) {
     case BOX_MUSIC_SLIDER:
         // Updating music slider state
@@ -110,11 +109,11 @@ bool PauseCycle::getMouseInput() {
     return false;
 }
 
-// Extra variables
-Uint16 offset = 0;  // Offset of background cells for create move effect
-
 // Drawing cells background, language buttons and sound options
 void PauseCycle::draw() const {
+    // Offset (in pixels) for moving background
+    static Uint16 offset;
+
     // Bliting background
     data.setColor({255, 206, 158, 255});
     SDL_RenderClear(data.renderer);

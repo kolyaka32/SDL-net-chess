@@ -34,9 +34,8 @@ bool SelectCycle::getMouseInput() {
 }
 
 // Example for getting keys input
-bool SelectCycle::getKeysInput(SDL_Keysym& key) {
-    switch (key.sym)
-    {
+bool SelectCycle::getKeysInput(const SDL_Keysym& key) {
+    switch (key.sym) {
     case SDLK_ESCAPE:
         // Running pause menu
         return runCycle<PauseCycle>();
