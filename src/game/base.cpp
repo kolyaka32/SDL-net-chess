@@ -16,7 +16,7 @@ GameCycle::~GameCycle() {}
 
 
 // Example for getting keys input
-bool GameCycle::getKeysInput(SDL_Keysym& key) {
+bool GameCycle::getKeysInput(const SDL_Keysym& key) {
     // Searching for key press
     switch (key.sym) {
     case SDLK_ESCAPE:

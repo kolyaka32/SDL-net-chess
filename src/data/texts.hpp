@@ -10,16 +10,14 @@
 #include "../GUI/baseGUI.hpp"
 
 // Class for updating all GUI objects
-class UpdateList
-{
-private:
-    const static Uint8 maxSize = 30;
-    Uint8 size = 0;
-    GUI::GUItemplate* languageUpdateList[maxSize];
+class UpdateList {
+ private:
+    const static Uint8 maxSize = 30;  // Maximal count of updating objects
+    Uint8 size = 0;                   // Current size of updating list
+    GUI::GUItemplate* languageUpdateList[maxSize];  // List with all updating objects
 
-public:
+ public:
     UpdateList();
-    ~UpdateList();
     void add(GUI::GUItemplate* object);
     void enterCycle();  // Entering internal cycle
     void exitCycle();   // Exiting internal cycle
@@ -30,7 +28,7 @@ public:
 // All static texts
 class Texts : public virtual App, public virtual InitFile {
  public:
-    // Array for updating language
+    // Array for update language
     UpdateList updateList;
 
  public:

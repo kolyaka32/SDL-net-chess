@@ -4,7 +4,7 @@
  */
 
 #include <cstdlib>
-#include <stdio.h>
+#include <cstdio>
 #include <cstring>
 
 #include "../data/data.hpp"
@@ -14,7 +14,8 @@ using namespace GUI;
 
 // Class of static text
 // Basic constructor for new object
-StaticText::StaticText(const char* _text, textHeight _height, float _X, float _Y, SDL_Color _color, ALIGNMENT_types _aligment)
+StaticText::StaticText(const char* _text, textHeight _height,
+    float _X, float _Y, SDL_Color _color, ALIGNMENT_types _aligment)
 : text(_text), posX(_X), posY(_Y), aligment(_aligment), color(_color), bufferText(nullptr) {
     // Creating font
     font = data.createFont(_height);
@@ -30,7 +31,7 @@ StaticText::StaticText(const char* _text, textHeight _height, float _X, float _Y
 StaticText::~StaticText() {
     // Clearing buffer
     if (bufferText) {
-        free(bufferText);
+        delete[] bufferText;
         bufferText = nullptr;
     }
     // Clearing texture
@@ -51,22 +52,26 @@ void StaticText::updateTexture() {
 void StaticText::updateLocationArgs(const unsigned count, ...) {
     // Clearing previous buffer
     if (bufferText) {
-        free(bufferText);
+        delete[] bufferText;
         bufferText = nullptr;
     }
 
     // Finding need text for this language
     const char* start = text;
-    for(Uint8 lan = LNG_ENGLISH; lan != data.language; ++lan){
+    for (Uint8 lan = LNG_ENGLISH; lan != data.language; ++lan) {
         // Parsing text to it end
-        for(; *start++;);
+        for (; *start++;) {}
     }
     // Getting arguments
     va_list args;
     va_start(args, count);
-    
-    // Creating new buffer for text with arguments
-    vasprintf(&bufferText, start, args);
+
+    // Getting size of string
+    size_t size = _vscprintf(start, args);
+
+    // Creating buffer for text
+    bufferText = new char[size];
+    vsprintf(bufferText, start, args);
 
     va_end(args);
 
@@ -77,8 +82,8 @@ void StaticText::updateLocationArgs(const unsigned count, ...) {
 //
 void StaticText::updateLocation() {
     // Clearing previous buffer
-    if(bufferText){
-        free(bufferText);
+    if (bufferText) {
+        delete[] bufferText;
         bufferText = nullptr;
     }
 
@@ -86,15 +91,14 @@ void StaticText::updateLocation() {
     const char* start = text;
     for (Uint8 lan = LNG_ENGLISH; lan != data.language; ++lan) {
         // Parsing text to it end
-        for(; *start++;);
+        for (; *start++;) {}
     }
-
     // Getting need size
     size_t size = strlen(start) + 1;
 
-    // Creating buffer for text
+    // Creating buffer for text and copy it here
     bufferText = new char[size];
-    strcpy(bufferText, start);
+    strcpy_s(bufferText, size, start);
 
     // Updating texture
     updateTexture();

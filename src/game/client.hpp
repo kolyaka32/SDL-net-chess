@@ -20,7 +20,7 @@ class ClientGameCycle : public InternetClientCycle {
 
     bool getData() override;   // Overloaded function of getting internet data
     void removeSelection();
-    
+
     // GUI objects
     GUI::StaticText enterIPText{"Enter IP:\0Введите IP:\0-\0-",
        30, 0.5, 0.1, WHITE};
@@ -41,8 +41,8 @@ class ClientGameCycle : public InternetClientCycle {
     // New overrided cycle functions
     // Getting special user input
     bool getMouseInput() override;  // Checking for any need mouse action
-    bool getKeysInput(SDL_Keysym& key) override;  // Checking for any keys actions
-    bool getAnotherInput(SDL_Event& event) override;  // Getting rest input
+    bool getKeysInput(const SDL_Keysym& key) override;  // Checking for any keys actions
+    bool getAnotherInput(const SDL_Event& event) override;  // Getting rest input
     void draw() const override;     // Drawing all needed objects
     void update() override;         // Special update
 

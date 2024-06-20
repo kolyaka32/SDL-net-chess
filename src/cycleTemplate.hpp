@@ -11,11 +11,11 @@
 // Template for any cycles
 class CycleTemplate {
  protected:
-    IdleTimer idleTimer{1000/data.drawFPS};   // Timer to idle in main cycle
+    IdleTimer idleTimer{1000/data.drawFPS};  // Timer to idle in main cycle
 
     // Data for cycle
     bool running = true;    // Flag of running current cycle
-    
+
     int mouseX, mouseY;     // Current position of mouse
     Uint8 selectedBox;      // Number of which box is currently selected
     const MUS_names music;  // Music track to play (or NULL, if not need start)
@@ -32,12 +32,12 @@ class CycleTemplate {
 
     // Get input subprograms
     virtual bool getMouseInput();  // Checking for any mouse actions
-    virtual bool getKeysInput(SDL_Keysym& key);   // Checking for any keys actions
-    virtual bool getAnotherInput(SDL_Event& event);  // Getting all other user input
+    virtual bool getKeysInput(const SDL_Keysym& key);   // Checking for any keys actions
+    virtual bool getAnotherInput(const SDL_Event& event);  // Getting all other user input
 
  public:
     explicit CycleTemplate(MUS_names music = MUS_START_NONE);
-    virtual void run();  // Main run cycle 
+    virtual void run();  // Main run cycle
 };
 
 

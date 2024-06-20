@@ -26,6 +26,4 @@ bool GUItemplate::in(const int mouseX, const int mouseY) const {
 }
 
 // Template for updating location of current object
-void GUItemplate::updateLocation() {
-
-}
+void GUItemplate::updateLocation() {}

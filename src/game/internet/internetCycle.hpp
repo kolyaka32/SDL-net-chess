@@ -11,8 +11,7 @@
 
 
 // Class for create process thread for internet connection
-class InternetCycle : public Internet, public GameCycle
-{
+class InternetCycle : public Internet, public GameCycle {
  private:
     void updateInternet();  // Update all internet data
 

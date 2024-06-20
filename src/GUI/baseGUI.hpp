@@ -59,17 +59,16 @@ namespace GUI {
 
 
     // Class of slider bar with point on it to control need parameter
-    template <typename linkType = Uint8>
     class Slider : public GUItemplate {
      private:
         SDL_Texture *textureButton;  // Texture of line (upper part of slider)
         SDL_Rect destButton;         // Place for rendering upper part
-        const linkType maxValue;     // Maximal value of state
-        linkType &link;              // Pointer to data to control
+        const unsigned maxValue;     // Maximal value of state
+        unsigned *link;              // Pointer to data to control
      public:
         // Create slide with need line and button images
-        Slider(float X, float Y, linkType &controlData, IMG_names lineImage = IMG_GUI_SLIDER_LINE,
-            IMG_names buttonImage = IMG_GUI_SLIDER_BUTTON, linkType max = 255);
+        Slider(float X, float Y, unsigned *controlData, IMG_names lineImage = IMG_GUI_SLIDER_LINE,
+            IMG_names buttonImage = IMG_GUI_SLIDER_BUTTON, unsigned max = 255);
         void setValue(int mouseX);                           // Setting new state from mouse position
         bool scroll(Sint32 wheelY, int mouseX, int mouseY);  // Checking mouse wheel action
         void blit() const override;                          // Drawing slider with need button position
@@ -113,15 +112,14 @@ namespace GUI {
 
     // Class of box, where user can type text
     class TypeBox : public GUItemplate {
-        // Global class constants
-        const static Uint8 bufferSize = 16;
-
      private:
-        // Constants from creating
+        // Class constants
+        const static Uint8 bufferSize = 16;
         const ALIGNMENT_types aligment;  // Aligment type for correct placed position
         const SDL_Color color;      // Color of typing text
 
-        char buffer[bufferSize+1];  // String, that was typed
+        // Variables
+        char buffer[bufferSize+1];       // String, that was typed
         char clipboardText[bufferSize];  // Copying string for clipboard
         char swapCaret;             // Byte for swap with caret
         int caret = 0;              // Position of place, where user type
@@ -163,7 +161,7 @@ namespace GUI {
      public:
         Backplate(const SDL_Rect rect, const Uint8 radius, const Uint8 border,
             const SDL_Color frontColor = {175, 175, 175, 255}, const SDL_Color backColor = BLACK);
-        Backplate(const Uint8 radius, const Uint8 border, const SDL_Color frontColor = {175, 175, 175, 255}, 
+        Backplate(const Uint8 radius, const Uint8 border, const SDL_Color frontColor = {175, 175, 175, 255},
             const SDL_Color backColor = BLACK);
         ~Backplate();
     };
@@ -173,7 +171,7 @@ namespace GUI {
      private:
         const StaticText topText;
      public:
-        TextButton(const char* text, textHeight size, float X, float Y, 
+        TextButton(const char* text, textHeight size, float X, float Y,
             SDL_Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
         void blit() const override;      // Drawing current button
         void updateLocation() override;  // Update object to match text sizes

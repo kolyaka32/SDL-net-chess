@@ -6,21 +6,15 @@
 #include "texts.hpp"
 
 
-// Class of updation
-UpdateList::UpdateList() {
-
-}
-
-UpdateList::~UpdateList() {
-
-}
+// Class of updation location
+UpdateList::UpdateList() {}
 
 // Adding new pointer to array
 void UpdateList::add(GUI::GUItemplate* object) {
     // Adding new item, if possible
     if (size < maxSize) {
         languageUpdateList[size] = object;
-        size++; 
+        size++;
     }
 }
 
@@ -34,14 +28,14 @@ void UpdateList::enterCycle() {
 // Exiting internal cycle
 void UpdateList::exitCycle() {
     // Clearing allow to previous nullptr
-    for (; (size > 0) && (languageUpdateList[--size]););
+    for (; (size > 0) && (languageUpdateList[--size]);) {}
 }
 
 // Updating all allowable objects
 void UpdateList::update() {
-   // Updating all objects
+    // Updating all objects
     for (Uint8 i=0; i < size; ++i) {
-        if(languageUpdateList[i]){
+        if (languageUpdateList[i]) {
             languageUpdateList[i]->updateLocation();
         }
     }
@@ -57,13 +51,13 @@ Texts::Texts() {
 // Update translations of all texts
 void Texts::updateTranslation() {
     updateTitle();
-    
+
     // Updating texts
     updateList.update();
 }
 
 // Updating title depend on language
-void Texts::updateTitle(){
+void Texts::updateTitle() {
     // Setting window title
     switch (language) {
     case LNG_ENGLISH:

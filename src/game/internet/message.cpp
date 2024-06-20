@@ -17,7 +17,7 @@ MessageSender::MessageSender() {
 // Clearing data
 MessageSender::~MessageSender() {
     // Clearing dynamic memory
-    for(Uint8 i=0; i < confirmMessages.size(); ++i){
+    for (Uint8 i=0; i < confirmMessages.size(); ++i) {
         delete[] confirmMessages[i].data;
     }
     // Clearing rest messages
@@ -25,7 +25,7 @@ MessageSender::~MessageSender() {
 }
 
 //
-void MessageSender::send(Message& _message){
+void MessageSender::send(Message& _message) {
     // Moving pointer with data to send packet
     sendData.data = _message.data;
     // Setting it size
@@ -42,13 +42,13 @@ void MessageSender::send(Message& _message){
 }
 
 // Setting message with this id as applied
-void MessageSender::applyMessage(Uint8 id){
+void MessageSender::applyMessage(Uint8 id) {
     // Searching for need id (from start)
-    for(Uint8 i=0; i < confirmMessages.size(); ++i){
-        if(confirmMessages[i].data[1] == id){
+    for (Uint8 i=0; i < confirmMessages.size(); ++i) {
+        if (confirmMessages[i].data[1] == id) {
             // Clearing dynamic memory before deleting
             delete[] confirmMessages[i].data;
-            
+
             // Need message applied and clear
             confirmMessages.erase(confirmMessages.begin() + i);
             return;
@@ -57,10 +57,10 @@ void MessageSender::applyMessage(Uint8 id){
 }
 
 // Resend all messages, which wasn't applied
-void MessageSender::checkNeedResend(){
+void MessageSender::checkNeedResend() {
     // Checking all messages for getting over timer
-    for(Uint8 i=0; i < confirmMessages.size(); ++i){
-        if(confirmMessages[i].lastSended > SDL_GetTicks64()){
+    for (Uint8 i=0; i < confirmMessages.size(); ++i) {
+        if (confirmMessages[i].lastSended > SDL_GetTicks64()) {
             // Resending it
             send(confirmMessages[i]);
         }
