@@ -11,18 +11,14 @@ AudioLibrary::AudioLibrary() {
     // Initializing all audio library
     if (!Mix_Init(MIX_INIT_OGG | MIX_INIT_FLAC)) {
         #if CHECK_CORRECTION
-        SDL_Log("Couldn't initialize audio library: %s\n", Mix_GetError());
-        throw "Couldn't initialize audio library";
-        exit(ERR_SDL_SND);
+        throw LibararyLoadException("audio library");
         #endif
     }
 
     // Openning audio chanel
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048)) {
         #if CHECK_CORRECTION
-        SDL_Log("Couldn't initialase audio chanel.\n");
-        throw "Couldn't initialase audio chanel";
-        exit(ERR_INI_SND);
+        throw LibararyLoadException("audio chanel initialisation");
         #endif
     }
 }

@@ -96,7 +96,7 @@ void SinglePlayerGameCycle::draw() const {
     settingButton.blit();
     exitButton.blit();
 
-    //
+    // Getting pixels of current frame
     const Uint8* frameData = (Uint8*)data.animations[type]->frames[frame][0].pixels;
     const float cellLength = 8 * width / currentWidth;
 

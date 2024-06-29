@@ -43,9 +43,7 @@ void Animations::loadAnimation(const std::string _name, ANI_names _index) {
     // Checking correction of loaded data
     #if CHECK_CORRECTION
     if (!tempRW) {
-        SDL_Log("Error with loading animation file '%s' at %u.", _name.std::string::c_str(), _index);
-        throw "Can't load animation";
-        exit(ERR_FIL_IMG);
+        throw DataLoadException{"animation file load: " + _name};
     }
     #endif
 
@@ -55,9 +53,7 @@ void Animations::loadAnimation(const std::string _name, ANI_names _index) {
     // Checking correction of loaded animation
     #if CHECK_CORRECTION
     if (animations[_index] == nullptr) {
-        SDL_Log("Error with loading animation file '%s' at %u.", _name.std::string::c_str(), _index);
-        throw "Can't load animation";
-        exit(ERR_FIL_IMG);
+        throw DataLoadException{"animation file creation: " + _name};
     }
     #endif
 }
@@ -77,9 +73,7 @@ void Animations::checkCorrection() {
 
     // Check, if all objects correct
     if (count != ANI_count) {
-        SDL_Log("Wrong count of animations");
-        throw "Wrong count of animations";
-        exit(ERR_FIL_ANI);
+        throw DataLoadException{"wrong count of animations"};
     }
 }
 #endif
