@@ -24,6 +24,6 @@ int main(int argv, char **args) {
         return main(argv, args);
     }
 
-    // Finishing main process
-    return NOR_WOR;
+    // Successful end of program
+    return 0;
 }

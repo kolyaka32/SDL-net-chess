@@ -13,16 +13,14 @@ Icone::Icone() {
 }
 
 // Loading icone with need name
-void Icone::loadIcone(const std::string name) {
+void Icone::loadIcone(const std::string _name) {
     // Getting icone data
-    SDL_RWops* tempRW = loadObject("img/" + name);
+    SDL_RWops* tempRW = loadObject("img/" + _name);
 
     // Checking created data
     #if CHECK_CORRECTION
     if (tempRW == nullptr) {
-        SDL_Log("Can't load game icone, %s", SDL_GetError());
-        throw "Error with loading game icone";
-        exit(ERR_FIL_ICO);
+        throw DataLoadException("icone file load: " + _name);
     }
     #endif
 
@@ -35,9 +33,7 @@ void Icone::loadIcone(const std::string name) {
     // Checking created image
     #if CHECK_CORRECTION
     if (iconeImage == nullptr) {
-        SDL_Log("Can't load game icone, %s", SDL_GetError());
-        throw "Error with loading game icone";
-        exit(ERR_FIL_ICO);
+        throw DataLoadException("icone file creation: " + _name);
     }
     #endif
 

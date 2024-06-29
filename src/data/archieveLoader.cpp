@@ -73,9 +73,7 @@ SDL_RWops *DataLoader::loadObject(const std::string _name) {
     // Checking correction of loaded object
     #if CHECK_CORRECTION
     if (!tempRW) {
-        SDL_Log("Can't load object '%s' from arhieve", _name);
-        throw "Can't load object from arhieve";
-        exit(ERR_FIL_OPN);
+        throw DataLoadException("load file from archieve: " + _name);
     }
     #endif
 

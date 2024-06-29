@@ -11,9 +11,7 @@
 FontLibrary::FontLibrary() {
     if (TTF_Init()) {
         #if CHECK_CORRECTION
-        SDL_Log("Couldn't initialize font library: %s\n", TTF_GetError());
-        throw "Couldn't init font library";
-        exit(ERR_SDL_FFT);
+        throw LibararyLoadException("font library");
         #endif
     }
 }
@@ -85,16 +83,14 @@ TTF_Font* Font::createFont(textHeight _size) {
 }
 
 // Loading font with need name
-void Font::loadFontData(const std::string name) {
+void Font::loadFontData(const std::string _name) {
     // Openning font file
-    fontData = loadObject(name);
+    fontData = loadObject(_name);
 
     // Check, if loaded normaly
     #if CHECK_CORRECTION
     if (fontData == nullptr) {
-        SDL_Log("Can't load data for fonts");
-        throw "Can't load data for fonts";
-        exit(ERR_FIL_FNT);
+        throw DataLoadException("font file: " + _name);
     }
     #endif
 }

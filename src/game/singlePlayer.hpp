@@ -8,7 +8,7 @@
 #include "../cycleTemplate.hpp"
 
 
-//
+// Game cycle (for single player (special animation))
 class SinglePlayerGameCycle : public CycleTemplate {
  private:
     // Extra GUI
@@ -26,9 +26,9 @@ class SinglePlayerGameCycle : public CycleTemplate {
     timer prevFrameUpdate;        // Timer, when was last frame change
 
     // Main run functions
-    bool getMouseInput() override;    // Getting mouse clicking
-    void update() override;      // Getting special objects update (if need)
-    void draw() const override;  // Draw all need objects
+    bool getMouseInput() override;
+    void update() override;
+    void draw() const override;
 
  public:
     SinglePlayerGameCycle();

@@ -12,9 +12,7 @@ App::App() {
     // Initialising main SDL libarary
     if (SDL_Init(SDL_INIT_EVERYTHING)) {
         #if CHECK_CORRECTION
-        SDL_Log("Couldn't initialise SDL main library: %s\n", SDL_GetError());
-        throw "Couldn't initialise SDL main library";
-        exit(ERR_SDL_SDL);
+        throw LibararyLoadException("main library");
         #endif
     }
 
@@ -23,9 +21,7 @@ App::App() {
         SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
     #if CHECK_CORRECTION
     if (window == NULL) {
-        SDL_Log("Couldn't create window: %s\n", SDL_GetError());
-        throw "Couldn't create window";
-        exit(ERR_INI_WIN);
+        throw LibararyLoadException("window creation");
     }
     #endif
 
@@ -33,14 +29,9 @@ App::App() {
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     #if CHECK_CORRECTION
     if (renderer == NULL) {
-        SDL_Log("Couldn't create renderer: %s\n", SDL_GetError());
-        throw "Couldn't create renderer";
-        exit(ERR_INI_REN);
+        throw LibararyLoadException("renderer creation");
     }
     #endif
-
-    // Setting base drawing color
-    setColor(BLACK);
 }
 
 // Function of deleting window and renders

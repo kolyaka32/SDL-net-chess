@@ -22,13 +22,13 @@ class ClientGameCycle : public InternetClientCycle {
     void removeSelection();
 
     // GUI objects
-    GUI::StaticText enterIPText{"Enter IP:\0Введите IP:\0-\0-",
+    GUI::StaticText enterIPText{"Enter IP:\0Введите IP:\0-\0Увядзіце IP:",
        30, 0.5, 0.1, WHITE};
-    GUI::StaticText enterPortText{"Enter port:\0Введите порт:\0-\0-",
+    GUI::StaticText enterPortText{"Enter port:\0Введите порт:\0Port eingeben:\0Увядзіце порт:",
        30, 0.5, 0.4, WHITE};
-    GUI::TextButton cancelButton{"Cancel\0Отмена\0-\0-",
+    GUI::TextButton cancelButton{"Cancel\0Отмена\0Annullierung\0Адмена",
        24, 0.5, 0.9, WHITE};
-    GUI::TextButton connectButton{"Connect\0Присоединится\0-\0-",
+    GUI::TextButton connectButton{"Connect\0Присоединится\0Beitritt\0Далучыцца",
        24, 0.5, 0.7, WHITE};
 
     // Input fields
@@ -40,11 +40,11 @@ class ClientGameCycle : public InternetClientCycle {
  protected:
     // New overrided cycle functions
     // Getting special user input
-    bool getMouseInput() override;  // Checking for any need mouse action
-    bool getKeysInput(const SDL_Keysym& key) override;  // Checking for any keys actions
-    bool getAnotherInput(const SDL_Event& event) override;  // Getting rest input
-    void draw() const override;     // Drawing all needed objects
-    void update() override;         // Special update
+    bool getMouseInput() override;
+    bool getKeysInput(const SDL_Keysym& key) override;
+    bool getAnotherInput(const SDL_Event& event) override;
+    void draw() const override;
+    void update() override;
 
  public:
     ClientGameCycle();

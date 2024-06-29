@@ -31,8 +31,8 @@ class CycleTemplate {
     virtual void update();      // Getting special objects update (if need)
 
     // Get input subprograms
-    virtual bool getMouseInput();  // Checking for any mouse actions
-    virtual bool getKeysInput(const SDL_Keysym& key);   // Checking for any keys actions
+    virtual bool getMouseInput();                          // Checking for any mouse actions
+    virtual bool getKeysInput(const SDL_Keysym& key);      // Checking for any keys actions
     virtual bool getAnotherInput(const SDL_Event& event);  // Getting all other user input
 
  public:

@@ -34,6 +34,7 @@
 // Internet constants
 #define BASE_PORT 2000                      // Base port to create/connect
 #define INTERNET_BUFFER 5                   // Size of data to send/recieve by connecion
+#define MAX_SEND_ID 128                     // Maximal number of send message ID
 #define MESSAGE_GET_TIMEOUT 4000            // Time after which connection is considered lost
 #define MESSAGE_NULL_TIMEOUT 800            // Time to send NULL message to keep connecion
 #define MESSAGE_APPLY_TIMEOUT 600           // Time to apply arriving message

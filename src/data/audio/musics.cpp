@@ -62,9 +62,7 @@ void Musics::loadMusic(const std::string _name, const MUS_names _index) {
     // Checking correction of loaded data
     #if CHECK_CORRECTION
     if (!musicsData[_index - 1]) {
-        SDL_Log("Error with loading music file '%s' at %u.", _name.std::string::c_str(), _index - 1);
-        throw "Error with loading music file";
-        exit(ERR_FIL_MUS);
+        throw DataLoadException("music file load: " + _name);
     }
     #endif
 
@@ -74,9 +72,7 @@ void Musics::loadMusic(const std::string _name, const MUS_names _index) {
     // Checking correction of loaded music
     #if CHECK_CORRECTION
     if (musics[_index - 1] == nullptr) {
-        SDL_Log("Error with loading music file '%s' at %u.", _name.std::string::c_str(), _index - 1);
-        throw "Error with loading music file";
-        exit(ERR_FIL_MUS);
+        throw DataLoadException("music file creation: " + _name);
     }
     #endif
 }
@@ -87,9 +83,7 @@ void Musics::checkCorrection() {
     // Checking, if all music tracks exist
     for (Uint8 i = 0; i < MUS_count; ++i) {
         if (musics[i] == NULL) {
-            SDL_Log("Wrong music track at %u.", i);
-            throw "Wrong count of music files";
-            exit(ERR_FIL_MUS);
+            throw DataLoadException("wrong count");
         }
     }
 }

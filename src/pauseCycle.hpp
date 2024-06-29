@@ -38,10 +38,10 @@ class PauseCycle : public CycleTemplate {
     GUI::ImageButton settingButton{0.95, 0.05, IMG_GUI_PAUSE_BUTTON};
 
     // New overrided cycle functions
-    void draw() const override;                      // Drawing all needed objects
-    void update() override;                          // Getting special objects update
-    bool getMouseInput() override;                   // Checking for any mouse actions
-    bool getAnotherInput(const SDL_Event& event) override;  // Getting all rest user input
+    void draw() const override;
+    void update() override;
+    bool getMouseInput() override;
+    bool getAnotherInput(const SDL_Event& event) override;
 
  public:
     PauseCycle();   // Start pause cycle

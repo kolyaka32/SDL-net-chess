@@ -6,7 +6,6 @@
 #pragma once
 
 #include <cstdlib>
-#include <cstring>
 #include <vector>
 #include <initializer_list>
 #include <SDL_net.h>
@@ -16,14 +15,14 @@
 
 // Types of internet messages
 enum MESSAGE_types{
-    MES_NONE = 0,   // Type of nothing for reset connection timer
-    MES_INIT = 1,   // Type of starting server and checking compatibility
-    MES_START = 2,  // Type of starting new round showing which player start
-    MES_TURN = 3,   // Type of setting shape on field, sending to opponent
-    MES_STOP = 4,   // Type of closing game and go to menu
-    MES_REST = 5,   // Type of restarting game and waiting for new start
-    MES_APPL = 6,   // Type of applying, that last message was get
-    MES_SKIP = 7,   // Type of skipping current round
+    MES_NONE,   // Type of nothing for reset connection timer
+    MES_INIT,   // Type of starting server and checking compatibility
+    MES_START,  // Type of starting new round showing which player start
+    MES_TURN,   // Type of setting shape on field, sending to opponent
+    MES_STOP,   // Type of closing game and go to menu
+    MES_REST,   // Type of restarting game and waiting for new start
+    MES_APPL,   // Type of applying, that last message was get
+    MES_SKIP,   // Type of skipping current round
 };
 
 
@@ -31,8 +30,6 @@ enum MESSAGE_types{
 struct Message {
     byte* data;  // Message data
     Uint8 size;  // Size of this data
-
-    // Data for control sending
     timer lastSended;  // Timer, when message was lastly send
 };
 
@@ -102,38 +99,12 @@ void MessageSender::sendNew(const MESSAGE_types _type, const std::initializer_li
 
     // Setting ID of message to confirm at return
     current.data[1] = ID;
-    // Changin ID
-    ID = (ID + 1) % 128;
+    // Changing ID
+    ID = (ID + 1) % MAX_SEND_ID;
 
     // Check, if need copy data
     if (current.size > 2) {
-        // Select, which type we should send
-        switch (sizeof(T)) {
-        // Smallest one-byte types
-        case sizeof(Uint8):
-            // Simple coping memory
-            memcpy(current.data + 2 , _list.begin(), _list.size());
-            break;
-
-        // Two-bytes types
-        case sizeof(Uint16):
-            // Coping each number to it position
-            for (Uint8 i=0; i < _list.size(); ++i) {
-                // SDLNet_Write16((Uint16)(_list + i*2), current.data + 2 + i*2);
-            }
-
-        // Four-bytes types
-        case sizeof(Uint32):
-            // Coping each number to it position
-            for (Uint8 i=0; i < _list.size(); ++i) {
-                // SDLNet_Write32((Uint32)(_list + i*4), current.data + 2 + i*4);
-            }
-
-        // Unknown size
-        default:
-            throw "Unknown size of message";
-            break;
-        }
+        memcpy(current.data + 2, _list.begin(), current.size);
     }
 
     // Sending this message
@@ -165,42 +136,16 @@ void MessageSender::sendWithoutApply(const MESSAGE_types _type,
     current.data[1] = ID;
 
     // Changin ID to next
-    ID = (ID + 1) % 128;
+    ID = (ID + 1) % MAX_SEND_ID;
 
     // Check, if need copy data
     if (current.size > 2) {
-        // Select, which type we should send
-        switch (sizeof(T)) {
-        // Smallest one-byte types
-        case sizeof(Uint8):
-            // Simple coping memory
-            memcpy(current.data+2, _list.begin(), _list.size());
-            break;
-
-        // Two-bytes types
-        case sizeof(Uint16):
-            // Coping each number to it position
-            for (Uint8 i=0; i < _list.size(); ++i) {
-                // SDLNet_Write16((Uint16)(_list + i*2), current.data + 2 + i*2);
-            }
-
-        // Four-bytes types
-        case sizeof(Uint32):
-            // Coping each number to it position
-            for (Uint8 i=0; i < _list.size(); ++i) {
-                // SDLNet_Write32((Uint32)(_list + i*4), current.data + 2 + i*4);
-            }
-
-        // Unknown size
-        default:
-            throw "Unknown size of message";
-            break;
-        }
+        memcpy(current.data + 2, _list.begin(), current.size);
     }
 
     // Sending this message
     send(current);
 
-    // Clearing it
+    // Clearing rest data
     delete[] current.data;
 }

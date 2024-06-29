@@ -8,13 +8,11 @@
 // Server game cycle class
 // Setting texture of port box
 ServerGameCycle::ServerGameCycle() {
-    // Updating text of created port
     portText.updateLocationArgs(1, serverPort);
 }
 
-//
+// Starting playing menu theme if need
 ServerGameCycle::~ServerGameCycle() {
-    // Starting playing menu theme if need
     if (!waitStart) {
         data.playMusic(MUS_MENU_THEME);
     }
@@ -22,7 +20,6 @@ ServerGameCycle::~ServerGameCycle() {
 
 //
 bool ServerGameCycle::getData() {
-    //
     switch (recieveData->data[0]) {
     // Code of start connection with other side
     case MES_INIT:
@@ -111,7 +108,6 @@ bool ServerGameCycle::getMouseInput() {
                 }
             }
         } else {
-            // Getting buttons clicks
             // Game restart
             if (restartButton.in(mouseX, mouseY)) {
                 // Resetting flags
@@ -188,8 +184,6 @@ void ServerGameCycle::draw() const {
             restartButton.blit();
             menuButton.blit();
         }
-
-        // Bliting all to screen
         data.render();
     }
 }

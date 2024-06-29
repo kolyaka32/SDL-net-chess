@@ -13,9 +13,7 @@ GraphicsLibrary::GraphicsLibrary() {
     // Initializing image library
     if (!IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG)) {
         #if CHECK_CORRECTION
-        SDL_Log("Couldn't initialize image library: %s\n", IMG_GetError());
-        throw "Couldn't initialize image library";
-        exit(ERR_SDL_IMG);
+        throw LibararyLoadException("image library");
         #endif
     }
 }
@@ -99,9 +97,7 @@ void Textures::loadTexture(const std::string _name, const IMG_names _index) {
     // Checking correction of loaded data
     #if CHECK_CORRECTION
     if (!tempRW) {
-        SDL_Log("Error with loading image file '%s' at %u.", _name.std::string::c_str(), _index);
-        throw "Error with loading image file";
-        exit(ERR_FIL_IMG);
+        throw DataLoadException("image file load: " + _name);
     }
     #endif
 
@@ -123,9 +119,7 @@ void Textures::loadTexture(const std::string _name, const IMG_names _index) {
     // Checking correction of loaded texture
     #if CHECK_CORRECTION
     if (textures[_index] == nullptr) {
-        SDL_Log("Error with loading image file '%s' at %u.", _name.std::string::c_str(), _index);
-        throw "Error with loading image file";
-        exit(ERR_FIL_IMG);
+        throw DataLoadException("image file creation: " + _name);
     }
     #endif
 }
@@ -136,9 +130,7 @@ void Textures::checkCorrection() {
     // Checking, if all images exist
     for (Uint8 i = 0; i < IMG_count; ++i) {
         if (textures[i] == NULL) {
-            SDL_Log("Wrong texture at %u.", i);
-            throw "Wrong texture count";
-            exit(ERR_FIL_IMG);
+            throw DataLoadException("image files wrong count");
         }
     }
 }
