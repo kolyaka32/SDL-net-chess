@@ -5,12 +5,12 @@
 
 #pragma once
 
-#include "cycleTemplate.hpp"
-#include "GUI/baseGUI.hpp"
+#include "baseCycle.hpp"
+#include "../GUI/baseGUI.hpp"
 
 
 // Cycle for select variants to start
-class SelectCycle : public CycleTemplate {
+class SelectCycle : public BaseCycle {
  private:
     // GUI objects
     GUI::StaticText titleText{"Chess\0Шахматы\0Schach\0Шахматы",

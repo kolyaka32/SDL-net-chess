@@ -3,15 +3,15 @@
  * <nik.kazankov.05@mail.ru>
  */
 
-#include "base.hpp"
-#include "../pauseCycle.hpp"
+#include "gameCycle.hpp"
+#include "pauseCycle.hpp"
 
-//
-GameCycle::GameCycle() : CycleTemplate(MUS_START_NONE) {
+
+GameCycle::GameCycle() : BaseCycle(MUS_START_NONE) {
     endState = END_NONE;
 }
 
-//
+// Resetting music to menu theme
 GameCycle::~GameCycle() {}
 
 

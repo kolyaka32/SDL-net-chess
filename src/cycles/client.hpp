@@ -7,8 +7,8 @@
 
 #include <string>
 
-#include "base.hpp"
-#include "internet/internetClient.hpp"
+#include "gameCycle.hpp"
+#include "../data/internet/internetClient.hpp"
 
 //
 class ClientGameCycle : public InternetClientCycle {

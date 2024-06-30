@@ -6,15 +6,15 @@
 #pragma once
 
 #include "../GUI/baseGUI.hpp"
-#include "../cycleTemplate.hpp"
-#include "entity/board.hpp"
-#include "entity/letters.hpp"
+#include "baseCycle.hpp"
+#include "../game/board.hpp"
+#include "../game/letters.hpp"
 
 
 // Cycle with game template
-class GameCycle : public CycleTemplate {
+class GameCycle : public BaseCycle {
  protected:
-    Board board;  // Main game field
+    Board board;     // Main game field
     Uint8 endState;  // State of game (end)
 
     // Extra UI
@@ -61,6 +61,6 @@ class GameCycle : public CycleTemplate {
     void draw() const override;
 
  public:
-    GameCycle();   // Start game cycle
-    ~GameCycle();  // Close game cycle
+    GameCycle();
+    ~GameCycle();
 };

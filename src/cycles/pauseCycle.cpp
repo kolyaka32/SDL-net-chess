@@ -3,7 +3,7 @@
  * <nik.kazankov.05@mail.ru>
  */
 
-#include "define.hpp"
+#include "../define.hpp"
 #include "pauseCycle.hpp"
 
 
@@ -20,8 +20,8 @@ enum {
 } SELECTED_BOX_types;
 
 
-// Starting basic template without start any new song
-PauseCycle::PauseCycle() : CycleTemplate(MUS_START_NONE) {}
+// Starting without any new song
+PauseCycle::PauseCycle() {}
 
 // Getting special input (with mousewheel and escape button)
 bool PauseCycle::getAnotherInput(const SDL_Event& event) {
@@ -34,6 +34,7 @@ bool PauseCycle::getAnotherInput(const SDL_Event& event) {
     case SDL_MOUSEWHEEL:
         // Mouse position on screen
         SDL_GetMouseState(&mouseX, &mouseY);  // Getting mouse position
+
         // Checking scroll on sliders
         if (musicSlider.scroll(event.wheel.y, mouseX, mouseY)) {
             Mix_VolumeMusic(data.musicVolume);
@@ -43,7 +44,6 @@ bool PauseCycle::getAnotherInput(const SDL_Event& event) {
         return false;
 
     default:
-        // None-return
         return false;
     }
 }
@@ -78,7 +78,7 @@ void PauseCycle::update() {
 // Getting language change and sound mutting
 bool PauseCycle::getMouseInput() {
     // Setting old language to save
-    Uint8 newLanguage = data.language;
+    language newLanguage = data.language;
 
     // Checking, if click on sliders or flag
     if (settingButton.in(mouseX, mouseY)) {
@@ -90,10 +90,11 @@ bool PauseCycle::getMouseInput() {
         selectedBox = BOX_SOUND_SLIDER;
         return false;
     } else {
-        for (Uint8 i=0; i < LNG_count; ++i)
+        for (language i=LNG_ENGLISH; i < LNG_BELARUSIAN; ++i) {
             if (flags[i].in(mouseX, mouseY)) {
                 newLanguage = i;
             }
+        }
     }
 
     // Updating texts language
@@ -104,8 +105,6 @@ bool PauseCycle::getMouseInput() {
         // Updating texture
         data.updateTranslation();
     }
-
-    // None-return
     return false;
 }
 
@@ -134,7 +133,7 @@ void PauseCycle::draw() const {
 
     // Blitting buttons
     // Start variants
-    for (Uint8 i = 0; i < LNG_count; ++i) {
+    for (language i = 0; i < LNG_count; ++i) {
         flags[i].blit();
     }
 

@@ -5,15 +5,14 @@
 
 #pragma once
 
-#include "cycleTemplate.hpp"
-#include "GUI/baseGUI.hpp"
+#include "baseCycle.hpp"
+#include "../GUI/baseGUI.hpp"
 
 
 // Cycle for select settings variants
-class PauseCycle : public CycleTemplate {
+class PauseCycle : public BaseCycle {
  private:
-    // Variables
-    timer nextSound = 0;  // Time to next play sound
+    timer nextSound = 0;  // Time to play next sound
 
     // GUI objects
     GUI::StaticText titleText{"Pause\0Пауза\0Pause\0Паўза",
@@ -22,8 +21,6 @@ class PauseCycle : public CycleTemplate {
         30, 0.5, 0.68};
     GUI::StaticText soundText{"Sounds\0Звуки\0Geräusche\0Гук",
         30, 0.5, 0.83};
-
-    // Sliders
     GUI::Slider musicSlider{0.5, 0.75, &data.musicVolume};
     GUI::Slider soundSlider{0.5, 0.9, &data.soundsVolume};
 

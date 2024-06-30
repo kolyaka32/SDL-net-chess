@@ -6,7 +6,7 @@
 #pragma once
 
 // Debuging modifiers
-#define DEBUG false
+#define DEBUG true
 #define CHECK_CORRECTION DEBUG
 #define ARCHIEVE_LOADING !DEBUG
 #define SCROLLER_SOUND SND_count
@@ -27,9 +27,6 @@
 #define DOWN_LINE LETTER_LINE               // Place for field letters
 #define SCREEN_WIDTH (GAME_WIDTH + LEFT_LINE + RIGHT_LINE)  // Width of all screen
 #define SCREEN_HEIGHT (GAME_HEIGHT + UPPER_LINE + DOWN_LINE)  // Height of all screen
-// Basic run frequency
-#define INPUT_FPS 50                        // Frequency of input update
-#define INTERNET_FPS 40                     // Frequency of internet update
 
 // Internet constants
 #define BASE_PORT 2000                      // Base port to create/connect

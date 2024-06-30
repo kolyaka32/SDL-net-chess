@@ -4,7 +4,7 @@
  */
 
 #include "board.hpp"
-#include "../../data/data.hpp"
+#include "../data/data.hpp"
 
 
 // First board clearing

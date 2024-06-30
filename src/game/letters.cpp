@@ -5,7 +5,7 @@
 
 #include "letters.hpp"
 
-#include "../../data/data.hpp"
+#include "../data/data.hpp"
 
 
 // Class with letters, placed in collumn

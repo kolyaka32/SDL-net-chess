@@ -5,11 +5,11 @@
 
 #pragma once
 
-#include "../cycleTemplate.hpp"
+#include "baseCycle.hpp"
 
 
 // Game cycle (for single player (special animation))
-class SinglePlayerGameCycle : public CycleTemplate {
+class SinglePlayerGameCycle : public BaseCycle {
  private:
     // Extra GUI
     GUI::ImageButton settingButton{0.95, 0.05, IMG_GUI_PAUSE_BUTTON};

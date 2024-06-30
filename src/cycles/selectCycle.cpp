@@ -7,13 +7,13 @@
 #include "pauseCycle.hpp"
 
 // Game variants
-#include "game/singlePlayer.hpp"
-#include "game/twoPlayer.hpp"
-#include "game/server.hpp"
-#include "game/client.hpp"
+#include "singlePlayer.hpp"
+#include "twoPlayer.hpp"
+#include "server.hpp"
+#include "client.hpp"
 
 // Starting basic template with main theme
-SelectCycle::SelectCycle() : CycleTemplate(MUS_MENU_THEME) {}
+SelectCycle::SelectCycle() : BaseCycle(MUS_MENU_THEME) {}
 
 // Getting selected button
 bool SelectCycle::getMouseInput() {

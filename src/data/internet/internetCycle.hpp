@@ -6,7 +6,7 @@
 #pragma once
 
 #include "baseInternet.hpp"
-#include "../base.hpp"
+#include "../../cycles/gameCycle.hpp"
 #include "../../data/idleTimer.hpp"
 
 
@@ -18,6 +18,7 @@ class InternetCycle : public Internet, public GameCycle {
  public:
     InternetCycle();
     ~InternetCycle();
-    // Main cycle function (for internet use)
+
+    // Main cycle function (special for internet use)
     void run() override;
 };

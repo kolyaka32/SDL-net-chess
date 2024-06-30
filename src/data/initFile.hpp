@@ -6,13 +6,14 @@
 #pragma once
 
 #include <string>
-#include "../include.hpp"
 
+#include "../include.hpp"
+#include "languages.hpp"
 
 // Class of object to save user options
 class InitFile {
  public:
-    Uint8 language;           // Game language for all texts
+    language language;        // Game language for all texts
     unsigned musicVolume;     // Start volume of music
     unsigned soundsVolume;    // Start volume of effects
     unsigned drawFPS;         // Setted frames per seconds

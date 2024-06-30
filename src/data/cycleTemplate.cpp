@@ -7,20 +7,14 @@
 
 
 // Reset basic cycle template variables
-CycleTemplate::CycleTemplate(MUS_names _music) : music(_music) {
+CycleTemplate::CycleTemplate() {
     // Resetting values
-    selectedBox = 0;
     mouseX = 0;
     mouseY = 0;
 
     // Resetting input
     SDL_Event event;
-    while ( SDL_PollEvent(&event) != 0 ) {}  // Don't do anything
-
-    // Starting playing need music (if need)
-    if (music) {
-        data.playMusic(music);
-    }
+    while ( SDL_PollEvent(&event) != 0 ) {}
 }
 
 // Getting user input

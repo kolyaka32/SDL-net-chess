@@ -5,8 +5,7 @@
 
 #pragma once
 
-#include "base.hpp"
-#include "internet/internetServer.hpp"
+#include "../data/internet/internetServer.hpp"
 
 // Game cycle (start server)
 class ServerGameCycle : public InternetServerCycle {

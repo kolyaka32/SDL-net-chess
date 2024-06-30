@@ -4,8 +4,7 @@
  */
 
 #include "data/data.hpp"
-#include "selectCycle.hpp"
-#include "workCodes.hpp"
+#include "cycles/selectCycle.hpp"
 
 // Main process data
 Data data;
@@ -15,7 +14,7 @@ int main(int argv, char **args) {
     // Starting selecting cycle
     SelectCycle cycle;
 
-    // Running cycle
+    // Running selecting cycle
     cycle.run();
 
     // Reloading game if need
