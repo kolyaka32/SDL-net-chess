@@ -7,12 +7,14 @@
 
 #include "baseCycle.hpp"
 #include "../GUI/baseGUI.hpp"
+#include "../game/background.hpp"
 
 
 // Cycle for select settings variants
 class PauseCycle : public BaseCycle {
  private:
     timer nextSound = 0;  // Time to play next sound
+    MovingBackground background;
 
     // GUI objects
     GUI::StaticText titleText{"Pause\0Пауза\0Pause\0Паўза",

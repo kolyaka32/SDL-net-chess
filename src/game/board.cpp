@@ -373,7 +373,8 @@ Uint8 Board::placeFigure(const coord _x, const coord _y) {
             return END_WIN + turn;
         }
     }
-    bool makeMove = true;  // Flag of happened castling
+    bool makeMove = true;  // Flag of normal turn
+
     // Check on special moves (castling and pawn transform)
     switch (activeCell.type) {
     case FIG_WHITE_ROOK:

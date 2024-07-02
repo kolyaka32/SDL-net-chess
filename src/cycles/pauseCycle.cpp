@@ -32,8 +32,8 @@ bool PauseCycle::getAnotherInput(const SDL_Event& event) {
         return false;
 
     case SDL_MOUSEWHEEL:
-        // Mouse position on screen
-        SDL_GetMouseState(&mouseX, &mouseY);  // Getting mouse position
+        // Getting new mouse position on screen
+        SDL_GetMouseState(&mouseX, &mouseY);
 
         // Checking scroll on sliders
         if (musicSlider.scroll(event.wheel.y, mouseX, mouseY)) {
@@ -48,8 +48,12 @@ bool PauseCycle::getAnotherInput(const SDL_Event& event) {
     }
 }
 
-// Special update of selected box
+
 void PauseCycle::update() {
+    // Updating background state
+    background.update();
+
+    // Updating pressing on sliders
     switch (selectedBox) {
     case BOX_MUSIC_SLIDER:
         // Updating music slider state
@@ -110,29 +114,10 @@ bool PauseCycle::getMouseInput() {
 
 // Drawing cells background, language buttons and sound options
 void PauseCycle::draw() const {
-    // Offset (in pixels) for moving background
-    static Uint16 offset;
-
-    // Bliting background
-    data.setColor({255, 206, 158, 255});
-    SDL_RenderClear(data.renderer);
-
-    // Drawing background
-    data.setColor({206, 139, 71, 255});
-    for (coord y = 0; y <= SCREEN_HEIGHT / CELL_SIDE + 1; ++y)
-        for (coord x = y % 2; x <= SCREEN_WIDTH / CELL_SIDE + 1; x+=2) {
-            SDL_Rect rect = {(x-1) * CELL_SIDE + offset/2, (y-1) * CELL_SIDE + offset/2, CELL_SIDE, CELL_SIDE};
-            SDL_RenderFillRect(data.renderer, &rect);
-        }
-
-    // Moving background
-    offset = (offset + 1) % (CELL_SIDE * 2);
-
-    // Bliting title
+    background.blit();
     titleText.blit();
 
-    // Blitting buttons
-    // Start variants
+    // Blitting language buttons
     for (language i = 0; i < LNG_count; ++i) {
         flags[i].blit();
     }
@@ -143,7 +128,7 @@ void PauseCycle::draw() const {
     soundText.blit();
     musicSlider.blit();
 
-    // Settings menu
+    // Exit button
     settingButton.blit();
 
     // Bliting all to screen
