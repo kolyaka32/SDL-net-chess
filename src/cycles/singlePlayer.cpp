@@ -4,7 +4,6 @@
  */
 
 #include "singlePlayer.hpp"
-#include "pauseCycle.hpp"
 
 //
 SinglePlayerGameCycle::SinglePlayerGameCycle()
@@ -31,12 +30,12 @@ SinglePlayerGameCycle::~SinglePlayerGameCycle() {
 
 // Getting mouse clicking
 bool SinglePlayerGameCycle::getMouseInput() {
-    if (settingButton.in(mouseX, mouseY)) {
-        runCycle<PauseCycle>();
-    } else if (exitButton.in(mouseX, mouseY)) {
+    // Checking on exit
+    if (exitButton.in(mouseX, mouseY)) {
         return true;
     }
-
+    // Clicking in settings menu
+    settings.click(mouseX, mouseY);
     return false;
 }
 
@@ -86,6 +85,8 @@ void SinglePlayerGameCycle::update() {
             prevFrameUpdate = SDL_GetTicks64() + data.animations[type]->delays[frame]/3;
         }
     }
+    // Updating settings
+    settings.update();
 }
 
 
@@ -96,7 +97,6 @@ void SinglePlayerGameCycle::draw() const {
     SDL_RenderClear(data.renderer);
 
     // Drawing buttons
-    settingButton.blit();
     exitButton.blit();
 
     // Getting pixels of current frame
@@ -132,6 +132,8 @@ void SinglePlayerGameCycle::draw() const {
             }
         }
     }
+    // Drawing settings
+    settings.blit();
 
     // Bliting all to screen
     data.render();

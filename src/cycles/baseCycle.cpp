@@ -10,3 +10,12 @@ BaseCycle::BaseCycle(MUS_names _music) : music(_music) {
         data.playMusic(music);
     }
 }
+
+void BaseCycle::update() {
+    settings.update();
+}
+
+bool BaseCycle::getAnotherInput(const SDL_Event& event) {
+    settings.getAnotherInput(event);
+    return false;
+}

@@ -19,7 +19,7 @@ class ClientGameCycle : public InternetClientCycle {
     bool selecting = false;    // Flag of pressing on mouse to selecting text
 
     bool getData() override;   // Overloaded function of getting internet data
-    void removeSelection();
+    void removeSelection();    // Function for reseting selection from type boxes
 
     // GUI objects
     GUI::StaticText enterIPText{"Enter IP:\0Введите IP:\0-\0Увядзіце IP:",
@@ -38,8 +38,6 @@ class ClientGameCycle : public InternetClientCycle {
     };
 
  protected:
-    // New overrided cycle functions
-    // Getting special user input
     bool getMouseInput() override;
     bool getKeysInput(const SDL_Keysym& key) override;
     bool getAnotherInput(const SDL_Event& event) override;

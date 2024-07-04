@@ -9,10 +9,11 @@
 using namespace GUI;
 
 //
-Backplate::Backplate(const SDL_Rect _rect, const Uint8 _rad,
-    const Uint8 _bor, const SDL_Color _frontColor, const SDL_Color _backColor)
+Backplate::Backplate(float _centerX, float _centerY, float _width, float _height,
+    Uint8 _rad, Uint8 _bor, SDL_Color _frontColor, SDL_Color _backColor)
 : frontColor(_frontColor), backColor(_backColor), rad(_rad), bor(_bor) {
-    updatePlate(_rect);
+    updatePlate({SCREEN_WIDTH * (_centerX - _width/2), SCREEN_HEIGHT * (_centerY - _height/2),
+        SCREEN_WIDTH * _width, SCREEN_HEIGHT * _height});
 }
 
 Backplate::Backplate(const Uint8 _rad, const Uint8 _bor, const SDL_Color _frontColor, const SDL_Color _backColor)

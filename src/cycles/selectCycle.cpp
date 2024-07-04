@@ -4,7 +4,6 @@
  */
 
 #include "selectCycle.hpp"
-#include "pauseCycle.hpp"
 
 // Game variants
 #include "singlePlayer.hpp"
@@ -17,19 +16,17 @@ SelectCycle::SelectCycle() : BaseCycle(MUS_MENU_THEME) {}
 
 // Getting selected button
 bool SelectCycle::getMouseInput() {
-    if (settingButton.in(mouseX, mouseY)) {
-        return runCycle<PauseCycle>();
-    } else if (singleplayerButton.in(mouseX, mouseY)) {
-        return runCycle<SinglePlayerGameCycle>();
-    } else if (twoPlayerButton.in(mouseX, mouseY)) {
-        return runCycle<TwoPlayerGameCycle>();
-    } else if (serverButton.in(mouseX, mouseY)) {
-        return runCycle<ServerGameCycle>();
-    } else if (connectButton.in(mouseX, mouseY)) {
-        return runCycle<ClientGameCycle>();
+    if (settings.click(mouseX, mouseY)) {
+        if (singleplayerButton.in(mouseX, mouseY)) {
+            return runCycle<SinglePlayerGameCycle>();
+        } else if (twoPlayerButton.in(mouseX, mouseY)) {
+            return runCycle<TwoPlayerGameCycle>();
+        } else if (serverButton.in(mouseX, mouseY)) {
+            return runCycle<ServerGameCycle>();
+        } else if (connectButton.in(mouseX, mouseY)) {
+            return runCycle<ClientGameCycle>();
+        }
     }
-
-    // Nothing allowable pressed
     return false;
 }
 
@@ -37,20 +34,23 @@ bool SelectCycle::getMouseInput() {
 bool SelectCycle::getKeysInput(const SDL_Keysym& key) {
     switch (key.sym) {
     case SDLK_ESCAPE:
-        // Running pause menu
-        return runCycle<PauseCycle>();
+        settings.activate();
+        return false;
 
     default:
-        // None-return
         return false;
     }
+}
+
+void SelectCycle::update() {
+    background.update();
+    settings.update();
 }
 
 // Drawing background with all buttons
 void SelectCycle::draw() const {
     // Bliting background
-    data.setColor(BLACK);
-    SDL_RenderClear(data.renderer);
+    background.blit();
 
     // Bliting title
     titleText.blit();
@@ -62,7 +62,7 @@ void SelectCycle::draw() const {
     connectButton.blit();
 
     // Settings menu
-    settingButton.blit();
+    settings.blit();
 
     // Bliting all to screen
     data.render();

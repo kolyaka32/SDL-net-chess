@@ -9,12 +9,12 @@
 
 //
 class MovingBackground {
-private:
+ private:
     const Uint8 maxIndex = 33;  // Maximal index, if greater - reset
     Uint16 offset = 0;  // Offset (in pixels) for moving background
     Uint8 index = 0;    // Index of drawing line (for figures)
 
-public:
+ public:
     MovingBackground();
     void blit() const;
     void update();

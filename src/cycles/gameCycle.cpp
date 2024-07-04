@@ -4,8 +4,6 @@
  */
 
 #include "gameCycle.hpp"
-#include "pauseCycle.hpp"
-
 
 GameCycle::GameCycle() : BaseCycle(MUS_START_NONE) {
     endState = END_NONE;
@@ -21,7 +19,12 @@ bool GameCycle::getKeysInput(const SDL_Keysym& key) {
     switch (key.sym) {
     case SDLK_ESCAPE:
         // Clearing selection by escape
-        board.resetSelection();
+        if (board.isFigureSelected()) {
+            board.resetSelection();
+        // Or go to setting menu
+        } else {
+            settings.activate();
+        }
         return false;
 
     case SDLK_q:
@@ -36,39 +39,30 @@ bool GameCycle::getKeysInput(const SDL_Keysym& key) {
 
 // Getting mouse clicking
 bool GameCycle::getMouseInput() {
-    // Buttons
-    if (settingButton.in(mouseX, mouseY)) {
-        runCycle<PauseCycle>();
-        return false;
-    } else if (exitButton.in(mouseX, mouseY)) {
+    if (exitButton.in(mouseX, mouseY)) {
         return true;
-    }
+    } else if (settings.click(mouseX, mouseY)) {
+        // Checking, if game start
+        if (endState <= END_TURN) {
+            // Clicking on field
+            endState = board.click((mouseX - LEFT_LINE) / CELL_SIDE, (mouseY - UPPER_LINE) / CELL_SIDE);
+        } else {
+            // Starting waiting menu
+            if (restartButton.in(mouseX, mouseY)) {
+                // Restarting current game
+                endState = END_NONE;
 
-    // Checking, if game start
-    if (endState <= END_TURN) {
-        // Clicking on field
-        endState = board.click((mouseX - LEFT_LINE) / CELL_SIDE, (mouseY - UPPER_LINE) / CELL_SIDE);
-    } else {
-        // Getting buttons clicks
-        // Game restart
-        if (restartButton.in(mouseX, mouseY)) {
-            // Restarting game
-            endState = END_NONE;
+                // Resetting field
+                board.reset();
 
-            // Resetting field
-            board.reset();
-
-            // Making sound
-            data.playSound(SND_RESET);
-            return false;
-
-        } else if (menuButton.in(mouseX, mouseY)) {
-            // Going to menu
-            return true;
+                // Making sound
+                data.playSound(SND_RESET);
+            } else if (menuButton.in(mouseX, mouseY)) {
+                // Going to menu
+                return true;
+            }
         }
     }
-
-    // None-return
     return false;
 }
 
@@ -84,7 +78,6 @@ void GameCycle::draw() const {
     playersTurnsTexts[board.currentTurn()].blit();
 
     // Drawing buttons
-    settingButton.blit();
     exitButton.blit();
 
     // Bliting game state, if need
@@ -111,6 +104,8 @@ void GameCycle::draw() const {
         restartButton.blit();
         menuButton.blit();
     }
+    // Drawing setting menu
+    settings.blit();
 
     // Bliting all to screen
     data.render();

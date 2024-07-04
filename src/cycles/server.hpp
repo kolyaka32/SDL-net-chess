@@ -23,7 +23,6 @@ class ServerGameCycle : public InternetServerCycle {
        24, 0.5, 0.9, WHITE};
 
  protected:
-    // Overrided cycle functions
     bool getMouseInput() override;
     void draw() const override;
 

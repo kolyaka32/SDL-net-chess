@@ -6,7 +6,7 @@
 #pragma once
 
 // Debuging modifiers
-#define DEBUG true
+#define DEBUG false
 #define CHECK_CORRECTION DEBUG
 #define ARCHIEVE_LOADING !DEBUG
 #define SCROLLER_SOUND SND_count
@@ -46,7 +46,7 @@
 #define RED {255, 0, 0, 255}
 #define GREEN {0, 255, 0, 255}
 #define BLUE {0, 0, 255, 255}
-#define GREY {170, 170, 170, 255}
+#define GREY {175, 175, 175, 255}
 #define FIELD_LIGHT {255, 206, 158, 255}
 #define FIELD_DARK {206, 139, 71, 255}
 
