@@ -31,7 +31,7 @@ void MovingBackground::blit() const {
             }
 
             // Setting seed for random, to save position and prevent jump
-            srand((index - x - 12 * y) % 240);
+            srand((144 + index - x - 12 * y) % 208);
             // Drawing figure (if need)
             if (rand() % 5 == 0) {
                 SDL_RenderCopy(data.renderer, data.textures[IMG_GAME_WHITE_PAWN + rand() % 12], NULL, &rect);
@@ -49,7 +49,7 @@ void MovingBackground::update() {
     if (offset > CELL_SIDE * 2) {
         offset = 0;
         index += 13;
-        if (index > 234) {
+        if (index >= 208) {
             index = 0;
         }
     }
