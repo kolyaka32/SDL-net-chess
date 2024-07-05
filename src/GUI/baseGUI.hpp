@@ -16,20 +16,19 @@
 
 // Namespace of objects for GUI (Graphic User Interface)
 namespace GUI {
-
-    // Text alignment type
-    enum ALIGNMENT_types{
-       LEFT_text,
-       MIDLE_text,
-       RIGHT_text
-    };
+   // Text alignment type
+   enum ALIGNMENT_types{
+      LEFT_text,
+      MIDLE_text,
+      RIGHT_text
+   };
 
 
     // Graphic user interface template for other objects
-    class GUItemplate {
+   class GUItemplate {
      protected:
-        SDL_Texture *texture;
-        SDL_Rect rect;
+      SDL_Texture *texture;
+      SDL_Rect rect;
      public:
         GUItemplate();
         virtual void blit() const;
@@ -159,9 +158,9 @@ namespace GUI {
      protected:
         void updatePlate(const SDL_Rect rect);  // Update sizes of plate
      public:
-        Backplate(const SDL_Rect rect, const Uint8 radius, const Uint8 border,
-            const SDL_Color frontColor = {175, 175, 175, 255}, const SDL_Color backColor = BLACK);
-        Backplate(const Uint8 radius, const Uint8 border, const SDL_Color frontColor = {175, 175, 175, 255},
+        Backplate(float centerX, float centerY, float width, float height, Uint8 radius, Uint8 border,
+            const SDL_Color frontColor = GREY, SDL_Color backColor = BLACK);
+        Backplate(Uint8 radius, Uint8 border,  SDL_Color frontColor = GREY,
             const SDL_Color backColor = BLACK);
         ~Backplate();
     };

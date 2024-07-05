@@ -62,6 +62,7 @@ class MessageSender {
  public:
     MessageSender();
     ~MessageSender();
+
     // Function for create and send new message
     template <typename T = Uint8>
     void sendNew(const MESSAGE_types type = MES_NONE,

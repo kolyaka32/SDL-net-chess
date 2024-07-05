@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include "../../include.hpp"
-#include "../../define.hpp"
+#include "../include.hpp"
+#include "../define.hpp"
 
 
 // Class with letters, placed in collumn

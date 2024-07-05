@@ -5,9 +5,9 @@
 
 #pragma once
 
-#include "base.hpp"
+#include "gameCycle.hpp"
 
-// Creating two player mode
+// Creating two player mode (standart game)
 class TwoPlayerGameCycle : public GameCycle {
  public:
     TwoPlayerGameCycle();

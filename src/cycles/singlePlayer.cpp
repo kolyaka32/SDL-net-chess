@@ -4,11 +4,10 @@
  */
 
 #include "singlePlayer.hpp"
-#include "../pauseCycle.hpp"
 
 //
 SinglePlayerGameCycle::SinglePlayerGameCycle()
-: CycleTemplate(MUS_MAIN_THEME), width(data.animations[0]->w), height(data.animations[0]->h) {
+: BaseCycle(MUS_MAIN_THEME), width(data.animations[0]->w), height(data.animations[0]->h) {
     prevFrameUpdate = SDL_GetTicks64() + 400;
 }
 
@@ -24,16 +23,19 @@ SinglePlayerGameCycle::~SinglePlayerGameCycle() {
     for (Uint8 i = IMG_GAME_WHITE_PAWN; i <= IMG_GAME_BLACK_KING; ++i) {
         SDL_SetTextureColorMod(data.textures[i], 0, 0, 0);
     }
+
+    // Resetting music to menu theme
+    data.playMusic(MUS_MENU_THEME);
 }
 
 // Getting mouse clicking
 bool SinglePlayerGameCycle::getMouseInput() {
-    if (settingButton.in(mouseX, mouseY)) {
-        runCycle<PauseCycle>();
-    } else if (exitButton.in(mouseX, mouseY)) {
+    // Checking on exit
+    if (exitButton.in(mouseX, mouseY)) {
         return true;
     }
-
+    // Clicking in settings menu
+    settings.click(mouseX, mouseY);
     return false;
 }
 
@@ -83,6 +85,8 @@ void SinglePlayerGameCycle::update() {
             prevFrameUpdate = SDL_GetTicks64() + data.animations[type]->delays[frame]/3;
         }
     }
+    // Updating settings
+    settings.update();
 }
 
 
@@ -93,16 +97,15 @@ void SinglePlayerGameCycle::draw() const {
     SDL_RenderClear(data.renderer);
 
     // Drawing buttons
-    settingButton.blit();
     exitButton.blit();
 
     // Getting pixels of current frame
     const Uint8* frameData = (Uint8*)data.animations[type]->frames[frame][0].pixels;
     const float cellLength = 8 * width / currentWidth;
 
+    // Setting seed of createdfigures for random on each step
     srand(currentWidth);
 
-    //
     for (Uint16 y=0; y < currentHeight; ++y) {
         for (Uint16 x=0; x < currentWidth; ++x) {
             // Drawing need figure
@@ -121,7 +124,6 @@ void SinglePlayerGameCycle::draw() const {
             if (currentWidth == width || (rand() % width < currentWidth)) {
                 SDL_Texture* curTexture = data.textures[IMG_GAME_BLACK_PAWN + rand() % 6];
 
-                //
                 Uint16 caret = (x + y * width) * 4;
 
                 SDL_SetTextureColorMod(curTexture, frameData[caret+2], frameData[caret+1], frameData[caret]);
@@ -130,6 +132,8 @@ void SinglePlayerGameCycle::draw() const {
             }
         }
     }
+    // Drawing settings
+    settings.blit();
 
     // Bliting all to screen
     data.render();

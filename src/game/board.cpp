@@ -4,16 +4,13 @@
  */
 
 #include "board.hpp"
-#include "../../data/data.hpp"
+#include "../data/data.hpp"
 
 
 // First board clearing
 Board::Board() {
     reset();
 }
-
-//
-Board::~Board() {}
 
 // Clearing field and setting
 void Board::reset() {
@@ -373,7 +370,8 @@ Uint8 Board::placeFigure(const coord _x, const coord _y) {
             return END_WIN + turn;
         }
     }
-    bool makeMove = true;  // Flag of happened castling
+    bool makeMove = true;  // Flag of normal turn
+
     // Check on special moves (castling and pawn transform)
     switch (activeCell.type) {
     case FIG_WHITE_ROOK:
@@ -507,7 +505,7 @@ Uint8 Board::placeFigure(const coord _x, const coord _y) {
 
 
 // Clicking on field (grab and put figures)
-Uint8 Board::click(const coord _x, const coord _y) {
+Uint8 Board::click(coord _x, coord _y) {
     // Checking, which type of action do
     if (!activeCell.type) {
         // Picking up figure from field
@@ -533,7 +531,7 @@ Uint8 Board::click(const coord _x, const coord _y) {
 
 
 // Making all like in click, but at once and without help
-Uint8 Board::move(const coord _x1, const coord _y1, const coord _x2, const coord _y2) {
+Uint8 Board::move(coord _x1, coord _y1, coord _x2, coord _y2) {
     // Emulating first click on field
     pickFigure(_x1, _y1);
 
@@ -550,12 +548,17 @@ Uint8 Board::move(const coord _x1, const coord _y1, const coord _x2, const coord
     }
 }
 
-//
+// Return previous position, where figure was
 position Board::getPreviousTurn() const {
     return activeCell.pos;
 }
 
-//
+// Return, which of users currently moving (1/2)
 Uint8 Board::currentTurn() const {
     return turn;
+}
+
+// Return, if selected any figure
+bool Board::isFigureSelected() const {
+    return activeCell.type;
 }

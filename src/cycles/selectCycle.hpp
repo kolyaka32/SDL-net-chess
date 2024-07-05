@@ -5,13 +5,15 @@
 
 #pragma once
 
-#include "cycleTemplate.hpp"
-#include "GUI/baseGUI.hpp"
-
+#include "baseCycle.hpp"
+#include "../GUI/baseGUI.hpp"
+#include "../game/background.hpp"
 
 // Cycle for select variants to start
-class SelectCycle : public CycleTemplate {
+class SelectCycle : public BaseCycle {
  private:
+    MovingBackground background;
+
     // GUI objects
     GUI::StaticText titleText{"Chess\0Шахматы\0Schach\0Шахматы",
       30, 0.5, 0.1, WHITE};
@@ -24,12 +26,10 @@ class SelectCycle : public CycleTemplate {
     GUI::TextButton connectButton{"Connect\0Присоединиться\0Beitreten\0Далучыцца",
        24, 0.5, 0.9, WHITE};
 
-    // Setting menu button
-    GUI::ImageButton settingButton{0.95, 0.05, IMG_GUI_PAUSE_BUTTON};
-
     // New overrided cycle functions
     bool getMouseInput() override;
     bool getKeysInput(const SDL_Keysym& key) override;
+    void update() override;
     void draw() const override;
 
  public:

@@ -38,13 +38,13 @@ class Board : public FiguresMoves {
 
  public:
     Board();
-    ~Board();
-    void reset();  // Resetting field for new game
+    void reset();       // Resetting field for new game
     void blit() const;  // Bliting field at screen
-    Uint8 click(const coord X, const coord Y);  // Clicking with mouse on need cell on field
+    Uint8 click(coord X, coord Y);  // Clicking with mouse on need cell on field
     // Simplier mover on field (for internet opponent turn)
-    Uint8 move(const coord X1, const coord Y1, const coord X2, const coord Y2);
+    Uint8 move(coord X1, coord Y1, coord X2, coord Y2);
     void resetSelection();  // Reset currently selected figure
     position getPreviousTurn() const;  // Return, where was made previous turn
     Uint8 currentTurn() const;         // Return, which person is now active
+    bool isFigureSelected() const;
 };

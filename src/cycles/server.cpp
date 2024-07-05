@@ -6,19 +6,18 @@
 #include "server.hpp"
 
 // Server game cycle class
-// Setting texture of port box
 ServerGameCycle::ServerGameCycle() {
+    // Setting texture of port box
     portText.updateLocationArgs(1, serverPort);
 }
 
-// Starting playing menu theme if need
 ServerGameCycle::~ServerGameCycle() {
+    // Starting playing menu theme if need
     if (!waitStart) {
         data.playMusic(MUS_MENU_THEME);
     }
 }
 
-//
 bool ServerGameCycle::getData() {
     switch (recieveData->data[0]) {
     // Code of start connection with other side
@@ -65,76 +64,67 @@ bool ServerGameCycle::getData() {
     }
 }
 
-
-//
 bool ServerGameCycle::getMouseInput() {
-    // Different draw variants
-    if (waitStart) {
-        // Connecting menu
-        // Check on connect cancel
-        if (cancelButton.in(mouseX, mouseY)) {
-            // Closing connection
-            return true;
-        }
-    } else {
-        // Game variant
-        // Pause button
-        /*if (settingButton.in(mouseX, mouseY)) {
-            return 1;
-        }*/
+    if (exitButton.in(mouseX, mouseY)) {
         // Quit to menu
-        if (exitButton.in(mouseX, mouseY)) {
-            return true;
-        }
-
-        // Clicking on field if possible
-        if (endState <= END_TURN) {
-            // Checking, if current turn this player
-            if (!waitTurn) {
-                // Getting previous click
-                position previousPos = board.getPreviousTurn();
-
-                // Normal clicking on field
-                endState = board.click((mouseX - LEFT_LINE) / CELL_SIDE, (mouseY - UPPER_LINE) / CELL_SIDE);
-
-                // Checking, if need send move
-                if (endState) {
-                    // Sedning turn
-                    sendNew(MES_TURN, {previousPos,
-                        (Uint8)getPos((mouseX - LEFT_LINE) / CELL_SIDE, (mouseY - UPPER_LINE) / CELL_SIDE)});
-
-                    // Changing turn
-                    waitTurn = true;
-                }
+        return true;
+    } else if (settings.click(mouseX, mouseY)) {
+        if (waitStart) {
+            // Connecting menu variant
+            if (cancelButton.in(mouseX, mouseY)) {
+                // Closing connection
+                return true;
             }
         } else {
-            // Game restart
-            if (restartButton.in(mouseX, mouseY)) {
-                // Resetting flags
-                endState = END_NONE;
-                waitTurn = false;
+            // Game variant
+            // Clicking on field if possible
+            if (endState <= END_TURN) {
+                // Checking, if current turn this player
+                if (!waitTurn) {
+                    // Getting previous click
+                    position previousPos = board.getPreviousTurn();
 
-                // Resetting field
-                board.reset();
+                    // Normal clicking on field
+                    endState = board.click((mouseX - LEFT_LINE) / CELL_SIDE, (mouseY - UPPER_LINE) / CELL_SIDE);
 
-                // Sending reset flag
-                sendNew(MES_REST);
+                    // Checking, if need send move
+                    if (endState) {
+                        // Sedning turn
+                        sendNew(MES_TURN, {previousPos,
+                            (Uint8)getPos((mouseX - LEFT_LINE) / CELL_SIDE, (mouseY - UPPER_LINE) / CELL_SIDE)});
 
-                // Making sound
-                data.playSound(SND_RESET);
-            } else if (menuButton.in(mouseX, mouseY)) {
-                // Going to menu
-                return true;
+                        // Changing turn
+                        waitTurn = true;
+                    }
+                }
+            } else {
+                // Game restart
+                if (restartButton.in(mouseX, mouseY)) {
+                    // Resetting flags
+                    endState = END_NONE;
+                    waitTurn = false;
+
+                    // Resetting field
+                    board.reset();
+
+                    // Sending reset flag
+                    sendNew(MES_REST);
+
+                    // Making sound
+                    data.playSound(SND_RESET);
+                } else if (menuButton.in(mouseX, mouseY)) {
+                    // Going to menu
+                    return true;
+                }
             }
         }
     }
     return false;
 }
 
-//
 void ServerGameCycle::draw() const {
-    // Connecting menu
     if (waitStart) {
+        // Connecting menu
         // Drawing background
         data.setColor(BLACK);
         SDL_RenderClear(data.renderer);
@@ -143,12 +133,9 @@ void ServerGameCycle::draw() const {
         waitText.blit();
         portText.blit();
         cancelButton.blit();
-
-        // Rendering at screen
-        data.render();
-    // Gameplay variant
     } else {
-        // Bliting field
+        // Gameplay variant
+        // Bliting game field
         board.blit();
 
         // Draw surround letters
@@ -156,9 +143,6 @@ void ServerGameCycle::draw() const {
 
         // Drawing player state
         playersTurnsTexts[waitTurn + 2].blit();
-
-        // Drawing exit button
-        exitButton.blit();
 
         // Bliting game state, if need
         if (endState > END_TURN) {
@@ -184,6 +168,12 @@ void ServerGameCycle::draw() const {
             restartButton.blit();
             menuButton.blit();
         }
-        data.render();
     }
+    // Drawing exit button
+    exitButton.blit();
+
+    // Settings menu
+    settings.blit();
+
+    data.render();
 }

@@ -107,6 +107,8 @@ bool ClientGameCycle::getAnotherInput(const SDL_Event& event) {
             typeBoxes[selectedBox - 1].resetPress(event.key.keysym.sym);
             return false;
         }
+    } else {
+        settings.getAnotherInput(event);
     }
     return false;
 }
@@ -141,7 +143,12 @@ bool ClientGameCycle::getKeysInput(const SDL_Keysym& key) {
         switch (key.sym) {
         case SDLK_ESCAPE:
             // Clearing selection by escape
-            board.resetSelection();
+            if (board.isFigureSelected()) {
+                board.resetSelection();
+            // Or go to setting menu
+            } else {
+                settings.activate();
+            }
             return false;
 
         case SDLK_q:
@@ -154,87 +161,84 @@ bool ClientGameCycle::getKeysInput(const SDL_Keysym& key) {
 
 // Updating text caret
 void ClientGameCycle::update() {
-    // Check, if selecting text
-    if (selecting) {
-        SDL_GetMouseState(&mouseX, nullptr);
-        typeBoxes[selectedBox - 1].updateSelection(mouseX);
-    } else if (waitStart && selectedBox && (SDL_GetTicks64() > lastTypeBoxUpdate)) {
-        // Check, if entering text and need to blink caret in type box
-        // Updating type box for show place to type
-        typeBoxes[selectedBox - 1].updateCaret();
-        lastTypeBoxUpdate = SDL_GetTicks64() + 500;
+    if (waitStart) {
+        // Check, if selecting text
+        if (selecting) {
+            SDL_GetMouseState(&mouseX, nullptr);
+            typeBoxes[selectedBox - 1].updateSelection(mouseX);
+        } else if (selectedBox && (SDL_GetTicks64() > lastTypeBoxUpdate)) {
+            // Blinking caret in type box
+            typeBoxes[selectedBox - 1].updateCaret();
+            lastTypeBoxUpdate = SDL_GetTicks64() + 500;
+        }
+    } else {
+        settings.update();
     }
 }
 
 
 //
 bool ClientGameCycle::getMouseInput() {
-    // Different draw variants
-    if (waitStart) {
-        // Connecting menu
-        // Connect to server button
-        if (connectButton.in(mouseX, mouseY)) {
-            removeSelection();
-            // Trying connect at address
-            tryConnect(typeBoxes[0].getString(), typeBoxes[1].getString());
-            return false;
-        } else if (cancelButton.in(mouseX, mouseY)) {
-            // Returning to menu
-            removeSelection();
-            return true;
-        }
-        // Selecting need box
-        for (Uint8 i=0; i < 2; ++i) {
-            // Checking, if click on that box
-            if (typeBoxes[i].in(mouseX, mouseY)) {
-                // Removing previous selection
+    if (exitButton.in(mouseX, mouseY)) {
+        return true;
+    } else if (settings.click(mouseX, mouseY)) {
+        // Different draw variants
+        if (waitStart) {
+            // Connecting menu
+            // Connect to server button
+            if (connectButton.in(mouseX, mouseY)) {
                 removeSelection();
-                // New selection
-                selectedBox = i+1;
-                typeBoxes[i].select(mouseX);
-                selecting = true;
-                lastTypeBoxUpdate = SDL_GetTicks64() + 700;
+                // Trying connect at address
+                tryConnect(typeBoxes[0].getString(), typeBoxes[1].getString());
                 return false;
+            } else if (cancelButton.in(mouseX, mouseY)) {
+                // Returning to menu
+                removeSelection();
+                return true;
             }
-        }
-        // If press on somewhere else on field - resetting selection
-        removeSelection();
-        return false;
-    } else {
-        // Game variant
-        // Pause button
-        /*if (settingButton.in(mouseX, mouseY)) {
-            return 1;
-        }*/
-        // Quit to menu
-        if (exitButton.in(mouseX, mouseY)) {
-            return true;
-        }
-
-        // Clicking on field if possible
-        if (endState <= END_TURN) {
-            // Checking, if current turn this player
-            if (!waitTurn) {
-                // Getting previous click
-                position previousPos = board.getPreviousTurn();
-
-                // Normal clicking on field
-                endState = board.click((mouseX - LEFT_LINE) / CELL_SIDE, (mouseY - UPPER_LINE) / CELL_SIDE);
-
-                // Checking, if need send move
-                if (endState) {
-                    // Sending turn
-                    sendNew(MES_TURN, {(Uint8)previousPos,
-                        (Uint8)getPos((mouseX - LEFT_LINE) / CELL_SIDE, (mouseY - UPPER_LINE) / CELL_SIDE)});
-
-                    // Changing turn
-                    waitTurn = true;
+            // Selecting need box
+            for (Uint8 i=0; i < 2; ++i) {
+                // Checking, if click on that box
+                if (typeBoxes[i].in(mouseX, mouseY)) {
+                    // Removing previous selection
+                    removeSelection();
+                    // New selection
+                    selectedBox = i+1;
+                    typeBoxes[i].select(mouseX);
+                    selecting = true;
+                    lastTypeBoxUpdate = SDL_GetTicks64() + 700;
+                    return false;
                 }
             }
+            // If press on somewhere else on field - resetting selection
+            removeSelection();
+            return false;
         } else {
-            // Checking exit to menu
-            if (menuButton.in(mouseX, mouseY)) {
-                return true;
+            // Game variant
+            if (endState <= END_TURN) {
+                // Checking, if current turn this player
+                if (!waitTurn) {
+                    // Getting previous click
+                    position previousPos = board.getPreviousTurn();
+
+                    // Normal clicking on field
+                    endState = board.click((mouseX - LEFT_LINE) / CELL_SIDE, (mouseY - UPPER_LINE) / CELL_SIDE);
+
+                    // Checking, if need send move
+                    if (endState) {
+                        // Sending turn
+                        sendNew(MES_TURN, {(Uint8)previousPos,
+                            (Uint8)getPos((mouseX - LEFT_LINE) / CELL_SIDE, (mouseY - UPPER_LINE) / CELL_SIDE)});
+
+                        // Changing turn
+                        waitTurn = true;
+                    }
+                }
+            } else {
+                // Waiting start menu
+                if (menuButton.in(mouseX, mouseY)) {
+                    return true;
+                }
             }
         }
     }
@@ -261,9 +265,6 @@ void ClientGameCycle::draw() const {
         // Drawing button for connect and exit
         connectButton.blit();
         cancelButton.blit();
-
-        // Rendering at screen
-        data.render();
     } else {
         // Game variant
         // Bliting field
@@ -274,9 +275,6 @@ void ClientGameCycle::draw() const {
 
         // Drawing player state
         playersTurnsTexts[waitTurn + 2].blit();
-
-        // Drawing exit button
-        exitButton.blit();
 
         // Bliting game state, if need
         if (endState > END_TURN) {
@@ -301,8 +299,10 @@ void ClientGameCycle::draw() const {
             // Blitting buttons (without restart option)
             menuButton.blit();
         }
-
-        // Bliting all to screen
-        data.render();
     }
+    exitButton.blit();
+    settings.blit();
+
+    // Bliting all to screen
+    data.render();
 }

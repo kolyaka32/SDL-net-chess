@@ -13,4 +13,7 @@ enum LNG_types{
     LNG_BELARUSIAN  // Belarusian language
 };
 
+// Data type for language
+typedef unsigned char language;
+
 #define LNG_count 4  // Final counter of all languages

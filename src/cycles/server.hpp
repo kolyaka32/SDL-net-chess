@@ -5,8 +5,7 @@
 
 #pragma once
 
-#include "base.hpp"
-#include "internet/internetServer.hpp"
+#include "../data/internet/internetServer.hpp"
 
 // Game cycle (start server)
 class ServerGameCycle : public InternetServerCycle {
@@ -24,7 +23,6 @@ class ServerGameCycle : public InternetServerCycle {
        24, 0.5, 0.9, WHITE};
 
  protected:
-    // Overrided cycle functions
     bool getMouseInput() override;
     void draw() const override;
 

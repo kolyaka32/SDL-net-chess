@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include "../../define.hpp"
-#include "../../dataTypes.hpp"
+#include "../define.hpp"
+#include "../dataTypes.hpp"
 
 // Names of all figures in game
 enum FIG_names{
