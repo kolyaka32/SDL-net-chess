@@ -6,7 +6,7 @@
 #include "musics.hpp"
 
 
-// Load all tracks
+// Class of working with music
 Musics::Musics() {
     // Resetting list of music tracks
     #if CHECK_CORRECTION
@@ -16,9 +16,11 @@ Musics::Musics() {
     // Loading all sounds
     // loadMusic(".mp3", MUS_);  // Template
 
-    loadMusic("main_theme.mp3", MUS_MAIN_THEME);
-    loadMusic("menu_theme.mp3", MUS_MENU_THEME);
-    loadMusic("singlePlayer.mp3", MUS_SINGLEPLAYER);
+    loadMusic("menu.mp3", MUS_MENU_THEME);
+    loadMusic("main-1.mp3", MUS_MAIN_1);
+    loadMusic("main-2.mp3", MUS_MAIN_2);
+    loadMusic("main-3.mp3", MUS_MAIN_3);
+    loadMusic("singleplayer.mp3", MUS_SINGLEPLAYER);
 
     // Checking correction of loaded tracks
     #if CHECK_CORRECTION
@@ -29,7 +31,6 @@ Musics::Musics() {
     Mix_VolumeMusic(musicVolume);
 }
 
-// Clear all data
 Musics::~Musics() {
     // Stopping playing music
     Mix_PauseMusic();
@@ -49,12 +50,10 @@ Musics::~Musics() {
     }
 }
 
-// Play need music track
-void Musics::playMusic(MUS_names _index) {
-    Mix_PlayMusic(musics[_index - 1], -1);
+void Musics::playMusic(Uint8 track, int times) {
+    Mix_PlayMusic(musics[track - 1], times);
 }
 
-// Load track with need name
 void Musics::loadMusic(const std::string _name, const MUS_names _index) {
     // Getting selected file data
     musicsData[_index - 1] = loadObject("mus/" + _name);
@@ -77,7 +76,6 @@ void Musics::loadMusic(const std::string _name, const MUS_names _index) {
     #endif
 }
 
-// Check correction of loaded tracks
 #if CHECK_CORRECTION
 void Musics::checkCorrection() {
     // Checking, if all music tracks exist

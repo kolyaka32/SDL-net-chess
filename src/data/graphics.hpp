@@ -24,10 +24,6 @@ enum IMG_names{
     IMG_GUI_FLAG_BEL,
 
     // Main game part
-    // Game field
-    IMG_GAME_FIELD,
-
-    // Game figures
     // White figures
     IMG_GAME_WHITE_PAWN,
     IMG_GAME_WHITE_BISHOP,
@@ -49,7 +45,7 @@ enum IMG_names{
 };
 
 // Number of all images
-#define IMG_count 23
+#define IMG_count 22
 
 
 // Library for work with any images

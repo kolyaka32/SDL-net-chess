@@ -5,13 +5,12 @@
 
 #include "singlePlayer.hpp"
 
-//
+
 SinglePlayerGameCycle::SinglePlayerGameCycle()
-: BaseCycle(MUS_MAIN_THEME), width(data.animations[0]->w), height(data.animations[0]->h) {
+: BaseCycle(MUS_MAIN_2), width(data.animations[0]->w), height(data.animations[0]->h) {
     prevFrameUpdate = SDL_GetTicks64() + 400;
 }
 
-// Resetting data after all animations
 SinglePlayerGameCycle::~SinglePlayerGameCycle() {
     // Resetting title
     data.updateTitle();
@@ -28,7 +27,6 @@ SinglePlayerGameCycle::~SinglePlayerGameCycle() {
     data.playMusic(MUS_MENU_THEME);
 }
 
-// Getting mouse clicking
 bool SinglePlayerGameCycle::getMouseInput() {
     // Checking on exit
     if (exitButton.in(mouseX, mouseY)) {
@@ -39,7 +37,6 @@ bool SinglePlayerGameCycle::getMouseInput() {
     return false;
 }
 
-//
 void SinglePlayerGameCycle::update() {
     // Checking, if need to change state
     if (SDL_GetTicks64() > prevFrameUpdate) {
@@ -89,8 +86,6 @@ void SinglePlayerGameCycle::update() {
     settings.update();
 }
 
-
-// Drawing background with special board
 void SinglePlayerGameCycle::draw() const {
     // Bliting background
     data.setColor(BLACK);

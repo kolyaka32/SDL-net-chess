@@ -34,7 +34,7 @@ bool ServerGameCycle::getData() {
             waitStart = false;
 
             // Starting playing main theme
-            data.playMusic(MUS_MAIN_THEME);
+            music.start();
 
             // Updating times of last sended messages
             lastMessageArrive = SDL_GetTicks64() + MESSAGE_GET_TIMEOUT;

@@ -26,16 +26,15 @@ Slider::Slider(float _X, float _Y, unsigned *_controlData,
     destButton.x = rect.x + *link * rect.w / maxValue - destButton.w / 2;
 }
 
-// Blitting all slider to screen
 void Slider::blit() const {
     SDL_RenderCopy(data.renderer, texture, NULL, &rect);
     SDL_RenderCopy(data.renderer, textureButton, NULL, &destButton);
 }
 
-// Setting new value of slider
-void Slider::setValue(const int mouseX) {
-    // Getting new position
+void Slider::setValue(int mouseX) {
+    // Setting new position
     destButton.x = mouseX;
+
     // Setting borders for position
     SET_MAX(destButton.x, rect.x + rect.w);
     SET_MIN(destButton.x, rect.x);
@@ -46,8 +45,7 @@ void Slider::setValue(const int mouseX) {
     *link = (destButton.x - rect.x + destButton.w / 2) * maxValue / rect.w;
 }
 
-
-bool Slider::scroll(const Sint32 wheelY, const int mouseX, const int mouseY) {
+bool Slider::scroll(Sint32 wheelY, int mouseX, int mouseY) {
     if (in(mouseX, mouseY)) {
         if (wheelY > 0) {
             setValue(destButton.x + destButton.w/2 + 8);

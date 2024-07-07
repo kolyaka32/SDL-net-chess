@@ -5,12 +5,11 @@
 
 #include "twoPlayer.hpp"
 
-//
+
 TwoPlayerGameCycle::TwoPlayerGameCycle() {
-    data.playMusic(MUS_MAIN_THEME);
+    music.start();
 }
 
-//
 TwoPlayerGameCycle::~TwoPlayerGameCycle() {
     // Resetting music to menu theme
     data.playMusic(MUS_MENU_THEME);
