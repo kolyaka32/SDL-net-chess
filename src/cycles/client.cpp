@@ -5,13 +5,11 @@
 
 #include "client.hpp"
 
-//
 ClientGameCycle::ClientGameCycle() {
     // Resetting values
     lastTypeBoxUpdate = 0;  // Setting to 0 to update as early as can
 }
 
-//
 ClientGameCycle::~ClientGameCycle() {
     // Additional stopping text input on case, when was closed at inputting
     removeSelection();
@@ -31,16 +29,14 @@ void ClientGameCycle::removeSelection() {
     }
 }
 
-//
 bool ClientGameCycle::getData() {
-    //
     switch (recieveData->data[0]) {
     // Code of initialasing connection
     case MES_INIT:
         // Checking, if get first init message
         if (waitStart) {
             // Starting playing main theme
-            data.playMusic(MUS_MAIN_THEME);
+            music.start();
 
             // Setting flag of connection to start game
             waitStart = false;
@@ -83,7 +79,6 @@ bool ClientGameCycle::getData() {
     }
 }
 
-// Getting text input
 bool ClientGameCycle::getAnotherInput(const SDL_Event& event) {
     // Checking on game variant
     if (waitStart) {
@@ -159,7 +154,6 @@ bool ClientGameCycle::getKeysInput(const SDL_Keysym& key) {
     return false;
 }
 
-// Updating text caret
 void ClientGameCycle::update() {
     if (waitStart) {
         // Check, if selecting text
@@ -172,12 +166,11 @@ void ClientGameCycle::update() {
             lastTypeBoxUpdate = SDL_GetTicks64() + 500;
         }
     } else {
+        music.update();
         settings.update();
     }
 }
 
-
-//
 bool ClientGameCycle::getMouseInput() {
     if (exitButton.in(mouseX, mouseY)) {
         return true;
@@ -245,7 +238,6 @@ bool ClientGameCycle::getMouseInput() {
     return false;
 }
 
-//
 void ClientGameCycle::draw() const {
     // Different draw variants
     if (waitStart) {

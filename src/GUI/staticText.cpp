@@ -13,7 +13,6 @@
 using namespace GUI;
 
 // Class of static text
-// Basic constructor for new object
 StaticText::StaticText(const char* _text, textHeight _height,
     float _X, float _Y, SDL_Color _color, ALIGNMENT_types _aligment)
 : text(_text), posX(_X), posY(_Y), aligment(_aligment), color(_color), bufferText(nullptr) {
@@ -22,32 +21,30 @@ StaticText::StaticText(const char* _text, textHeight _height,
     // Updating rect height for correct button
     updateLocation();
 
-    // Adding item to global updation list
+    // Adding item to global location update list
     data.updateList.add(this);
 }
 
-// Clearing rest data
 StaticText::~StaticText() {
-    // Clearing buffer
+    // Clearing text buffer
     if (bufferText) {
         delete[] bufferText;
         bufferText = nullptr;
     }
-    // Clearing texture
     SDL_DestroyTexture(texture);
 }
 
-//
 void StaticText::updateTexture() {
+    // Creating surface with text
     SDL_Surface *surface = TTF_RenderUTF8_Solid(font, bufferText, color);
     texture = SDL_CreateTextureFromSurface(data.renderer, surface);
     SDL_FreeSurface(surface);
+    // Moving draw rect to new place
     SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
     rect.x = SCREEN_WIDTH * posX - (rect.w * aligment / 2);
     rect.y = SCREEN_HEIGHT * posY - rect.h / 2;
 }
 
-//
 void StaticText::updateLocationArgs(const unsigned count, ...) {
     // Clearing previous buffer
     if (bufferText) {
@@ -74,7 +71,6 @@ void StaticText::updateLocationArgs(const unsigned count, ...) {
 
     va_end(args);
 
-    // Updating texture
     updateTexture();
 }
 
@@ -97,8 +93,7 @@ void StaticText::updateLocation() {
 
     // Creating buffer for text and copy it here
     bufferText = new char[size];
-    strcpy_s(bufferText, size, start);
+    sprintf(bufferText, start);
 
-    // Updating texture
     updateTexture();
 }

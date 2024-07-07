@@ -9,6 +9,10 @@
 // Main process data
 Data data;
 
+// Declaration of global 
+GUI::ImageButton BaseCycle::exitButton{0.05, 0.05, IMG_GUI_QUIT_BUTTON};
+SettingsMenu BaseCycle::settings;
+
 // Main function
 int main(int argv, char **args) {
     // Starting selecting cycle

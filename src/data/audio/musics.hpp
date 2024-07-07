@@ -12,14 +12,16 @@
 enum MUS_names{
     MUS_START_NONE,  // Track to not start new music
 
-    MUS_MAIN_THEME,  // Main music for game cycles
     MUS_MENU_THEME,  // Music for menu
-
+    MUS_MAIN_1,      // Music of cycles (#1)
+    MUS_MAIN_2,      // Music of cycles (#2)
+    MUS_MAIN_3,      // Music of cycles (#3)
     MUS_SINGLEPLAYER,  // Special music for singleplayer mode
 };
 
 // Total counter of music (without NONE)
-#define MUS_count 3
+#define MUS_count 5
+#define MUS_MAIN_count 3
 
 
 // Class of all loaded music tracks for play
@@ -39,5 +41,5 @@ class Musics : virtual AudioLibrary, public virtual InitFile, public virtual Dat
  public:
     Musics();   // Load all tracks
     ~Musics();  // Clear all data
-    void playMusic(MUS_names track);  // Play need music track
+    void playMusic(Uint8 track, int times = -1);  // Play need track need times
 };

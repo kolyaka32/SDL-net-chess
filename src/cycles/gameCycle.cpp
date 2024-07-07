@@ -9,9 +9,6 @@ GameCycle::GameCycle() : BaseCycle(MUS_START_NONE) {
     endState = END_NONE;
 }
 
-// Resetting music to menu theme
-GameCycle::~GameCycle() {}
-
 
 // Example for getting keys input
 bool GameCycle::getKeysInput(const SDL_Keysym& key) {
@@ -66,7 +63,11 @@ bool GameCycle::getMouseInput() {
     return false;
 }
 
-//
+void GameCycle::update() {
+    music.update();
+    settings.update();
+}
+
 void GameCycle::draw() const {
     // Bliting field
     board.blit();

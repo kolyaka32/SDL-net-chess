@@ -48,10 +48,6 @@ Textures::Textures() {
     loadTexture("GUI/Flag_BEL.png", IMG_GUI_FLAG_BEL);
 
     // Main game part
-    // Game field
-    loadTexture("chess-pack-1/chessboard.png", IMG_GAME_FIELD);
-
-    // Game figures
     // White figures
     loadTexture("chess-pack-1/w-pawn.png", IMG_GAME_WHITE_PAWN);
     loadTexture("chess-pack-1/w-bishop.png", IMG_GAME_WHITE_BISHOP);
