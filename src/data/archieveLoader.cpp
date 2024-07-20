@@ -8,7 +8,7 @@
 #include "../define.hpp"
 #include "../dataTypes.hpp"
 #include "dataLoader.hpp"
-#include "../workCodes.hpp"
+#include "loadExceptions.hpp"
 
 
 // Functions for loading data from archieve

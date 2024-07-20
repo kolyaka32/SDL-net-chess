@@ -4,7 +4,7 @@
  */
 
 #include "graphics.hpp"
-#include "../workCodes.hpp"
+#include "loadExceptions.hpp"
 
 
 // Library for work with any images

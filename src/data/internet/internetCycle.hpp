@@ -17,7 +17,6 @@ class InternetCycle : public Internet, public GameCycle {
 
  public:
     InternetCycle();
-    ~InternetCycle();
 
     // Main cycle function (special for internet use)
     void run() override;

@@ -5,7 +5,7 @@
 
 #include "baseInternet.hpp"
 #include "../../data/data.hpp"
-#include "../../workCodes.hpp"
+#include "../loadExceptions.hpp"
 
 
 // Initialasing internet library

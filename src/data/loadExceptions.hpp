@@ -7,7 +7,7 @@
 
 #include <stdexcept>
 
-#include "define.hpp"
+#include "../define.hpp"
 
 // Custom exceptions
 #if CHECK_CORRECTION

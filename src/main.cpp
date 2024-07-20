@@ -10,7 +10,7 @@
 Data data;
 
 // Declaration of global 
-GUI::ImageButton BaseCycle::exitButton{0.05, 0.05, IMG_GUI_QUIT_BUTTON};
+const GUI::ImageButton BaseCycle::exitButton{0.05, 0.05, IMG_GUI_QUIT_BUTTON};
 SettingsMenu BaseCycle::settings;
 
 // Main function

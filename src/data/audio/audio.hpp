@@ -8,7 +8,7 @@
 #include "../../include.hpp"
 #include "../../define.hpp"
 #include "../../dataTypes.hpp"
-#include "../../workCodes.hpp"
+#include "../loadExceptions.hpp"
 
 
 // Class for working with audio

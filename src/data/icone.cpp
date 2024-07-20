@@ -4,7 +4,7 @@
  */
 
 #include "icone.hpp"
-#include "../workCodes.hpp"
+#include "loadExceptions.hpp"
 
 
 // Loading single icone

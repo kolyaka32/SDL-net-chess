@@ -5,7 +5,7 @@
 
 #include "application.hpp"
 #include "../define.hpp"
-#include "../workCodes.hpp"
+#include "loadExceptions.hpp"
 
 // Function of creating window and renderer for outputing image
 App::App() {

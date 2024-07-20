@@ -7,7 +7,7 @@
 
 #include "../define.hpp"
 #include "dataLoader.hpp"
-#include "../workCodes.hpp"
+#include "loadExceptions.hpp"
 
 
 // Loading data from file system (for testing)

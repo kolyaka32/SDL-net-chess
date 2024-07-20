@@ -10,7 +10,7 @@
 #include "gameCycle.hpp"
 #include "../data/internet/internetClient.hpp"
 
-//
+// Class of game cycle for client with connection part
 class ClientGameCycle : public InternetClientCycle {
  private:
     bool waitStart = true;     // Flag of waiting for game start

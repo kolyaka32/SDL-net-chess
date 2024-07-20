@@ -6,13 +6,10 @@
 #include "internetCycle.hpp"
 
 
-//
+// Internet cycle class
 InternetCycle::InternetCycle() {}
 
-//
-InternetCycle::~InternetCycle() {}
-
-// Function for start need cycle
+// Own function for start need cycle
 void InternetCycle::run() {
     // Starting main cycle
     while (running) {

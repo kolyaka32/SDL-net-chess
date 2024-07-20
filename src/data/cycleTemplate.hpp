@@ -17,9 +17,13 @@ class CycleTemplate {
     bool running = true;    // Flag of running current cycle
     int mouseX, mouseY;     // Current position of mouse
 
-    // Function for run internal cycle
+    // Run internal cycle
     template <class Cycle>
     bool runCycle();
+
+    // Run internal cycle with parameters
+    template <class Cycle, typename Param>
+    bool runCycle(Param args);
 
     // Cycle functions for cycle (should be overriden)
     void getInput();            // Getting all user input
@@ -37,7 +41,8 @@ class CycleTemplate {
 };
 
 
-// Realisation of running internal cycle
+// Realisations
+// Run internal cycle
 template <class Cycle>
 bool CycleTemplate::runCycle() {
     // Entering cycle for correct updations
@@ -45,6 +50,30 @@ bool CycleTemplate::runCycle() {
 
     // Launching new cycle
     Cycle cycle;
+
+    // Running cycle
+    cycle.run();
+
+    // Checking for exit
+    if (!data.appRunning) {
+        return true;
+    }
+
+    // Exiting updation cycle
+    data.updateList.exitCycle();
+
+    // Normal return
+    return false;
+}
+
+// Run cycle with parameters
+template <class Cycle, typename Param>
+bool CycleTemplate::runCycle(Param args) {
+    // Entering cycle for correct updations
+    data.updateList.enterCycle();
+
+    // Launching new cycle
+    Cycle cycle(args);
 
     // Running cycle
     cycle.run();

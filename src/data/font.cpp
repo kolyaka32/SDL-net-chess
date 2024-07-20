@@ -4,7 +4,7 @@
  */
 
 #include "font.hpp"
-#include "../workCodes.hpp"
+#include "loadExceptions.hpp"
 
 
 // Initializing fonts library
