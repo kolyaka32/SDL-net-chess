@@ -11,10 +11,10 @@
 // Base cycle for use in any game mode
 class BaseCycle : public CycleTemplate {
  protected:
-    Uint8 selectedBox;      // Number of which box is currently selected
-    const MUS_names music;  // Music track to play (or NULL, if not need start)
+    Uint8 selectedBox;             // Number of which box is currently selected
+    const MUS_names music;         // Music track to play (or NULL, if not need start)
     static SettingsMenu settings;  // Menu for change settings
-    const static GUI::ImageButton exitButton;  // Button for exit from selected mode
+    const static GUI::ImageButton exitButton;  // Button for exit from mode
  public:
     BaseCycle(MUS_names song = MUS_START_NONE);
     void update() override;

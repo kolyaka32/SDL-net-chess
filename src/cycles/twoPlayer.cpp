@@ -6,8 +6,9 @@
 #include "twoPlayer.hpp"
 
 
+// Two player mode (standart game)
 TwoPlayerGameCycle::TwoPlayerGameCycle() {
-    music.start();
+    musicOrder.start();
 }
 
 TwoPlayerGameCycle::~TwoPlayerGameCycle() {

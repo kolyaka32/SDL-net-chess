@@ -64,7 +64,7 @@ bool GameCycle::getMouseInput() {
 }
 
 void GameCycle::update() {
-    music.update();
+    musicOrder.update();
     settings.update();
 }
 

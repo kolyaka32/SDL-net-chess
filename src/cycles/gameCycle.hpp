@@ -19,7 +19,7 @@ class GameCycle : public BaseCycle {
    Uint8 endState;  // State of game (end)
 
    SurroundingLetters letters;  // Letters, that surround field
-   MusicOrder music{MUS_MAIN_1, MUS_MAIN_count};  // Order to play different tracks
+   MusicOrder musicOrder{MUS_MAIN_1, MUS_MAIN_count};  // Order to play different tracks
 
    // GUI objects
    GUI::TextButton restartButton{"Restart\0Перезапустить\0Starten\0Перазапуск",
