@@ -10,17 +10,14 @@ project(Chess)  # Main project
 file(GLOB_RECURSE SOURCES RELATIVE ${CMAKE_SOURCE_DIR} "src/*.cpp" "src/*.rc")
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-# Static linking standart C++ libraries
-set(CMAKE_CXX_STANDARD_LIBRARIES "-static") # !!!!!! not working with libzip on linux
-set(CMAKE_EXE_LINKER_FLAGS "-static")       # !!!!!! not working with libzip on linux
-set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++")
-
 # Hidding console
 set(CMAKE_CXX_FLAGS "-mwindows -static")
 
+# Setting to link standart libraries statickly
+set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
+
 # Including external libraries
 set(CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 # Finding place of external libraries
 # Including SDL-family
