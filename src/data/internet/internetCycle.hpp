@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024, Kazankov Nikolay 
+ * Copyright (C) 2024-2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
@@ -17,7 +17,6 @@ class InternetCycle : public Internet, public GameCycle {
 
  public:
     InternetCycle();
-    ~InternetCycle();
 
     // Main cycle function (special for internet use)
     void run() override;

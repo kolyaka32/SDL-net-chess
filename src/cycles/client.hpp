@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024, Kazankov Nikolay 
+ * Copyright (C) 2024-2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
@@ -10,7 +10,7 @@
 #include "gameCycle.hpp"
 #include "../data/internet/internetClient.hpp"
 
-//
+// Class of game cycle for client with connection part
 class ClientGameCycle : public InternetClientCycle {
  private:
     bool waitStart = true;     // Flag of waiting for game start

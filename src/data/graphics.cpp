@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2024, Kazankov Nikolay 
+ * Copyright (C) 2024-2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
 #include "graphics.hpp"
-#include "../workCodes.hpp"
+#include "loadExceptions.hpp"
 
 
 // Library for work with any images

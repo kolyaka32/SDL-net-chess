@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024, Kazankov Nikolay 
+ * Copyright (C) 2024-2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
@@ -7,7 +7,7 @@
 
 #include <stdexcept>
 
-#include "define.hpp"
+#include "../define.hpp"
 
 // Custom exceptions
 #if CHECK_CORRECTION

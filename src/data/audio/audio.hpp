@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024, Kazankov Nikolay 
+ * Copyright (C) 2024-2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
@@ -8,7 +8,7 @@
 #include "../../include.hpp"
 #include "../../define.hpp"
 #include "../../dataTypes.hpp"
-#include "../../workCodes.hpp"
+#include "../loadExceptions.hpp"
 
 
 // Class for working with audio

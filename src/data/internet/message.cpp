@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2024, Kazankov Nikolay 
+ * Copyright (C) 2024-2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
 #include "message.hpp"
 
-//
+
 MessageSender::MessageSender() {
     // Resetting ID counter
     ID = 0;
@@ -14,7 +14,6 @@ MessageSender::MessageSender() {
     sendData.maxlen = INTERNET_BUFFER;
 }
 
-// Clearing data
 MessageSender::~MessageSender() {
     // Clearing dynamic memory
     for (Uint8 i=0; i < confirmMessages.size(); ++i) {
@@ -24,7 +23,6 @@ MessageSender::~MessageSender() {
     confirmMessages.clear();
 }
 
-//
 void MessageSender::send(Message& _message) {
     // Moving pointer with data to send packet
     sendData.data = _message.data;
@@ -43,7 +41,7 @@ void MessageSender::send(Message& _message) {
 
 // Setting message with this id as applied
 void MessageSender::applyMessage(Uint8 id) {
-    // Searching for need id (from start)
+    // Searching for need id
     for (Uint8 i=0; i < confirmMessages.size(); ++i) {
         if (confirmMessages[i].data[1] == id) {
             // Clearing dynamic memory before deleting

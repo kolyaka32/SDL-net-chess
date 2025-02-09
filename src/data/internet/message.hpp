@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024, Kazankov Nikolay 
+ * Copyright (C) 2024-2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
@@ -48,13 +48,9 @@ class MessageSender {
 
  protected:
     // Data for internet work
-    UDPsocket socket;          // Socket to send/recieve data
-
-    // Packet to send data
-    UDPpacket sendData;
-
-    // Timer, when last message send to control connection
-    timer lastMessageSend;
+    UDPsocket socket;       // Socket to send/recieve data
+    UDPpacket sendData;     // Packet to send data
+    timer lastMessageSend;  // Timer, when last message send to control connection
 
     void applyMessage(Uint8 id);  // Setting message with this id as applied
     void checkNeedResend();       // Function for check, if need resend any of the messages

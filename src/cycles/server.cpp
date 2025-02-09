@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024, Kazankov Nikolay 
+ * Copyright (C) 2024-2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
@@ -34,7 +34,7 @@ bool ServerGameCycle::getData() {
             waitStart = false;
 
             // Starting playing main theme
-            music.start();
+            musicOrder.start();
 
             // Updating times of last sended messages
             lastMessageArrive = SDL_GetTicks64() + MESSAGE_GET_TIMEOUT;

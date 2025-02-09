@@ -1,18 +1,15 @@
 /*
- * Copyright (C) 2024, Kazankov Nikolay 
+ * Copyright (C) 2024-2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
 #include "internetCycle.hpp"
 
 
-//
+// Internet cycle class
 InternetCycle::InternetCycle() {}
 
-//
-InternetCycle::~InternetCycle() {}
-
-// Function for start need cycle
+// Own function for start need cycle
 void InternetCycle::run() {
     // Starting main cycle
     while (running) {

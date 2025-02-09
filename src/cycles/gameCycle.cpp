@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024, Kazankov Nikolay 
+ * Copyright (C) 2024-2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
@@ -64,7 +64,7 @@ bool GameCycle::getMouseInput() {
 }
 
 void GameCycle::update() {
-    music.update();
+    musicOrder.update();
     settings.update();
 }
 

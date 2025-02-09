@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024, Kazankov Nikolay 
+ * Copyright (C) 2024-2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
@@ -36,7 +36,7 @@ bool ClientGameCycle::getData() {
         // Checking, if get first init message
         if (waitStart) {
             // Starting playing main theme
-            music.start();
+            musicOrder.start();
 
             // Setting flag of connection to start game
             waitStart = false;
@@ -166,7 +166,7 @@ void ClientGameCycle::update() {
             lastTypeBoxUpdate = SDL_GetTicks64() + 500;
         }
     } else {
-        music.update();
+        musicOrder.update();
         settings.update();
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024, Kazankov Nikolay 
+ * Copyright (C) 2024-2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
@@ -67,6 +67,6 @@ class Textures : virtual GraphicsLibrary, public virtual DataLoader {
     #endif
  public:
     SDL_Texture *textures[IMG_count];  // Array of all textures
-    Textures();   // Loading all data, need for work with textures
-    ~Textures();  // Clear all data from textures
+    Textures();
+    ~Textures();
 };
