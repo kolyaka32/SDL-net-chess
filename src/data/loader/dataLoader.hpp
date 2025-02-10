@@ -1,7 +1,6 @@
 #pragma once
 
-#include "rwops.hpp"
-
+#include <SDL3/SDL_iostream.h>
 
 
 // Interface for load file
@@ -11,5 +10,5 @@ private:
 public:
     DataLoader(/* args */);
     virtual ~DataLoader();
-    virtual RWops* load(const char* file);
+    virtual SDL_IOStream* load(const char* file);
 };

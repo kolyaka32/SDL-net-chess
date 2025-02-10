@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "SDL_mixer.h"
+#include <SDL3_mixer/SDL_mixer.h>
 #include "loader/dataLoader.hpp"
 #include "../musicNames.hpp"
 

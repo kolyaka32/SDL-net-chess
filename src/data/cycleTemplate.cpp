@@ -26,7 +26,7 @@ void CycleTemplate::getInput() {
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
         // Code of program exiting
-        case SDL_QUIT:
+        case SDL_EVENT_QUIT:
             // Stopping program at all
             //data.appRunning = false;
 
@@ -35,7 +35,7 @@ void CycleTemplate::getInput() {
             return;
 
         // Getting mouse input
-        case SDL_MOUSEBUTTONDOWN:
+        case SDL_EVENT_MOUSE_BUTTON_DOWN:
             // Updating mouse position
             SDL_GetMouseState(&mouseX, &mouseY);
 
@@ -48,8 +48,8 @@ void CycleTemplate::getInput() {
             break;
 
         // Getting mouse presses
-        case SDL_KEYDOWN:
-            if (getKeysInput(event.key.keysym)) {
+        case SDL_EVENT_KEY_DOWN:
+            if (getKeysInput(event.key.key)) {
                 // Closing cycle, if need
                 running = false;
                 return;
@@ -79,8 +79,8 @@ bool CycleTemplate::getMouseInput() {
 }
 
 // Example for getting keys input
-bool CycleTemplate::getKeysInput(const SDL_Keysym& key) {
-    switch (key.sym) {
+bool CycleTemplate::getKeysInput(SDL_Keycode _key) {
+    switch (_key) {
     case SDLK_ESCAPE:
         // Stopping ruuning by escape
         running = false;

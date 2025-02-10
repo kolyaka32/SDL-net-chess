@@ -8,10 +8,10 @@
 #include <cstdlib>
 #include <vector>
 #include <initializer_list>
-#include <SDL_net.h>
+#include <SDL3_net/SDL3_net.h>
 
-#include "../../dataTypes.hpp"
-#include "../../define.hpp"
+//#include "../../dataTypes.hpp"
+//#include "../../define.hpp"
 
 // Types of internet messages
 enum MESSAGE_types{

@@ -9,6 +9,6 @@ DataLoader::~DataLoader() {
 
 }
 
-RWops* DataLoader::load(const char* name) {
+SDL_IOStream* DataLoader::load(const char* name) {
     return nullptr;
 }

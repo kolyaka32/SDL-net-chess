@@ -26,12 +26,12 @@ namespace GUI {
    class GUItemplate {
      protected:
       SDL_Texture* texture;
-      SDL_Rect rect;
+      SDL_FRect rect;
      public:
         GUItemplate();
         virtual void blit(Window& _target) const;
         bool in(int mouseX, int mouseY) const;
-        virtual void updateLocation();
+        virtual void updateLocation(Window& _target);
     };
 
 
@@ -49,9 +49,9 @@ namespace GUI {
         StaticText(const char* text, textHeight size, float X,
             float Y, SDL_Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
         ~StaticText();
-        void updateLocation() override;
-        void updateLocationArgs(const unsigned count, ...);  // Create new texture
-        void updateTexture();  // Updating texture
+        void updateLocation(Window& _target) override;
+        void updateLocationArgs(Window& _target, ...);  // Create new texture
+        void updateTexture(Window& _target);  // Updating texture
     };
 
 
@@ -75,7 +75,7 @@ namespace GUI {
     // Class of buttons with image on it
     class ImageButton : public GUItemplate {
      public:
-        ImageButton(float X, float Y, IMG_names textureIndex);   // Create new button
+        ImageButton(Window& _target, float X, float Y, IMG_names textureIndex);
     };
 
 
@@ -138,14 +138,14 @@ namespace GUI {
     class Backplate : public GUItemplate {
      private:
         const SDL_Color frontColor, backColor;  // Front and back colors of plate
-        const Uint8 rad;  // Radius of rounding
-        const Uint8 bor;  // Border (with back color)
+        const float rad;  // Radius of rounding
+        const float bor;  // Border (with back color)
      protected:
-        void updatePlate(const SDL_Rect rect);  // Update sizes of plate
+        void updatePlate(Window& _target, const SDL_FRect rect);  // Update sizes of plate
      public:
-        Backplate(float centerX, float centerY, float width, float height, Uint8 radius, Uint8 border,
-            const SDL_Color frontColor = GREY, SDL_Color backColor = BLACK);
-        Backplate(Uint8 radius, Uint8 border,  SDL_Color frontColor = GREY,
+        Backplate(Window& _target, float centerX, float centerY, float width, float height, float radius, float border,
+            const SDL_Color frontColor = GREY, const SDL_Color backColor = BLACK);
+        Backplate(float radius, float border,  SDL_Color frontColor = GREY,
             const SDL_Color backColor = BLACK);
         ~Backplate();
     };
@@ -158,7 +158,7 @@ namespace GUI {
         TextButton(const char* text, textHeight size, float X, float Y,
             SDL_Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
         void blit(Window& _target) const override;  // Drawing current button
-        void updateLocation() override;  // Update object to match text sizes
+        void updateLocation(Window& _target) override;  // Update object to match text sizes
     };
 
 }  // namespace GUI

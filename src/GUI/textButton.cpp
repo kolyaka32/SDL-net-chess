@@ -25,7 +25,7 @@ void TextButton::blit(Window& _target) const {
 }
 
 // Update current text plate
-void TextButton::updateLocation() {
+void TextButton::updateLocation(Window& _target) {
     // Updating backplate
-    updatePlate({topText.rect.x-10, topText.rect.y-1, topText.rect.w+20, topText.rect.h+4});
+    updatePlate(_target, {topText.rect.x-10, topText.rect.y-1, topText.rect.w+20, topText.rect.h+4});
 }

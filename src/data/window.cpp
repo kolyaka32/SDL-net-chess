@@ -10,11 +10,11 @@
 
 Window::Window(const DataLoader& _loader)
  : textures{_loader},
- fonts{_loader}
-{
-    // Creating window
-    window = SDL_CreateWindow(WINDOWNAME, SDL_WINDOWPOS_UNDEFINED,
-        SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
+ fonts{_loader} {
+    // Creating showing tools
+    SDL_CreateWindowAndRenderer(WINDOWNAME, SCREEN_WIDTH, SCREEN_HEIGHT, 0, &window, &renderer);
+
+    // Checking on correction of created objects
     #if CHECK_CORRECTION
     if (window == NULL) {
         throw LibararyLoadException("window creation");
@@ -22,7 +22,6 @@ Window::Window(const DataLoader& _loader)
     #endif
 
     // Creating renderer from window
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     #if CHECK_CORRECTION
     if (renderer == NULL) {
         throw LibararyLoadException("renderer creation");
@@ -31,7 +30,7 @@ Window::Window(const DataLoader& _loader)
 }
 
 
-Window::~Window() {
+Window::~Window() noexcept {
     // Destroying renderer
     SDL_DestroyRenderer(renderer);
 
@@ -55,37 +54,46 @@ void Window::render() {
 }
 
 
-void Window::drawPoint(int x, int y) {
-    SDL_RenderDrawPoint(renderer, x, y);
+void Window::drawPoint(float x, float y) {
+    SDL_RenderPoint(renderer, x, y);
 }
 
-void Window::drawRect(const SDL_Rect& _rect) {
+void Window::drawRect(const SDL_FRect& _rect) {
     SDL_RenderFillRect(renderer, &_rect);
 }
 
-void Window::blit(IMG_names _name, const SDL_Rect* _dest, const SDL_Rect* _src) {
-    SDL_RenderCopy(renderer, textures[_name], _src, _dest);
-}
 
-void Window::blit(IMG_names _name, float _angle, const SDL_Rect* _dest, const SDL_Rect* _src, SDL_Point _center) {
-    SDL_RenderCopyEx(renderer, textures[_name], _src, _dest, _angle, &_center, SDL_FLIP_NONE);
-}
-
-void Window::queryTexture(IMG_names name, int* _width, int* _height) {
-    SDL_QueryTexture(textures[name], nullptr, nullptr, _width, _height);
+SDL_Texture* Window::getTexture(IMG_names _name) {
+    return textures[_name];
 }
 
 
-SDL_Texture* Window::createTexture(int _width, int _height, SDL_PixelFormatEnum _format) {
-    return SDL_CreateTexture(renderer, _format, SDL_TEXTUREACCESS_TARGET, _width, _height);
+SDL_Texture* Window::createTexture(int _width, int _height, SDL_TextureAccess _access, SDL_PixelFormat _format) {
+    return SDL_CreateTexture(renderer, _format, _access, _width, _height);
 }
 
-void Window::blit(SDL_Texture* _texture, const SDL_Rect* _dest, const SDL_Rect* _src) {
-    SDL_RenderCopy(renderer, _texture, _src, _dest);
+SDL_Texture* Window::createTexture(SDL_Surface* _surface, bool isFree) {
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, _surface);
+    if (isFree) {
+        SDL_DestroySurface(_surface);
+    }
+    return texture;
+}
+
+void Window::blit(SDL_Texture* _texture, const SDL_FRect* _dest, const SDL_FRect* _src) {
+    SDL_RenderTexture(renderer, _texture, _src, _dest);
+}
+
+void Window::blit(SDL_Texture* _texture, float _angle, const SDL_FRect* _dest, const SDL_FRect* _src, SDL_FPoint _center) {
+    SDL_RenderTextureRotated(renderer, _texture, _src, _dest, _angle, &_center, SDL_FLIP_NONE);
 }
 
 void Window::setRenderTarget(SDL_Texture* _target) {
     SDL_SetRenderTarget(renderer, _target);
+}
+
+void Window::resetRenderTarget() {
+    SDL_SetRenderTarget(renderer, nullptr);
 }
 
 void Window::setBlendMode(SDL_Texture* _texture, SDL_BlendMode _blendMode) {
@@ -101,6 +109,6 @@ void Window::destroyTexture(SDL_Texture* _texture) {
 }
 
 
-void Window::blitText(const char* text, const SDL_Rect& rect) {
+void Window::blitText(const char* text, const SDL_FRect& rect) {
 
 }

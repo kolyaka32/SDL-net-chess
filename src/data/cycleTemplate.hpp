@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include "SDL_Keyboard.h"
-#include "SDL_events.h"
+#include <SDL3/SDL_Keyboard.h>
+#include <SDL3/SDL_events.h>
 #include "idleTimer.hpp"
 
 // Template for any cycles
@@ -15,8 +15,8 @@ class CycleTemplate {
     IdleTimer idleTimer{1000/60};  // Timer to idle in main cycle
 
     // Data for cycle
-    bool running = true;    // Flag of running current cycle
-    int mouseX, mouseY;     // Current position of mouse
+    bool running = true;   // Flag of running current cycle
+    float mouseX, mouseY;  // Current position of mouse
 
     // Run internal cycle
     template <class Cycle>
@@ -33,7 +33,7 @@ class CycleTemplate {
 
     // Subproframs for get need input
     virtual bool getMouseInput();                          // Checking for any mouse actions
-    virtual bool getKeysInput(const SDL_Keysym& key);      // Checking for any keys actions
+    virtual bool getKeysInput(SDL_Keycode key);            // Checking for any keys actions
     virtual bool getAnotherInput(const SDL_Event& event);  // Getting all rest user input
 
  public:

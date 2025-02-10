@@ -6,7 +6,7 @@
 #pragma once
 
 #include <stdexcept>
-#include "SDL_Log.h"
+#include <SDL3/SDL_log.h>
 #include "../testing.hpp"
 
 // Custom exceptions

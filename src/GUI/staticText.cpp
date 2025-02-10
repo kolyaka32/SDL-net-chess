@@ -34,18 +34,18 @@ StaticText::~StaticText() {
     SDL_DestroyTexture(texture);
 }
 
-void StaticText::updateTexture() {
+void StaticText::updateTexture(Window& _target) {
     // Creating surface with text
-    SDL_Surface *surface = TTF_RenderUTF8_Solid(font, bufferText, color);
-    texture = SDL_CreateTextureFromSurface(data.renderer, surface);
-    SDL_FreeSurface(surface);
+    SDL_Surface *surface = TTF_RenderText_Solid(font, bufferText, len, color);
+    texture = _target.createTexture(surface);
+
     // Moving draw rect to new place
-    SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
+    SDL_GetTextureSize(texture, &rect.w, &rect.h);
     rect.x = SCREEN_WIDTH * posX - (rect.w * aligment / 2);
     rect.y = SCREEN_HEIGHT * posY - rect.h / 2;
 }
 
-void StaticText::updateLocationArgs(const unsigned count, ...) {
+void StaticText::updateLocationArgs(Window& _target, ...) {
     // Clearing previous buffer
     if (bufferText) {
         delete[] bufferText;
@@ -54,13 +54,13 @@ void StaticText::updateLocationArgs(const unsigned count, ...) {
 
     // Finding need text for this language
     const char* start = text;
-    for (Uint8 lan = LNG_ENGLISH; lan != data.language; ++lan) {
+    for (LNG_types lan = LNG_ENGLISH; lan != data.language; ++lan) {
         // Parsing text to it end
         for (; *start++;) {}
     }
     // Getting arguments
     va_list args;
-    va_start(args, count);
+    va_start(args, _target);
 
     // Getting size of string
     size_t size = _vscprintf(start, args);
@@ -71,11 +71,11 @@ void StaticText::updateLocationArgs(const unsigned count, ...) {
 
     va_end(args);
 
-    updateTexture();
+    updateTexture(_target);
 }
 
 //
-void StaticText::updateLocation() {
+void StaticText::updateLocation(Window& _target) {
     // Clearing previous buffer
     if (bufferText) {
         delete[] bufferText;
@@ -95,5 +95,5 @@ void StaticText::updateLocation() {
     bufferText = new char[size];
     sprintf(bufferText, start);
 
-    updateTexture();
+    updateTexture(_target);
 }

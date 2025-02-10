@@ -11,5 +11,5 @@ private:
 public:
     StraightLoader(/* args */);
     ~StraightLoader() override;
-    RWops* load(const char* name) override;
+    SDL_IOStream* load(const char* name) override;
 };

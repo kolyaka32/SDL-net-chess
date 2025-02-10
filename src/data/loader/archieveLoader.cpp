@@ -8,6 +8,6 @@ ArchieveLoader::~ArchieveLoader() {
     
 }
 
-RWops* ArchieveLoader::load(const char* _file) {
+SDL_IOStream* ArchieveLoader::load(const char* _file) {
     return nullptr;
 }
