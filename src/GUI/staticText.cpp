@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024-2025, Kazankov Nikolay 
+ * Copyright (C) 2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
@@ -7,7 +7,7 @@
 #include <cstdio>
 #include <cstring>
 
-#include "../data/data.hpp"
+
 #include "baseGUI.hpp"
 
 using namespace GUI;
@@ -22,7 +22,7 @@ StaticText::StaticText(const char* _text, textHeight _height,
     updateLocation();
 
     // Adding item to global location update list
-    data.updateList.add(this);
+    //data.updateList.add(this);
 }
 
 StaticText::~StaticText() {

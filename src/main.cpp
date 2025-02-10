@@ -1,31 +1,32 @@
 /*
- * Copyright (C) 2024-2025, Kazankov Nikolay 
+ * Copyright (C) 2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
-#include "data/data.hpp"
-#include "cycles/selectCycle.hpp"
+#include "data/app.hpp"
 
-// Main process data
-Data data;
 
-// Declaration of global 
-const GUI::ImageButton BaseCycle::exitButton{0.05, 0.05, IMG_GUI_QUIT_BUTTON};
-SettingsMenu BaseCycle::settings;
+// Declaration of global objects
+//const GUI::ImageButton BaseCycle::exitButton{0.05, 0.05, IMG_GUI_QUIT_BUTTON};
+//SettingsMenu BaseCycle::settings;
+
 
 // Main function
 int main(int argv, char **args) {
     // Starting selecting cycle
-    SelectCycle cycle;
+    //SelectCycle cycle;
+
+    // Main process data
+    App app;
 
     // Running selecting cycle
-    cycle.run();
+    //cycle.run();
 
     // Reloading game if need
-    if (data.restart) {
+    /*if (data.restart) {
         data.restart = false;
         return main(argv, args);
-    }
+    }*/
 
     // Successful end of program
     return 0;

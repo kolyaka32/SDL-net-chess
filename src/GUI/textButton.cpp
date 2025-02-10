@@ -1,9 +1,8 @@
 /*
- * Copyright (C) 2024-2025, Kazankov Nikolay 
+ * Copyright (C) 2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
-#include "../data/data.hpp"
 #include "baseGUI.hpp"
 
 using namespace GUI;
@@ -16,13 +15,13 @@ TextButton::TextButton(const char* _text, textHeight _size, float _X, float _Y,
     updateLocation();
 
     // Adding item to global updation list
-    data.updateList.add(this);
+    //data.updateList.add(this);
 }
 
 //
-void TextButton::blit() const {
-    SDL_RenderCopy(data.renderer, texture, NULL, &rect);
-    topText.blit();
+void TextButton::blit(Window& _target) const {
+    _target.blit(texture, &rect);
+    topText.blit(_target);
 }
 
 // Update current text plate

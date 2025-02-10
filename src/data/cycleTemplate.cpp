@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024-2025, Kazankov Nikolay 
+ * Copyright (C) 2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
@@ -28,7 +28,7 @@ void CycleTemplate::getInput() {
         // Code of program exiting
         case SDL_QUIT:
             // Stopping program at all
-            data.appRunning = false;
+            //data.appRunning = false;
 
             // Stopping current cycle
             running = false;

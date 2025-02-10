@@ -1,22 +1,15 @@
 /*
- * Copyright (C) 2024-2025, Kazankov Nikolay 
+ * Copyright (C) 2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
 #pragma once
 
-// Debuging modifiers
-#define DEBUG false
-#define CHECK_CORRECTION DEBUG
-#define ARCHIEVE_LOADING !DEBUG
-#define SCROLLER_SOUND SND_count
-#define CONNECTION_LOST_PERCENT 50
-
 // System numbers
 #define WINDOWNAME "Chess on SDL"           // System game name
 // Game field parameters
 #define FIELD_WIDTH 8                       // Number of cells
-#define CELL_SIDE 64                        // Width and height of mine in pixels
+#define CELL_SIDE 64                        // Width and height of cell in pixels
 // Widthes and heightes
 #define GAME_WIDTH FIELD_WIDTH * CELL_SIDE  // Width of game area
 #define GAME_HEIGHT GAME_WIDTH              // Height of game area
@@ -35,6 +28,7 @@
 #define MESSAGE_GET_TIMEOUT 4000            // Time after which connection is considered lost
 #define MESSAGE_NULL_TIMEOUT 800            // Time to send NULL message to keep connecion
 #define MESSAGE_APPLY_TIMEOUT 600           // Time to apply arriving message
+#define CONNECTION_LOST_PERCENT 50
 
 // Base file names
 #define SETTING_FILE "settings5.ini"        // File with all starting data (width, height...)

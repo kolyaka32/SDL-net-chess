@@ -1,17 +1,18 @@
 /*
- * Copyright (C) 2024-2025, Kazankov Nikolay 
+ * Copyright (C) 2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
 #pragma once
 
-#include "data.hpp"
+#include "SDL_Keyboard.h"
+#include "SDL_events.h"
 #include "idleTimer.hpp"
 
 // Template for any cycles
 class CycleTemplate {
  protected:
-    IdleTimer idleTimer{1000/data.drawFPS};  // Timer to idle in main cycle
+    IdleTimer idleTimer{1000/60};  // Timer to idle in main cycle
 
     // Data for cycle
     bool running = true;    // Flag of running current cycle
@@ -46,7 +47,7 @@ class CycleTemplate {
 template <class Cycle>
 bool CycleTemplate::runCycle() {
     // Entering cycle for correct updations
-    data.updateList.enterCycle();
+    //data.updateList.enterCycle();
 
     // Launching new cycle
     Cycle cycle;
@@ -55,12 +56,12 @@ bool CycleTemplate::runCycle() {
     cycle.run();
 
     // Checking for exit
-    if (!data.appRunning) {
+    /*if (!data.appRunning) {
         return true;
-    }
+    }*/
 
     // Exiting updation cycle
-    data.updateList.exitCycle();
+    //data.updateList.exitCycle();
 
     // Normal return
     return false;
@@ -70,7 +71,7 @@ bool CycleTemplate::runCycle() {
 template <class Cycle, typename Param>
 bool CycleTemplate::runCycle(Param args) {
     // Entering cycle for correct updations
-    data.updateList.enterCycle();
+    //data.updateList.enterCycle();
 
     // Launching new cycle
     Cycle cycle(args);
@@ -79,12 +80,12 @@ bool CycleTemplate::runCycle(Param args) {
     cycle.run();
 
     // Checking for exit
-    if (!data.appRunning) {
+    /*if (!data.appRunning) {
         return true;
-    }
+    }*/
 
     // Exiting updation cycle
-    data.updateList.exitCycle();
+    //data.updateList.exitCycle();
 
     // Normal return
     return false;

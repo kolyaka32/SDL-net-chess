@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2024-2025, Kazankov Nikolay 
+ * Copyright (C) 2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
 #include <cstdlib>
 #include <cstring>
-#include "../data/data.hpp"
+#include <algorithm>
 #include "baseGUI.hpp"
 
 using namespace GUI;
@@ -347,10 +347,10 @@ void TypeBox::updateSelection(int _mouseX) {
 }
 
 // Overrided function for draw text and backplate at screen
-void TypeBox::blit() const {
+void TypeBox::blit(Window& _target) const {
     // Rendering background picture for better typing
-    SDL_RenderCopy(data.renderer, data.textures[IMG_GUI_TYPE_BOX], NULL, &rect);
+    _target.blit(IMG_GUI_TYPE_BOX, &rect);
 
     // Rendering text
-    SDL_RenderCopy(data.renderer, texture, NULL, &textRect);
+    _target.blit(texture, &textRect);
 }

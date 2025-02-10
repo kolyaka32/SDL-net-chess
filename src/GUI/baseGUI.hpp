@@ -1,17 +1,15 @@
 /*
- * Copyright (C) 2024-2025, Kazankov Nikolay 
+ * Copyright (C) 2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
 #pragma once
 
-#include "../include.hpp"
+
+#include "../data/window.hpp"
 #include "../define.hpp"
-#include "../dataTypes.hpp"
-#include "../data/languages.hpp"
-#include "../data/graphics.hpp"
-#include "../data/font.hpp"
-#include "../data/animations.hpp"
+#include "../languages.hpp"
+//#include "../data/animations.hpp"
 
 
 // Namespace of objects for GUI (Graphic User Interface)
@@ -27,12 +25,12 @@ namespace GUI {
     // Graphic user interface template for other objects
    class GUItemplate {
      protected:
-      SDL_Texture *texture;
+      SDL_Texture* texture;
       SDL_Rect rect;
      public:
         GUItemplate();
-        virtual void blit() const;
-        virtual bool in(const int mouseX, const int mouseY) const;
+        virtual void blit(Window& _target) const;
+        bool in(int mouseX, int mouseY) const;
         virtual void updateLocation();
     };
 
@@ -70,7 +68,7 @@ namespace GUI {
             IMG_names buttonImage = IMG_GUI_SLIDER_BUTTON, unsigned max = 255);
         void setValue(int mouseX);                           // Setting new state from mouse position
         bool scroll(Sint32 wheelY, int mouseX, int mouseY);  // Checking mouse wheel action
-        void blit() const override;                          // Drawing slider with need button position
+        void blit(Window& _target) const override;           // Drawing slider with need button position
     };
 
 
@@ -94,19 +92,6 @@ namespace GUI {
         void update();
     };
     #endif
-
-
-    // Bar to show some charachteristic (like health) with icone
-    class Bar : public GUItemplate {
-     private:
-        SDL_Rect Front_rect;    // Front rect for primal color
-        SDL_Rect IconeRect;     // Rect for icone, near bar, if need
-        const SDL_Color color;  // Color of front part of bar
-     public:
-        // Create new bar with it position, primal color and icone near it
-        Bar(const SDL_Rect dest, SDL_Color color, IMG_names icone = IMG_GUI_PAUSE_BUTTON);
-        void blit(int width);   // Drawing bar with icone need width
-    };
 
 
     // Class of box, where user can type text
@@ -138,7 +123,7 @@ namespace GUI {
         TypeBox(textHeight size, float posX, float posY, const char *startText = "",
             ALIGNMENT_types newAligment = MIDLE_text, SDL_Color newColor = BLACK);
         ~TypeBox();                         // Clearing font and texture
-        void blit() const override;         // Function of drawing text with background plate
+        void blit(Window& _target) const override;  // Function of drawing text with background plate
         const char* getString() const;      // Function of getting typed string
         void writeString(const char* str);  // Function of writing any string to buffer at caret position
         void press(SDL_Keycode code);       // Function of processing special keycodes
@@ -172,7 +157,7 @@ namespace GUI {
      public:
         TextButton(const char* text, textHeight size, float X, float Y,
             SDL_Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
-        void blit() const override;      // Drawing current button
+        void blit(Window& _target) const override;  // Drawing current button
         void updateLocation() override;  // Update object to match text sizes
     };
 

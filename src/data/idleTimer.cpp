@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024-2025, Kazankov Nikolay 
+ * Copyright (C) 2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
@@ -10,13 +10,13 @@
 IdleTimer::IdleTimer(unsigned _sleepTime)
 : sleepTime(_sleepTime) {
     // Resetting timer
-    lastSleep = SDL_GetTicks64() + sleepTime;
+    lastSleep = getTime() + sleepTime;
 }
 
 // Check, if need sleep and sleep it
 void IdleTimer::sleep() {
     // Check, if idle need
-    if (SDL_GetTicks64() < lastSleep) {
+    if (getTime() < lastSleep) {
         // Sleep rest time
         SDL_Delay(lastSleep - SDL_GetTicks64());
     }
