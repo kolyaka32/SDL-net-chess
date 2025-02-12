@@ -10,5 +10,5 @@ private:
 public:
     DataLoader(/* args */);
     virtual ~DataLoader();
-    virtual SDL_IOStream* load(const char* file);
+    virtual SDL_IOStream* load(const char* file) const;
 };

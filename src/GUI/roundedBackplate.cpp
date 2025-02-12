@@ -15,7 +15,7 @@ Backplate::Backplate(Window& _target, float _centerX, float _centerY, float _wid
         SCREEN_WIDTH * _width, SCREEN_HEIGHT * _height});
 }
 
-Backplate::Backplate(const float _rad, const float _bor, const SDL_Color _frontColor, const SDL_Color _backColor)
+Backplate::Backplate(Window& _target, float _rad, float _bor, const SDL_Color _frontColor, const SDL_Color _backColor)
 : frontColor(_frontColor), backColor(_backColor), rad(_rad), bor(_bor) {
     rect = {0, 0, 0, 0};
 }
@@ -24,7 +24,7 @@ Backplate::~Backplate() {
     SDL_DestroyTexture(texture);
 }
 
-void Backplate::updatePlate(Window& _target, const SDL_FRect _rect) {
+void Backplate::updatePlate(Window& _target, const SDL_FRect& _rect) {
     // Checking, if need clear previous texture
     if (texture) {
         SDL_DestroyTexture(texture);

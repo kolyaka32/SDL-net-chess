@@ -11,14 +11,12 @@
 #include "../texturesNames.hpp"
 
 // Class for load, draw and clear textures
-class Textures
-{
+class Textures {
 private:
-    unsigned count = 0;
-    SDL_Texture* textures[50];
+    SDL_Texture* textures[IMG_count];
     void loadTexture();
 public:
-    Textures(const DataLoader& loader);
+    Textures(const DataLoader& loader, unsigned count, const char* names[]);
     ~Textures();
     SDL_Texture* operator[] (IMG_names index);
 };

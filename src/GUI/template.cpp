@@ -14,7 +14,7 @@ GUItemplate::GUItemplate() {
 
 // Template function for draw
 void GUItemplate::blit(Window& _target) const {
-    _target.blit(texture, &rect);
+    _target.blit(texture, rect);
 }
 
 // Template function for check, if mouse press in object

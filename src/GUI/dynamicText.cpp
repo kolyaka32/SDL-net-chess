@@ -12,8 +12,9 @@
 using namespace GUI;
 
 // Class of static text
-StaticText::StaticText(Window& _target, const std::string (&_text)[LNG_count], textHeight _height,
-    float _X, float _Y, SDL_Color _color, ALIGNMENT_types _aligment) {
+DynamicText::DynamicText(Window& _target, const std::string (&_text)[LNG_count], float _height,
+    float _X, float _Y, SDL_Color _color, ALIGNMENT_types _aligment)
+: posX(_X), posY(_Y), aligment(_aligment), color(_color) {
     TTF_Font* font = _target.getFont(FNT_MAIN);
 
     SDL_Surface *surface = TTF_RenderText_Solid(font, _text[currentLanguage].c_str(), _text[currentLanguage].size(), _color);
@@ -25,12 +26,12 @@ StaticText::StaticText(Window& _target, const std::string (&_text)[LNG_count], t
     rect.y = SCREEN_HEIGHT * _Y - rect.h / 2;
 }
 
-StaticText::~StaticText() {
+DynamicText::~DynamicText() {
     // Clearing text buffer
     SDL_DestroyTexture(texture);
 }
 
-/*void StaticText::updateTexture(Window& _target) {
+void DynamicText::updateTexture(Window& _target) {
     // Creating surface with text
     SDL_Surface *surface = TTF_RenderText_Solid(font, currentText.c_str(), currentText.size(), color);
     texture = _target.createTexture(surface);
@@ -39,11 +40,11 @@ StaticText::~StaticText() {
     SDL_GetTextureSize(texture, &rect.w, &rect.h);
     rect.x = SCREEN_WIDTH * posX - (rect.w * aligment / 2);
     rect.y = SCREEN_HEIGHT * posY - rect.h / 2;
-}*/
+}
 
-/*void StaticText::updateLocationArgs(Window& _target, ...) {
+void DynamicText::updateLocationArgs(Window& _target, ...) {
     // Clearing previous buffer
-    if (bufferText) {
+    /*if (bufferText) {
         delete[] bufferText;
         bufferText = nullptr;
     }
@@ -66,15 +67,15 @@ StaticText::~StaticText() {
     bufferText = new char[length];
     vsprintf(bufferText, start, args);
 
-    va_end(args);
+    va_end(args);*/
 
     updateTexture(_target);
-}*/
+}
 
 //
-/*void StaticText::updateLocation(Window& _target) {
+void DynamicText::updateLocation(Window& _target) {
     // Clearing previous buffer
-    if (bufferText) {
+    /*if (bufferText) {
         delete[] bufferText;
         bufferText = nullptr;
     }
@@ -90,7 +91,7 @@ StaticText::~StaticText() {
 
     // Creating buffer for text and copy it here
     bufferText = new char[length];
-    sprintf(bufferText, start);
+    sprintf(bufferText, start);*/
 
     updateTexture(_target);
-}*/
+}

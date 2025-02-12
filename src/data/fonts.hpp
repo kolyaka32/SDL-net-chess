@@ -12,12 +12,12 @@
 typedef unsigned short textHeight;
 
 // Class for draw any font with need height
-class Fonts
-{
+class Fonts {
 private:
-    /* data */
+    TTF_Font* fonts[FNT_count];
+    void loadFont(const DataLoader& loader, unsigned index, const char* name);
 public:
-    Fonts(DataLoader loader);
+    Fonts(const DataLoader& loader, unsigned count, const char* filesNames[]);
     ~Fonts();
+    TTF_Font* operator[](FNT_names index);
 };
-

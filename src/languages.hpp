@@ -6,14 +6,14 @@
 #pragma once
 
 // Types of language
-enum LNG_types{
+enum LNG_types : unsigned {
     LNG_ENGLISH,     // English language
     LNG_RUSSIAN,     // Russian language
     LNG_GERMAN,      // German language
     LNG_BELARUSIAN,  // Belarusian language
 
-    LNG_count,       // Global counter of all languages
+    LNG_count,       // Counter of all languages
 };
 
-// Data type for language
-typedef unsigned char language;
+// Selected language of current app
+extern LNG_types currentLanguage;

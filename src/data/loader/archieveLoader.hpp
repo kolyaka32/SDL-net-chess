@@ -11,5 +11,5 @@ private:
 public:
     ArchieveLoader(/* args */);
     ~ArchieveLoader() override;
-    SDL_IOStream* load(const char* name) override;
+    SDL_IOStream* load(const char* name) const override;
 };

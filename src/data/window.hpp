@@ -16,7 +16,7 @@ private:
     SDL_Window* window;
     SDL_Renderer* renderer;
     Textures textures;
-    const Fonts fonts;
+    Fonts fonts;
 public:
     Window(const DataLoader& loader);
     ~Window() noexcept;
@@ -39,8 +39,8 @@ public:
     // Work with own textures
     SDL_Texture* createTexture(int width, int height, SDL_TextureAccess access = SDL_TEXTUREACCESS_TARGET, SDL_PixelFormat format = SDL_PIXELFORMAT_RGBA32);
     SDL_Texture* createTexture(SDL_Surface* surface, bool isFree = true);
-    void blit(SDL_Texture* texture, const SDL_FRect* dest, const SDL_FRect* src = nullptr);
-    void blit(SDL_Texture* texture, float angle, const SDL_FRect* rect, const SDL_FRect* src = nullptr, SDL_FPoint center = {0, 0});
+    void blit(SDL_Texture* texture, const SDL_FRect& dest, const SDL_FRect* src = nullptr);
+    void blit(SDL_Texture* texture, float angle, const SDL_FRect& rect, const SDL_FRect* src = nullptr, SDL_FPoint center = {0, 0});
     void setRenderTarget(SDL_Texture* target);
     void resetRenderTarget();
     void setBlendMode(SDL_Texture* _texture, SDL_BlendMode _blendMode = SDL_BLENDMODE_NONE);
@@ -49,4 +49,10 @@ public:
 
     // Work with fonts
     void blitText(const char* text, const SDL_FRect& rect);
+    TTF_Font* getFont(FNT_names name);
+
+    // Work with window
+    void startTextInput();
+    void stopTextInput();
+    
 };

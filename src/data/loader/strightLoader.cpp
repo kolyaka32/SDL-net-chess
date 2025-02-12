@@ -8,6 +8,6 @@ StraightLoader::~StraightLoader() {
     
 }
 
-SDL_IOStream* StraightLoader::load(const char* _file) {
+SDL_IOStream* StraightLoader::load(const char* _file) const {
     return nullptr;
 }

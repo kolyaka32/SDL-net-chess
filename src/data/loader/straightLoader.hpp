@@ -11,5 +11,5 @@ private:
 public:
     StraightLoader(/* args */);
     ~StraightLoader() override;
-    SDL_IOStream* load(const char* name) override;
+    SDL_IOStream* load(const char* name) const override;
 };

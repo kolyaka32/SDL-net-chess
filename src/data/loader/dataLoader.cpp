@@ -9,6 +9,6 @@ DataLoader::~DataLoader() {
 
 }
 
-SDL_IOStream* DataLoader::load(const char* name) {
+SDL_IOStream* DataLoader::load(const char* name) const {
     return nullptr;
 }

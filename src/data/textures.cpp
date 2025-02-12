@@ -2,7 +2,7 @@
 #include "textures.hpp"
 
 
-Textures::Textures(const DataLoader& loader) {
+Textures::Textures(const DataLoader& _loader, unsigned _count, const char* _names[]) {
 
 }
 

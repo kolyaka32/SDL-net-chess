@@ -10,7 +10,7 @@ using namespace GUI;
 
 #if ANI_count
 // GIF animation class
-GIFAnimation::GIFAnimation(SDL_Rect _rect, ANI_names _type) {
+GIFAnimation::GIFAnimation(Window& _target, SDL_Rect _rect, ANI_names _type) {
     // Creating animation
     type = _type;
     rect = _rect;
@@ -22,11 +22,11 @@ GIFAnimation::~GIFAnimation() {
     SDL_DestroyTexture(texture);
 }
 
-void GIFAnimation::update() {
-    if (SDL_GetTicks64() > prevTick) {
+void GIFAnimation::update(Window& _target) {
+    if (SDL_GetTicks() > prevTick) {
         frame = (frame + 1) % data.animations[type]->count;
         texture = SDL_CreateTextureFromSurface(data.renderer, data.animations[type]->frames[frame]);
-        prevTick = SDL_GetTicks64() + data.animations[type]->delays[frame] / 10;
+        prevTick = SDL_GetTicks() + data.animations[type]->delays[frame] / 10;
     }
 }
 #endif

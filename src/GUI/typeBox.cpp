@@ -4,7 +4,6 @@
  */
 
 #include <cstdlib>
-#include <cstring>
 #include <algorithm>
 #include "baseGUI.hpp"
 
@@ -12,9 +11,9 @@ using namespace GUI;
 
 
 // Type box class
-TypeBox::TypeBox(textHeight _height, float _x, float _y, const char* _text, ALIGNMENT_types _aligment, SDL_Color _color)
+TypeBox::TypeBox(Window& _target, textHeight _height, float _x, float _y, const char* _text, ALIGNMENT_types _aligment, SDL_Color _color)
 : color(_color), aligment(_aligment) {
-    font = data.createFont(_height);
+    font = _target.getFont(FNT_MAIN);
     textRect.x = SCREEN_WIDTH * _x;
     textRect.y = SCREEN_HEIGHT * _y - _height / 2;
     textRect.w = textRect.h = 0;
@@ -31,7 +30,7 @@ TypeBox::TypeBox(textHeight _height, float _x, float _y, const char* _text, ALIG
     }
 
     // Creating background picture for typing
-    SDL_QueryTexture(data.textures[IMG_GUI_TYPE_BOX], NULL, NULL, &rect.w, &rect.h);
+    SDL_GetTextureSize(_target.getTexture(IMG_GUI_TYPE_BOX), &rect.w, &rect.h);
     rect.x = SCREEN_WIDTH * _x - rect.w / 2;
     rect.y = SCREEN_HEIGHT * _y - rect.h / 2 + 2;
 }
@@ -44,7 +43,7 @@ TypeBox::~TypeBox() {
 // Creating new texture
 void TypeBox::updateTexture() {
     // Creating main surface from all text
-    SDL_Surface* mainSurface = TTF_RenderUTF8_Solid(font, buffer, color);
+    /*SDL_Surface* mainSurface = TTF_RenderUTF8_Solid(font, buffer, color);
 
     //
     if (selectLength) {
@@ -73,13 +72,14 @@ void TypeBox::updateTexture() {
     }
 
     // Updating texture
-    texture = SDL_CreateTextureFromSurface(data.renderer, mainSurface);
-    SDL_FreeSurface(mainSurface);
+    //texture = 
+    //SDL_CreateTextureFromSurface(data.renderer, mainSurface);
+    //SDL_FreeSurface(mainSurface);
 
     // Resetting place of text with saving aligment
     textRect.x += textRect.w * aligment / 2;
     SDL_QueryTexture(texture, NULL, NULL, &textRect.w, &textRect.h);
-    textRect.x -= textRect.w * aligment / 2;
+    textRect.x -= textRect.w * aligment / 2;*/
 }
 
 // Returning text
@@ -249,7 +249,7 @@ void TypeBox::press(SDL_Keycode code) {
         copyToClipboard();
         break;
 
-    case SDLK_v:
+    case SDLK_V:
         if (preCode == SDLK_LCTRL) {
             writeClipboard();
         } else {
@@ -258,7 +258,7 @@ void TypeBox::press(SDL_Keycode code) {
         }
         break;
 
-    case SDLK_c:
+    case SDLK_C:
         if (preCode == SDLK_LCTRL) {
             copyToClipboard();
         } else {
@@ -267,7 +267,7 @@ void TypeBox::press(SDL_Keycode code) {
         }
         break;
 
-    case SDLK_a:
+    case SDLK_A:
         if (preCode == SDLK_LCTRL) {
             selectAll();
         } else {
@@ -292,13 +292,13 @@ void TypeBox::resetPress(SDL_Keycode code) {
 }
 
 // Select last letter to create writing symbol
-void TypeBox::select(int _mouseX) {
+void TypeBox::select(Window& _target, int _mouseX) {
     // Resetting swapping caret
     swapCaret = ' ';
     selectLength = 0;
     preCode = 0;
 
-    TTF_MeasureUTF8(font, buffer, _mouseX - textRect.x, nullptr, &caret);
+    //TTF_MeasureUTF8(font, buffer, _mouseX - textRect.x, nullptr, &caret);
 
     // Moving all string
     for (int i=length; i >= caret; --i) {
@@ -310,13 +310,13 @@ void TypeBox::select(int _mouseX) {
     updateTexture();
 
     // Starting using keyboard
-    SDL_StartTextInput();
+    _target.startTextInput();
 }
 
 // Clear selection of writing symbol
-void TypeBox::removeSelect() {
+void TypeBox::removeSelect(Window& _target) {
     // Stoping entering any letters
-    SDL_StopTextInput();
+    _target.stopTextInput();
 
     // Clearing enter symbol
     for (int t = caret; t <= length; t++) {
@@ -336,7 +336,7 @@ void TypeBox::updateCaret() {
 // Selecting text
 void TypeBox::updateSelection(int _mouseX) {
     // Check on borders
-    TTF_MeasureUTF8(font, buffer, _mouseX - textRect.x, nullptr, &selectLength);
+    //TTF_MeasureUTF8(font, buffer, _mouseX - textRect.x, nullptr, &selectLength);
     if (selectLength <= caret) {
         SET_MIN(selectLength, 0);
         selectLength -= caret;
@@ -349,8 +349,8 @@ void TypeBox::updateSelection(int _mouseX) {
 // Overrided function for draw text and backplate at screen
 void TypeBox::blit(Window& _target) const {
     // Rendering background picture for better typing
-    _target.blit(IMG_GUI_TYPE_BOX, &rect);
+    //_target.blit(IMG_GUI_TYPE_BOX, &rect);
 
     // Rendering text
-    _target.blit(texture, &textRect);
+    _target.blit(texture, textRect);
 }

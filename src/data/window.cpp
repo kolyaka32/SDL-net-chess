@@ -7,10 +7,13 @@
 #include "../define.hpp"
 #include "exceptions.hpp"
 
+// Names of loading files
+#include "../texturesNames.hpp"
+#include "../fontsNames.hpp"
 
 Window::Window(const DataLoader& _loader)
- : textures{_loader},
- fonts{_loader} {
+ : textures{_loader, IMG_count, texturesFilesNames},
+ fonts{_loader, FNT_count, fontsFilesNames} {
     // Creating showing tools
     SDL_CreateWindowAndRenderer(WINDOWNAME, SCREEN_WIDTH, SCREEN_HEIGHT, 0, &window, &renderer);
 
@@ -80,12 +83,12 @@ SDL_Texture* Window::createTexture(SDL_Surface* _surface, bool isFree) {
     return texture;
 }
 
-void Window::blit(SDL_Texture* _texture, const SDL_FRect* _dest, const SDL_FRect* _src) {
-    SDL_RenderTexture(renderer, _texture, _src, _dest);
+void Window::blit(SDL_Texture* _texture, const SDL_FRect& _dest, const SDL_FRect* _src) {
+    SDL_RenderTexture(renderer, _texture, _src, &_dest);
 }
 
-void Window::blit(SDL_Texture* _texture, float _angle, const SDL_FRect* _dest, const SDL_FRect* _src, SDL_FPoint _center) {
-    SDL_RenderTextureRotated(renderer, _texture, _src, _dest, _angle, &_center, SDL_FLIP_NONE);
+void Window::blit(SDL_Texture* _texture, float _angle, const SDL_FRect& _dest, const SDL_FRect* _src, SDL_FPoint _center) {
+    SDL_RenderTextureRotated(renderer, _texture, _src, &_dest, _angle, &_center, SDL_FLIP_NONE);
 }
 
 void Window::setRenderTarget(SDL_Texture* _target) {
@@ -111,4 +114,17 @@ void Window::destroyTexture(SDL_Texture* _texture) {
 
 void Window::blitText(const char* text, const SDL_FRect& rect) {
 
+}
+
+TTF_Font* Window::getFont(FNT_names _name) {
+    return fonts[_name];
+}
+
+
+void Window::startTextInput() {
+    SDL_StartTextInput(window);
+}
+
+void Window::stopTextInput() {
+    SDL_StopTextInput(window);
 }

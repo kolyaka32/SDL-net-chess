@@ -16,8 +16,7 @@
 #include "window.hpp"
 
 
-class App
-{
+class App {
 private:
     // Selecting loader for data, depend on state of testing
     #if ARCHIEVE_LOADING
