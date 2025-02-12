@@ -6,9 +6,9 @@
 #pragma once
 
 #if ARCHIEVE_LOADING
-#include "loader/straightLoader.hpp"
-#else
 #include "loader/archieveLoader.hpp"
+#else
+#include "loader/straightLoader.hpp"
 #endif
 
 #include "music.hpp"
@@ -20,9 +20,9 @@ class App {
 private:
     // Selecting loader for data, depend on state of testing
     #if ARCHIEVE_LOADING
-    const StraightLoader loader;
-    #else
     const ArchieveLoader loader;
+    #else
+    const StraightLoader loader;
     #endif
 
     void run();

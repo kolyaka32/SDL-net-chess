@@ -9,8 +9,6 @@
 #include "loader/dataLoader.hpp"
 #include "../fontsNames.hpp"
 
-typedef unsigned short textHeight;
-
 // Class for draw any font with need height
 class Fonts {
 private:

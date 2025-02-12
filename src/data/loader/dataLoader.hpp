@@ -1,7 +1,14 @@
+/*
+ * Copyright (C) 2025, Kazankov Nikolay 
+ * <nik.kazankov.05@mail.ru>
+ */
+
 #pragma once
 
 #include <SDL3/SDL_iostream.h>
 
+#include "../../testing.hpp"
+#include "../exceptions.hpp"
 
 // Interface for load file
 class DataLoader {

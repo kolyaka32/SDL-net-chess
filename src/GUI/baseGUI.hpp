@@ -48,7 +48,7 @@ namespace GUI {
    protected:
       //void updateTexture(Window& _target);
    public:
-      StaticText(Window& _target, const std::string (&text)[LNG_count], textHeight size, float X,
+      StaticText(Window& _target, const std::string (&text)[LNG_count], float size, float X,
          float Y, SDL_Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
       ~StaticText();
       //void updateLocation(Window& _target) override;
@@ -142,7 +142,7 @@ namespace GUI {
       void deleteSelected();      // Function for clearing selected part
 
    public:
-      TypeBox(Window& _target, textHeight size, float posX, float posY, const char *startText = "",
+      TypeBox(Window& _target, float size, float posX, float posY, const char *startText = "",
          ALIGNMENT_types newAligment = MIDLE_text, SDL_Color newColor = BLACK);
       ~TypeBox();                                 // Clearing font and texture
       void blit(Window& _target) const override;  // Function of drawing text with background plate
@@ -177,7 +177,7 @@ namespace GUI {
    private:
       const StaticText topText;
    public:
-      TextButton(Window& _target, const std::string (&text)[LNG_count], textHeight size, float X, float Y,
+      TextButton(Window& _target, const std::string (&text)[LNG_count], float size, float X, float Y,
          SDL_Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
       void blit(Window& _target) const override;  // Drawing current button
       void updateLocation(Window& _target) override;  // Update object to match text sizes

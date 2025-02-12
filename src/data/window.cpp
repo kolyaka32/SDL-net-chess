@@ -12,11 +12,10 @@
 #include "../fontsNames.hpp"
 
 Window::Window(const DataLoader& _loader)
- : textures{_loader, IMG_count, texturesFilesNames},
- fonts{_loader, FNT_count, fontsFilesNames} {
-    // Creating showing tools
-    SDL_CreateWindowAndRenderer(WINDOWNAME, SCREEN_WIDTH, SCREEN_HEIGHT, 0, &window, &renderer);
-
+ : window(SDL_CreateWindow(WINDOWNAME, SCREEN_WIDTH, SCREEN_HEIGHT, 0)),
+renderer(SDL_CreateRenderer(window, NULL)),
+textures{_loader, renderer, IMG_count, texturesFilesNames},
+fonts{_loader, FNT_count, fontsFilesNames} {
     // Checking on correction of created objects
     #if CHECK_CORRECTION
     if (window == NULL) {

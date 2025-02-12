@@ -12,7 +12,7 @@
 using namespace GUI;
 
 // Class of static text
-StaticText::StaticText(Window& _target, const std::string (&_text)[LNG_count], textHeight _height,
+StaticText::StaticText(Window& _target, const std::string (&_text)[LNG_count], float _height,
     float _X, float _Y, SDL_Color _color, ALIGNMENT_types _aligment) {
     TTF_Font* font = _target.getFont(FNT_MAIN);
 

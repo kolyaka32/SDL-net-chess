@@ -14,9 +14,9 @@
 class Textures {
 private:
     SDL_Texture* textures[IMG_count];
-    void loadTexture();
+    void loadTexture(const DataLoader& _loader, SDL_Renderer* renderer, unsigned _index, const char* _name);
 public:
-    Textures(const DataLoader& loader, unsigned count, const char* names[]);
+    Textures(const DataLoader& loader, SDL_Renderer* renderer, unsigned count, const char* names[]);
     ~Textures();
     SDL_Texture* operator[] (IMG_names index);
 };

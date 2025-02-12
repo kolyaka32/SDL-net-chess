@@ -9,7 +9,7 @@ using namespace GUI;
 
 
 // Button class
-TextButton::TextButton(Window& _target, const std::string (&_text)[LNG_count], textHeight _size, float _X, float _Y,
+TextButton::TextButton(Window& _target, const std::string (&_text)[LNG_count], float _size, float _X, float _Y,
     SDL_Color _color, ALIGNMENT_types _alignment)
 : topText(_target, _text, _size, _X, _Y, _color, _alignment),
 Backplate(_target, _size*0.75, 3) {

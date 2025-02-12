@@ -7,5 +7,5 @@
 
 // File names of the corresponding fonts
 const char* fontsFilesNames[FNT_count] = {
-    "PTSans-Regular.ttf",
+    "fnt/PTSans-Regular.ttf",
 };

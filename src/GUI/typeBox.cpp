@@ -11,7 +11,7 @@ using namespace GUI;
 
 
 // Type box class
-TypeBox::TypeBox(Window& _target, textHeight _height, float _x, float _y, const char* _text, ALIGNMENT_types _aligment, SDL_Color _color)
+TypeBox::TypeBox(Window& _target, float _height, float _x, float _y, const char* _text, ALIGNMENT_types _aligment, SDL_Color _color)
 : color(_color), aligment(_aligment) {
     font = _target.getFont(FNT_MAIN);
     textRect.x = SCREEN_WIDTH * _x;

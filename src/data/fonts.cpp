@@ -8,6 +8,14 @@
 
 
 Fonts::Fonts(const DataLoader& _loader, unsigned _count, const char* _filesNames[]) {
+    // Initialasing font library
+    if (!TTF_Init())
+    #if CHECK_CORRECTION
+    {
+        throw LibararyLoadException("Font library");
+    }
+    #endif
+
     // Resetting fonts array
     #if CHECK_CORRECTION
     for (unsigned i=0; i < _count; ++i) {
@@ -22,10 +30,9 @@ Fonts::Fonts(const DataLoader& _loader, unsigned _count, const char* _filesNames
 
     // Checking massive on loading correction
     #if CHECK_CORRECTION
-    unsigned loaded = 0;
-    for (unsigned i=0; i < _count; ++i) {
+    for (unsigned i=0; i < FNT_count; ++i) {
         if (fonts[i] == NULL) {
-            throw DataLoadException("Fonts at index: " + to_string(i));
+            throw DataLoadException("Fonts at index: " + std::to_string(i));
         }
     }
     #endif
@@ -36,12 +43,22 @@ Fonts::~Fonts() {
     for (unsigned i=0; i < FNT_count; ++i) {
         TTF_CloseFont(fonts[i]);
     }
+
+    // Closing font library
+    TTF_Quit();
 }
 
 void Fonts::loadFont(const DataLoader& _loader, unsigned _index, const char* _name) {
     SDL_IOStream* iodata = _loader.load(_name);
 
     fonts[_index] = TTF_OpenFontIO(iodata, true, 12.);
+
+    // Checking correction of loaded font
+    #if CHECK_CORRECTION
+    if (fonts[_index] == nullptr) {
+        throw DataLoadException(_name);
+    }
+    #endif
 }
 
 TTF_Font* Fonts::operator[](FNT_names _index) {

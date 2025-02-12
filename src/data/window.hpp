@@ -10,8 +10,7 @@
 
 
 // Class of window, where all happen
-class Window
-{
+class Window {
 private:
     SDL_Window* window;
     SDL_Renderer* renderer;
