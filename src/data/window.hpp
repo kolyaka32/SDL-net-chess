@@ -46,9 +46,9 @@ public:
     void unlockTexture(SDL_Texture* texture);
     void destroyTexture(SDL_Texture* texture);
 
-    // Work with fonts
-    void blitText(const char* text, const SDL_FRect& rect);
+    // Work with fonts and text
     TTF_Font* getFont(FNT_names name);
+    SDL_Texture* createTexture(FNT_names font, float height, const char* text, unsigned length, SDL_Color color);
 
     // Work with window
     void startTextInput();

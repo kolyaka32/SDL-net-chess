@@ -31,7 +31,7 @@ void Slider::blit(Window& _target) const {
     _target.blit(textureButton, buttonRect);
 }
 
-void Slider::setValue(int mouseX) {
+void Slider::setValue(float mouseX) {
     // Setting new position
     buttonRect.x = mouseX;
 
@@ -45,7 +45,7 @@ void Slider::setValue(int mouseX) {
     *link = (buttonRect.x - rect.x + buttonRect.w / 2) * maxValue / rect.w;
 }
 
-bool Slider::scroll(Sint32 wheelY, int mouseX, int mouseY) {
+bool Slider::scroll(float wheelY, float mouseX, float mouseY) {
     if (in(mouseX, mouseY)) {
         if (wheelY > 0) {
             setValue(buttonRect.x + buttonRect.w/2 + 8);

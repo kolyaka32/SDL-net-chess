@@ -30,7 +30,7 @@ public:
     App(/* args */);
     ~App();
 
-    const Window window;
+    Window window;
     const Music music;
     const Sounds sounds;
 };

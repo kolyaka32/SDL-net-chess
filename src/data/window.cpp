@@ -111,12 +111,22 @@ void Window::destroyTexture(SDL_Texture* _texture) {
 }
 
 
-void Window::blitText(const char* text, const SDL_FRect& rect) {
-
-}
-
 TTF_Font* Window::getFont(FNT_names _name) {
     return fonts[_name];
+}
+
+SDL_Texture* Window::createTexture(FNT_names _font, float _height, const char* _text, unsigned _length, SDL_Color _color) {
+    // Setting text draw height
+    TTF_SetFontSize(getFont(_font), _height);
+
+    // Creating surface
+    SDL_Surface* surface = TTF_RenderText_Solid(getFont(_font), _text, _length, _color);
+
+    // Creating texture from created surface
+    SDL_Texture* texture = createTexture(surface);
+
+    SDL_DestroySurface(surface);
+    return texture;
 }
 
 

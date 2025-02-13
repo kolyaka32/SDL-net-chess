@@ -11,13 +11,13 @@ using namespace GUI;
 Backplate::Backplate(Window& _target, float _centerX, float _centerY, float _width, float _height,
     float _rad, float _bor, SDL_Color _frontColor, const SDL_Color _backColor)
 : frontColor(_frontColor), backColor(_backColor), rad(_rad), bor(_bor) {
-    updatePlate(_target, {SCREEN_WIDTH * (_centerX - _width/2), SCREEN_HEIGHT * (_centerY - _height/2),
-        SCREEN_WIDTH * _width, SCREEN_HEIGHT * _height});
+    updatePlate(_target, {SDL_roundf(SCREEN_WIDTH * (_centerX - _width/2)), SDL_roundf(SCREEN_HEIGHT * (_centerY - _height/2)),
+        SDL_roundf(SCREEN_WIDTH * _width), SDL_roundf(SCREEN_HEIGHT * _height)});
 }
 
-Backplate::Backplate(Window& _target, float _rad, float _bor, const SDL_Color _frontColor, const SDL_Color _backColor)
+Backplate::Backplate(Window& _target, const SDL_FRect& _rect, float _rad, float _bor, const SDL_Color _frontColor, const SDL_Color _backColor)
 : frontColor(_frontColor), backColor(_backColor), rad(_rad), bor(_bor) {
-    rect = {0, 0, 0, 0};
+    updatePlate(_target, _rect);
 }
 
 Backplate::~Backplate() {
@@ -25,17 +25,12 @@ Backplate::~Backplate() {
 }
 
 void Backplate::updatePlate(Window& _target, const SDL_FRect& _rect) {
-    // Checking, if need clear previous texture
-    if (texture) {
-        SDL_DestroyTexture(texture);
-    }
-
     // Creating new texture for drawing
     texture = _target.createTexture(_rect.w, _rect.h);
     rect = _rect;
 
     // Setting render target to this texture
-    //SDL_SetRenderTarget(data.renderer, texture);
+    _target.setRenderTarget(texture);
     SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
 
     // Drawing back part
@@ -49,7 +44,7 @@ void Backplate::updatePlate(Window& _target, const SDL_FRect& _rect) {
     // Clearing front edges
     _target.setDrawColor(backColor);
     for (float y=0; y <= rad+bor; ++y) {
-        for (float x=0; x <= rad+bor; ++x) {
+        for (float x=0; x < rad+bor; ++x) {
             if (sqr(y)+sqr(x) >= sqr(rad-bor)) {
                 _target.drawPoint(rad-x, rad-y);
                 _target.drawPoint(rect.w-rad+x, rad-y);
@@ -60,10 +55,10 @@ void Backplate::updatePlate(Window& _target, const SDL_FRect& _rect) {
     }
 
     // Clearing back edges
-    _target.setDrawColor(WHITE);
+    _target.setDrawColor({255, 255, 255, 0});
     for (float y=0; y <= rad; ++y) {
         for (float x=0; x <= rad; ++x) {
-            if (sqr(y)+sqr(x) >= sqr(rad)) {
+            if (sqr(y)+sqr(x) > sqr(rad)) {
                 _target.drawPoint(rad-x, rad-y);
                 _target.drawPoint(rect.w-rad+x, rad-y);
                 _target.drawPoint(rad-x, rect.h-rad+y);

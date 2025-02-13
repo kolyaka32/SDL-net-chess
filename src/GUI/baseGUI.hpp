@@ -30,42 +30,30 @@ namespace GUI {
    public:
       GUItemplate();
       virtual void blit(Window& _target) const;
-      bool in(int mouseX, int mouseY) const;
+      bool in(float mouseX, float mouseY) const;
       virtual void updateLocation(Window& _target);
    };
 
 
    // Static text on screen
    class StaticText : public GUItemplate {
-   private:
-      //const std::string text[LNG_count];    // Text to create from
-      //const float posX, posY;               // Relative positions on screen
-      //const ALIGNMENT_types aligment;       // Aligment type to improve displasment
-      //const SDL_Color color;                // Base draw color
-      //TTF_Font *font;                       // Font to create texture
-      //std::string currentText;              // Current text for print
-      friend class TextButton;              // Allowing textbutton to take data
-   protected:
-      //void updateTexture(Window& _target);
    public:
       StaticText(Window& _target, const std::string (&text)[LNG_count], float size, float X,
          float Y, SDL_Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
       ~StaticText();
-      //void updateLocation(Window& _target) override;
-      //void updateLocationArgs(Window& _target, ...);  // Change text, depend on another arguments
    };
 
 
-   // Static text on screen
+   // Dynamicly updated text on screen
    class DynamicText : public GUItemplate {
       private:
-         const std::string text[LNG_count];    // Text to create from
-         const float posX, posY;               // Relative positions on screen
-         const ALIGNMENT_types aligment;       // Aligment type to improve displasment
-         const SDL_Color color;                // Base draw color
-         TTF_Font *font;                       // Font to create texture
-         std::string currentText;              // Current text for print
-         friend class TextButton;              // Allowing textbutton to take data
+         const std::string (&text)[LNG_count];  // Text to create from
+         const float posX, posY;          // Relative positions on screen
+         const ALIGNMENT_types aligment;  // Aligment type to improve displasment
+         const SDL_Color color;           // Base draw color
+         const float height;              // Height of text to draw
+         char currentText[50];            // Current text for print
+         unsigned currentLength;          // Current length of text
       protected:
          void updateTexture(Window& _target);
       public:
@@ -88,9 +76,9 @@ namespace GUI {
       // Create slide with need line and button images
       Slider(Window& _target, float X, float Y, unsigned *controlData, IMG_names lineImage = IMG_GUI_SLIDER_LINE,
          IMG_names buttonImage = IMG_GUI_SLIDER_BUTTON, unsigned max = 255);
-      void setValue(int mouseX);                           // Setting new state from mouse position
-      bool scroll(Sint32 wheelY, int mouseX, int mouseY);  // Checking mouse wheel action
-      void blit(Window& _target) const override;           // Drawing slider with need button position
+      void setValue(float mouseX);                             // Setting new state from mouse position
+      bool scroll(float wheelY, float mouseX, float mouseY);  // Checking mouse wheel action
+      void blit(Window& _target) const override;               // Drawing slider with need button position
    };
 
 
@@ -167,20 +155,19 @@ namespace GUI {
    public:
       Backplate(Window& _target, float centerX, float centerY, float width, float height, float radius, float border,
          const SDL_Color frontColor = GREY, const SDL_Color backColor = BLACK);
-      Backplate(Window& _target, float radius, float border,  SDL_Color frontColor = GREY,
+      Backplate(Window& _target, const SDL_FRect& rect, float radius, float border, SDL_Color frontColor = GREY,
          const SDL_Color backColor = BLACK);
       ~Backplate();
    };
 
    // Class of buttons with text on it
-   class TextButton : public Backplate {
+   class TextButton : public StaticText {
    private:
-      const StaticText topText;
+      const Backplate backplate;
    public:
       TextButton(Window& _target, const std::string (&text)[LNG_count], float size, float X, float Y,
          SDL_Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
       void blit(Window& _target) const override;  // Drawing current button
-      void updateLocation(Window& _target) override;  // Update object to match text sizes
    };
 
 }  // namespace GUI
