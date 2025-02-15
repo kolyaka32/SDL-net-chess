@@ -19,7 +19,6 @@ DynamicText::DynamicText(Window& _target, const std::string (&_text)[LNG_count],
 }
 
 DynamicText::~DynamicText() {
-    // Clearing text buffer
     SDL_DestroyTexture(texture);
 }
 
@@ -30,7 +29,7 @@ void DynamicText::updateTexture(Window& _target) {
     }
 
     // Creating surface with text
-    texture = _target.createTexture(FNT_MAIN, height, currentText, currentLength, color);
+    texture = _target.createTexture(FNT_MAIN, height, currentText, 0, color);
 
     // Moving draw rect to new place
     SDL_GetTextureSize(texture, &rect.w, &rect.h);
@@ -45,18 +44,15 @@ void DynamicText::updateLocationArgs(Window& _target, ...) {
 
     // Creating buffer for text
     vsprintf_s(currentText, 50, text[currentLanguage].c_str(), args);
-    currentLength = strlen(currentText);
 
     va_end(args);
 
     updateTexture(_target);
 }
 
-//
 void DynamicText::updateLocation(Window& _target) {
     // Finding need text for this language
-    currentLength = text[currentLanguage].size();
-    sprintf_s(currentText, 50, text[currentLanguage].c_str());
+    strcpy_s(currentText, 50, text[currentLanguage].c_str());
 
     updateTexture(_target);
 }

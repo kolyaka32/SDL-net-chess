@@ -12,11 +12,11 @@ using namespace GUI;
 
 // Type box class
 TypeBox::TypeBox(Window& _target, float _height, float _x, float _y, const char* _text, ALIGNMENT_types _aligment, SDL_Color _color)
-: color(_color), aligment(_aligment) {
-    font = _target.getFont(FNT_MAIN);
-    textRect.x = SCREEN_WIDTH * _x;
-    textRect.y = SCREEN_HEIGHT * _y - _height / 2;
-    textRect.w = textRect.h = 0;
+: target(_target), textColor(_color), aligment(_aligment), height(_height), backTexture(_target.getTexture(IMG_GUI_TYPE_BOX)),
+backRect({SCREEN_WIDTH*_x - backTexture->w/2, SCREEN_HEIGHT*_y - backTexture->h/2+2, float(backTexture->w), float(backTexture->h)}) {
+    rect.x = SCREEN_WIDTH * _x;
+    rect.y = SCREEN_HEIGHT * _y - _height / 2;
+    rect.w = rect.h = 0;
 
     // Copying text to caret
     length = strlen(_text);
@@ -28,11 +28,6 @@ TypeBox::TypeBox(Window& _target, float _height, float _x, float _y, const char*
     if (caret) {
         updateTexture();
     }
-
-    // Creating background picture for typing
-    SDL_GetTextureSize(_target.getTexture(IMG_GUI_TYPE_BOX), &rect.w, &rect.h);
-    rect.x = SCREEN_WIDTH * _x - rect.w / 2;
-    rect.y = SCREEN_HEIGHT * _y - rect.h / 2 + 2;
 }
 
 // Clearing rest texture
@@ -43,7 +38,7 @@ TypeBox::~TypeBox() {
 // Creating new texture
 void TypeBox::updateTexture() {
     // Creating main surface from all text
-    /*SDL_Surface* mainSurface = TTF_RenderUTF8_Solid(font, buffer, color);
+    SDL_Surface* mainSurface = TTF_RenderText_Solid(font, buffer, textColor);
 
     //
     if (selectLength) {
@@ -52,34 +47,33 @@ void TypeBox::updateTexture() {
         SDL_Rect inverseRect = {0, 0, 0, 0};
 
         if (selectLength > 0) {
-            std::swap(buffer[caret+1], t);
+            //std::swap(buffer[caret+1], t);
             TTF_SizeUTF8(font, buffer, &inverseRect.x, &inverseRect.h);
-            std::swap(buffer[caret+1], t);
-            std::swap(buffer[caret + selectLength+1], t);
-            inverseSurface = TTF_RenderUTF8_Shaded(font, buffer+caret+1, WHITE, color);
-            std::swap(buffer[caret + selectLength+1], t);
+            //std::swap(buffer[caret+1], t);
+            //std::swap(buffer[caret + selectLength+1], t);
+            inverseSurface = TTF_RenderUTF8_Shaded(font, buffer+caret+1, WHITE, textColor);
+            //std::swap(buffer[caret + selectLength+1], t);
         } else {
-            std::swap(buffer[caret + selectLength], t);
+            //std::swap(buffer[caret + selectLength], t);
             TTF_SizeUTF8(font, buffer, &inverseRect.x, &inverseRect.h);
-            std::swap(buffer[caret + selectLength], t);
-            std::swap(buffer[caret], t);
-            inverseSurface = TTF_RenderUTF8_Shaded(font, buffer + caret + selectLength, WHITE, color);
-            std::swap(buffer[caret], t);
+            //std::swap(buffer[caret + selectLength], t);
+            //std::swap(buffer[caret], t);
+            inverseSurface = TTF_RenderUTF8_Shaded(font, buffer + caret + selectLength, WHITE, textColor);
+            //std::swap(buffer[caret], t);
         }
         inverseRect.w = inverseSurface->w;
         SDL_BlitSurface(inverseSurface, NULL, mainSurface, &inverseRect);
-        SDL_FreeSurface(inverseSurface);
+        SDL_DestroySurface(inverseSurface);
     }
 
     // Updating texture
-    //texture = 
-    //SDL_CreateTextureFromSurface(data.renderer, mainSurface);
-    //SDL_FreeSurface(mainSurface);
+    texture = target.createTexture(mainSurface);
+    SDL_DestroySurface(mainSurface);
 
     // Resetting place of text with saving aligment
-    textRect.x += textRect.w * aligment / 2;
-    SDL_QueryTexture(texture, NULL, NULL, &textRect.w, &textRect.h);
-    textRect.x -= textRect.w * aligment / 2;*/
+    rect.x += rect.w * aligment / 2;
+    SDL_GetTextureSize(texture, &rect.w, &rect.h);
+    rect.x -= rect.w * aligment / 2;
 }
 
 // Returning text
@@ -292,7 +286,7 @@ void TypeBox::resetPress(SDL_Keycode code) {
 }
 
 // Select last letter to create writing symbol
-void TypeBox::select(Window& _target, int _mouseX) {
+void TypeBox::select(float _mouseX) {
     // Resetting swapping caret
     swapCaret = ' ';
     selectLength = 0;
@@ -310,13 +304,13 @@ void TypeBox::select(Window& _target, int _mouseX) {
     updateTexture();
 
     // Starting using keyboard
-    _target.startTextInput();
+    target.startTextInput();
 }
 
 // Clear selection of writing symbol
-void TypeBox::removeSelect(Window& _target) {
+void TypeBox::removeSelect() {
     // Stoping entering any letters
-    _target.stopTextInput();
+    target.stopTextInput();
 
     // Clearing enter symbol
     for (int t = caret; t <= length; t++) {
@@ -334,7 +328,7 @@ void TypeBox::updateCaret() {
 }
 
 // Selecting text
-void TypeBox::updateSelection(int _mouseX) {
+void TypeBox::updateSelection(float _mouseX) {
     // Check on borders
     //TTF_MeasureUTF8(font, buffer, _mouseX - textRect.x, nullptr, &selectLength);
     if (selectLength <= caret) {
@@ -347,10 +341,10 @@ void TypeBox::updateSelection(int _mouseX) {
 }
 
 // Overrided function for draw text and backplate at screen
-void TypeBox::blit(Window& _target) const {
+void TypeBox::blit() const {
     // Rendering background picture for better typing
-    //_target.blit(IMG_GUI_TYPE_BOX, &rect);
+    target.blit(backTexture, backRect);
 
     // Rendering text
-    _target.blit(texture, textRect);
+    target.blit(texture, rect);
 }

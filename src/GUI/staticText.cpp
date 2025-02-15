@@ -15,7 +15,7 @@ using namespace GUI;
 StaticText::StaticText(Window& _target, const std::string (&_text)[LNG_count], float _height,
     float _X, float _Y, SDL_Color _color, ALIGNMENT_types _aligment) {
     // Creating texture of text
-    texture = _target.createTexture(FNT_MAIN, _height, _text[currentLanguage].c_str(), _text[currentLanguage].size(), _color);
+    texture = _target.createTexture(FNT_MAIN, _height, _text[currentLanguage].c_str(), 0, _color);
 
     // Updating rect height for correct button
     SDL_GetTextureSize(texture, &rect.w, &rect.h);

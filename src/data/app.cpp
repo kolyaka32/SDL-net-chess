@@ -21,7 +21,8 @@ App::~App() {
 
 void App::run() {
     // Testing
-
+    GUI::TypeBox typeBox{window, 12, 0.5, 0.5};
+    GUI::DynamicText dynText{window, {"12 %i", "34 %i", "56 %i", "78 %i"}, 24, 0.5, 0.2};
 
     // Main part
     bool running = true;
@@ -71,11 +72,13 @@ void App::run() {
                 getAnotherInput(event);*/
             }
         }
+        dynText.updateLocationArgs(window, 20);
 
         // Drawing
         window.setDrawColor(GREEN);
         window.clear();
-
+        dynText.blit(window);
+        typeBox.blit(window);
         window.render();
     }
 }
