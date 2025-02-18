@@ -48,6 +48,7 @@ public:
 
     // Work with fonts and text
     TTF_Font* getFont(FNT_names name);
+    TTF_Font* createFontCopy(FNT_names name, float height);
     SDL_Texture* createTexture(FNT_names font, float height, const char* text, unsigned length, SDL_Color color);
 
     // Work with window

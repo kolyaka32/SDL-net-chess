@@ -21,8 +21,9 @@ App::~App() {
 
 void App::run() {
     // Testing
-    GUI::TypeBox typeBox{window, 12, 0.5, 0.5};
-    GUI::DynamicText dynText{window, {"12 %i", "34 %i", "56 %i", "78 %i"}, 24, 0.5, 0.2};
+    GUI::TypeBox typeBox{window, 20, 0.5, 0.5, "123456789"};
+    bool press = false;
+    bool selected = false;
 
     // Main part
     bool running = true;
@@ -44,7 +45,22 @@ void App::run() {
             case SDL_EVENT_MOUSE_BUTTON_DOWN:
                 // Updating mouse position
                 SDL_GetMouseState(&mouseX, &mouseY);
-    
+                if (typeBox.in(mouseX, mouseY)) {
+                    if (!selected) {
+                        press = true;
+                        selected = true;
+                        typeBox.select(mouseX);
+                    } else {
+                        typeBox.removeSelect();
+                        typeBox.select(mouseX);
+                        press = true;
+                    }
+                } else if (selected) {
+                    selected = false;
+                    press = false;
+                    typeBox.removeSelect();
+                }
+
                 // Getting mouse press
                 /*if (getMouseInput()) {
                     // Stopping run cycle
@@ -52,9 +68,19 @@ void App::run() {
                     return;
                 }*/
                 break;
+            
+            case SDL_EVENT_MOUSE_BUTTON_UP:
+                /*if (press) {
+                    typeBox.removeSelect();
+                    press = false;
+                }*/
+                press = false;
+                break;
     
             // Getting mouse presses
             case SDL_EVENT_KEY_DOWN:
+                
+                typeBox.press(event.key.key);
                 /*if (getKeysInput(event.key.key)) {
                     // Closing cycle, if need
                     running = false;
@@ -63,8 +89,12 @@ void App::run() {
                 break;
 
             case SDL_EVENT_MOUSE_WHEEL:
-                SDL_GetMouseState(&mouseX, &mouseY);
+                //SDL_GetMouseState(&mouseX, &mouseY);
                 //slider.scroll(event.wheel.y, mouseX, mouseY);
+                break;
+
+            case SDL_EVENT_TEXT_INPUT:
+                typeBox.writeString(event.text.text);
                 break;
     
             /*default:
@@ -72,13 +102,15 @@ void App::run() {
                 getAnotherInput(event);*/
             }
         }
-        dynText.updateLocationArgs(window, 20);
+        if (press) {
+            SDL_GetMouseState(&mouseX, &mouseY);
+            typeBox.updateSelection(mouseX);
+        }
 
         // Drawing
         window.setDrawColor(GREEN);
         window.clear();
-        dynText.blit(window);
-        typeBox.blit(window);
+        typeBox.blit();
         window.render();
     }
 }

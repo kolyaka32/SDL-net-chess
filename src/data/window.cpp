@@ -115,6 +115,12 @@ TTF_Font* Window::getFont(FNT_names _name) {
     return fonts[_name];
 }
 
+TTF_Font* Window::createFontCopy(FNT_names _name, float _height) {
+    TTF_Font* font = TTF_CopyFont(fonts[_name]);
+    TTF_SetFontSize(font, _height);
+    return font;
+}
+
 SDL_Texture* Window::createTexture(FNT_names _font, float _height, const char* _text, unsigned _length, SDL_Color _color) {
     // Setting text draw height
     TTF_SetFontSize(getFont(_font), _height);
