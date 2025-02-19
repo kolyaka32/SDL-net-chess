@@ -90,6 +90,10 @@ void Window::blit(SDL_Texture* _texture, float _angle, const SDL_FRect& _dest, c
     SDL_RenderTextureRotated(renderer, _texture, _src, &_dest, _angle, &_center, SDL_FLIP_NONE);
 }
 
+void Window::blit(const SDL_FRect& _rect) {
+    SDL_RenderRect(renderer, &_rect);
+}
+
 void Window::setRenderTarget(SDL_Texture* _target) {
     SDL_SetRenderTarget(renderer, _target);
 }

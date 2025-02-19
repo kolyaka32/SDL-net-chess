@@ -20,6 +20,12 @@ void TypeBox::blit() const {
 
     // Rendering text
     target.blit(texture, rect);
+
+    // Rendering caret
+    if (showCaret) {
+        target.setDrawColor({50, 50, 50, 50});
+        target.blit(caretRect);
+    }
 }
 
 bool TypeBox::in(float mouseX, float mouseY) const {

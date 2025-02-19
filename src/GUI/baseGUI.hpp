@@ -119,13 +119,13 @@ namespace GUI {
       size_t length = 0;                 // Length of all text
       size_t caret = 0;                  // Position of place, where user type
       int selectLength = 0;              // Length of selected box
-      char swapCaret;                    // Byte for swap with caret
-      Uint64 needSwap = 0;               // Time, when next need to change caret
+      bool showCaret = false;            // Flag, if need to show caret
+      Uint64 needSwapCaret = 0;          // Time, when next need to change caret
+      SDL_FRect caretRect;               // Place, where caret should be at screen
       char clipboardText[bufferSize];    // Copying string for clipboard use
 
       void updateTexture();              // Creat new texture and update it position
       void deleteSelected();             // Clearing selected part
-      void selectAll();                  // Select all text
       void writeClipboard();             // Write clipboard content after caret
       void copyToClipboard();            // Writing selected text to clipboard
 

@@ -22,6 +22,7 @@ App::~App() {
 void App::run() {
     // Testing
     GUI::TypeBox typeBox{window, 20, 0.5, 0.5, "123456789"};
+    //GUI::DynamicText dyn{window, {"Caret: %i", "", "", ""}, 20., 0.5, 0.3};
     bool press = false;
     bool selected = false;
 
@@ -81,6 +82,7 @@ void App::run() {
             case SDL_EVENT_KEY_DOWN:
                 
                 typeBox.press(event.key.key);
+                press = false;
                 /*if (getKeysInput(event.key.key)) {
                     // Closing cycle, if need
                     running = false;
@@ -95,6 +97,7 @@ void App::run() {
 
             case SDL_EVENT_TEXT_INPUT:
                 typeBox.writeString(event.text.text);
+                press = false;
                 break;
     
             /*default:
@@ -109,11 +112,13 @@ void App::run() {
         if (selected) {
             typeBox.updateCaret();
         }
+        //dyn.updateLocationArgs(window, typeBox.caret);
 
         // Drawing
         window.setDrawColor(GREEN);
         window.clear();
         typeBox.blit();
+        //dyn.blit(window);
         window.render();
     }
 }
