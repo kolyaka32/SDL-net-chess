@@ -107,38 +107,39 @@ namespace GUI {
    class TypeField : public GUItemplate {
    protected:
       // Class constants
-      Window& target;                    // Main target, where to draw
       const static int bufferSize = 16;  // Size of text buffer
       const int posX;                    // Relevant x position on screen
       const ALIGNMENT_types aligment;    // Aligment type for correct placed position
       const SDL_Color textColor;         // Color of typing text
+      Window& target;                    // Target, where draw to
       TTF_Font* font;                    // Font for type text
 
       // Variables
-      char buffer[bufferSize+1];         // String, that was typed
-      char clipboardText[bufferSize];    // Copying string for clipboard
-      char swapCaret;                    // Byte for swap with caret
+      char buffer[bufferSize];           // String, that was typed
+      size_t length = 0;                 // Length of all text
       size_t caret = 0;                  // Position of place, where user type
       int selectLength = 0;              // Length of selected box
-      size_t length;                     // Length of all text
+      char swapCaret;                    // Byte for swap with caret
+      Uint64 needSwap = 0;               // Time, when next need to change caret
+      char clipboardText[bufferSize];    // Copying string for clipboard use
 
-      void updateTexture();              // Function for creat new texture and update it position
-      void writeClipboard();             // Function for writing clipboard content after caret
-      void copyToClipboard();            // Function for writing selected text to clipboard
+      void updateTexture();              // Creat new texture and update it position
+      void deleteSelected();             // Clearing selected part
       void selectAll();                  // Select all text
-      void deleteSelected();             // Function for clearing selected part
+      void writeClipboard();             // Write clipboard content after caret
+      void copyToClipboard();            // Writing selected text to clipboard
 
    public:
       TypeField(Window& _target, float height, float posX, float posY, const char *startText,
          ALIGNMENT_types newAligment = MIDLE_text, SDL_Color textColor = BLACK);
-      ~TypeField();                               // Clearing font and texture
-      const char* getString() const;              // Function of getting typed string
-      void writeString(const char* str);          // Function of writing any string to buffer at caret position
-      void press(SDL_Keycode code);               // Function of processing special keycodes
-      void updateCaret();                         // Function of change caret symbol from '|' to ' ' and back
-      void updateSelection(float mouseX);         // Function of updating selecting text
-      void select(float mouseX);                  // Function of setting caret for typing after
-      void removeSelect();                        // Function of removing caret after typing
+      ~TypeField();                        // Clearing font and texture
+      const char* getString() const;       // Function of getting typed string
+      void writeString(const char* str);   // Function of writing any string to buffer at caret position
+      void press(SDL_Keycode code);        // Function of processing special keycodes
+      void updateCaret();                  // Function of change caret symbol from '|' to ' ' and back
+      void updateSelection(float mouseX);  // Function of updating selecting text
+      void select(float mouseX);           // Function of setting caret for typing after
+      void removeSelect();                 // Function of removing caret after typing
    };
 
    // Class of type field with frame for better writing

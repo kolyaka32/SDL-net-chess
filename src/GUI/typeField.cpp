@@ -20,7 +20,6 @@ TypeField::TypeField(Window& _target, float _height, float _x, float _y, const c
     length = strlen(_text);
     SET_MAX(length, bufferSize);
     memcpy(buffer, _text, length);
-    buffer[length] = '\0';
 
     // Creating first texture, if there was any text
     if (length) {
@@ -165,6 +164,7 @@ void TypeField::deleteSelected() {
 void TypeField::press(SDL_Keycode code) {
     // Getting current shft and control state
     SDL_Keymod keyMods = SDL_GetModState();
+
     // Switching between extra input options
     switch (code) {
     // Functions for deleting text
@@ -316,8 +316,13 @@ void TypeField::removeSelect() {
 
 // Swapping caret with writing symbol to space and back
 void TypeField::updateCaret() {
-    std::swap(buffer[caret], swapCaret);
-    updateTexture();
+    if (SDL_GetTicks() > needSwap) {
+        std::swap(buffer[caret], swapCaret);
+        updateTexture();
+
+        // Updating timer
+        needSwap = SDL_GetTicks() + 500;
+    }
 }
 
 // Selecting text
@@ -327,7 +332,6 @@ void TypeField::updateSelection(float _mouseX) {
     TTF_MeasureString(font, buffer, length, _mouseX-rect.x, NULL, &measure);
 
     if (measure <= caret) {
-        //SET_MIN(selectLength, 0);
         selectLength = measure - caret;
     } else {
         selectLength = measure - (caret+1);

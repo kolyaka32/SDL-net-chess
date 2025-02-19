@@ -106,6 +106,9 @@ void App::run() {
             SDL_GetMouseState(&mouseX, &mouseY);
             typeBox.updateSelection(mouseX);
         }
+        if (selected) {
+            typeBox.updateCaret();
+        }
 
         // Drawing
         window.setDrawColor(GREEN);
