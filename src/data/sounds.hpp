@@ -5,16 +5,18 @@
 
 #pragma once
 
+#include <SDL3_mixer/SDL_mixer.h>
 #include "loader/dataLoader.hpp"
 #include "../soundsNames.hpp"
 
-// 
-class Sounds
-{
+
+// Class for playing sound with need name
+class Sounds {
 private:
-    void loadSound();
+    Mix_Chunk* sounds[SND_count];
+    void loadSound(const DataLoader& loader, unsigned index, const char* name);
 public:
     Sounds(const DataLoader& loader);
     ~Sounds();
-    void playSound();
+    void play(SND_names name) const;
 };

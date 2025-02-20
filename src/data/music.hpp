@@ -11,13 +11,12 @@
 
 
 // Class for play music
-class Music
-{
+class Music {
 private:
     Mix_Music* music[MUS_count];
-    void loadMusic();
+    void loadMusic(const DataLoader& loader, unsigned index, const char* name);
 public:
     Music(const DataLoader& loader);
     ~Music();
-    void playMusic(MUS_names name);
+    void start(MUS_names name) const;
 };

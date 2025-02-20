@@ -3,7 +3,7 @@
 
 
 Textures::Textures(const DataLoader& _loader, SDL_Renderer* _renderer, unsigned _count, const char* _filesNames[]) {
-    // Resetting fonts array
+    // Resetting texture masiive
     #if CHECK_CORRECTION
     for (unsigned i=0; i < _count; ++i) {
         textures[i] = nullptr;

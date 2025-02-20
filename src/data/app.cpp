@@ -8,9 +8,8 @@
 
 App::App()
  : window{loader},
- music{loader},
- sounds{loader}
-{
+music{loader},
+sounds{loader} {
     // Running current application
     run();
 }
@@ -25,6 +24,8 @@ void App::run() {
     //GUI::DynamicText dyn{window, {"Caret: %i", "", "", ""}, 20., 0.5, 0.3};
     bool press = false;
     bool selected = false;
+
+    music.start(MUS_MAIN_1);
 
     // Main part
     bool running = true;
@@ -80,9 +81,29 @@ void App::run() {
     
             // Getting mouse presses
             case SDL_EVENT_KEY_DOWN:
-                
                 typeBox.press(event.key.key);
                 press = false;
+                switch (event.key.key)
+                {
+                case SDLK_1:
+                    music.start(MUS_MAIN_1);
+                    break;
+
+                case SDLK_2:
+                    music.start(MUS_MAIN_2);
+                    break;
+
+                case SDLK_3:
+                    sounds.play(SND_RESET);
+                    break;
+
+                case SDLK_4:
+                    sounds.play(SND_TURN);
+                    break;
+                
+                default:
+                    break;
+                }
                 /*if (getKeysInput(event.key.key)) {
                     // Closing cycle, if need
                     running = false;

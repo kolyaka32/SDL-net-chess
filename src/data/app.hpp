@@ -5,19 +5,22 @@
 
 #pragma once
 
+#include "libraries.hpp"
 #include "music.hpp"
 #include "sounds.hpp"
 #include "window.hpp"
 
+// Load needed loader, depend on teting
 #if ARCHIEVE_LOADING
 #include "loader/archieveLoader.hpp"
 #else
 #include "loader/straightLoader.hpp"
 #endif
 
-class App {
+// Class of whole current application
+class App : Libraries {
 private:
-    // Selecting loader for data, depend on state of testing
+    // Selecting loader for data, depend on testing
     #if ARCHIEVE_LOADING
     const ArchieveLoader loader;
     #else

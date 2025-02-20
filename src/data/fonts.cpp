@@ -6,15 +6,6 @@
 #include "fonts.hpp"
 
 Fonts::Fonts(const DataLoader& _loader, unsigned _count, const char* _filesNames[]) {
-    // Initialasing font library
-    #if CHECK_CORRECTION
-    if (!TTF_Init()) {
-        throw LibararyLoadException("Font library");
-    }
-    #else
-    TTF_Init();
-    #endif
-
     // Resetting fonts array
     #if CHECK_CORRECTION
     for (unsigned i=0; i < _count; ++i) {
@@ -42,9 +33,6 @@ Fonts::~Fonts() {
     for (unsigned i=0; i < FNT_count; ++i) {
         TTF_CloseFont(fonts[i]);
     }
-
-    // Closing font library
-    TTF_Quit();
 }
 
 void Fonts::loadFont(const DataLoader& _loader, unsigned _index, const char* _name) {

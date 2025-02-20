@@ -30,6 +30,13 @@ SDL_IOStream* ArchieveLoader::load(const char* _file) const {
     // Openning need file
     zip_file_t *file = zip_fopen_encrypted(archive, _file, 0, ARCHIEVE_PASSWORD);
 
+    // Checking correction of openned file
+    #if CHECK_CORRECTION
+    if (file == nullptr) {
+        throw DataLoadException("load file from archieve: " + std::string(_file));
+    }
+    #endif
+
     // Getting states of need file
     zip_stat_t st;
     zip_stat(archive, _file, 0, &st);
