@@ -14,18 +14,13 @@ sounds{loader} {
     run();
 }
 
-App::~App() {
-
-}
+App::~App() {}
 
 void App::run() {
     // Testing
     GUI::TypeBox typeBox{window, 20, 0.5, 0.5, "123456789"};
-    //GUI::DynamicText dyn{window, {"Caret: %i", "", "", ""}, 20., 0.5, 0.3};
     bool press = false;
     bool selected = false;
-
-    music.start(MUS_MAIN_1);
 
     // Main part
     bool running = true;
@@ -83,27 +78,6 @@ void App::run() {
             case SDL_EVENT_KEY_DOWN:
                 typeBox.press(event.key.key);
                 press = false;
-                switch (event.key.key)
-                {
-                case SDLK_1:
-                    music.start(MUS_MAIN_1);
-                    break;
-
-                case SDLK_2:
-                    music.start(MUS_MAIN_2);
-                    break;
-
-                case SDLK_3:
-                    sounds.play(SND_RESET);
-                    break;
-
-                case SDLK_4:
-                    sounds.play(SND_TURN);
-                    break;
-                
-                default:
-                    break;
-                }
                 /*if (getKeysInput(event.key.key)) {
                     // Closing cycle, if need
                     running = false;
@@ -113,7 +87,6 @@ void App::run() {
 
             case SDL_EVENT_MOUSE_WHEEL:
                 //SDL_GetMouseState(&mouseX, &mouseY);
-                //slider.scroll(event.wheel.y, mouseX, mouseY);
                 break;
 
             case SDL_EVENT_TEXT_INPUT:
@@ -133,13 +106,10 @@ void App::run() {
         if (selected) {
             typeBox.updateCaret();
         }
-        //dyn.updateLocationArgs(window, typeBox.caret);
-
         // Drawing
         window.setDrawColor(GREEN);
         window.clear();
         typeBox.blit();
-        //dyn.blit(window);
         window.render();
     }
 }

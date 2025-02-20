@@ -41,7 +41,7 @@ void Music::loadMusic(const DataLoader& _loader, unsigned _index, const char* _n
     SDL_IOStream* iodata = _loader.load(_name);
 
     // Loading track
-    music[_index] = Mix_LoadMUS_IO(iodata, false);
+    music[_index] = Mix_LoadMUS_IO(iodata, true);
 
     // Checking correction of loaded track
     #if CHECK_CORRECTION
