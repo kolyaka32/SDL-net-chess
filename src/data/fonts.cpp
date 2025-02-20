@@ -48,6 +48,6 @@ void Fonts::loadFont(const DataLoader& _loader, unsigned _index, const char* _na
     #endif
 }
 
-TTF_Font* Fonts::operator[](FNT_names _index) {
+TTF_Font* Fonts::operator[](FNT_names _index) const {
     return fonts[_index];
 }

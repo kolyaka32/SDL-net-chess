@@ -11,6 +11,7 @@
 #include "../texturesNames.hpp"
 #include "../fontsNames.hpp"
 
+
 Window::Window(const DataLoader& _loader)
  : window(SDL_CreateWindow(WINDOWNAME, SCREEN_WIDTH, SCREEN_HEIGHT, 0)),
 renderer(SDL_CreateRenderer(window, NULL)),
@@ -31,7 +32,6 @@ fonts{_loader, FNT_count, fontsFilesNames} {
     #endif
 }
 
-
 Window::~Window() noexcept {
     // Destroying renderer
     SDL_DestroyRenderer(renderer);
@@ -41,40 +41,38 @@ Window::~Window() noexcept {
 }
 
 
-
-
-void Window::setDrawColor(SDL_Color color) {
+void Window::setDrawColor(SDL_Color color) const {
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 }
 
-void Window::clear() {
+void Window::clear() const {
     SDL_RenderClear(renderer);
 }
 
-void Window::render() {
+void Window::render() const {
     SDL_RenderPresent(renderer);
 }
 
 
-void Window::drawPoint(float x, float y) {
+void Window::drawPoint(float x, float y) const {
     SDL_RenderPoint(renderer, x, y);
 }
 
-void Window::drawRect(const SDL_FRect& _rect) {
+void Window::drawRect(const SDL_FRect& _rect) const {
     SDL_RenderFillRect(renderer, &_rect);
 }
 
 
-SDL_Texture* Window::getTexture(IMG_names _name) {
+SDL_Texture* Window::getTexture(IMG_names _name) const {
     return textures[_name];
 }
 
 
-SDL_Texture* Window::createTexture(int _width, int _height, SDL_TextureAccess _access, SDL_PixelFormat _format) {
+SDL_Texture* Window::createTexture(int _width, int _height, SDL_TextureAccess _access, SDL_PixelFormat _format) const {
     return SDL_CreateTexture(renderer, _format, _access, _width, _height);
 }
 
-SDL_Texture* Window::createTexture(SDL_Surface* _surface, bool isFree) {
+SDL_Texture* Window::createTexture(SDL_Surface* _surface, bool isFree) const {
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, _surface);
     if (isFree) {
         SDL_DestroySurface(_surface);
@@ -82,46 +80,46 @@ SDL_Texture* Window::createTexture(SDL_Surface* _surface, bool isFree) {
     return texture;
 }
 
-void Window::blit(SDL_Texture* _texture, const SDL_FRect& _dest, const SDL_FRect* _src) {
+void Window::blit(SDL_Texture* _texture, const SDL_FRect& _dest, const SDL_FRect* _src) const {
     SDL_RenderTexture(renderer, _texture, _src, &_dest);
 }
 
-void Window::blit(SDL_Texture* _texture, float _angle, const SDL_FRect& _dest, const SDL_FRect* _src, SDL_FPoint _center) {
+void Window::blit(SDL_Texture* _texture, float _angle, const SDL_FRect& _dest, const SDL_FRect* _src, SDL_FPoint _center) const {
     SDL_RenderTextureRotated(renderer, _texture, _src, &_dest, _angle, &_center, SDL_FLIP_NONE);
 }
 
-void Window::setRenderTarget(SDL_Texture* _target) {
+void Window::setRenderTarget(SDL_Texture* _target) const {
     SDL_SetRenderTarget(renderer, _target);
 }
 
-void Window::resetRenderTarget() {
+void Window::resetRenderTarget() const {
     SDL_SetRenderTarget(renderer, nullptr);
 }
 
-void Window::setBlendMode(SDL_Texture* _texture, SDL_BlendMode _blendMode) {
+void Window::setBlendMode(SDL_Texture* _texture, SDL_BlendMode _blendMode) const {
     SDL_SetTextureBlendMode(_texture, _blendMode);
 }
 
-void Window::unlockTexture(SDL_Texture* _texture) {
+void Window::unlockTexture(SDL_Texture* _texture) const {
     SDL_UnlockTexture(_texture);
 }
 
-void Window::destroyTexture(SDL_Texture* _texture) {
+void Window::destroyTexture(SDL_Texture* _texture) const {
     SDL_DestroyTexture(_texture);
 }
 
 
-TTF_Font* Window::getFont(FNT_names _name) {
+TTF_Font* Window::getFont(FNT_names _name) const {
     return fonts[_name];
 }
 
-TTF_Font* Window::createFontCopy(FNT_names _name, float _height) {
+TTF_Font* Window::createFontCopy(FNT_names _name, float _height) const {
     TTF_Font* font = TTF_CopyFont(fonts[_name]);
     TTF_SetFontSize(font, _height);
     return font;
 }
 
-SDL_Texture* Window::createTexture(FNT_names _font, float _height, const char* _text, unsigned _length, SDL_Color _color) {
+SDL_Texture* Window::createTexture(FNT_names _font, float _height, const char* _text, unsigned _length, SDL_Color _color) const {
     // Setting text draw height
     TTF_SetFontSize(getFont(_font), _height);
 
@@ -136,10 +134,10 @@ SDL_Texture* Window::createTexture(FNT_names _font, float _height, const char* _
 }
 
 
-void Window::startTextInput() {
+void Window::startTextInput() const {
     SDL_StartTextInput(window);
 }
 
-void Window::stopTextInput() {
+void Window::stopTextInput() const {
     SDL_StopTextInput(window);
 }

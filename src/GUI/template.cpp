@@ -13,7 +13,7 @@ GUItemplate::GUItemplate() {
 }
 
 // Template function for draw
-void GUItemplate::blit(Window& _target) const {
+void GUItemplate::blit(const Window& _target) const {
     _target.blit(texture, rect);
 }
 
@@ -22,6 +22,3 @@ bool GUItemplate::in(float mouseX, float mouseY) const {
     return ((mouseX > rect.x && mouseX < rect.x + rect.w) &&
         (mouseY > rect.y && mouseY < rect.y + rect.h));
 }
-
-// Template for updating location of current object
-void GUItemplate::updateLocation(Window& _target) {}

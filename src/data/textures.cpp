@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2025, Kazankov Nikolay 
+ * <nik.kazankov.05@mail.ru>
+ */
 
 #include "textures.hpp"
 
@@ -59,6 +63,6 @@ void Textures::loadTexture(const DataLoader& _loader, SDL_Renderer* _renderer, u
     SDL_DestroySurface(surface);
 }
 
-SDL_Texture* Textures::operator[] (IMG_names index) {
+SDL_Texture* Textures::operator[] (IMG_names index) const {
     return textures[index];
 }

@@ -10,7 +10,7 @@ using namespace GUI;
 
 
 // Button class
-ImageButton::ImageButton(Window& _target, float _x, float _y, IMG_names _index) : GUItemplate() {
+ImageButton::ImageButton(const Window& _target, float _x, float _y, IMG_names _index) {
     // Setting base texture
     texture = _target.getTexture(_index);
 

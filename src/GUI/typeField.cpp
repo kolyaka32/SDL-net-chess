@@ -11,7 +11,7 @@ using namespace GUI;
 
 
 // Type field class
-TypeField::TypeField(Window& _target, float _height, float _x, float _y, const char* _text, ALIGNMENT_types _aligment, SDL_Color _color)
+TypeField::TypeField(const Window& _target, float _height, float _x, float _y, const char* _text, ALIGNMENT_types _aligment, SDL_Color _color)
 : target(_target), posX(SCREEN_WIDTH*_x), aligment(_aligment), textColor(_color), font(_target.createFontCopy(FNT_MAIN, _height)) {
     // Setting rects
     rect = {0, SCREEN_HEIGHT*_y-_height/2-1, 0, 0};

@@ -8,7 +8,7 @@
 using namespace GUI;
 
 
-TypeBox::TypeBox(Window& _target, float _height, float _x, float _y, const char* _text)
+TypeBox::TypeBox(const Window& _target, float _height, float _x, float _y, const char* _text)
 : TypeField(_target, _height, _x, _y, _text, GUI::MIDLE_text, BLACK),
 backTexture(_target.getTexture(IMG_GUI_TYPE_BOX)),
 backRect({SCREEN_WIDTH*_x-backTexture->w/2, SCREEN_HEIGHT*_y-backTexture->h/2+2, float(backTexture->w), float(backTexture->h)}) {}

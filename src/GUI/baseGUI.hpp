@@ -29,16 +29,15 @@ namespace GUI {
       SDL_FRect rect;
    public:
       GUItemplate();
-      virtual void blit(Window& _target) const;
+      virtual void blit(const Window& _target) const;
       bool in(float mouseX, float mouseY) const;
-      virtual void updateLocation(Window& _target);
    };
 
 
    // Static text on screen
    class StaticText : public GUItemplate {
    public:
-      StaticText(Window& _target, const std::string (&text)[LNG_count], float size, float X,
+      StaticText(const Window& _target, const std::string (&text)[LNG_count], float size, float X,
          float Y, SDL_Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
       ~StaticText();
    };
@@ -54,13 +53,13 @@ namespace GUI {
          const float height;              // Height of text to draw
          char currentText[50];            // Current text for print
       protected:
-         void updateTexture(Window& _target);
+         void updateTexture(const Window& _target);
       public:
-         DynamicText(Window& _target, const std::string (&text)[LNG_count], float size, float X,
+         DynamicText(const Window& _target, const std::string (&text)[LNG_count], float size, float X,
             float Y, SDL_Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
          ~DynamicText();
-         void updateLocation(Window& _target) override;
-         void updateLocationArgs(Window& _target, ...);  // Change text, depend on another arguments
+         void updateLocation(const Window& _target);
+         void updateLocationArgs(const Window& _target, ...);  // Change text, depend on another arguments
       };
 
 
@@ -73,18 +72,18 @@ namespace GUI {
       unsigned *link;              // Pointer to data to control
    public:
       // Create slide with need line and button images
-      Slider(Window& _target, float X, float Y, unsigned *controlData, IMG_names lineImage = IMG_GUI_SLIDER_LINE,
+      Slider(const Window& _target, float X, float Y, unsigned *controlData, IMG_names lineImage = IMG_GUI_SLIDER_LINE,
          IMG_names buttonImage = IMG_GUI_SLIDER_BUTTON, unsigned max = 255);
-      void setValue(float mouseX);                             // Setting new state from mouse position
+      void setValue(float mouseX);                            // Setting new state from mouse position
       bool scroll(float wheelY, float mouseX, float mouseY);  // Checking mouse wheel action
-      void blit(Window& _target) const override;               // Drawing slider with need button position
+      void blit(const Window& _target) const override;        // Drawing slider with need button position
    };
 
 
     // Class of buttons with image on it
    class ImageButton : public GUItemplate {
    public:
-      ImageButton(Window& _target, float X, float Y, IMG_names textureIndex);
+      ImageButton(const Window& _target, float X, float Y, IMG_names textureIndex);
    };
 
 
@@ -111,7 +110,7 @@ namespace GUI {
       const int posX;                    // Relevant x position on screen
       const ALIGNMENT_types aligment;    // Aligment type for correct placed position
       const SDL_Color textColor;         // Color of typing text
-      Window& target;                    // Target, where draw to
+      const Window& target;              // Target, where draw to
       TTF_Font* font;                    // Font for type text
 
       // Variables
@@ -130,7 +129,7 @@ namespace GUI {
       void copyToClipboard();            // Writing selected text to clipboard
 
    public:
-      TypeField(Window& _target, float height, float posX, float posY, const char *startText,
+      TypeField(const Window& _target, float height, float posX, float posY, const char *startText,
          ALIGNMENT_types newAligment = MIDLE_text, SDL_Color textColor = BLACK);
       ~TypeField();                        // Clearing font and texture
       const char* getString() const;       // Function of getting typed string
@@ -148,24 +147,18 @@ namespace GUI {
       SDL_Texture* backTexture;  // Texture of backplate
       const SDL_FRect backRect;  // Rect of backplate
    public:
-      TypeBox(Window& _target, float textHeight, float posX, float posY, const char* startText = "");
+      TypeBox(const Window& _target, float textHeight, float posX, float posY, const char* startText = "");
       void blit() const;
       bool in(float mouseX, float mouseY) const;
    };
 
    // Class of backplate for
    class Backplate : public GUItemplate {
-   private:
-      const SDL_Color frontColor, backColor;  // Front and back colors of plate
-      const float rad;  // Radius of rounding
-      const float bor;  // Border (with back color)
-   protected:
-      void updatePlate(Window& _target, const SDL_FRect& rect);  // Update sizes of plate
    public:
-      Backplate(Window& _target, float centerX, float centerY, float width, float height, float radius, float border,
-         const SDL_Color frontColor = GREY, const SDL_Color backColor = BLACK);
-      Backplate(Window& _target, const SDL_FRect& rect, float radius, float border, SDL_Color frontColor = GREY,
-         const SDL_Color backColor = BLACK);
+      Backplate(const Window& _target, float centerX, float centerY, float width, float height, float radius, float border,
+         SDL_Color frontColor = GREY, SDL_Color backColor = BLACK);
+      Backplate(const Window& _target, const SDL_FRect& rect, float radius, float border, SDL_Color frontColor = GREY,
+         SDL_Color backColor = BLACK);
       ~Backplate();
    };
 
@@ -174,9 +167,9 @@ namespace GUI {
    private:
       const Backplate backplate;
    public:
-      TextButton(Window& _target, const std::string (&text)[LNG_count], float size, float X, float Y,
+      TextButton(const Window& _target, const std::string (&text)[LNG_count], float size, float X, float Y,
          SDL_Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
-      void blit(Window& _target) const override;  // Drawing current button
+      void blit(const Window& _target) const override;  // Drawing current button
    };
 
 }  // namespace GUI

@@ -17,5 +17,5 @@ private:
 public:
     Fonts(const DataLoader& loader, unsigned count, const char* filesNames[]);
     ~Fonts();
-    TTF_Font* operator[](FNT_names index);
+    TTF_Font* operator[](FNT_names index) const;
 };

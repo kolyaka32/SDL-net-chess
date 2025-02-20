@@ -10,7 +10,7 @@ using namespace GUI;
 
 
 // Slider class
-Slider::Slider(Window& _target, float _X, float _Y, unsigned *_controlData,
+Slider::Slider(const Window& _target, float _X, float _Y, unsigned *_controlData,
     IMG_names _lineImage, IMG_names _buttonImage, unsigned _max)
 : link(_controlData), maxValue(_max) {
     // Getting need texture
@@ -26,7 +26,7 @@ Slider::Slider(Window& _target, float _X, float _Y, unsigned *_controlData,
     buttonRect.x = rect.x + *link * rect.w / maxValue - buttonRect.w / 2;
 }
 
-void Slider::blit(Window& _target) const {
+void Slider::blit(const Window& _target) const {
     _target.blit(texture, rect);
     _target.blit(textureButton, buttonRect);
 }

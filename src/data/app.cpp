@@ -7,7 +7,7 @@
 #include "../GUI/baseGUI.hpp"
 
 App::App()
- : window{loader},
+: window{loader},
 music{loader},
 sounds{loader} {
     // Running current application
@@ -19,6 +19,7 @@ App::~App() {}
 void App::run() {
     // Testing
     GUI::TypeBox typeBox{window, 20, 0.5, 0.5, "123456789"};
+    GUI::TextButton btn{window, {"12", "34", "56", "78"}, 40, 0.4, 0.2};
     bool press = false;
     bool selected = false;
 
@@ -110,6 +111,7 @@ void App::run() {
         window.setDrawColor(GREEN);
         window.clear();
         typeBox.blit();
+        btn.blit(window);
         window.render();
     }
 }
