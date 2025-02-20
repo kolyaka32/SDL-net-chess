@@ -40,7 +40,6 @@ public:
     SDL_Texture* createTexture(SDL_Surface* surface, bool isFree = true);
     void blit(SDL_Texture* texture, const SDL_FRect& dest, const SDL_FRect* src = nullptr);
     void blit(SDL_Texture* texture, float angle, const SDL_FRect& rect, const SDL_FRect* src = nullptr, SDL_FPoint center = {0, 0});
-    void blit(const SDL_FRect& rect);
     void setRenderTarget(SDL_Texture* target);
     void resetRenderTarget();
     void setBlendMode(SDL_Texture* _texture, SDL_BlendMode _blendMode = SDL_BLENDMODE_NONE);

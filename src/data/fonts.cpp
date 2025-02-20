@@ -5,8 +5,6 @@
 
 #include "fonts.hpp"
 
-
-
 Fonts::Fonts(const DataLoader& _loader, unsigned _count, const char* _filesNames[]) {
     // Initialasing font library
     #if CHECK_CORRECTION

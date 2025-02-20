@@ -325,12 +325,12 @@ void TypeField::removeSelect() {
 }
 
 void TypeField::updateCaret() {
-    if (SDL_GetTicks() > needSwapCaret) {
+    if (getTime() > needSwapCaret) {
         // Inversing show state
         showCaret ^= true;
 
         // Update timer
-        needSwapCaret = SDL_GetTicks() + 400;
+        needSwapCaret = getTime() + 400;
     }
 }
 

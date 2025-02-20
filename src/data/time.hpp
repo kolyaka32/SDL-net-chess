@@ -2,5 +2,8 @@
 
 #include <SDL3/SDL_timer.h>
 
-typedef unsigned long long time;
+// Macros for better getting time
+#define getTime SDL_GetTicks
+
+// Type of data for storing time
 typedef unsigned long long timer;

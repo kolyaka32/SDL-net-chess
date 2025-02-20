@@ -24,7 +24,7 @@ void TypeBox::blit() const {
     // Rendering caret
     if (showCaret) {
         target.setDrawColor({50, 50, 50, 50});
-        target.blit(caretRect);
+        target.drawRect(caretRect);
     }
 }
 

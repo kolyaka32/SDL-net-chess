@@ -23,10 +23,10 @@ GIFAnimation::~GIFAnimation() {
 }
 
 void GIFAnimation::update(Window& _target) {
-    if (SDL_GetTicks() > prevTick) {
+    if (getTime() > prevTick) {
         frame = (frame + 1) % data.animations[type]->count;
         texture = SDL_CreateTextureFromSurface(data.renderer, data.animations[type]->frames[frame]);
-        prevTick = SDL_GetTicks() + data.animations[type]->delays[frame] / 10;
+        prevTick = getTime() + data.animations[type]->delays[frame] / 10;
     }
 }
 #endif
