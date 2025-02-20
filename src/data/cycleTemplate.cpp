@@ -20,7 +20,7 @@ CycleTemplate::CycleTemplate() {
 // Getting user input
 void CycleTemplate::getInput() {
     // Creating event for get user input
-    static SDL_Event event;
+    SDL_Event event;
 
     // Getting input
     while (SDL_PollEvent(&event)) {

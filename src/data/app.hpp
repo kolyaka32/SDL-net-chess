@@ -5,16 +5,15 @@
 
 #pragma once
 
+#include "music.hpp"
+#include "sounds.hpp"
+#include "window.hpp"
+
 #if ARCHIEVE_LOADING
 #include "loader/archieveLoader.hpp"
 #else
 #include "loader/straightLoader.hpp"
 #endif
-
-#include "music.hpp"
-#include "sounds.hpp"
-#include "window.hpp"
-
 
 class App {
 private:

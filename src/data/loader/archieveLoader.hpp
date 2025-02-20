@@ -6,13 +6,17 @@
 #pragma once
 
 #include "dataLoader.hpp"
+#include "zip.h"
 
+
+// Setting password for archive
+#define ARCHIEVE_PASSWORD NULL
 
 // Implimentation of loader for arcives
 class ArchieveLoader : public DataLoader
 {
 private:
-    /* data */
+    zip_t* archive;  // Archive, where data is located
 public:
     ArchieveLoader(/* args */);
     ~ArchieveLoader() override;

@@ -5,13 +5,9 @@
 
 #include "straightLoader.hpp"
 
-StraightLoader::StraightLoader() {
+StraightLoader::StraightLoader() {}
 
-}
-
-StraightLoader::~StraightLoader() {
-    
-}
+StraightLoader::~StraightLoader() {}
 
 SDL_IOStream* StraightLoader::load(const char* _fileName) const {
     // Creating modified name
@@ -21,9 +17,6 @@ SDL_IOStream* StraightLoader::load(const char* _fileName) const {
 
     // Openning file straight from system
     SDL_IOStream* data = SDL_IOFromFile(fileName, "r");
-
-    //SDL_IOStream* testData = SDL_IOFromFile("../test.txt", "a");
-    //SDL_CloseIO(testData);
 
     // Clearing temporary name
     delete[] fileName;

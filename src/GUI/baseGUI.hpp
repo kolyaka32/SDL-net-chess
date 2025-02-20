@@ -9,7 +9,7 @@
 #include "../data/window.hpp"
 #include "../define.hpp"
 #include "../languages.hpp"
-//#include "../data/animations.hpp"
+#include "../data/time.hpp"
 
 
 // Namespace of objects for GUI (Graphic User Interface)
@@ -120,7 +120,7 @@ namespace GUI {
       size_t caret = 0;                  // Position of place, where user type
       int selectLength = 0;              // Length of selected box
       bool showCaret = false;            // Flag, if need to show caret
-      Uint64 needSwapCaret = 0;          // Time, when next need to change caret
+      time needSwapCaret = 0;            // Time, when next need to change caret
       SDL_FRect caretRect;               // Place, where caret should be at screen
       char clipboardText[bufferSize];    // Copying string for clipboard use
 

@@ -9,11 +9,12 @@
 
 Fonts::Fonts(const DataLoader& _loader, unsigned _count, const char* _filesNames[]) {
     // Initialasing font library
-    if (!TTF_Init())
     #if CHECK_CORRECTION
-    {
+    if (!TTF_Init()) {
         throw LibararyLoadException("Font library");
     }
+    #else
+    TTF_Init();
     #endif
 
     // Resetting fonts array
@@ -51,7 +52,7 @@ Fonts::~Fonts() {
 void Fonts::loadFont(const DataLoader& _loader, unsigned _index, const char* _name) {
     SDL_IOStream* iodata = _loader.load(_name);
 
-    fonts[_index] = TTF_OpenFontIO(iodata, true, 12.);
+    fonts[_index] = TTF_OpenFontIO(iodata, true, 20.);
 
     // Checking correction of loaded font
     #if CHECK_CORRECTION
