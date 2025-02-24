@@ -14,9 +14,12 @@
 class Music {
 private:
     Mix_Music* music[MUS_count];
+    Uint8 volume;
     void loadMusic(const DataLoader& loader, unsigned index, const char* name);
 public:
     Music(const DataLoader& loader);
     ~Music();
     void start(MUS_names name) const;
+    void setVolume(int volume);
+    Uint8 getVolume() const;
 };

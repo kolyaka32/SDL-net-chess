@@ -55,3 +55,18 @@ void Music::start(MUS_names _index) const {
     // Infinite playing selected music
     Mix_PlayMusic(music[_index], -1);
 }
+
+void Music::setVolume(int _volume) {
+    // Checking correction given volume
+    #if CHECK_CORRECTION
+    if (_volume > MIX_MAX_VOLUME) {
+        throw "Wrong volume";
+    }
+    #endif
+    volume = _volume;
+    Mix_VolumeMusic(volume);
+}
+
+Uint8 Music::getVolume() const {
+    return volume;
+}

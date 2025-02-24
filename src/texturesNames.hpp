@@ -6,7 +6,7 @@
 #pragma once
 
 // Names of all images with related numbers
-enum IMG_names{
+enum IMG_names : unsigned {
     // Base part
     // Graphic interface sprites
     IMG_GUI_PAUSE_BUTTON,

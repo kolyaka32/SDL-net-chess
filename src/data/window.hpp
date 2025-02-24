@@ -36,10 +36,12 @@ public:
     SDL_Texture* getTexture(IMG_names name) const;
 
     // Work with own textures
+    SDL_Surface* createSurface(int width, int height, SDL_PixelFormat format = SDL_PIXELFORMAT_RGBA32) const;
     SDL_Texture* createTexture(int width, int height, SDL_TextureAccess access = SDL_TEXTUREACCESS_TARGET, SDL_PixelFormat format = SDL_PIXELFORMAT_RGBA32) const;
     SDL_Texture* createTexture(SDL_Surface* surface, bool isFree = true) const;
     void blit(SDL_Texture* texture, const SDL_FRect& dest, const SDL_FRect* src = nullptr) const;
     void blit(SDL_Texture* texture, float angle, const SDL_FRect& rect, const SDL_FRect* src = nullptr, SDL_FPoint center = {0, 0}) const;
+    void blit(IMG_names name, const SDL_FRect& dest, const SDL_FRect* src = nullptr) const;
     void setRenderTarget(SDL_Texture* target) const;
     void resetRenderTarget() const;
     void setBlendMode(SDL_Texture* _texture, SDL_BlendMode _blendMode = SDL_BLENDMODE_NONE) const;
@@ -54,4 +56,6 @@ public:
     // Work with window
     void startTextInput() const;
     void stopTextInput() const;
+    void updateTitle() const;
+    void updateTitle(const char* name) const;
 };

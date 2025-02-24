@@ -12,10 +12,8 @@
 
 // Interface for load file
 class DataLoader {
-private:
-    /* data */
 public:
-    DataLoader(/* args */);
+    DataLoader();
     virtual ~DataLoader();
     virtual SDL_IOStream* load(const char* file) const;
 };

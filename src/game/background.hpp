@@ -5,9 +5,11 @@
 
 #pragma once
 
+#include "../GUI/baseGUI.hpp"
 
-//
-class MovingBackground {
+
+// 
+class MovingBackground : GUI::GUItemplate {
  private:
     const Uint8 maxIndex = 33;  // Maximal index, if greater - reset
     Uint16 offset = 0;  // Offset (in pixels) for moving background
@@ -15,6 +17,6 @@ class MovingBackground {
 
  public:
     MovingBackground();
-    void blit() const;
+    void blit(const Window& target) const override;
     void update();
 };

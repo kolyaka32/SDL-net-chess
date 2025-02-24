@@ -6,9 +6,10 @@
 #pragma once
 
 #include "libraries.hpp"
+#include "window.hpp"
 #include "music.hpp"
 #include "sounds.hpp"
-#include "window.hpp"
+#include "../cycles/cycles.hpp"
 
 // Load needed loader, depend on teting
 #if ARCHIEVE_LOADING
@@ -16,6 +17,7 @@
 #else
 #include "loader/straightLoader.hpp"
 #endif
+
 
 // Class of whole current application
 class App : Libraries {
@@ -27,14 +29,22 @@ private:
     const StraightLoader loader;
     #endif
 
-    void run();
+    // Flags of work
+    bool running = true;
+    CYCLE_types nextCycle = CYCLE_NONE;
+
 public:
-    App(/* args */);
+    App();
     ~App();
 
-    const Window window;
-    const Music music;
-    const Sounds sounds;
-};
+    // Commands to operate with global running
+    void stop();
+    void startNextCycle(CYCLE_types type);
+    
+    // Command to start cycles
+    void run();
 
-extern App app;
+    const Window window;
+    Music music;
+    Sounds sounds;
+};

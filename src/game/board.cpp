@@ -4,8 +4,6 @@
  */
 
 #include "board.hpp"
-#include "../data/data.hpp"
-
 
 // First board clearing
 Board::Board() {
@@ -36,7 +34,7 @@ void Board::reset() {
     Uint16 i = 0;
     for (; data.startConfig[i] && (c < sqr(FIELD_WIDTH)); ++i) {
         switch (data.startConfig[i]) {
-        // Basic white figures
+        // White figures
         case 'K':
             figures[c++] = FIG_WHITE_KING;
             break;
@@ -61,7 +59,7 @@ void Board::reset() {
             figures[c++] = FIG_WHITE_PAWN;
             break;
 
-        // Basic figures
+        // Black figures
         case 'k':
             figures[c++] = FIG_BLACK_KING;
             break;

@@ -13,12 +13,11 @@
 #define ARCHIEVE_PASSWORD NULL
 
 // Implimentation of loader for arcives
-class ArchieveLoader : public DataLoader
-{
+class ArchieveLoader : public DataLoader {
 private:
     zip_t* archive;  // Archive, where data is located
 public:
-    ArchieveLoader(/* args */);
+    ArchieveLoader();
     ~ArchieveLoader() override;
     SDL_IOStream* load(const char* name) const override;
 };

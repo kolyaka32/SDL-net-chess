@@ -54,3 +54,20 @@ void Sounds::loadSound(const DataLoader& _loader, unsigned _index, const char* _
 void Sounds::play(SND_names _index) const {
     Mix_PlayChannel(_index, sounds[_index], 0);
 }
+
+void Sounds::setVolume(int _volume) {
+    // Checking correction given volume
+    #if CHECK_CORRECTION
+    if (_volume > MIX_MAX_VOLUME) {
+        throw "Wrong volume";
+    }
+    #endif
+    volume = _volume;
+    for (int i=0; i < SND_count; ++i) {
+        Mix_VolumeChunk(sounds[i], volume);
+    }
+}
+
+Uint8 Sounds::getVolume() const {
+    return volume;
+}

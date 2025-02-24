@@ -10,7 +10,7 @@
 // Names of loading files
 #include "../texturesNames.hpp"
 #include "../fontsNames.hpp"
-
+#include "../languages.hpp"
 
 Window::Window(const DataLoader& _loader)
  : window(SDL_CreateWindow(WINDOWNAME, SCREEN_WIDTH, SCREEN_HEIGHT, 0)),
@@ -68,6 +68,10 @@ SDL_Texture* Window::getTexture(IMG_names _name) const {
 }
 
 
+SDL_Surface* Window::createSurface(int _width, int _height, SDL_PixelFormat _format) const {
+    return SDL_CreateSurface(_width, _height, _format);
+}
+
 SDL_Texture* Window::createTexture(int _width, int _height, SDL_TextureAccess _access, SDL_PixelFormat _format) const {
     return SDL_CreateTexture(renderer, _format, _access, _width, _height);
 }
@@ -86,6 +90,10 @@ void Window::blit(SDL_Texture* _texture, const SDL_FRect& _dest, const SDL_FRect
 
 void Window::blit(SDL_Texture* _texture, float _angle, const SDL_FRect& _dest, const SDL_FRect* _src, SDL_FPoint _center) const {
     SDL_RenderTextureRotated(renderer, _texture, _src, &_dest, _angle, &_center, SDL_FLIP_NONE);
+}
+
+void Window::blit(IMG_names _name, const SDL_FRect& _dest, const SDL_FRect* _src) const {
+    SDL_RenderTexture(renderer, textures[_name], _src, &_dest);
 }
 
 void Window::setRenderTarget(SDL_Texture* _target) const {
@@ -140,4 +148,29 @@ void Window::startTextInput() const {
 
 void Window::stopTextInput() const {
     SDL_StopTextInput(window);
+}
+
+void Window::updateTitle() const {
+    // Setting window title
+    switch (currentLanguage) {
+    case LNG_ENGLISH:
+        updateTitle("Chess on SDL");
+        break;
+
+    case LNG_RUSSIAN:
+        updateTitle("Шахматы на SDL");
+        break;
+
+    case LNG_GERMAN:
+        updateTitle("Schach на SDL");
+        break;
+
+    case LNG_BELARUSIAN:
+        updateTitle("Шахматы на SDL");
+        break;
+    }
+}
+
+void Window::updateTitle(const char* _name) const {
+    SDL_SetWindowTitle(window, _name);
 }

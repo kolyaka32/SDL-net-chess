@@ -13,14 +13,11 @@
 
 // Main function
 int main(int argv, char **args) {
-    // Starting selecting cycle
-    //SelectCycle cycle;
-
     // Main process data
     App app;
 
-    // Running selecting cycle
-    //cycle.run();
+    // Running selected app
+    app.run();
 
     // Reloading game if need
     /*if (data.restart) {

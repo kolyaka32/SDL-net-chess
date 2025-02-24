@@ -6,40 +6,43 @@
 #include "singlePlayer.hpp"
 
 
-SinglePlayerGameCycle::SinglePlayerGameCycle()
-: BaseCycle(MUS_MAIN_2), width(data.animations[0]->w), height(data.animations[0]->h) {
-    prevFrameUpdate = SDL_GetTicks64() + 400;
+SinglePlayerGameCycle::SinglePlayerGameCycle(App& _app)
+: app(_app),
+width(0/*data.animations[0]->w*/),
+height(0/*data.animations[0]->h*/) {
+    prevFrameUpdate = getTime() + 400;
 }
 
 SinglePlayerGameCycle::~SinglePlayerGameCycle() {
     // Resetting title
-    data.updateTitle();
+    app.window.updateTitle();
 
     // Resetting volume
-    Mix_VolumeMusic(data.musicVolume);
+    //Mix_VolumeMusic(data.musicVolume);
 
     // Resetting color for figures
-    for (Uint8 i = IMG_GAME_WHITE_PAWN; i <= IMG_GAME_BLACK_KING; ++i) {
-        SDL_SetTextureColorMod(data.textures[i], 0, 0, 0);
+    for (unsigned i = IMG_GAME_WHITE_PAWN; i <= IMG_GAME_BLACK_KING; ++i) {
+        SDL_SetTextureColorMod(app.window.getTexture(IMG_names(i)), 0, 0, 0);
     }
 
     // Resetting music to menu theme
-    data.playMusic(MUS_MENU_THEME);
+    app.music.start(MUS_MENU_THEME);
 }
 
-bool SinglePlayerGameCycle::getMouseInput() {
+void SinglePlayerGameCycle::getMouseInput(App& _app) {
     // Checking on exit
     if (exitButton.in(mouseX, mouseY)) {
-        return true;
+        stop();
+        return;
     }
     // Clicking in settings menu
     settings.click(mouseX, mouseY);
-    return false;
+    return;
 }
 
-void SinglePlayerGameCycle::update() {
+void SinglePlayerGameCycle::update(App& _app) {
     // Checking, if need to change state
-    if (SDL_GetTicks64() > prevFrameUpdate) {
+    if (getTime() > prevFrameUpdate) {
         // Changing length until reach need width
         if (currentWidth < width) {
             // Increasing field width
@@ -48,54 +51,57 @@ void SinglePlayerGameCycle::update() {
             // Waiting for full width
             if (currentWidth == width) {
                 // Setting updated window title
-                switch (data.language) {
+                switch (currentLanguage) {
                 case LNG_ENGLISH:
-                    SDL_SetWindowTitle(data.window, "You been rickrolled!");
+                    app.window.updateTitle("You been rickrolled!");
                     break;
 
                 case LNG_RUSSIAN:
-                    SDL_SetWindowTitle(data.window, "Ты зарикролен!");
+                    app.window.updateTitle("Ты зарикролен!");
                     break;
 
                 case LNG_GERMAN:
-                    SDL_SetWindowTitle(data.window, "Schach на SDL");
+                    app.window.updateTitle("Schach на SDL");
                     break;
 
                 case LNG_BELARUSIAN:
-                    SDL_SetWindowTitle(data.window, "Шахматы на SDL");
+                    app.window.updateTitle("Шахматы на SDL");
                     break;
                 }
                 // Correcting music volume
-                Mix_VolumeMusic(data.musicVolume);
+                //app.music.setVolume();
+
                 // Setting new music and volume back
-                data.playMusic(MUS_SINGLEPLAYER);
+                app.music.start(MUS_SINGLEPLAYER);
             }
             // Correcting height
             currentHeight = height * currentWidth / width;
             // Correcting music volume
-            Mix_VolumeMusic(data.musicVolume * currentWidth/currentWidth * currentWidth/currentWidth);
+            //app.music.setVolume();
+            //Mix_VolumeMusic(data.musicVolume * currentWidth/currentWidth * currentWidth/currentWidth);
+
             // Setting timer to update
-            prevFrameUpdate = SDL_GetTicks64() + (width - currentWidth)*5;
+            prevFrameUpdate = getTime() + (width - currentWidth)*5;
         } else {
             // Updating frame counter
-            frame = (frame + 1) % data.animations[type]->count;
-            prevFrameUpdate = SDL_GetTicks64() + data.animations[type]->delays[frame]/3;
+            //frame = (frame + 1) % data.animations[type]->count;
+            //prevFrameUpdate = getTime() + data.animations[type]->delays[frame]/3;
         }
     }
     // Updating settings
-    settings.update();
+    settings.update(_app);
 }
 
-void SinglePlayerGameCycle::draw() const {
+void SinglePlayerGameCycle::draw(const App& _app) const {
     // Bliting background
-    data.setColor(BLACK);
-    SDL_RenderClear(data.renderer);
+    _app.window.setDrawColor(BLACK);
+    _app.window.clear();
 
     // Drawing buttons
-    exitButton.blit();
+    exitButton.blit(_app.window);
 
     // Getting pixels of current frame
-    const Uint8* frameData = (Uint8*)data.animations[type]->frames[frame][0].pixels;
+    /*const Uint8* frameData = (Uint8*)data.animations[type]->frames[frame][0].pixels;
     const float cellLength = 8 * width / currentWidth;
 
     // Setting seed of createdfigures for random on each step
@@ -112,24 +118,24 @@ void SinglePlayerGameCycle::draw() const {
             } else {
                 data.setColor(FIELD_DARK);
             }
-
-            SDL_RenderFillRectF(data.renderer, &dest);
+            
+            _app.window.drawRect(dest);
 
             // Checkig, if need to make free cell
             if (currentWidth == width || (rand() % width < currentWidth)) {
-                SDL_Texture* curTexture = data.textures[IMG_GAME_BLACK_PAWN + rand() % 6];
+                SDL_Texture* curTexture = _app.window.getTexture(IMG_names(IMG_GAME_BLACK_PAWN + rand() % 6));
 
                 Uint16 caret = (x + y * width) * 4;
 
                 SDL_SetTextureColorMod(curTexture, frameData[caret+2], frameData[caret+1], frameData[caret]);
 
-                SDL_RenderCopyF(data.renderer, curTexture, NULL, &dest);
+                _app.window.blit(curTexture, dest);
             }
         }
-    }
+    }*/
     // Drawing settings
-    settings.blit();
+    settings.blit(_app.window);
 
     // Bliting all to screen
-    data.render();
+    _app.window.render();
 }

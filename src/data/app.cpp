@@ -3,18 +3,22 @@
  * <nik.kazankov.05@mail.ru>
  */
 
-#include "app.hpp"
-#include "../GUI/baseGUI.hpp"
+#include "cycleTemplate.hpp"
 
 App::App()
 : window{loader},
 music{loader},
-sounds{loader} {
-    // Running current application
-    run();
-}
+sounds{loader} {}
 
 App::~App() {}
+
+void App::stop() {
+    running = false;
+}
+
+void App::startNextCycle(CYCLE_types _type) {
+    nextCycle = _type;
+}
 
 void App::run() {
     // Testing
@@ -34,11 +38,11 @@ void App::run() {
             case SDL_EVENT_QUIT:
                 // Stopping program at all
                 //data.appRunning = false;
-    
+
                 // Stopping current cycle
                 running = false;
                 return;
-    
+
             // Getting mouse input
             case SDL_EVENT_MOUSE_BUTTON_DOWN:
                 // Updating mouse position
