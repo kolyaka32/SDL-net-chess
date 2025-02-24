@@ -11,10 +11,10 @@
 // Base cycle for use in any game mode
 class BaseCycle : public CycleTemplate {
  protected:
-    static SettingsMenu settings;  // Menu for change settings
-    const static GUI::ImageButton exitButton;  // Button for exit from mode
+    SettingsMenu settings;  // Menu for change settings
+    const GUI::ImageButton exitButton;  // Button for exit from mode
  public:
-    BaseCycle();
+    BaseCycle(const Window& target);
     void update(App& app) override;
     void getAnotherInput(App& app, const SDL_Event& event) override;
 };

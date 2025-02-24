@@ -7,7 +7,8 @@
 
 // Starting basic template with main theme
 SelectCycle::SelectCycle(const Window& _target)
-: titleText{_target, {"Chess", "Шахматы", "Schach", "Шахматы"}, 30, 0.5, 0.1, WHITE},
+: BaseCycle(_target),
+titleText{_target, {"Chess", "Шахматы", "Schach", "Шахматы"}, 30, 0.5, 0.1, WHITE},
 singleplayerButton{_target, {"Singleplayer", "Одиночная игра", "Einzelspiel", "Адзіночная гульня"}, 24, 0.5, 0.3, WHITE},
 twoPlayerButton{_target, {"Two players", "Два игрока", "Zwei Spieler", "Два гульца"}, 24, 0.5, 0.5, WHITE},
 serverButton{_target, {"Create server", "Создать сервер", "Server erstellen", "Стварыць сервер"}, 24, 0.5, 0.7, WHITE},

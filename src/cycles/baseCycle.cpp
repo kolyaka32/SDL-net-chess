@@ -5,8 +5,14 @@
 
 #include "baseCycle.hpp"
 
+// Declaration of global objects
+//const GUI::ImageButton BaseCycle::exitButton{0.05, 0.05, IMG_GUI_QUIT_BUTTON};
+//SettingsMenu BaseCycle::settings;
+
 // Base cycle class
-BaseCycle::BaseCycle() {}
+BaseCycle::BaseCycle(const Window& _target)
+: exitButton{_target, 0.05, 0.05, IMG_GUI_QUIT_BUTTON},
+settings(_target) {}
 
 void BaseCycle::update(App& _app) {
     settings.update(_app);

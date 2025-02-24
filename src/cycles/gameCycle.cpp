@@ -6,7 +6,8 @@
 #include "gameCycle.hpp"
 
 GameCycle::GameCycle(const Window& _target)
-: letters(_target),
+: BaseCycle(_target),
+letters(_target),
 restartButton{_target, {"Restart", "Перезапустить", "Starten", "Перазапуск"}, 24, 0.5, 0.5, WHITE},
 menuButton{_target, {"Exit to menu", "Выйти в меню", "Menü verlassen", "Выйсці ў меню"}, 24, 0.5, 0.6, WHITE},
 playersTurnsTexts {
@@ -56,7 +57,7 @@ void GameCycle::getMouseInput(App& _app) {
         // Checking, if game start
         if (endState <= END_TURN) {
             // Clicking on field
-            endState = board.click((mouseX - LEFT_LINE) / CELL_SIDE, (mouseY - UPPER_LINE) / CELL_SIDE);
+            endState = board.click(_app.sounds, (mouseX - LEFT_LINE) / CELL_SIDE, (mouseY - UPPER_LINE) / CELL_SIDE);
             return;
         }
         // Starting waiting menu
@@ -85,7 +86,7 @@ void GameCycle::update(App& _app) {
 
 void GameCycle::draw(const App& _app) const {
     // Bliting field
-    board.blit();
+    board.blit(_app.window);
 
     // Draw surround letters
     letters.blit(_app.window);

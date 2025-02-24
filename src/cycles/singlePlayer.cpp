@@ -7,7 +7,8 @@
 
 
 SinglePlayerGameCycle::SinglePlayerGameCycle(App& _app)
-: app(_app),
+: BaseCycle(_app.window),
+app(_app),
 width(0/*data.animations[0]->w*/),
 height(0/*data.animations[0]->h*/) {
     prevFrameUpdate = getTime() + 400;

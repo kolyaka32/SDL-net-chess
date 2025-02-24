@@ -5,6 +5,9 @@
 
 #include "board.hpp"
 
+// Configuration of board, for play
+char startBoardConfig[85];
+
 // First board clearing
 Board::Board() {
     reset();
@@ -32,8 +35,8 @@ void Board::reset() {
 
     // Parsing text for setting figures
     Uint16 i = 0;
-    for (; data.startConfig[i] && (c < sqr(FIELD_WIDTH)); ++i) {
-        switch (data.startConfig[i]) {
+    for (; startBoardConfig[i] && (c < sqr(FIELD_WIDTH)); ++i) {
+        switch (startBoardConfig[i]) {
         // White figures
         case 'K':
             figures[c++] = FIG_WHITE_KING;
@@ -94,7 +97,7 @@ void Board::reset() {
         case '7':
         case '8':
         case '9':
-            c += data.startConfig[i] - '0';
+            c += startBoardConfig[i] - '0';
             break;
 
         // Line separator
@@ -114,8 +117,8 @@ void Board::reset() {
         }
     }
     // Parsing last part of text for rest data
-    for (; data.startConfig[i]; ++i) {
-        switch (data.startConfig[i]) {
+    for (; startBoardConfig[i]; ++i) {
+        switch (startBoardConfig[i]) {
         // Starting player config
         case 'w':
         case 'W':
@@ -148,29 +151,26 @@ void Board::reset() {
 }
 
 // Drawing all figures with background
-void Board::blit() const {
+void Board::blit(const Window& _target) const {
     // Drawing global background
-    data.setColor(BLACK);
-    SDL_RenderClear(data.renderer);
+    _target.setDrawColor(BLACK);
+    _target.clear();
 
     // Drawing field light part
-    data.setColor(FIELD_LIGHT);
-    const static SDL_Rect lightRect = {LEFT_LINE, UPPER_LINE, GAME_WIDTH, GAME_HEIGHT};
-    SDL_RenderFillRect(data.renderer, &lightRect);
+    _target.drawRect({LEFT_LINE, UPPER_LINE, GAME_WIDTH, GAME_HEIGHT});
 
     // Drawing background
-    data.setColor(FIELD_DARK);
+    _target.setDrawColor(FIELD_DARK);
     for (coord y = 0; y < FIELD_WIDTH; ++y)
         for (coord x = y % 2; x < FIELD_WIDTH; x += 2) {
-            SDL_Rect rect = {LEFT_LINE + x * CELL_SIDE, UPPER_LINE + y * CELL_SIDE, CELL_SIDE, CELL_SIDE};
-            SDL_RenderFillRect(data.renderer, &rect);
+            _target.drawRect({float(LEFT_LINE + x * CELL_SIDE), float(UPPER_LINE + y * CELL_SIDE), CELL_SIDE, CELL_SIDE});
         }
 
     // Drawing each figure
     for (coord y = 0; y < FIELD_WIDTH; ++y)
         for (coord x = 0; x < FIELD_WIDTH; ++x) {
             if (figures[getPos(x, y)]) {
-                SDL_Rect rect = {LEFT_LINE + x * CELL_SIDE, UPPER_LINE + y * CELL_SIDE, CELL_SIDE, CELL_SIDE};
+                SDL_FRect rect = {float(LEFT_LINE + x * CELL_SIDE), float(UPPER_LINE + y * CELL_SIDE), CELL_SIDE, CELL_SIDE};
                 Uint8 textureIndex = IMG_GAME_WHITE_PAWN - 1 + figures[getPos(x, y)];
 
                 // Checking, if figure current (blue)
@@ -179,28 +179,28 @@ void Board::blit() const {
                     textureIndex -= FIG_BLUE_TYPE;
 
                     // Making it blue
-                    SDL_SetTextureColorMod(data.textures[textureIndex], 0, 0, 255);
+                    SDL_SetTextureColorMod(_target.getTexture(IMG_names(textureIndex)), 0, 0, 255);
 
                     // Drawing
-                    SDL_RenderCopy(data.renderer, data.textures[textureIndex], NULL, &rect);
+                    _target.blit(IMG_names(textureIndex), rect);
 
                     // Resetting cell color
-                    SDL_SetTextureColorMod(data.textures[textureIndex], 0, 0, 0);
+                    SDL_SetTextureColorMod(_target.getTexture(IMG_names(textureIndex)), 0, 0, 0);
                 } else if (figures[getPos(x, y)] > FIG_RED_TYPE) {
                     // Checking, if figure attackable (red)
                     // Changing cell index to normal
                     textureIndex -= FIG_RED_TYPE;
 
                     // Making it red
-                    SDL_SetTextureColorMod(data.textures[textureIndex], 255, 0, 0);
+                    SDL_SetTextureColorMod(_target.getTexture(IMG_names(textureIndex)), 255, 0, 0);
 
                     // Drawing
-                    SDL_RenderCopy(data.renderer, data.textures[textureIndex], NULL, &rect);
+                    _target.blit(IMG_names(textureIndex), rect);
 
                     // Resetting cell color
-                    SDL_SetTextureColorMod(data.textures[textureIndex], 0, 0, 0);
+                    SDL_SetTextureColorMod(_target.getTexture(IMG_names(textureIndex)), 0, 0, 0);
                 } else {
-                    SDL_RenderCopy(data.renderer, data.textures[textureIndex], NULL, &rect);
+                    _target.blit(IMG_names(textureIndex), rect);
                 }
             }
         }
@@ -355,7 +355,7 @@ void Board::pickFigure(const coord _x, const coord _y) {
 }
 
 //
-Uint8 Board::placeFigure(const coord _x, const coord _y) {
+Uint8 Board::placeFigure(const Sounds& _sounds, coord _x, coord _y) {
     // Check on game end
     if (turn == TURN_WHITE) {
         // Checking on game end (if there king of another command)
@@ -489,7 +489,7 @@ Uint8 Board::placeFigure(const coord _x, const coord _y) {
     }
 
     // Making sound
-    data.playSound(SND_TURN);
+    _sounds.play(SND_TURN);
 
     // Clearing field after turn
     resetSelection();
@@ -503,7 +503,7 @@ Uint8 Board::placeFigure(const coord _x, const coord _y) {
 
 
 // Clicking on field (grab and put figures)
-Uint8 Board::click(coord _x, coord _y) {
+Uint8 Board::click(const Sounds& _sounds, coord _x, coord _y) {
     // Checking, which type of action do
     if (!activeCell.type) {
         // Picking up figure from field
@@ -521,7 +521,7 @@ Uint8 Board::click(coord _x, coord _y) {
     } else if (figures[getPos(_x, _y)] >= FIG_MOVE_TO) {
         // Checking, if click on avalible position
         // Placing figure there
-        return placeFigure(_x, _y);
+        return placeFigure(_sounds, _x, _y);
     }
     // Return, that nothing happen
     return END_NONE;
@@ -529,12 +529,12 @@ Uint8 Board::click(coord _x, coord _y) {
 
 
 // Making all like in click, but at once and without help
-Uint8 Board::move(coord _x1, coord _y1, coord _x2, coord _y2) {
+Uint8 Board::move(const Sounds& _sounds, coord _x1, coord _y1, coord _x2, coord _y2) {
     // Emulating first click on field
     pickFigure(_x1, _y1);
 
     // Emulating second click on field
-    Uint8 state = click(_x2, _y2);
+    Uint8 state = click(_sounds, _x2, _y2);
 
     // Check, if there was turn
     if (state) {

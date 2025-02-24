@@ -5,12 +5,6 @@
 
 #include "data/app.hpp"
 
-
-// Declaration of global objects
-//const GUI::ImageButton BaseCycle::exitButton{0.05, 0.05, IMG_GUI_QUIT_BUTTON};
-//SettingsMenu BaseCycle::settings;
-
-
 // Main function
 int main(int argv, char **args) {
     // Main process data

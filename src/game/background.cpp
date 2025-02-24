@@ -19,7 +19,7 @@ void MovingBackground::blit(const Window& _target) const {
     for (Uint8 y = 0; y < SCREEN_HEIGHT / CELL_SIDE + 1; ++y) {
         for (Uint8 x = 0; x < SCREEN_WIDTH / CELL_SIDE + 2; ++x) {
             // Drawing dark rects on odd cells
-            SDL_FRect rect = {(x-1) * CELL_SIDE + offset/2, (y-1) * CELL_SIDE + offset/2, CELL_SIDE, CELL_SIDE};
+            SDL_FRect rect = {float((x-1)*CELL_SIDE + offset/2.0), float((y-1) * CELL_SIDE + offset/2), CELL_SIDE, CELL_SIDE};
             if ((x + y) % 2) {
                 _target.drawRect(rect);
             }
@@ -28,7 +28,7 @@ void MovingBackground::blit(const Window& _target) const {
             srand((144 + index - x - 12 * y) % 208);
             // Drawing figure (if need)
             if (rand() % 5 == 0) {
-                _target.blit(IMG_GAME_WHITE_PAWN + rand() % 12, rect);
+                _target.blit(IMG_names(IMG_GAME_WHITE_PAWN + rand() % 12), rect);
             }
         }
     }
