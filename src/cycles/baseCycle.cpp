@@ -5,12 +5,23 @@
 
 #include "baseCycle.hpp"
 
-// Declaration of global objects
-const GUI::ImageButton BaseCycle::exitButton{application.window, 0.05, 0.05, IMG_GUI_QUIT_BUTTON};
-SettingsMenu BaseCycle::settings{application.window};
+// Declaration of static objects
+bool BaseCycle::keepSettings = false;
 
 // Base cycle class
-BaseCycle::BaseCycle(const Window& _target) {}
+BaseCycle::BaseCycle(const Window& _target)
+: exitButton{application.window, 0.05, 0.05, IMG_GUI_QUIT_BUTTON},
+settings{application.window} {
+    if (keepSettings) {
+        // Opening settings menu after restart
+        settings.activate();
+        keepSettings = false;
+    }
+}
+
+void BaseCycle::setKeepSettings() {
+    keepSettings = true;
+}
 
 void BaseCycle::update(App& _app) {
     settings.update(_app);

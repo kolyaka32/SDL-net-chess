@@ -20,7 +20,7 @@ bool SettingsMenu::click(int mouseX, int mouseY) {
     // Check, if click on setting butoon
     if (settingButton.in(mouseX, mouseY)) {
         active ^= true;  // Changing state
-        return true;
+        return false;
     }
     // Clicking in menu
     if (active) {
@@ -33,7 +33,7 @@ bool SettingsMenu::click(int mouseX, int mouseY) {
         } else if (soundSlider.in(mouseX, mouseY)) {
             holdingSlider = 2;
         } else*/ {
-            for (unsigned i = LNG_ENGLISH; i < LNG_BELARUSIAN; ++i) {
+            for (unsigned i = LNG_ENGLISH; i <= LNG_BELARUSIAN; ++i) {
                 if (flags[i].in(mouseX, mouseY)) {
                     newLanguage = LNG_types(i);
                 }
@@ -44,10 +44,10 @@ bool SettingsMenu::click(int mouseX, int mouseY) {
             currentLanguage = newLanguage;
             
             // Returning need restart
-            return false;
+            return true;
         }
     }
-    return true;
+    return false;
 }
 
 // Getting special input (with mousewheel and escape button)

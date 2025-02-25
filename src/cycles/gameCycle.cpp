@@ -54,8 +54,14 @@ void GameCycle::getMouseInput(App& _app) {
         _app.startNextCycle(CYCLE_MENU);
         stop();
         return;
-    }
-    if (settings.click(mouseX, mouseY)) {
+    } else if (settings.click(mouseX, mouseY)) {
+        // Updating location
+        _app.window.updateTitle();
+        setKeepSettings();
+
+        // Restarting for changing language
+        stop();
+    } else {
         // Checking, if game start
         if (endState <= END_TURN) {
             // Clicking on field

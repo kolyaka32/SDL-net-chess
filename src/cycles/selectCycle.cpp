@@ -8,7 +8,7 @@
 // Starting basic template with main theme
 SelectCycle::SelectCycle(const Window& _target)
 : BaseCycle(_target),
-titleText{_target, {"Chess", "Шахматы", "Schach", "Шахматы"}, 30, 0.5, 0.1, WHITE},
+titleText{_target, {"Chess", "Шахматы", "Schach", "Шахматы"}, 64, 0.5, 0.1, 3, WHITE},
 singleplayerButton{_target, {"Singleplayer", "Одиночная игра", "Einzelspiel", "Адзіночная гульня"}, 24, 0.5, 0.3, WHITE},
 twoPlayerButton{_target, {"Two players", "Два игрока", "Zwei Spieler", "Два гульца"}, 24, 0.5, 0.5, WHITE},
 serverButton{_target, {"Create server", "Создать сервер", "Server erstellen", "Стварыць сервер"}, 24, 0.5, 0.7, WHITE},
@@ -22,6 +22,14 @@ connectButton{_target, {"Connect", "Присоединиться", "Beitreten", 
 // Getting selected button
 void SelectCycle::getMouseInput(App& _app) {
     if (settings.click(mouseX, mouseY)) {
+        // Updating location
+        // Updating title
+        _app.window.updateTitle();
+        setKeepSettings();
+
+        // Restarting for changing language
+        stop();
+    } else {
         if (singleplayerButton.in(mouseX, mouseY)) {
             _app.startNextCycle(CYCLE_SINGLEPLAYER);
             stop();
@@ -35,12 +43,6 @@ void SelectCycle::getMouseInput(App& _app) {
             _app.startNextCycle(CYCLE_CLIENT);
             stop();
         }*/
-    } else {
-        // Updating title
-        _app.window.updateTitle();
-
-        // Restarting menu for changing language
-        stop();
     }
     return;
 }

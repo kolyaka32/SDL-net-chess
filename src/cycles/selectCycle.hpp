@@ -16,7 +16,7 @@ class SelectCycle : public BaseCycle {
     MovingBackground background;
 
     // GUI objects
-        GUI::StaticText titleText;
+    GUI::HighlightedStaticText titleText;
     GUI::TextButton singleplayerButton;
     GUI::TextButton twoPlayerButton;
     GUI::TextButton serverButton;

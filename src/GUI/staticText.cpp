@@ -3,10 +3,6 @@
  * <nik.kazankov.05@mail.ru>
  */
 
-//#include <cstdlib>
-#include <cstdio>
-
-
 #include "baseGUI.hpp"
 
 using namespace GUI;
@@ -24,6 +20,5 @@ StaticText::StaticText(const Window& _target, const std::string (&_text)[LNG_cou
 }
 
 StaticText::~StaticText() {
-    // Clearing text buffer
     SDL_DestroyTexture(texture);
 }
