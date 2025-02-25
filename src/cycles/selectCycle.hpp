@@ -9,24 +9,25 @@
 #include "../GUI/baseGUI.hpp"
 #include "../game/background.hpp"
 
+
 // Cycle for select variants to start
 class SelectCycle : public BaseCycle {
  private:
-   MovingBackground background;
+    MovingBackground background;
 
-   // GUI objects
-   GUI::StaticText titleText;
-   GUI::TextButton singleplayerButton;
-   GUI::TextButton twoPlayerButton;
-   GUI::TextButton serverButton;
-   GUI::TextButton connectButton;
+    // GUI objects
+        GUI::StaticText titleText;
+    GUI::TextButton singleplayerButton;
+    GUI::TextButton twoPlayerButton;
+    GUI::TextButton serverButton;
+    GUI::TextButton connectButton;
 
-   // New overrided cycle functions
-   void getMouseInput(App& app) override;
-   void getKeysInput(App& app, SDL_Keycode key) override;
-   void update(App& app) override;
-   void draw(const App& app) const override;
+    // New overrided cycle functions
+    void getMouseInput(App& app) override;
+    void getKeysInput(App& app, SDL_Keycode key) override;
+    void update(App& app) override;
+    void draw(const App& app) const override;
 
  public:
-   SelectCycle(const Window& target);  // Create selecting cycle
+    SelectCycle(const Window& target);  // Create selecting cycle
 };

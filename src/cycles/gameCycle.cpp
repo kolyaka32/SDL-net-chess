@@ -42,6 +42,7 @@ void GameCycle::getKeysInput(App& _app, SDL_Keycode key) {
 
     case SDLK_Q:
         // Quiting to menu
+        _app.startNextCycle(CYCLE_MENU);
         stop();
         return;
     }
@@ -50,6 +51,7 @@ void GameCycle::getKeysInput(App& _app, SDL_Keycode key) {
 // Getting mouse clicking
 void GameCycle::getMouseInput(App& _app) {
     if (exitButton.in(mouseX, mouseY)) {
+        _app.startNextCycle(CYCLE_MENU);
         stop();
         return;
     }
@@ -74,6 +76,7 @@ void GameCycle::getMouseInput(App& _app) {
         }
         if (menuButton.in(mouseX, mouseY)) {
             // Going to menu
+            _app.startNextCycle(CYCLE_MENU);
             stop();
             return;
         }

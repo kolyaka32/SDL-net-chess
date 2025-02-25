@@ -5,13 +5,13 @@
 
 #include "data/app.hpp"
 
+// Global application data
+App application;
+
 // Main function
 int main(int argv, char **args) {
-    // Main process data
-    App app;
-
     // Running selected app
-    app.run();
+    application.run();
 
     // Reloading game if need
     /*if (data.restart) {

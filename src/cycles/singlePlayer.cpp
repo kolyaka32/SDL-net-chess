@@ -27,12 +27,13 @@ SinglePlayerGameCycle::~SinglePlayerGameCycle() {
     }
 
     // Resetting music to menu theme
-    app.music.start(MUS_MENU_THEME);
+    //app.music.start(MUS_MENU_THEME);
 }
 
 void SinglePlayerGameCycle::getMouseInput(App& _app) {
     // Checking on exit
     if (exitButton.in(mouseX, mouseY)) {
+        _app.startNextCycle(CYCLE_MENU);
         stop();
         return;
     }
@@ -73,7 +74,7 @@ void SinglePlayerGameCycle::update(App& _app) {
                 //app.music.setVolume();
 
                 // Setting new music and volume back
-                app.music.start(MUS_SINGLEPLAYER);
+                //app.music.start(MUS_SINGLEPLAYER);
             }
             // Correcting height
             currentHeight = height * currentWidth / width;

@@ -8,14 +8,12 @@
 #include "../data/app.hpp"
 #include "../GUI/baseGUI.hpp"
 
-const Uint16 c = SCREEN_HEIGHT;
-
 // Class of menu with game settings
 class SettingsMenu : public GUI::GUItemplate {
  private:
     bool active = false;  // Flag of showing current menu
-    timer nextSound = 0;  // Time to play next sound
-    Uint8 holdingSlider = 0;  // Index of holded slider
+    timer nextSound = 0;         // Time to play next sound
+    Uint8 holdingSlider = 0;     // Index of holded slider
 
     // Button for enter and quit settings menu
     const GUI::ImageButton settingButton;

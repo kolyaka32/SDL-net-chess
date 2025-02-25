@@ -7,6 +7,10 @@
 
 #include "../define.hpp"
 
+// Static class members
+Uint16 MovingBackground::offset = 0;   // Offset (in pixels) for moving background
+Uint8 MovingBackground::index = 0;     // Index of drawing line (for figures)
+
 MovingBackground::MovingBackground() {}
 
 void MovingBackground::blit(const Window& _target) const {

@@ -6,7 +6,7 @@
 #include "board.hpp"
 
 // Configuration of board, for play
-char startBoardConfig[85];
+char startBoardConfig[85] = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq";
 
 // First board clearing
 Board::Board() {
@@ -157,6 +157,7 @@ void Board::blit(const Window& _target) const {
     _target.clear();
 
     // Drawing field light part
+    _target.setDrawColor(FIELD_LIGHT);
     _target.drawRect({LEFT_LINE, UPPER_LINE, GAME_WIDTH, GAME_HEIGHT});
 
     // Drawing background

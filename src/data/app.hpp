@@ -31,7 +31,7 @@ private:
 
     // Flags of work
     bool running = true;
-    CYCLE_types nextCycle = CYCLE_NONE;
+    CYCLE_types nextCycle = CYCLE_MENU;
 
 public:
     App();
@@ -48,3 +48,6 @@ public:
     Music music;
     Sounds sounds;
 };
+
+// Global application data
+extern App application;

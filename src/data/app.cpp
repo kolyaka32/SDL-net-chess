@@ -5,6 +5,11 @@
 
 #include "cycleTemplate.hpp"
 
+// Cycles
+#include "../cycles/selectCycle.hpp"
+#include "../cycles/singlePlayer.hpp"
+#include "../cycles/twoPlayer.hpp"
+
 App::App()
 : window{loader},
 music{loader},
@@ -21,101 +26,40 @@ void App::startNextCycle(CYCLE_types _type) {
 }
 
 void App::run() {
-    // Testing
-    GUI::TypeBox typeBox{window, 20, 0.5, 0.5, "123456789"};
-    GUI::TextButton btn{window, {"12", "34", "56", "78"}, 40, 0.4, 0.2};
-    bool press = false;
-    bool selected = false;
-
-    // Main part
-    bool running = true;
-    float mouseX, mouseY;
-    SDL_Event event;
+    // Running application
     while (running) {
-        while (SDL_PollEvent(&event)) {
-            switch (event.type) {
-            // Code of program exiting
-            case SDL_EVENT_QUIT:
-                // Stopping program at all
-                //data.appRunning = false;
-
-                // Stopping current cycle
-                running = false;
-                return;
-
-            // Getting mouse input
-            case SDL_EVENT_MOUSE_BUTTON_DOWN:
-                // Updating mouse position
-                SDL_GetMouseState(&mouseX, &mouseY);
-                if (typeBox.in(mouseX, mouseY)) {
-                    if (!selected) {
-                        press = true;
-                        selected = true;
-                        typeBox.select(mouseX);
-                    } else {
-                        typeBox.removeSelect();
-                        typeBox.select(mouseX);
-                        press = true;
-                    }
-                } else if (selected) {
-                    selected = false;
-                    press = false;
-                    typeBox.removeSelect();
-                }
-
-                // Getting mouse press
-                /*if (getMouseInput()) {
-                    // Stopping run cycle
-                    running = false;
-                    return;
-                }*/
-                break;
-            
-            case SDL_EVENT_MOUSE_BUTTON_UP:
-                /*if (press) {
-                    typeBox.removeSelect();
-                    press = false;
-                }*/
-                press = false;
-                break;
-    
-            // Getting mouse presses
-            case SDL_EVENT_KEY_DOWN:
-                typeBox.press(event.key.key);
-                press = false;
-                /*if (getKeysInput(event.key.key)) {
-                    // Closing cycle, if need
-                    running = false;
-                    return;
-                }*/
-                break;
-
-            case SDL_EVENT_MOUSE_WHEEL:
-                //SDL_GetMouseState(&mouseX, &mouseY);
-                break;
-
-            case SDL_EVENT_TEXT_INPUT:
-                typeBox.writeString(event.text.text);
-                press = false;
-                break;
-    
-            /*default:
-                // Getting another user input (if need)
-                getAnotherInput(event);*/
+        // Switching between running options
+        switch (nextCycle) {
+        case CYCLE_MENU:
+            {
+                // Cycle with game menu and selection of mode
+                SelectCycle cycle(window);
+                cycle.run(*this);
             }
+            break;
+        
+        case CYCLE_SINGLEPLAYER:
+            {
+                // Cycle with singplayer joke animation
+                SinglePlayerGameCycle cycle(*this);
+                cycle.run(*this);
+            }
+            break;
+
+        case CYCLE_LOCALCOOP:
+            {
+                // Cycle with game menu and selection of mode
+                TwoPlayerGameCycle cycle(window);
+                cycle.run(*this);
+            }
+            break;
+
+        // Stopping current process
+        case CYCLE_NONE:
+        default:
+            running = false;
+            break;
         }
-        if (press) {
-            SDL_GetMouseState(&mouseX, &mouseY);
-            typeBox.updateSelection(mouseX);
-        }
-        if (selected) {
-            typeBox.updateCaret();
-        }
-        // Drawing
-        window.setDrawColor(GREEN);
-        window.clear();
-        typeBox.blit();
-        btn.blit(window);
-        window.render();
     }
+    
 }

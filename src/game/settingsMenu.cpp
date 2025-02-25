@@ -42,11 +42,10 @@ bool SettingsMenu::click(int mouseX, int mouseY) {
         // Updating texts language
         if (newLanguage != currentLanguage) {
             currentLanguage = newLanguage;
-
-            // Updating texture
-            //data.updateTranslation();
+            
+            // Returning need restart
+            return false;
         }
-        return false;
     }
     return true;
 }

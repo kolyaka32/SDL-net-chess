@@ -8,12 +8,12 @@
 #include "../GUI/baseGUI.hpp"
 
 
-// 
+// Class of menu moving background
 class MovingBackground : GUI::GUItemplate {
  private:
     const Uint8 maxIndex = 33;  // Maximal index, if greater - reset
-    Uint16 offset = 0;  // Offset (in pixels) for moving background
-    Uint8 index = 0;    // Index of drawing line (for figures)
+    static Uint16 offset;       // Offset (in pixels) for moving background
+    static Uint8 index;         // Index of drawing line (for figures)
 
  public:
     MovingBackground();

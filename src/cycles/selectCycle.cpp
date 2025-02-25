@@ -12,20 +12,35 @@ titleText{_target, {"Chess", "Шахматы", "Schach", "Шахматы"}, 30, 
 singleplayerButton{_target, {"Singleplayer", "Одиночная игра", "Einzelspiel", "Адзіночная гульня"}, 24, 0.5, 0.3, WHITE},
 twoPlayerButton{_target, {"Two players", "Два игрока", "Zwei Spieler", "Два гульца"}, 24, 0.5, 0.5, WHITE},
 serverButton{_target, {"Create server", "Создать сервер", "Server erstellen", "Стварыць сервер"}, 24, 0.5, 0.7, WHITE},
-connectButton{_target, {"Connect", "Присоединиться", "Beitreten", "Далучыцца"}, 24, 0.5, 0.9, WHITE} {}
+connectButton{_target, {"Connect", "Присоединиться", "Beitreten", "Далучыцца"}, 24, 0.5, 0.9, WHITE} {
+    // Resetting figures color
+    for (unsigned i=IMG_GAME_WHITE_PAWN; i<=IMG_GAME_BLACK_KING; ++i) {
+        SDL_SetTextureColorMod(_target.getTexture(IMG_names(i)), 0, 0, 0);
+    }
+}
 
 // Getting selected button
 void SelectCycle::getMouseInput(App& _app) {
     if (settings.click(mouseX, mouseY)) {
         if (singleplayerButton.in(mouseX, mouseY)) {
             _app.startNextCycle(CYCLE_SINGLEPLAYER);
+            stop();
         } else if (twoPlayerButton.in(mouseX, mouseY)) {
             _app.startNextCycle(CYCLE_LOCALCOOP);
-        } else if (serverButton.in(mouseX, mouseY)) {
+            stop();
+        }/* else if (serverButton.in(mouseX, mouseY)) {
             _app.startNextCycle(CYCLE_SERVER);
+            stop();
         } else if (connectButton.in(mouseX, mouseY)) {
             _app.startNextCycle(CYCLE_CLIENT);
-        }
+            stop();
+        }*/
+    } else {
+        // Updating title
+        _app.window.updateTitle();
+
+        // Restarting menu for changing language
+        stop();
     }
     return;
 }
