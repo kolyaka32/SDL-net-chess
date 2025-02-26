@@ -7,14 +7,17 @@
 
 SettingsMenu::SettingsMenu(const Window& _target)
 : settingButton{_target, 0.95, 0.05, IMG_GUI_PAUSE_BUTTON},
-background{_target, 0.5, 0.5, 0.65, 0.7, 20, 5},
-titleText{_target, {"Pause", "Пауза", "Pause", "Паўза"}, 30, 0.5, 0.2},
-flags { {_target, 0.35, 0.33, IMG_GUI_FLAG_USA},
-    {_target, 0.65, 0.33, IMG_GUI_FLAG_RUS},
-    {_target, 0.35, 0.53, IMG_GUI_FLAG_GER},
-    {_target, 0.65, 0.53, IMG_GUI_FLAG_BEL}, },
-musicText{_target, {"Music", "Музыка", "Die Musik", "Музыка"}, 30, 0.5, 0.65},
-soundText{_target, {"Sounds", "Звуки", "Geräusche", "Гук"}, 30, 0.5, 0.75} {}
+background{_target, 0.5, 0.5, 0.65, 0.8, 20, 5},
+titleText{_target, {"Pause", "Пауза", "Pause", "Паўза"}, 34, 0.5, 0.15, 2, WHITE},
+flags {
+    {_target, 0.35, 0.28, IMG_GUI_FLAG_USA},
+    {_target, 0.65, 0.28, IMG_GUI_FLAG_RUS},
+    {_target, 0.35, 0.47, IMG_GUI_FLAG_GER},
+    {_target, 0.65, 0.47, IMG_GUI_FLAG_BEL},
+},
+musicText{_target, {"Music", "Музыка", "Die Musik", "Музыка"}, 30, 0.5, 0.6, 1, WHITE},
+soundText{_target, {"Sounds", "Звуки", "Geräusche", "Гук"}, 30, 0.5, 0.71, 1, WHITE},
+exitButton{_target, {"Exit", "Выход", "Ausfahrt", "Выхад"}, 24, 0.5, 0.85, WHITE} {}
 
 bool SettingsMenu::click(int mouseX, int mouseY) {
     // Check, if click on setting butoon
@@ -24,6 +27,11 @@ bool SettingsMenu::click(int mouseX, int mouseY) {
     }
     // Clicking in menu
     if (active) {
+        // Checking on exit
+        if (exitButton.in(mouseX, mouseY)) {
+            active = false;
+            return false;
+        }
         // Setting old language to save
         LNG_types newLanguage = currentLanguage;
 
@@ -129,6 +137,8 @@ void SettingsMenu::blit(const Window& _target) const {
         //soundSlider.blit(_target);
         soundText.blit(_target);
         //musicSlider.blit(_target);
+        // Quit
+        exitButton.blit(_target);
     }
 }
 

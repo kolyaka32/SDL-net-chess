@@ -5,6 +5,9 @@
 
 #include "gameCycle.hpp"
 
+// Static class members
+Board GameCycle::board;
+
 GameCycle::GameCycle(const Window& _target)
 : BaseCycle(_target),
 letters(_target),

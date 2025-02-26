@@ -14,8 +14,8 @@
 // Cycle with game template
 class GameCycle : public BaseCycle {
  protected:
-   Board board;     // Main game field
-   Uint8 endState;  // State of game (end)
+   static Board board;  // Main game field
+   Uint8 endState;      // State of game (end)
 
    SurroundingLetters letters;  // Letters, that surround field
 

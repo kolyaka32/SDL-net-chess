@@ -11,23 +11,25 @@
 // Class of menu with game settings
 class SettingsMenu : public GUI::GUItemplate {
  private:
-    bool active = false;  // Flag of showing current menu
-    timer nextSound = 0;         // Time to play next sound
-    Uint8 holdingSlider = 0;     // Index of holded slider
+    bool active = false;      // Flag of showing current menu
+    timer nextSound = 0;      // Time to play next sound
+    Uint8 holdingSlider = 0;  // Index of holded slider
 
     // Button for enter and quit settings menu
     const GUI::ImageButton settingButton;
     // Background plate
     const GUI::Backplate background;
     // Title
-    GUI::StaticText titleText;
+    GUI::HighlightedStaticText titleText;
     // Flags for select language
     const GUI::ImageButton flags[LNG_count];
     // Sliders and it texts
-    GUI::StaticText musicText;
-    GUI::StaticText soundText;
+    GUI::HighlightedStaticText musicText;
+    GUI::HighlightedStaticText soundText;
     //GUI::Slider musicSlider{0.5, 0.7, &data.musicVolume};
     //GUI::Slider soundSlider{0.5, 0.8, &data.soundsVolume};
+    // Quit button
+    GUI::TextButton exitButton;
 
  public:
     SettingsMenu(const Window& target);
