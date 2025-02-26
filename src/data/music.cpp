@@ -56,7 +56,7 @@ void Music::start(MUS_names _index) const {
     Mix_PlayMusic(music[_index], -1);
 }
 
-void Music::setVolume(int _volume) {
+void Music::setVolume(unsigned _volume) {
     // Checking correction given volume
     #if CHECK_CORRECTION
     if (_volume > MIX_MAX_VOLUME) {
@@ -67,6 +67,6 @@ void Music::setVolume(int _volume) {
     Mix_VolumeMusic(volume);
 }
 
-Uint8 Music::getVolume() const {
+unsigned Music::getVolume() const {
     return volume;
 }

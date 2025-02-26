@@ -15,7 +15,8 @@
 // Template for any cycles
 class CycleTemplate {
 private:
-    bool running = true;  // Flag of current running state
+    bool running = true;           // Flag of current running state
+    static bool restarted;         // Flag of cycle was restarted (by changing language)
     IdleTimer idleTimer{1000/60};  // Timer to idle in main cycle
 
 protected:
@@ -23,6 +24,8 @@ protected:
     float mouseX, mouseY;   // Current position of mouse
     void updateMousePos();  // Update mouseX and mouseY
     void stop();            // Stopping current cycle
+    void restart();         // Set that cycle to restart with rememering it
+    bool isRestarted();     // Tell, if cycle was restarted
 
     // Cycle functions for cycle (should be overriden)
     void getInput(App& app);                  // Getting all user input

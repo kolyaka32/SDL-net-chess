@@ -55,7 +55,7 @@ void Sounds::play(SND_names _index) const {
     Mix_PlayChannel(_index, sounds[_index], 0);
 }
 
-void Sounds::setVolume(int _volume) {
+void Sounds::setVolume(unsigned _volume) {
     // Checking correction given volume
     #if CHECK_CORRECTION
     if (_volume > MIX_MAX_VOLUME) {
@@ -68,6 +68,6 @@ void Sounds::setVolume(int _volume) {
     }
 }
 
-Uint8 Sounds::getVolume() const {
+unsigned Sounds::getVolume() const {
     return volume;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025, Kazankov Nikolay 
+ * Copyright (C) 2025, Kazankov Nikolay
  * <nik.kazankov.05@mail.ru>
  */
 
@@ -29,5 +29,5 @@ class SelectCycle : public BaseCycle {
     void draw(const App& app) const override;
 
  public:
-    SelectCycle(const Window& target);  // Create selecting cycle
+    SelectCycle(const App& app);
 };

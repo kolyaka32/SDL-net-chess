@@ -7,12 +7,11 @@
 
 
 // Two player mode (standart game)
-TwoPlayerGameCycle::TwoPlayerGameCycle(const Window& _target)
-: GameCycle(_target) {
-    //musicOrder.start();
+TwoPlayerGameCycle::TwoPlayerGameCycle(const App& _app)
+: GameCycle(_app) {
+    // Starting main music
+    if (!isRestarted()) {
+        _app.music.start(MUS_MAIN);
+    }
 }
 
-TwoPlayerGameCycle::~TwoPlayerGameCycle() {
-    // Resetting music to menu theme
-    //data.playMusic(MUS_MENU_THEME);
-}

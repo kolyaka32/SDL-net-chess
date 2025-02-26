@@ -41,5 +41,5 @@ class GameCycle : public BaseCycle {
    void draw(const App& app) const override;
 
  public:
-   GameCycle(const Window& target);
+   GameCycle(const App& app);
 };

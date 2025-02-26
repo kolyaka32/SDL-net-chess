@@ -6,6 +6,9 @@
 #include "cycleTemplate.hpp"
 
 
+// Static class members
+bool CycleTemplate::restarted = false;
+
 // Reset basic cycle template variables
 CycleTemplate::CycleTemplate()
 : mouseX(0), mouseY(0) {
@@ -20,6 +23,15 @@ void CycleTemplate::updateMousePos() {
 
 void CycleTemplate::stop() {
     running = false;
+}
+
+void CycleTemplate::restart() {
+    restarted = true;
+    running = false;
+}
+
+bool CycleTemplate::isRestarted() {
+    return restarted;
 }
 
 // Getting user input
@@ -99,6 +111,9 @@ void CycleTemplate::getAnotherInput(App& app, const SDL_Event& event) {
 
 // Function for start need cycle
 void CycleTemplate::run(App& _app) {
+    // Resetting restart flag after all started
+    restarted = false;
+
     // Starting main cycle
     while (running) {
         // Getting user input

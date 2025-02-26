@@ -8,23 +8,23 @@
 // Static class members
 Board GameCycle::board;
 
-GameCycle::GameCycle(const Window& _target)
-: BaseCycle(_target),
-letters(_target),
-restartButton{_target, {"Restart", "Перезапустить", "Starten", "Перазапуск"}, 24, 0.5, 0.5, WHITE},
-menuButton{_target, {"Exit to menu", "Выйти в меню", "Menü verlassen", "Выйсці ў меню"}, 24, 0.5, 0.6, WHITE},
+GameCycle::GameCycle(const App& _app)
+: BaseCycle(_app),
+letters(_app.window),
+restartButton{_app.window, {"Restart", "Перезапустить", "Starten", "Перазапуск"}, 24, 0.5, 0.5, WHITE},
+menuButton{_app.window, {"Exit to menu", "Выйти в меню", "Menü verlassen", "Выйсці ў меню"}, 24, 0.5, 0.6, WHITE},
 playersTurnsTexts {
-    {_target, {"First player turn", "Ход первого игрока", "Der Zug des ersten Spielers", "Ход першага гульца"}, 24, 0.5, 0.1, WHITE},
-    {_target, {"Second player turn", "Ход второго игрока", "Zug des zweiten Spielers", "Ход другога гульца"}, 24, 0.5, 0.1, WHITE},
-    {_target, {"Your turn", "Ваш ход", "Sie spielen aus", "Ваш ход"}, 24, 0.5, 0.1, WHITE},
-    {_target, {"Wait", "Ожидайте", "Erwartet", "Чакаць"}, 24, 0.5, 0.1, WHITE},
+    {_app.window, {"First player turn", "Ход первого игрока", "Der Zug des ersten Spielers", "Ход першага гульца"}, 24, 0.5, 0.1, WHITE},
+    {_app.window, {"Second player turn", "Ход второго игрока", "Zug des zweiten Spielers", "Ход другога гульца"}, 24, 0.5, 0.1, WHITE},
+    {_app.window, {"Your turn", "Ваш ход", "Sie spielen aus", "Ваш ход"}, 24, 0.5, 0.1, WHITE},
+    {_app.window, {"Wait", "Ожидайте", "Erwartet", "Чакаць"}, 24, 0.5, 0.1, WHITE},
 },
-endBackplate{_target, 0.5, 0.5, 0.6, 0.3, 40, 5},
-winText{_target, {"Win!", "Победа!", "Sieg!", "Перамога!"}, 30, 0.5, 0.4, WHITE},
-firstWinText{_target, {"Fist player win!", "Первый игрок выйграл!", "Der erste Spieler hat gewonnen!", "Першы гулец выйграў!"}, 30, 0.5, 0.4, WHITE},
-secondWinText{_target, {"Second player win!", "Второй игрок выйграл!", "Der zweite Spieler hat gewonnen!", "Другі гулец выйграў!"}, 30, 0.5, 0.4, WHITE},
-looseText{_target, {"You loose...", "Вы проиграли...", "Sie haben verloren...", "Вы прайгралі..."}, 30, 0.5, 0.4, WHITE},
-nobodyWinText{_target, {"Nobody win", "Ничья", "Unentschieden", "Чые"},30, 0.5, 0.4, WHITE} {
+endBackplate{_app.window, 0.5, 0.5, 0.6, 0.3, 40, 5},
+winText{_app.window, {"Win!", "Победа!", "Sieg!", "Перамога!"}, 30, 0.5, 0.4, WHITE},
+firstWinText{_app.window, {"Fist player win!", "Первый игрок выйграл!", "Der erste Spieler hat gewonnen!", "Першы гулец выйграў!"}, 30, 0.5, 0.4, WHITE},
+secondWinText{_app.window, {"Second player win!", "Второй игрок выйграл!", "Der zweite Spieler hat gewonnen!", "Другі гулец выйграў!"}, 30, 0.5, 0.4, WHITE},
+looseText{_app.window, {"You loose...", "Вы проиграли...", "Sie haben verloren...", "Вы прайгралі..."}, 30, 0.5, 0.4, WHITE},
+nobodyWinText{_app.window, {"Nobody win", "Ничья", "Unentschieden", "Чые"},30, 0.5, 0.4, WHITE} {
     endState = END_NONE;
 }
 
@@ -60,11 +60,8 @@ void GameCycle::getMouseInput(App& _app) {
     } else if (settings.click(mouseX, mouseY)) {
         // Updating location
         _app.window.updateTitle();
-        setKeepSettings();
-
-        // Restarting for changing language
-        stop();
-    } else {
+        restart();
+    } else if (!settings.isActive()) {
         // Checking, if game start
         if (endState <= END_TURN) {
             // Clicking on field

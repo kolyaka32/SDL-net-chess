@@ -10,6 +10,5 @@
 // Creating two player mode (standart game)
 class TwoPlayerGameCycle : public GameCycle {
  public:
-    TwoPlayerGameCycle(const Window& target);
-    ~TwoPlayerGameCycle();
+    TwoPlayerGameCycle(const App& app);
 };

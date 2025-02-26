@@ -48,6 +48,3 @@ public:
     Music music;
     Sounds sounds;
 };
-
-// Global application data
-extern App application;

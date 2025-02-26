@@ -5,17 +5,23 @@
 
 #include "selectCycle.hpp"
 
+
 // Starting basic template with main theme
-SelectCycle::SelectCycle(const Window& _target)
-: BaseCycle(_target),
-titleText{_target, {"Chess", "Шахматы", "Schach", "Шахматы"}, 64, 0.5, 0.1, 3, WHITE},
-singleplayerButton{_target, {"Singleplayer", "Одиночная игра", "Einzelspiel", "Адзіночная гульня"}, 24, 0.5, 0.3, WHITE},
-twoPlayerButton{_target, {"Two players", "Два игрока", "Zwei Spieler", "Два гульца"}, 24, 0.5, 0.5, WHITE},
-serverButton{_target, {"Create server", "Создать сервер", "Server erstellen", "Стварыць сервер"}, 24, 0.5, 0.7, WHITE},
-connectButton{_target, {"Connect", "Присоединиться", "Beitreten", "Далучыцца"}, 24, 0.5, 0.9, WHITE} {
+SelectCycle::SelectCycle(const App& _app)
+: BaseCycle(_app),
+titleText{_app.window, {"Chess", "Шахматы", "Schach", "Шахматы"}, 64, 0.5, 0.1, 3, WHITE},
+singleplayerButton{_app.window, {"Singleplayer", "Одиночная игра", "Einzelspiel", "Адзіночная гульня"}, 24, 0.5, 0.3, WHITE},
+twoPlayerButton{_app.window, {"Two players", "Два игрока", "Zwei Spieler", "Два гульца"}, 24, 0.5, 0.5, WHITE},
+serverButton{_app.window, {"Create server", "Создать сервер", "Server erstellen", "Стварыць сервер"}, 24, 0.5, 0.7, WHITE},
+connectButton{_app.window, {"Connect", "Присоединиться", "Beitreten", "Далучыцца"}, 24, 0.5, 0.9, WHITE} {
     // Resetting figures color
     for (unsigned i=IMG_GAME_WHITE_PAWN; i<=IMG_GAME_BLACK_KING; ++i) {
-        SDL_SetTextureColorMod(_target.getTexture(IMG_names(i)), 0, 0, 0);
+        SDL_SetTextureColorMod(_app.window.getTexture(IMG_names(i)), 0, 0, 0);
+    }
+
+    // Starting menu song (if wasn't started)
+    if(!isRestarted()) {
+        _app.music.start(MUS_MENU);
     }
 }
 
@@ -23,13 +29,10 @@ connectButton{_target, {"Connect", "Присоединиться", "Beitreten", 
 void SelectCycle::getMouseInput(App& _app) {
     if (settings.click(mouseX, mouseY)) {
         // Updating location
-        // Updating title
         _app.window.updateTitle();
-        setKeepSettings();
-
-        // Restarting for changing language
-        stop();
-    } else {
+        restart();
+        return;
+    } else if (!settings.isActive()) {
         if (singleplayerButton.in(mouseX, mouseY)) {
             _app.startNextCycle(CYCLE_SINGLEPLAYER);
             stop();

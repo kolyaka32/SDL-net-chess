@@ -33,7 +33,7 @@ void App::run() {
         case CYCLE_MENU:
             {
                 // Cycle with game menu and selection of mode
-                SelectCycle cycle(window);
+                SelectCycle cycle(*this);
                 cycle.run(*this);
             }
             break;
@@ -49,7 +49,7 @@ void App::run() {
         case CYCLE_LOCALCOOP:
             {
                 // Cycle with game menu and selection of mode
-                TwoPlayerGameCycle cycle(window);
+                TwoPlayerGameCycle cycle(*this);
                 cycle.run(*this);
             }
             break;

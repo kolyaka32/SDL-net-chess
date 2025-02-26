@@ -78,14 +78,13 @@ namespace GUI {
         SDL_Texture *textureButton;  // Texture of line (upper part of slider)
         SDL_FRect buttonRect;        // Place for rendering upper part
         const unsigned maxValue;     // Maximal value of state
-        unsigned *link;              // Pointer to data to control
      public:
         // Create slide with need line and button images
-        Slider(const Window& _target, float X, float Y, unsigned *controlData, IMG_names lineImage = IMG_GUI_SLIDER_LINE,
+        Slider(const Window& _target, float X, float Y, unsigned startValue, IMG_names lineImage = IMG_GUI_SLIDER_LINE,
             IMG_names buttonImage = IMG_GUI_SLIDER_BUTTON, unsigned max = 255);
-        void setValue(float mouseX);                            // Setting new state from mouse position
-        bool scroll(float wheelY, float mouseX, float mouseY);  // Checking mouse wheel action
-        void blit(const Window& _target) const override;        // Drawing slider with need button position
+        unsigned setValue(float mouseX);                  // Setting new state from mouse position
+        unsigned scroll(float wheelY);                    // Checking mouse wheel action
+        void blit(const Window& _target) const override;  // Drawing slider with need button position
     };
 
 
@@ -177,7 +176,7 @@ namespace GUI {
         const Backplate backplate;
      public:
         TextButton(const Window& _target, const std::string (&text)[LNG_count], float size, float X, float Y,
-            SDL_Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
+            SDL_Color color = WHITE, ALIGNMENT_types alignment = MIDLE_text);
         void blit(const Window& _target) const override;  // Drawing current button
     };
 

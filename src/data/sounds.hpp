@@ -14,12 +14,12 @@
 class Sounds {
 private:
     Mix_Chunk* sounds[SND_count];
-    Uint8 volume;
+    Uint8 volume = 0;
     void loadSound(const DataLoader& loader, unsigned index, const char* name);
 public:
     Sounds(const DataLoader& loader);
     ~Sounds();
     void play(SND_names name) const;
-    void setVolume(int _volume);
-    Uint8 getVolume() const;
+    void setVolume(unsigned _volume);
+    unsigned getVolume() const;
 };

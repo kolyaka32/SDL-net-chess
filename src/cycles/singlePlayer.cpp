@@ -7,11 +7,16 @@
 
 
 SinglePlayerGameCycle::SinglePlayerGameCycle(App& _app)
-: BaseCycle(_app.window),
+: BaseCycle(_app),
 app(_app),
 width(0/*data.animations[0]->w*/),
 height(0/*data.animations[0]->h*/) {
     prevFrameUpdate = getTime() + 400;
+
+    // Starting menu song (if wasn't started)
+    if(!isRestarted()) {
+        _app.music.start(MUS_MENU);
+    }
 }
 
 SinglePlayerGameCycle::~SinglePlayerGameCycle() {
@@ -25,9 +30,6 @@ SinglePlayerGameCycle::~SinglePlayerGameCycle() {
     for (unsigned i = IMG_GAME_WHITE_PAWN; i <= IMG_GAME_BLACK_KING; ++i) {
         SDL_SetTextureColorMod(app.window.getTexture(IMG_names(i)), 0, 0, 0);
     }
-
-    // Resetting music to menu theme
-    //app.music.start(MUS_MENU_THEME);
 }
 
 void SinglePlayerGameCycle::getMouseInput(App& _app) {
