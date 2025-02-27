@@ -1,15 +1,19 @@
 /*
- * Copyright (C) 2024-2025, Kazankov Nikolay 
+ * Copyright (C) 2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
 #pragma once
 
 #include "../define.hpp"
-#include "../dataTypes.hpp"
+#include "SDL3/SDL_stdinc.h"
+
+typedef Uint8 cell;
+typedef Uint8 position;
+typedef Uint8 coord;
 
 // Names of all figures in game
-enum FIG_names{
+enum FIG_names {
     // None-element
     FIG_NONE,
 

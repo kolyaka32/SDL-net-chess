@@ -1,99 +1,102 @@
 /*
- * Copyright (C) 2024-2025, Kazankov Nikolay 
+ * Copyright (C) 2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
 #include "cycleTemplate.hpp"
 
 
-// Reset basic cycle template variables
-CycleTemplate::CycleTemplate() {
-    // Resetting values
-    mouseX = 0;
-    mouseY = 0;
+// Static class members
+bool CycleTemplate::restarted = false;
 
+// Reset basic cycle template variables
+CycleTemplate::CycleTemplate()
+: mouseX(0), mouseY(0) {
     // Resetting input
     SDL_Event event;
     while ( SDL_PollEvent(&event) != 0 ) {}
 }
 
+void CycleTemplate::updateMousePos() {
+    SDL_GetMouseState(&mouseX, &mouseY);
+}
+
+void CycleTemplate::stop() {
+    running = false;
+}
+
+void CycleTemplate::restart() {
+    restarted = true;
+    running = false;
+}
+
+bool CycleTemplate::isRestarted() {
+    return restarted;
+}
+
 // Getting user input
-void CycleTemplate::getInput() {
+void CycleTemplate::getInput(App& _app) {
     // Creating event for get user input
-    static SDL_Event event;
+    SDL_Event event;
 
     // Getting input
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
         // Code of program exiting
-        case SDL_QUIT:
+        case SDL_EVENT_QUIT:
             // Stopping program at all
-            data.appRunning = false;
+            _app.stop();
 
             // Stopping current cycle
             running = false;
             return;
 
         // Getting mouse input
-        case SDL_MOUSEBUTTONDOWN:
+        case SDL_EVENT_MOUSE_BUTTON_DOWN:
             // Updating mouse position
-            SDL_GetMouseState(&mouseX, &mouseY);
+            updateMousePos();
 
             // Getting mouse press
-            if (getMouseInput()) {
-                // Stopping run cycle
-                running = false;
-                return;
-            }
+            getMouseInput(_app);
             break;
 
         // Getting mouse presses
-        case SDL_KEYDOWN:
-            if (getKeysInput(event.key.keysym)) {
-                // Closing cycle, if need
-                running = false;
-                return;
-            }
+        case SDL_EVENT_KEY_DOWN:
+            getKeysInput(_app, event.key.key);
             break;
 
         default:
             // Getting another user input (if need)
-            getAnotherInput(event);
+            getAnotherInput(_app, event);
         }
     }
 }
 
 // Empty template for draw
-void CycleTemplate::draw() const {}
+void CycleTemplate::draw(const App& app) const {}
 
 // Getting special update (if need)
-void CycleTemplate::update() {}
+void CycleTemplate::update(App& app) {}
 
 // Example for getting mouse input
-bool CycleTemplate::getMouseInput() {
+void CycleTemplate::getMouseInput(App& app) {
     /*if (startOptions[0].in(mouseX, mouseY)) {
-        return 1;
+        return;
     }*/
-    // Nothing-return
-    return false;
 }
 
 // Example for getting keys input
-bool CycleTemplate::getKeysInput(const SDL_Keysym& key) {
-    switch (key.sym) {
+void CycleTemplate::getKeysInput(App& app, SDL_Keycode _key) {
+    switch (_key) {
     case SDLK_ESCAPE:
         // Stopping ruuning by escape
         running = false;
-        return true;
-
-    default:
-        // None-return
-        return false;
+        return;
     }
 }
 
 // Example function for get user input
-bool CycleTemplate::getAnotherInput(const SDL_Event& event) {
+void CycleTemplate::getAnotherInput(App& app, const SDL_Event& event) {
     switch (event.type) {
     /*case SDL_MOUSEWHEEL:
         // Mouse position on screen
@@ -103,24 +106,24 @@ bool CycleTemplate::getAnotherInput(const SDL_Event& event) {
         //if (MusicSlider.scroll(event.wheel.y, mouseX, mouseY));
         //else if (SoundSlider.scroll(event.wheel.y, mouseX, mouseY));
         break;*/
-
-    default:
-        return false;
     }
 }
 
 // Function for start need cycle
-void CycleTemplate::run() {
+void CycleTemplate::run(App& _app) {
+    // Resetting restart flag after all started
+    restarted = false;
+
     // Starting main cycle
     while (running) {
         // Getting user input
-        getInput();
+        getInput(_app);
 
         // Updating things
-        update();
+        update(_app);
 
         // Drawing interface
-        draw();
+        draw(_app);
 
         // Standing in idle state
         idleTimer.sleep();

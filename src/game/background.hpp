@@ -1,21 +1,22 @@
 /*
- * Copyright (C) 2024-2025, Kazankov Nikolay 
+ * Copyright (C) 2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
 #pragma once
 
-#include "../include.hpp"
+#include "../GUI/baseGUI.hpp"
 
-//
-class MovingBackground {
+
+// Class of menu moving background
+class MovingBackground : GUI::GUItemplate {
  private:
     const Uint8 maxIndex = 33;  // Maximal index, if greater - reset
-    Uint16 offset = 0;  // Offset (in pixels) for moving background
-    Uint8 index = 0;    // Index of drawing line (for figures)
+    static Uint16 offset;       // Offset (in pixels) for moving background
+    static Uint8 index;         // Index of drawing line (for figures)
 
  public:
     MovingBackground();
-    void blit() const;
+    void blit(const Window& target) const override;
     void update();
 };

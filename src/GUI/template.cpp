@@ -1,10 +1,8 @@
 /*
- * Copyright (C) 2024-2025, Kazankov Nikolay 
+ * Copyright (C) 2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
-#include "../include.hpp"
-#include "../data/data.hpp"
 #include "baseGUI.hpp"
 
 using namespace GUI;
@@ -15,15 +13,12 @@ GUItemplate::GUItemplate() {
 }
 
 // Template function for draw
-void GUItemplate::blit() const {
-    SDL_RenderCopy(data.renderer, texture, NULL, &rect);
+void GUItemplate::blit(const Window& _target) const {
+    _target.blit(texture, rect);
 }
 
 // Template function for check, if mouse press in object
-bool GUItemplate::in(const int mouseX, const int mouseY) const {
+bool GUItemplate::in(float mouseX, float mouseY) const {
     return ((mouseX > rect.x && mouseX < rect.x + rect.w) &&
         (mouseY > rect.y && mouseY < rect.y + rect.h));
 }
-
-// Template for updating location of current object
-void GUItemplate::updateLocation() {}

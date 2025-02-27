@@ -1,59 +1,74 @@
 /*
- * Copyright (C) 2024-2025, Kazankov Nikolay 
+ * Copyright (C) 2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
 #pragma once
 
-#include "../include.hpp"
+#include <string>
+#include "../data/window.hpp"
 #include "../define.hpp"
-#include "../dataTypes.hpp"
-#include "../data/languages.hpp"
-#include "../data/graphics.hpp"
-#include "../data/font.hpp"
-#include "../data/animations.hpp"
+#include "../languages.hpp"
+#include "../data/time.hpp"
 
 
 // Namespace of objects for GUI (Graphic User Interface)
 namespace GUI {
-   // Text alignment type
-   enum ALIGNMENT_types{
-      LEFT_text,
-      MIDLE_text,
-      RIGHT_text
-   };
-
-
-    // Graphic user interface template for other objects
-   class GUItemplate {
-     protected:
-      SDL_Texture *texture;
-      SDL_Rect rect;
-     public:
-        GUItemplate();
-        virtual void blit() const;
-        virtual bool in(const int mouseX, const int mouseY) const;
-        virtual void updateLocation();
+    // Text alignment type
+    enum ALIGNMENT_types{
+        LEFT_text,
+        MIDLE_text,
+        RIGHT_text
     };
 
 
-    // Static text on screen with drawing and updating functions
-    class StaticText : public GUItemplate {
-     private:
-        const char *text;                     // Text to create from
-        const float posX, posY;               // Relative positions on screen
-        const ALIGNMENT_types aligment;       // Aligment type to improve displasment
-        const SDL_Color color;                // Base draw color
-        TTF_Font *font;                       // Font to create texture
-        char *bufferText;                     // Current text to show
-        friend class TextButton;              // Allowing textbutton to take data
+    // Graphic user interface template for other objects
+    class GUItemplate {
+     protected:
+        SDL_Texture* texture;
+        SDL_FRect rect;
      public:
-        StaticText(const char* text, textHeight size, float X,
+        GUItemplate();
+        virtual void blit(const Window& _target) const;
+        bool in(float mouseX, float mouseY) const;
+    };
+
+
+    // Static text on screen
+    class StaticText : public GUItemplate {
+     public:
+        StaticText(const Window& target, const std::string (&text)[LNG_count], float size, float X,
             float Y, SDL_Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
         ~StaticText();
-        void updateLocation() override;
-        void updateLocationArgs(const unsigned count, ...);  // Create new texture
-        void updateTexture();  // Updating texture
+    };
+
+
+    // Static text on screen
+    class HighlightedStaticText : public GUItemplate {
+     public:
+        HighlightedStaticText(const Window& target, const std::string (&text)[LNG_count], float size, float X,
+            float Y, int frame, SDL_Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
+        ~HighlightedStaticText();
+    };
+
+
+    // Dynamicly updated text on screen
+    class DynamicText : public GUItemplate {
+     private:
+        const std::string (&text)[LNG_count];  // Text to create from
+        const float posX, posY;          // Relative positions on screen
+        const ALIGNMENT_types aligment;  // Aligment type to improve displasment
+        const SDL_Color color;           // Base draw color
+        const float height;              // Height of text to draw
+        char currentText[50];            // Current text for print
+     protected:
+        void updateTexture(const Window& _target);
+     public:
+        DynamicText(const Window& _target, const std::string (&text)[LNG_count], float size, float X,
+        float Y, SDL_Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
+        ~DynamicText();
+        void updateLocation(const Window& _target);
+        void updateLocationArgs(const Window& _target, ...);  // Change text, depend on another arguments
     };
 
 
@@ -61,23 +76,22 @@ namespace GUI {
     class Slider : public GUItemplate {
      private:
         SDL_Texture *textureButton;  // Texture of line (upper part of slider)
-        SDL_Rect destButton;         // Place for rendering upper part
+        SDL_FRect buttonRect;        // Place for rendering upper part
         const unsigned maxValue;     // Maximal value of state
-        unsigned *link;              // Pointer to data to control
      public:
         // Create slide with need line and button images
-        Slider(float X, float Y, unsigned *controlData, IMG_names lineImage = IMG_GUI_SLIDER_LINE,
+        Slider(const Window& _target, float X, float Y, unsigned startValue, IMG_names lineImage = IMG_GUI_SLIDER_LINE,
             IMG_names buttonImage = IMG_GUI_SLIDER_BUTTON, unsigned max = 255);
-        void setValue(int mouseX);                           // Setting new state from mouse position
-        bool scroll(Sint32 wheelY, int mouseX, int mouseY);  // Checking mouse wheel action
-        void blit() const override;                          // Drawing slider with need button position
+        unsigned setValue(float mouseX);                  // Setting new state from mouse position
+        unsigned scroll(float wheelY);                    // Checking mouse wheel action
+        void blit(const Window& _target) const override;  // Drawing slider with need button position
     };
 
 
     // Class of buttons with image on it
     class ImageButton : public GUItemplate {
-     public:
-        ImageButton(float X, float Y, IMG_names textureIndex);   // Create new button
+    public:
+        ImageButton(const Window& _target, float X, float Y, IMG_names textureIndex);
     };
 
 
@@ -85,95 +99,85 @@ namespace GUI {
     #if ANI_count
     class GIFAnimation : public GUItemplate {
      private:
-        ANI_names type;
-        Uint32 frame;
-        timer prevTick;
+            ANI_names type;
+            Uint32 frame;
+            timer prevTick;
      public:
-        GIFAnimation(SDL_Rect destination, ANI_names type);
-        ~GIFAnimation();
-        void update();
+            GIFAnimation(Window& _target, SDL_Rect destination, ANI_names type);
+            ~GIFAnimation();
+            void update(Window& _target);
     };
     #endif
 
 
-    // Bar to show some charachteristic (like health) with icone
-    class Bar : public GUItemplate {
-     private:
-        SDL_Rect Front_rect;    // Front rect for primal color
-        SDL_Rect IconeRect;     // Rect for icone, near bar, if need
-        const SDL_Color color;  // Color of front part of bar
-     public:
-        // Create new bar with it position, primal color and icone near it
-        Bar(const SDL_Rect dest, SDL_Color color, IMG_names icone = IMG_GUI_PAUSE_BUTTON);
-        void blit(int width);   // Drawing bar with icone need width
-    };
-
-
-    // Class of box, where user can type text
-    class TypeBox : public GUItemplate {
-     private:
+    // Class of field, where user can type text
+    class TypeField : public GUItemplate {
+     protected:
         // Class constants
-        const static Uint8 bufferSize = 16;
-        const ALIGNMENT_types aligment;  // Aligment type for correct placed position
-        const SDL_Color color;      // Color of typing text
+        const static int bufferSize = 16;  // Size of text buffer
+        const int posX;                    // Relevant x position on screen
+        const ALIGNMENT_types aligment;    // Aligment type for correct placed position
+        const SDL_Color textColor;         // Color of typing text
+        const Window& target;              // Target, where draw to
+        TTF_Font* font;                    // Font for type text
 
         // Variables
-        char buffer[bufferSize+1];       // String, that was typed
-        char clipboardText[bufferSize];  // Copying string for clipboard
-        char swapCaret;             // Byte for swap with caret
-        int caret = 0;              // Position of place, where user type
-        int selectLength = 0;       // Length of selected box
-        Uint8 length;               // Length of all text
-        TTF_Font *font;             // Font for type text
-        SDL_Rect textRect;          // Rectangle of background plate (for better visability)
-        SDL_Keycode preCode;        // Code of key, that was previously pressed
+        char buffer[bufferSize];           // String, that was typed
+        size_t length = 0;                 // Length of all text
+        size_t caret = 0;                  // Position of place, where user type
+        int selectLength = 0;              // Length of selected box
+        bool showCaret = false;            // Flag, if need to show caret
+        timer needSwapCaret = 0;           // Time, when next need to change caret
+        SDL_FRect caretRect;               // Place, where caret should be at screen
+        char clipboardText[bufferSize];    // Copying string for clipboard use
 
-        void updateTexture();       // Function for creat new texture and updat it position
-        void writeClipboard();      // Function for writing clipboard content after caret
-        void copyToClipboard();     // Function for writing selected text to clipboard
-        void selectAll();           // Select all text
-        void deleteSelected();      // Function for clearing selected part
+        void updateTexture();              // Creat new texture and update it position
+        void deleteSelected();             // Clearing selected part
+        void writeClipboard();             // Write clipboard content after caret
+        void copyToClipboard();            // Writing selected text to clipboard
 
      public:
-        TypeBox(textHeight size, float posX, float posY, const char *startText = "",
-            ALIGNMENT_types newAligment = MIDLE_text, SDL_Color newColor = BLACK);
-        ~TypeBox();                         // Clearing font and texture
-        void blit() const override;         // Function of drawing text with background plate
-        const char* getString() const;      // Function of getting typed string
-        void writeString(const char* str);  // Function of writing any string to buffer at caret position
-        void press(SDL_Keycode code);       // Function of processing special keycodes
-        void resetPress(SDL_Keycode code);  // Resetting pressing on any button
-        void updateCaret();                 // Function of change caret symbol from '|' to ' ' and back
-        void updateSelection(int mouseX);   // Function of updating selecting text
-        void select(int mouseX);            // Function of setting caret for typing after
-        void removeSelect();                // Function of removing caret after typing
+        TypeField(const Window& _target, float height, float posX, float posY, const char *startText,
+            ALIGNMENT_types newAligment = MIDLE_text, SDL_Color textColor = BLACK);
+        ~TypeField();                        // Clearing font and texture
+        const char* getString() const;       // Function of getting typed string
+        void writeString(const char* str);   // Function of writing any string to buffer at caret position
+        void press(SDL_Keycode code);        // Function of processing special keycodes
+        void updateCaret();                  // Function of change caret symbol from '|' to ' ' and back
+        void updateSelection(float mouseX);  // Function of updating selecting text
+        void select(float mouseX);           // Function of setting caret for typing after
+        void removeSelect();                 // Function of removing caret after typing
+    };
+
+    // Class of type field with frame for better writing
+    class TypeBox : public TypeField {
+     private:
+        SDL_Texture* backTexture;  // Texture of backplate
+        const SDL_FRect backRect;  // Rect of backplate
+     public:
+        TypeBox(const Window& _target, float textHeight, float posX, float posY, const char* startText = "");
+        void blit() const;
+        bool in(float mouseX, float mouseY) const;
     };
 
     // Class of backplate for
     class Backplate : public GUItemplate {
-     private:
-        const SDL_Color frontColor, backColor;  // Front and back colors of plate
-        const Uint8 rad;  // Radius of rounding
-        const Uint8 bor;  // Border (with back color)
-     protected:
-        void updatePlate(const SDL_Rect rect);  // Update sizes of plate
      public:
-        Backplate(float centerX, float centerY, float width, float height, Uint8 radius, Uint8 border,
-            const SDL_Color frontColor = GREY, SDL_Color backColor = BLACK);
-        Backplate(Uint8 radius, Uint8 border,  SDL_Color frontColor = GREY,
-            const SDL_Color backColor = BLACK);
+        Backplate(const Window& _target, float centerX, float centerY, float width, float height, float radius, float border,
+            SDL_Color frontColor = GREY, SDL_Color backColor = BLACK);
+        Backplate(const Window& _target, const SDL_FRect& rect, float radius, float border, SDL_Color frontColor = GREY,
+            SDL_Color backColor = BLACK);
         ~Backplate();
     };
 
     // Class of buttons with text on it
-    class TextButton : public Backplate {
+    class TextButton : public HighlightedStaticText {
      private:
-        const StaticText topText;
+        const Backplate backplate;
      public:
-        TextButton(const char* text, textHeight size, float X, float Y,
-            SDL_Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
-        void blit() const override;      // Drawing current button
-        void updateLocation() override;  // Update object to match text sizes
+        TextButton(const Window& _target, const std::string (&text)[LNG_count], float size, float X, float Y,
+            SDL_Color color = WHITE, ALIGNMENT_types alignment = MIDLE_text);
+        void blit(const Window& _target) const override;  // Drawing current button
     };
 
 }  // namespace GUI

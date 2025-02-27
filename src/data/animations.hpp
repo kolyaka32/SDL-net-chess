@@ -1,42 +1,23 @@
 /*
- * Copyright (C) 2024-2025, Kazankov Nikolay 
+ * Copyright (C) 2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
 #pragma once
 
-#include <string>
+#include <SDL3_image/SDL_image.h>
 
-#include "graphics.hpp"
-#include "dataLoader.hpp"
+#include "loader/dataLoader.hpp"
+#include "../animationsNames.hpp"
 
 
-// Total animation counter
-#define ANI_count 1
-
-// Data for work with animations
-#if ANI_count
-
-// Names of sound effects in array to use
-enum ANI_names{
-     ANI_SINGLEPLAYER,
-};
-
-// Base class with all animations
-class Animations : virtual GraphicsLibrary, public virtual DataLoader {
- public:
-    IMG_Animation *animations[ANI_count];  // List with all animations
-
+// Class for load, draw and clear animations
+class Animations {
  private:
-    // Function for load animation with need name
-    void loadAnimation(const std::string name, ANI_names index);
-    // Check, if all animations load correctly (if need)
-    #if CHECK_CORRECTION
-    void checkCorrection();
-    #endif
-
+    IMG_Animation* animations[ANI_count];
+    void load(const DataLoader& _loader, unsigned _index, const char* _name);
  public:
-    Animations();
+    Animations(const DataLoader& loader, unsigned count, const char* names[]);
     ~Animations();
+    IMG_Animation* operator[] (ANI_names index) const;
 };
-#endif

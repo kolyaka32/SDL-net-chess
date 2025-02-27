@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024-2025, Kazankov Nikolay 
+ * Copyright (C) 2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
@@ -7,11 +7,11 @@
 
 
 // Two player mode (standart game)
-TwoPlayerGameCycle::TwoPlayerGameCycle() {
-    musicOrder.start();
+TwoPlayerGameCycle::TwoPlayerGameCycle(const App& _app)
+: GameCycle(_app) {
+    // Starting main music
+    if (!isRestarted()) {
+        _app.music.start(MUS_MAIN);
+    }
 }
 
-TwoPlayerGameCycle::~TwoPlayerGameCycle() {
-    // Resetting music to menu theme
-    data.playMusic(MUS_MENU_THEME);
-}
