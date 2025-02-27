@@ -9,13 +9,15 @@
 SinglePlayerGameCycle::SinglePlayerGameCycle(App& _app)
 : BaseCycle(_app),
 app(_app),
-width(0/*data.animations[0]->w*/),
-height(0/*data.animations[0]->h*/) {
+startVolume(_app.music.getVolume()),
+animation(_app.window.getAnimation(ANI_SINGLEPLAYER)),
+width(animation->w),
+height(animation->h) {
     prevFrameUpdate = getTime() + 400;
 
-    // Starting menu song (if wasn't started)
+    // Starting main song (if wasn't started)
     if(!isRestarted()) {
-        _app.music.start(MUS_MENU);
+        _app.music.start(MUS_MAIN);
     }
 }
 
@@ -24,7 +26,7 @@ SinglePlayerGameCycle::~SinglePlayerGameCycle() {
     app.window.updateTitle();
 
     // Resetting volume
-    //Mix_VolumeMusic(data.musicVolume);
+    app.music.setVolume(startVolume);
 
     // Resetting color for figures
     for (unsigned i = IMG_GAME_WHITE_PAWN; i <= IMG_GAME_BLACK_KING; ++i) {
@@ -41,6 +43,12 @@ void SinglePlayerGameCycle::getMouseInput(App& _app) {
     }
     // Clicking in settings menu
     settings.click(mouseX, mouseY);
+
+    // Changing volume
+    if (currentWidth != width) {
+        startVolume = _app.music.getVolume();
+        app.music.setVolume(startVolume * (width-currentWidth)/width);
+    }
     return;
 }
 
@@ -72,24 +80,22 @@ void SinglePlayerGameCycle::update(App& _app) {
                     app.window.updateTitle("Шахматы на SDL");
                     break;
                 }
-                // Correcting music volume
-                //app.music.setVolume();
-
                 // Setting new music and volume back
-                //app.music.start(MUS_SINGLEPLAYER);
+                _app.music.setVolume(startVolume*2);
+                _app.music.start(MUS_SINGLEPLAYER);
+                return;
             }
             // Correcting height
             currentHeight = height * currentWidth / width;
             // Correcting music volume
-            //app.music.setVolume();
-            //Mix_VolumeMusic(data.musicVolume * currentWidth/currentWidth * currentWidth/currentWidth);
+            app.music.setVolume(startVolume * (width-currentWidth)/width);
 
             // Setting timer to update
             prevFrameUpdate = getTime() + (width - currentWidth)*5;
         } else {
             // Updating frame counter
-            //frame = (frame + 1) % data.animations[type]->count;
-            //prevFrameUpdate = getTime() + data.animations[type]->delays[frame]/3;
+            frame = (frame + 1) % animation->count;
+            prevFrameUpdate = getTime() + animation->delays[frame]/3;
         }
     }
     // Updating settings
@@ -105,7 +111,7 @@ void SinglePlayerGameCycle::draw(const App& _app) const {
     exitButton.blit(_app.window);
 
     // Getting pixels of current frame
-    /*const Uint8* frameData = (Uint8*)data.animations[type]->frames[frame][0].pixels;
+    const Uint8* frameData = (Uint8*)animation->frames[frame][0].pixels;
     const float cellLength = 8 * width / currentWidth;
 
     // Setting seed of createdfigures for random on each step
@@ -118,9 +124,9 @@ void SinglePlayerGameCycle::draw(const App& _app) const {
 
             // Drawing rect for field
             if ((x+y)%2) {
-                data.setColor(FIELD_LIGHT);
+                _app.window.setDrawColor(FIELD_LIGHT);
             } else {
-                data.setColor(FIELD_DARK);
+                _app.window.setDrawColor(FIELD_DARK);
             }
             
             _app.window.drawRect(dest);
@@ -136,7 +142,7 @@ void SinglePlayerGameCycle::draw(const App& _app) const {
                 _app.window.blit(curTexture, dest);
             }
         }
-    }*/
+    }
     // Drawing settings
     settings.blit(_app.window);
 

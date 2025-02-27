@@ -12,11 +12,13 @@
 #include "../fontsNames.hpp"
 #include "../languages.hpp"
 
+
 Window::Window(const DataLoader& _loader)
  : window(SDL_CreateWindow(WINDOWNAME, SCREEN_WIDTH, SCREEN_HEIGHT, 0)),
 renderer(SDL_CreateRenderer(window, NULL)),
 textures{_loader, renderer, IMG_count, texturesFilesNames},
-fonts{_loader, FNT_count, fontsFilesNames} {
+fonts{_loader, FNT_count, fontsFilesNames},
+animations{_loader, ANI_count, animationsFilesNames} {
     // Checking on correction of created objects
     #if CHECK_CORRECTION
     if (window == NULL) {
@@ -65,6 +67,10 @@ void Window::drawRect(const SDL_FRect& _rect) const {
 
 SDL_Texture* Window::getTexture(IMG_names _name) const {
     return textures[_name];
+}
+
+IMG_Animation* Window::getAnimation(ANI_names _name) const {
+    return animations[_name];
 }
 
 

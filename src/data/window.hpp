@@ -7,16 +7,19 @@
 
 #include "textures.hpp"
 #include "fonts.hpp"
+#include "animations.hpp"
 
 
 // Class of window, where all happen
 class Window {
-private:
+ private:
     SDL_Window* window;
     SDL_Renderer* renderer;
     const Textures textures;
     const Fonts fonts;
-public:
+    const Animations animations;
+
+ public:
     Window(const DataLoader& loader);
     ~Window() noexcept;
 
@@ -32,8 +35,9 @@ public:
     void drawPoint(float x, float y) const;
     void drawRect(const SDL_FRect& rect) const;
 
-    // Work with loaded textures
+    // Work with loaded data
     SDL_Texture* getTexture(IMG_names name) const;
+    IMG_Animation* getAnimation(ANI_names name) const;
 
     // Work with own textures
     SDL_Surface* createSurface(int width, int height, SDL_PixelFormat format = SDL_PIXELFORMAT_RGBA32) const;

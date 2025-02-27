@@ -13,12 +13,15 @@ class SinglePlayerGameCycle : public BaseCycle {
  private:
     App& app;
 
+    // Volume from start of cycle to reset later
+    unsigned startVolume;
+
     // Data for transition to animation
     Uint16 currentWidth = 8;
     Uint16 currentHeight = 8;
 
     // Data for board animation
-    //const ANI_names type = ANI_SINGLEPLAYER;
+    const IMG_Animation* animation;
     const Uint16 width, height;   // Parameters of image
     Uint16 frame = 0;             // Current frame of animation
     timer prevFrameUpdate;        // Timer, when was last frame change

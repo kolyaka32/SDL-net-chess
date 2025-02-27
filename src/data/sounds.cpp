@@ -27,6 +27,9 @@ Sounds::Sounds(const DataLoader& _loader) {
         }
     }
     #endif
+    
+    // Resetting sounds volume
+    setVolume(MIX_MAX_VOLUME/2);
 }
 
 Sounds::~Sounds() {
