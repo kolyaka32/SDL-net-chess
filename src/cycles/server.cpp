@@ -16,26 +16,12 @@ app(_app) {
     SDLNet_Init();
 
     // Creating server
-    int adressesNumber = 0;
-    SDLNet_Address** addreses = SDLNet_GetLocalAddresses(&adressesNumber);
-
-    for (int i=0; i < adressesNumber; ++i) {
-        SDL_Log("Address at %i: %s", i, SDLNet_GetAddressString(addreses[i]));
-    }
-
-    SDLNet_FreeLocalAddresses(addreses);
-
-    //SDLNet_Address* currentAddress = SDLNet_ResolveHostname("26.46.13.88");
-    server = SDLNet_CreateDatagramSocket(NULL, 8000);
-
-    SDL_Log("Error %s", SDL_GetError());
-
-    //SDL_Log("Server created %s", SDLNet_GetAddressString(server));
+    SDLNet_CreateServer(NULL, 8000);
 }
 
 Server::~Server() {
     SDLNet_Quit();
-    SDLNet_DestroyDatagramSocket(server);
+    SDLNet_DestroyServer(server);
 }
 
 void Server::getMouseInput(App& _app) {
@@ -55,17 +41,17 @@ void Server::update(App& _app) {
     // Updating settings
     settings.update(_app);
 
-    SDLNet_Datagram* datagramm;
-    
-    SDLNet_ReceiveDatagram(server, &datagramm);
 
-    if (datagramm) {
+    if (client_stream == NULL) {
+        SDLNet_AcceptClient(server, &client_stream);
+    } else {
+        int buffer[40];
+        SDLNet_ReadFromStreamSocket(client_stream, buffer, 40);
         SDL_Log("Error %s", SDL_GetError());
-        for (int i=0; i< datagramm->buflen; ++i) {
-            SDL_Log("%u ", datagramm->buf[i]);
+        for (int i=0; i < 40; ++i) {
+            SDL_Log("%u ", buffer[i]);
         }
         SDL_Log("\n");
-        SDLNet_DestroyDatagram(datagramm);
     }
 }
 
