@@ -29,7 +29,7 @@ Music::Music(const DataLoader& _loader){
     #endif
 
     // Resetting music volume
-    setVolume(0);
+    setVolume(MIX_MAX_VOLUME/2);
 }
 
 Music::~Music(){

@@ -7,6 +7,7 @@
 
 // Static class members
 Board GameCycle::board;
+Uint8 GameCycle::endState;
 
 GameCycle::GameCycle(const App& _app)
 : BaseCycle(_app),
@@ -26,6 +27,7 @@ secondWinText{_app.window, {"Second player win!", "Второй игрок вы�
 looseText{_app.window, {"You loose...", "Вы проиграли...", "Sie haben verloren...", "Вы прайгралі..."}, 30, 0.5, 0.4, WHITE},
 nobodyWinText{_app.window, {"Nobody win", "Ничья", "Unentschieden", "Чые"},30, 0.5, 0.4, WHITE} {
     endState = END_NONE;
+    board.reset();
 }
 
 

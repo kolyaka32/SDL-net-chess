@@ -6,12 +6,10 @@
 #include "board.hpp"
 
 // Configuration of board, for play
-char startBoardConfig[85] = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq";
+char boardConfig[85] = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq";
 
 // First board clearing
-Board::Board() {
-    reset();
-}
+Board::Board() {}
 
 // Clearing field and setting
 void Board::reset() {
@@ -34,9 +32,9 @@ void Board::reset() {
     position c = 0;  // Counter of place on field
 
     // Parsing text for setting figures
-    Uint16 i = 0;
-    for (; startBoardConfig[i] && (c < sqr(FIELD_WIDTH)); ++i) {
-        switch (startBoardConfig[i]) {
+    unsigned i=0;
+    for (; boardConfig[i] && (c < sqr(FIELD_WIDTH)); ++i) {
+        switch (boardConfig[i]) {
         // White figures
         case 'K':
             figures[c++] = FIG_WHITE_KING;
@@ -97,7 +95,7 @@ void Board::reset() {
         case '7':
         case '8':
         case '9':
-            c += startBoardConfig[i] - '0';
+            c += boardConfig[i] - '0';
             break;
 
         // Line separator
@@ -117,8 +115,8 @@ void Board::reset() {
         }
     }
     // Parsing last part of text for rest data
-    for (; startBoardConfig[i]; ++i) {
-        switch (startBoardConfig[i]) {
+    for (; boardConfig[i]; ++i) {
+        switch (boardConfig[i]) {
         // Starting player config
         case 'w':
         case 'W':

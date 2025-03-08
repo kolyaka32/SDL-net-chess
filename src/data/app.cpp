@@ -13,9 +13,10 @@
 #include "../cycles/client.hpp"
 
 App::App()
-: window{loader},
-music{loader},
-sounds{loader} {}
+: music{loader},
+sounds{loader},
+initFile(music, sounds),
+window{loader} {}
 
 App::~App() {}
 
@@ -56,7 +57,7 @@ void App::run() {
             }
             break;
 
-        case CYCLE_SERVER:
+        /*case CYCLE_SERVER:
             {
                 // Cycle with waiting in lobby for another player
                 Server cycle(*this);
@@ -70,7 +71,7 @@ void App::run() {
                 Client cycle(*this);
                 cycle.run(*this);
             }
-            break;
+            break;*/
 
         // Stopping current process
         case CYCLE_NONE:

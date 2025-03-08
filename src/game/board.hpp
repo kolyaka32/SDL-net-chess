@@ -11,7 +11,7 @@
 
 
 // Configuration of board, for play
-extern char startBoardConfig[85];
+extern char boardConfig[85];
 
 // Types of current game state
 enum END_names{

@@ -6,9 +6,10 @@
 #pragma once
 
 #include "libraries.hpp"
-#include "window.hpp"
 #include "music.hpp"
 #include "sounds.hpp"
+#include "initFile.hpp"
+#include "window.hpp"
 #include "../cycles/cycles.hpp"
 
 // Load needed loader, depend on teting
@@ -44,7 +45,8 @@ public:
     // Command to start cycles
     void run();
 
-    const Window window;
     Music music;
     Sounds sounds;
+    InitFile initFile;
+    const Window window;
 };
