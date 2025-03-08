@@ -24,7 +24,7 @@ Slider::Slider(const Window& _target, float _X, float _Y, unsigned _startValue,
     rect.x = SCREEN_WIDTH * _X - rect.w / 2;
     rect.y = SCREEN_HEIGHT * _Y - rect.h / 2;
     buttonRect.y = SCREEN_HEIGHT * _Y - buttonRect.h / 2;
-    buttonRect.x = rect.x + _startValue - buttonRect.w / 2;
+    buttonRect.x = rect.x + _startValue*2 - buttonRect.w / 2;
 }
 
 void Slider::blit(const Window& _target) const {
@@ -32,9 +32,9 @@ void Slider::blit(const Window& _target) const {
     _target.blit(textureButton, buttonRect);
 }
 
-unsigned Slider::setValue(float mouseX) {
+unsigned Slider::setValue(float _mouseX) {
     // Setting new position
-    buttonRect.x = mouseX;
+    buttonRect.x = _mouseX;
 
     // Setting borders for position
     SET_MAX(buttonRect.x, rect.x + rect.w);
@@ -43,11 +43,11 @@ unsigned Slider::setValue(float mouseX) {
     buttonRect.x -= buttonRect.w / 2;
 
     // Setting new linked value
-    return buttonRect.x - rect.x + buttonRect.w/2;
+    return (buttonRect.x - rect.x + buttonRect.w/2)/2;
 }
 
-unsigned Slider::scroll(float wheelY) {
-    if (wheelY > 0) {
+unsigned Slider::scroll(float _wheelY) {
+    if (_wheelY > 0) {
         return setValue(buttonRect.x + buttonRect.w/2 + 8);
     } else {
         return setValue(buttonRect.x + buttonRect.w/2 - 8);

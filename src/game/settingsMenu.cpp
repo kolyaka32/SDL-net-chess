@@ -97,13 +97,13 @@ void SettingsMenu::update(App& _app) {
         case 1:
             // Updating music slider state
             SDL_GetMouseState(&mouseX, nullptr);
-            _app.music.setVolume(musicSlider.setValue(mouseX)/2);
+            _app.music.setVolume(musicSlider.setValue(mouseX));
             break;
 
         case 2:
             // Updating sound slider state
             SDL_GetMouseState(&mouseX, nullptr);
-            _app.sounds.setVolume(soundSlider.setValue(mouseX)/2);
+            _app.sounds.setVolume(soundSlider.setValue(mouseX));
 
             // Playing sound effect for understanding loud
             if (getTime() > nextSound) {

@@ -95,7 +95,7 @@ void InitFile::saveSettings() {
 
     // Writing music and sounds volumes
     outSettings << "music = " << music.getVolume() << "\n";
-    outSettings << "sounds = " << music.getVolume() << "\n";
+    outSettings << "sounds = " << sounds.getVolume() << "\n";
 
     // Writing starting config (order of figures)
     outSettings << "\nGame configuration:\n";
