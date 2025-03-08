@@ -1,26 +1,25 @@
 /*
- * Copyright (C) 2024-2025, Kazankov Nikolay 
+ * Copyright (C) 2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
 #pragma once
 
-#include <string>
+#include "../define.hpp"
+#include "music.hpp"
+#include "sounds.hpp"
 
-#include "../include.hpp"
-#include "languages.hpp"
-
-// Class of object to save user options
+// Class for load/save settings to/from game
 class InitFile {
- public:
-    language language;        // Game language for all texts
-    unsigned musicVolume;     // Start volume of music
-    unsigned soundsVolume;    // Start volume of effects
-    unsigned drawFPS;         // Setted frames per seconds
-    std::string baseIP;       // Saved ip for better expirience
-    std::string basePort;     // Saved connection port for better expirience
-    std::string startConfig;  // Start field configuration
- public:
-    InitFile();   // Load all settings from init file
-    ~InitFile();  // Save all settings to init file
+private:
+    Music& music;
+    Sounds& sounds;
+    const std::string getText(const std::string line) const;
+    const unsigned getValue(const std::string line) const;
+
+public:
+    InitFile(Music& music, Sounds& sounds);
+    ~InitFile();
+    void loadSettings();
+    void saveSettings();
 };

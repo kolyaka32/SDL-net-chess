@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024-2025, Kazankov Nikolay 
+ * Copyright (C) 2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
@@ -145,7 +145,7 @@ void FiguresMoves::setStraight(const coord _x, const coord _y) {
 }
 
 // Set all cells from array for place, where you can move
-void FiguresMoves::setAround(const coord _x, const coord _y, const Sint8 _moves[][2]) {
+void FiguresMoves::setAround(coord _x, coord _y, const Sint8 _moves[][2]) {
     // Checking all cells in array
     for (Uint8 i=0; i < 8; ++i) {
         Sint8 x = _x + _moves[i][0];

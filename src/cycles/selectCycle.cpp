@@ -1,69 +1,86 @@
 /*
- * Copyright (C) 2024-2025, Kazankov Nikolay 
+ * Copyright (C) 2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
 #include "selectCycle.hpp"
 
-// Game variants
-#include "singlePlayer.hpp"
-#include "twoPlayer.hpp"
-#include "server.hpp"
-#include "client.hpp"
 
 // Starting basic template with main theme
-SelectCycle::SelectCycle() : BaseCycle(MUS_MENU_THEME) {}
+SelectCycle::SelectCycle(const App& _app)
+: BaseCycle(_app),
+titleText{_app.window, {"Chess", "Шахматы", "Schach", "Шахматы"}, 64, 0.5, 0.1, 3, WHITE},
+singleplayerButton{_app.window, {"Singleplayer", "Одиночная игра", "Einzelspiel", "Адзіночная гульня"}, 24, 0.5, 0.3, WHITE},
+twoPlayerButton{_app.window, {"Two players", "Два игрока", "Zwei Spieler", "Два гульца"}, 24, 0.5, 0.5, WHITE},
+serverButton{_app.window, {"Create server", "Создать сервер", "Server erstellen", "Стварыць сервер"}, 24, 0.5, 0.7, WHITE},
+connectButton{_app.window, {"Connect", "Присоединиться", "Beitreten", "Далучыцца"}, 24, 0.5, 0.9, WHITE} {
+    // Resetting figures color
+    for (unsigned i=IMG_GAME_WHITE_PAWN; i<=IMG_GAME_BLACK_KING; ++i) {
+        SDL_SetTextureColorMod(_app.window.getTexture(IMG_names(i)), 0, 0, 0);
+    }
+
+    // Starting menu song (if wasn't started)
+    if(!isRestarted()) {
+        _app.music.start(MUS_MENU);
+    }
+}
 
 // Getting selected button
-bool SelectCycle::getMouseInput() {
+void SelectCycle::getMouseInput(App& _app) {
     if (settings.click(mouseX, mouseY)) {
+        // Updating location
+        _app.window.updateTitle();
+        restart();
+        return;
+    } else if (!settings.isActive()) {
         if (singleplayerButton.in(mouseX, mouseY)) {
-            return runCycle<SinglePlayerGameCycle>();
+            _app.startNextCycle(CYCLE_SINGLEPLAYER);
+            stop();
         } else if (twoPlayerButton.in(mouseX, mouseY)) {
-            return runCycle<TwoPlayerGameCycle>();
-        } else if (serverButton.in(mouseX, mouseY)) {
-            return runCycle<ServerGameCycle>();
+            _app.startNextCycle(CYCLE_LOCALCOOP);
+            stop();
+        }/* else if (serverButton.in(mouseX, mouseY)) {
+            _app.startNextCycle(CYCLE_SERVER);
+            stop();
         } else if (connectButton.in(mouseX, mouseY)) {
-            return runCycle<ClientGameCycle>();
-        }
+            _app.startNextCycle(CYCLE_CLIENT);
+            stop();
+        }*/
     }
-    return false;
+    return;
 }
 
 // Example for getting keys input
-bool SelectCycle::getKeysInput(const SDL_Keysym& key) {
-    switch (key.sym) {
+void SelectCycle::getKeysInput(App& _app, SDL_Keycode _key) {
+    switch (_key) {
     case SDLK_ESCAPE:
         settings.activate();
-        return false;
-
-    default:
-        return false;
+        return;
     }
 }
 
-void SelectCycle::update() {
+void SelectCycle::update(App& _app) {
     background.update();
-    settings.update();
+    settings.update(_app);
 }
 
 // Drawing background with all buttons
-void SelectCycle::draw() const {
+void SelectCycle::draw(const App& _app) const {
     // Bliting background
-    background.blit();
+    background.blit(_app.window);
 
     // Bliting title
-    titleText.blit();
+    titleText.blit(_app.window);
 
     // Blitting start buttons
-    singleplayerButton.blit();
-    twoPlayerButton.blit();
-    serverButton.blit();
-    connectButton.blit();
+    singleplayerButton.blit(_app.window);
+    twoPlayerButton.blit(_app.window);
+    serverButton.blit(_app.window);
+    connectButton.blit(_app.window);
 
     // Settings menu
-    settings.blit();
+    settings.blit(_app.window);
 
     // Bliting all to screen
-    data.render();
+    _app.window.render();
 }

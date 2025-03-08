@@ -1,104 +1,108 @@
 /*
- * Copyright (C) 2024-2025, Kazankov Nikolay 
+ * Copyright (C) 2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
-#include <fstream>
-
 #include "initFile.hpp"
-#include "texts.hpp"
+#include <fstream>
+#include <string>
+
+// Files to setup
+#include "../languages.hpp"
+#include "../game/board.hpp"
 
 
-// Loading initialasing settings in game
-InitFile::InitFile() {
+InitFile::InitFile(Music& _music, Sounds& _sounds)
+: music(_music), sounds(_sounds) {
+    loadSettings();
+}
+
+InitFile::~InitFile() {
+    saveSettings();
+}
+
+const std::string InitFile::getText(const std::string _line) const {
+    return _line.substr(MAX(_line.rfind(' '), _line.rfind('='))+1);
+}
+
+const unsigned InitFile::getValue(const std::string _line) const {
+    return std::stoi(_line.substr(MAX(_line.rfind(' '), _line.rfind('='))+1));
+}
+
+void InitFile::loadSettings() {
     // Reading file
-    std::ifstream inSettings(SETTING_FILE);  // Open file to read
-    std::string line;  // Input string line
-
-    // Setting standart values for variables
-    language = LNG_ENGLISH;
-    musicVolume = MIX_MAX_VOLUME/2;
-    soundsVolume = MIX_MAX_VOLUME/2;
-    drawFPS = 60;
-    baseIP = "127.0.0.1";
-    basePort = "2000";
-    // Base chess start code
-    startConfig = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq";
+    std::ifstream inSettings(SETTING_FILE);
+    std::string currentLine;  // Input string line
 
     // Reading file until it end
-    while (std::getline(inSettings, line)) {
-        std::string first = line.substr(0, line.find('=')-1);
+    while (std::getline(inSettings, currentLine)) {
+        std::string parameter = currentLine.substr(0, MIN(currentLine.find(' '), currentLine.find('=')));
+
         // Switching between options
-        if ( first == "language" ) {
-            std::string lang = line.substr(line.rfind('=')+2);
-            if (lang == "russian") {
-                language = LNG_RUSSIAN;
-            } else if (lang == "english") {
-                language = LNG_ENGLISH;
+        if (parameter == "language") {
+            std::string lang = getText(currentLine);
+            if (lang == "english") {
+                currentLanguage = LNG_ENGLISH;
+            } else if (lang == "russian") {
+                currentLanguage = LNG_RUSSIAN;
             } else if (lang == "german") {
-                language = LNG_GERMAN;
+                currentLanguage = LNG_GERMAN;
             } else if (lang == "belarusian") {
-                language = LNG_BELARUSIAN;
+                currentLanguage = LNG_BELARUSIAN;
             }
-        } else if (first == "music") {
-            musicVolume = std::stoi(line.substr(line.rfind('=')+2));
-        } else if (first == "effects") {
-            soundsVolume = std::stoi(line.substr(line.rfind('=')+2));
-        } else if (first == "max FPS") {
-            drawFPS = std::stoi(line.substr(line.rfind('=')+2));
-        } else if (first == "start config") {
-            startConfig = line.substr(line.rfind('=')+2);
-        } else if (first == "IP") {
-            baseIP = line.substr(line.rfind('=')+2);
-        } else if (first == "port") {
-            basePort = line.substr(line.rfind('=')+2);
-        }
+        } else if (parameter == "music") {
+            music.setVolume(getValue(currentLine));
+        } else if (parameter == "sounds") {
+            sounds.setVolume(getValue(currentLine));
+        } else if (parameter == "start config") {
+            strcpy_s(boardConfig, 85, getText(currentLine).c_str());
+        }/* else if (parameter == "IP") {
+            baseIP = getText(currentLine);
+        } else if (parameter == "port") {
+            basePort = getText(currentLine);
+        }*/
     }
-    // Checking of minimal posible values
-    SET_MIN(drawFPS, 5);
 
     inSettings.close();  // Closing reading file
 }
 
-
-// Save all settings to init file
-InitFile::~InitFile() {
+void InitFile::saveSettings() {
     // Creating output file
-    FILE* outSettings = fopen(SETTING_FILE, "w");
+    std::ofstream outSettings(SETTING_FILE);
 
-    // Writing data to output
-    fprintf(outSettings, "# Language type (english/russian):\n");  // Extra comment
+    // Writing data with comments to file
+    outSettings << "# Settings of chess game:\n";
+
     // Writing language
-    switch (language) {
+    outSettings << "language = ";
+    switch (currentLanguage) {
     case LNG_ENGLISH:
-        fprintf(outSettings, "language = english\n");
+        outSettings << "english\n";
         break;
 
     case LNG_RUSSIAN:
-        fprintf(outSettings, "language = russian\n");
+        outSettings << "russian\n";
         break;
 
     case LNG_GERMAN:
-        fprintf(outSettings, "language = german\n");
+        outSettings << "german\n";
         break;
 
     case LNG_BELARUSIAN:
-        fprintf(outSettings, "language = belarusian\n");
+        outSettings << "belarusian\n";
         break;
     }
 
-    fprintf(outSettings, "\n# Technical part:\n");                       // Extra comment
-    fprintf(outSettings, "music = %u\n", musicVolume);                   // Writing music volume
-    fprintf(outSettings, "effects = %u\n", soundsVolume);                // Writing effects volume
-    fprintf(outSettings, "max FPS = %u\n", drawFPS);                     // Writing frames per seconds
+    // Writing music and sounds volumes
+    outSettings << "music = " << music.getVolume() << "\n";
+    outSettings << "sounds = " << sounds.getVolume() << "\n";
 
-    fprintf(outSettings, "\nGame configuration:\n");                      // Extra comment
     // Writing starting config (order of figures)
-    fprintf(outSettings, "start config = %s\n", startConfig.std::string::c_str());
+    outSettings << "\nGame configuration:\n";
+    outSettings << "start config = " << boardConfig << "\n";
 
-    fprintf(outSettings, "\n# Internet base parameters:\n");               // Extra comment
-    fprintf(outSettings, "IP = %s\n", baseIP.std::string::c_str());      // Base connect IP
-    fprintf(outSettings, "port = %s\n", basePort.std::string::c_str());  // Base connect port
-
-    fclose(outSettings);
+    // Writing internet connection data
+    /*outSettings << "\n# Internet base parameters:\n";
+    outSettings << "IP = ", baseIP << "\n";
+    outSettings << "port = ", basePort << "\n";*/
 }

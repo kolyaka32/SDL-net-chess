@@ -1,32 +1,26 @@
 /*
- * Copyright (C) 2024-2025, Kazankov Nikolay 
+ * Copyright (C) 2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
 #pragma once
 
-#include "../data/internet/internetServer.hpp"
+#include "baseCycle.hpp"
+#include <SDL3_net/SDL_net.h>
 
-// Game cycle for create server and play with connected person
-class ServerGameCycle : public InternetServerCycle {
+// Game cycle (for single player (special animation))
+class Server : public BaseCycle {
  private:
-   bool waitStart = true;    // Flag of waiting for game start
-   bool waitTurn = false;    // Flag of waiting for another player for turn
-   bool getData() override;  // Overloaded function of getting internet data
+    App& app;
 
-   // GUI objects
-   GUI::StaticText waitText{"Wait for connection\0Ожидайте подключения\0auf Verbindung warten\0дачакайцеся злучэння",
-      30, 0.5, 0.2, WHITE};
-   GUI::StaticText portText{"Your port: %u\0Ваш порт: %u\0Ihr Hafen: %u\0Ваш партвейн: %u",
-      30, 0.5, 0.4, WHITE};
-   GUI::TextButton cancelButton{"Cancel\0Отмена\0Stornieren\0Адмяняць",
-      24, 0.5, 0.9, WHITE};
+    SDLNet_DatagramSocket* server;
 
- protected:
-   bool getMouseInput() override;
-   void draw() const override;
+    // Main run functions
+    void getMouseInput(App& app) override;
+    void update(App& app) override;
+    void draw(const App& app) const override;
 
  public:
-   ServerGameCycle();
-   ~ServerGameCycle();
+    Server(App& app);
+    ~Server();
 };

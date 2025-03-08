@@ -1,26 +1,25 @@
 /*
- * Copyright (C) 2024-2025, Kazankov Nikolay 
+ * Copyright (C) 2025, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
 #include "baseCycle.hpp"
 
-// Base cycle class
-BaseCycle::BaseCycle(MUS_names _music) : music(_music) {
-    // Resetting values
-    selectedBox = 0;
 
-    // Starting playing need music
-    if (music) {
-        data.playMusic(music);
+// Base cycle class
+BaseCycle::BaseCycle(const App& _app)
+: exitButton{_app.window, 0.05, 0.05, IMG_GUI_QUIT_BUTTON},
+settings{_app} {
+    // Opening settings menu after restart
+    if (isRestarted()) {
+        settings.activate();
     }
 }
 
-void BaseCycle::update() {
-    settings.update();
+void BaseCycle::update(App& _app) {
+    settings.update(_app);
 }
 
-bool BaseCycle::getAnotherInput(const SDL_Event& event) {
-    settings.getAnotherInput(event);
-    return false;
+void BaseCycle::getAnotherInput(App& _app, const SDL_Event& event) {
+    settings.getAnotherInput(_app, event);
 }
