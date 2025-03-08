@@ -13,8 +13,7 @@ class Server : public BaseCycle {
  private:
     App& app;
 
-    SDLNet_Server* server;
-    SDLNet_StreamSocket *client_stream = nullptr;
+    SDLNet_DatagramSocket* server;
 
     // Main run functions
     void getMouseInput(App& app) override;

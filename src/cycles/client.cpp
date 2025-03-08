@@ -14,47 +14,31 @@ app(_app) {
     }
     SDLNet_Init();
 
-    
-    SDLNet_Address* current = SDLNet_ResolveHostname("www.libsdl.org");
+    SDLNet_Address* sendTo = SDLNet_ResolveHostname("255.255.255.255");
+    SDLNet_WaitUntilResolved(sendTo, -1);
+    SDL_Log("Client to send created: %u\n", sendTo);
 
-    SDLNet_WaitUntilResolved(current, 20);
+    //SDLNet_Address* sendFrom = SDLNet_ResolveHostname("127.0.0.1");
+    //SDLNet_WaitUntilResolved(sendFrom, -1);
 
-    SDLNet_StreamSocket* client = SDLNet_CreateClient(current, 80);
+    SDLNet_DatagramSocket* current = SDLNet_CreateDatagramSocket(0, 0);
 
+    SDL_Log("Client from send to: %u\n", current);
     SDL_Log(SDL_GetError());
-
-    // buffer data
-    char data[100];
-
-    SDLNet_ReadFromStreamSocket(client, data, 100);
-
-
-    //
-    printf(data);
-
-    SDLNet_DestroyStreamSocket(client);
-
-    SDLNet_UnrefAddress(current);
-
-
-    /*SDLNet_Address* current = SDLNet_ResolveHostname("26.46.13.88");
-    SDLNet_Address* newCurrent = SDLNet_RefAddress(current);
-    SDLNet_StreamSocket* client = SDLNet_CreateClient(newCurrent, 8000);
-
-
-    SDL_Log(SDL_GetError());
-
-    SDLNet_WaitUntilConnected(client, -1);
 
     char data[20] = "1234";
+    
+    SDLNet_SendDatagram(current, sendTo, 8000, data, 20);
 
-    SDLNet_WriteToStreamSocket(client, data, 20);
+    SDL_Log(SDL_GetError());
 
-    SDLNet_DestroyStreamSocket(client);
-    SDLNet_UnrefAddress(current);
+    SDLNet_DestroyDatagramSocket(current);
+    SDLNet_UnrefAddress(sendTo);
+    
+    SDL_Log("Client stopped\n");
 
     _app.startNextCycle(CYCLE_MENU);
-    stop();*/
+    stop();
 }
 
 Client::~Client() {

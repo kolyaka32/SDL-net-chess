@@ -16,12 +16,14 @@ app(_app) {
     SDLNet_Init();
 
     // Creating server
-    SDLNet_CreateServer(NULL, 8000);
+    server = SDLNet_CreateDatagramSocket(NULL, 8000);
+
+    SDL_Log("Server created: %u\n", server);
 }
 
 Server::~Server() {
     SDLNet_Quit();
-    SDLNet_DestroyServer(server);
+    SDLNet_DestroyDatagramSocket(server);
 }
 
 void Server::getMouseInput(App& _app) {
@@ -42,16 +44,20 @@ void Server::update(App& _app) {
     settings.update(_app);
 
 
-    if (client_stream == NULL) {
-        SDLNet_AcceptClient(server, &client_stream);
-    } else {
-        int buffer[40];
-        SDLNet_ReadFromStreamSocket(client_stream, buffer, 40);
-        SDL_Log("Error %s", SDL_GetError());
-        for (int i=0; i < 40; ++i) {
-            SDL_Log("%u ", buffer[i]);
+    SDLNet_Datagram* data;
+
+
+    if (!SDLNet_ReceiveDatagram(server, &data)) {
+        SDL_Log("something");
+    }
+
+    if (data) {
+        SDL_Log("Error %s\n", SDL_GetError());
+        for (int i=0; i < data->buflen; ++i) {
+            SDL_Log("%u ", data->buf[i]);
         }
         SDL_Log("\n");
+        SDLNet_DestroyDatagram(data);
     }
 }
 
