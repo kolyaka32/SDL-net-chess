@@ -22,11 +22,11 @@ InitFile::~InitFile() {
 }
 
 const std::string InitFile::getText(const std::string _line) const {
-    return _line.substr(MAX(_line.rfind(' '), _line.rfind('='))+1);
+    return _line.substr(_line.rfind('=')+2);
 }
 
 const unsigned InitFile::getValue(const std::string _line) const {
-    return std::stoi(_line.substr(MAX(_line.rfind(' '), _line.rfind('='))+1));
+    return std::stoi(_line.substr(_line.rfind('=')+2));
 }
 
 void InitFile::loadSettings() {
@@ -54,7 +54,7 @@ void InitFile::loadSettings() {
             music.setVolume(getValue(currentLine));
         } else if (parameter == "sounds") {
             sounds.setVolume(getValue(currentLine));
-        } else if (parameter == "start config") {
+        } else if (parameter == "startBoardConfig") {
             strcpy_s(boardConfig, 85, getText(currentLine).c_str());
         }/* else if (parameter == "IP") {
             baseIP = getText(currentLine);
@@ -99,7 +99,7 @@ void InitFile::saveSettings() {
 
     // Writing starting config (order of figures)
     outSettings << "\nGame configuration:\n";
-    outSettings << "start config = " << boardConfig << "\n";
+    outSettings << "startBoardConfig = " << boardConfig << "\n";
 
     // Writing internet connection data
     /*outSettings << "\n# Internet base parameters:\n";

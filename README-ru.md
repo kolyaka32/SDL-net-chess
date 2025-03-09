@@ -34,26 +34,38 @@
 * Белларусский (Беларускі) (работа в процессе)
 
 
+![Изображение меню](/screenshots/game-menu-ru.png?raw=true)
+
+
 ## Установка для собственного использования (windows)
 1. Установить компилятор для C++ (например [MSYS2](https://www.msys2.org/#installation));
 2. Установить [Make](https://sourceforge.net/projects/gnuwin32/files/make/3.81/make-3.81.exe/download);
 3. Установить [CMake](https://sourceforge.net/projects/cmake.mirror/);
-4. Установить и распоковать внешние библиотеки: ([SDL2](https://github.com/libsdl-org/SDL/releases), [SDL image](https://github.com/libsdl-org/SDL_image/releases), [SDL mixer](https://github.com/libsdl-org/SDL_mixer/releases), [SDL ttf](https://github.com/libsdl-org/SDL_ttf/releases), [SDL net](https://github.com/libsdl-org/SDL_net/releases));
-5. Установить и распоковать библиотеку для архивации - libzip (собирается самим пользователем), требует: 1. [zlib](https://www.zlib.net/), 2. bzip (идёт вместе с GNU), 3. [libzip itself](https://libzip.org/download/), 4. Build libzip using cmake to folder, 5. Run 'make', 'make install' (as administrator);
-6. (Опционально) Визуальная оболочка для редактирования кода [Visual Studio Code](https://code.visualstudio.com/download) (для более простого использования) (Рекомендуется с плагинами на c++ и cmake).
-
-Пункт 4 со всеми собранными библиотеками можеи быть найден в [релизы](https://github.com/kolyaka32/SDL-net-chess/releases) (Development-kit).
-
-
-## Установка для собственного использования (linux-like)
-1. Check availability of [make] and [cmake];
-2. 
-3. 
-4. External SDL libraries ([SDL2](https://github.com/libsdl-org/SDL/releases), [SDL image](https://github.com/libsdl-org/SDL_image/releases), [SDL mixer](https://github.com/libsdl-org/SDL_mixer/releases), [SDL ttf](https://github.com/libsdl-org/SDL_ttf/releases), [SDL net](https://github.com/libsdl-org/SDL_net/releases));
-5. External archieve library - libzip (build by you own), required: [libzip](https://libzip.org/download/);
-6. (Optional) Code editor [Visual Studio Code](https://code.visualstudio.com/download) (for better usage).
+4. Скачать и разархивировать библиотеки SDL (готовые):
+4.1. [SDL3](https://github.com/libsdl-org/SDL/releases);
+4.2. [SDL3-image](https://github.com/libsdl-org/SDL_image/releases);
+4.3. [SDL3-mixer](https://github.com/libsdl-org/SDL_mixer/releases);
+4.4. [SDL3-ttf](https://github.com/libsdl-org/SDL_ttf/releases);
+5. Дополнительная библиотека - libzip (компилируется самостоятельно), требуется:
+5.1. [zlib](https://www.zlib.net/);
+5.2. bzip (идёт вместе с GNU(с компилятор));
+5.3. [сама libzip](https://libzip.org/download/);
+5.4. Собрать libzip используя cmake в папку 'build/';
+5.5. Запустить 'make' и 'make install' в командной строке в папке 'build' (с правами администратора);
+6. (Опционально) Визуальная оболочка для редактирования кода [Visual Studio Code](https://code.visualstudio.com/download) (Рекомендуется для более простого использования с плагинами для c++ и cmake).
 
 
+## Установка для собственного использования (unux системы)
+1. Проверить наличие компиляторов [g++], [make] и [cmake];
+2. Проверить наличие [git];
+3. Установить (или собрать самому) следующие библиотеки:
+4. Внешние SDL библиотеки ([SDL3](https://github.com/libsdl-org/SDL/releases), [SDL3-image](https://github.com/libsdl-org/SDL_image/releases), [SDL3-mixer](https://github.com/libsdl-org/SDL_mixer/releases), [SDL3-ttf](https://github.com/libsdl-org/SDL_ttf/releases), [SDL3-net](https://github.com/libsdl-org/SDL_net/releases));
+5. Внешняя библиотека архивации (собирается самостоятельно): [libzip](https://libzip.org/download/);
+6. (Опционально) Визуальная оболочка для редактирования кода [Visual Studio Code](https://code.visualstudio.com/download) (Рекомендуется для более простого использования с плагинами для c++ и cmake).
+
+
+## Готовые исходники
+Исходные файлы со всеми собранными библиотеками могут быть найден в [релизы](https://github.com/kolyaka32/Astroshuter-on-SDL/releases) (Development-kit).
 
 
 ## Использованные внешние зависимости:

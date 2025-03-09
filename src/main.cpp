@@ -13,12 +13,6 @@ int main(int argv, char **args) {
     // Running selected app
     application.run();
 
-    // Reloading game if need
-    /*if (data.restart) {
-        data.restart = false;
-        return main(argv, args);
-    }*/
-
     // Successful end of program
     return 0;
 }

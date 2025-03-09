@@ -8,9 +8,6 @@
 // Configuration of board, for play
 char boardConfig[85] = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq";
 
-// First board clearing
-Board::Board() {}
-
 // Clearing field and setting
 void Board::reset() {
     // Resetting field parametrs
