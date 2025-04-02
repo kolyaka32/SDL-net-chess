@@ -3,8 +3,8 @@
  * <nik.kazankov.05@mail.ru>
  */
 
-//#include "../data/data.hpp"
 #include "baseGUI.hpp"
+#include "../data/macroses.hpp"
 
 using namespace GUI;
 

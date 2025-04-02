@@ -26,7 +26,7 @@ void App::run() {
                 cycle.run(*this);
             }
             break;
-        
+
         case CYCLE_SINGLEPLAYER:
             {
                 // Cycle with singplayer joke animation

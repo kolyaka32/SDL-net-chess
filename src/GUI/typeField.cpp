@@ -3,9 +3,10 @@
  * <nik.kazankov.05@mail.ru>
  */
 
+#include "baseGUI.hpp"
 #include <cstdlib>
 #include <algorithm>
-#include "baseGUI.hpp"
+#include "../data/macroses.hpp"
 
 using namespace GUI;
 

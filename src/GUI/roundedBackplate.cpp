@@ -4,6 +4,7 @@
  */
 
 #include "baseGUI.hpp"
+#include "../data/macroses.hpp"
 
 using namespace GUI;
 

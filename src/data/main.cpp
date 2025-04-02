@@ -3,7 +3,7 @@
  * <nik.kazankov.05@mail.ru>
  */
 
-#include "data/app.hpp"
+#include "app.hpp"
 
 // Global application data
 App application;
