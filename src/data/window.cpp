@@ -201,27 +201,6 @@ void Window::stopTextInput() const {
     SDL_StopTextInput(window);
 }
 
-void Window::updateTitle() const {
-    // Setting window title
-    switch (currentLanguage) {
-    case LNG_ENGLISH:
-        updateTitle("Chess on SDL");
-        break;
-
-    case LNG_RUSSIAN:
-        updateTitle("Шахматы на SDL");
-        break;
-
-    case LNG_GERMAN:
-        updateTitle("Schach на SDL");
-        break;
-
-    case LNG_BELARUSIAN:
-        updateTitle("Шахматы на SDL");
-        break;
-    }
-}
-
 void Window::updateTitle(const char* _name) const {
     SDL_SetWindowTitle(window, _name);
 }
