@@ -16,7 +16,7 @@ serverButton{_app.window, {"Create server", "Создать сервер", "Serv
 connectButton{_app.window, {"Connect", "Присоединиться", "Beitreten", "Далучыцца"}, 24, 0.5, 0.9, WHITE} {
     // Resetting figures color
     for (unsigned i=IMG_GAME_WHITE_PAWN; i<=IMG_GAME_BLACK_KING; ++i) {
-        SDL_SetTextureColorMod(_app.window.getTexture(IMG_names(i)), 0, 0, 0);
+        _app.window.setColorMode(IMG_names(i));
     }
 
     // Starting menu song (if wasn't started)

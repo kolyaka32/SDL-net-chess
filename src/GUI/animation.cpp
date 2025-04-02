@@ -10,23 +10,20 @@ using namespace GUI;
 
 #if ANI_count
 // GIF animation class
-GIFAnimation::GIFAnimation(Window& _target, SDL_Rect _rect, ANI_names _type) {
-    // Creating animation
-    type = _type;
-    rect = _rect;
-    frame = 0;
-    prevTick = 0;
-}
+GIFAnimation::GIFAnimation(Window& _target, SDL_Rect _rect, ANI_names _type)
+: dest(_dest), type(_type), frame(0), prevTick(0) {}
 
-GIFAnimation::~GIFAnimation() {
+void GIFAnimation::~GIFAnimation() {
     SDL_DestroyTexture(texture);
 }
 
-void GIFAnimation::update(Window& _target) {
-    if (getTime() > prevTick) {
-        frame = (frame + 1) % data.animations[type]->count;
-        texture = SDL_CreateTextureFromSurface(data.renderer, data.animations[type]->frames[frame]);
-        prevTick = getTime() + data.animations[type]->delays[frame] / 10;
+void GIFAnimation::blit(const Window& _target) {
+    if (SDL_GetTicks() > prevTick) {
+        static unsigned frame = (frame + 1) % Animations[type]->count;
+        _target.destroy(texture);
+        texture = _target.createTexture(Animations[type]->frames[frame], false);
+        prevTick = SDL_GetTicks() + Animations[type]->delays[frame] / 2;
     }
+    _target.draw(texture, dest);
 }
 #endif

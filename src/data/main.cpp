@@ -3,7 +3,7 @@
  * <nik.kazankov.05@mail.ru>
  */
 
-#include "data/app.hpp"
+#include "app.hpp"
 
 // Global application data
 App application;
@@ -12,12 +12,6 @@ App application;
 int main(int argv, char **args) {
     // Running selected app
     application.run();
-
-    // Reloading game if need
-    /*if (data.restart) {
-        data.restart = false;
-        return main(argv, args);
-    }*/
 
     // Successful end of program
     return 0;

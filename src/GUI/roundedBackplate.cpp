@@ -4,17 +4,18 @@
  */
 
 #include "baseGUI.hpp"
+#include "../data/macroses.hpp"
 
 using namespace GUI;
 
 // Class of backplates (smoothed rects)
 Backplate::Backplate(const Window& _target, float _centerX, float _centerY, float _width, float _height,
-    float _rad, float _bor, SDL_Color _frontColor, SDL_Color _backColor)
+    float _rad, float _bor, Color _frontColor, Color _backColor)
 : Backplate(_target, {SDL_roundf(SCREEN_WIDTH * (_centerX - _width/2)), SDL_roundf(SCREEN_HEIGHT * (_centerY - _height/2)),
     SDL_roundf(SCREEN_WIDTH * _width), SDL_roundf(SCREEN_HEIGHT * _height)}, _rad, _bor, _frontColor, _backColor) {}
 
 // Creating backplate depend from rect, where it should be
-Backplate::Backplate(const Window& _target, const SDL_FRect& _rect, float _rad, float _bor, SDL_Color _frontColor, SDL_Color _backColor) {
+Backplate::Backplate(const Window& _target, const SDL_FRect& _rect, float _rad, float _bor, Color _frontColor, Color _backColor) {
     // Creating new texture for drawing
     texture = _target.createTexture(_rect.w, _rect.h);
     rect = _rect;

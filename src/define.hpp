@@ -5,8 +5,9 @@
 
 #pragma once
 
-// System numbers
-#define WINDOWNAME "Chess on SDL"           // System game name
+// System name
+#define WINDOWNAME "Chess on SDL"
+
 // Game field parameters
 #define FIELD_WIDTH 8                       // Number of cells
 #define CELL_SIDE 64                        // Width and height of cell in pixels
@@ -33,20 +34,3 @@
 // Base file names
 #define SETTING_FILE "settings5.ini"        // File with all starting data (width, height...)
 #define DATA_FILE "data5.dat"               // File with all GFX
-
-// Global game colors
-#define BLACK {0, 0, 0, 255}
-#define WHITE {255, 255, 255, 255}
-#define RED {255, 0, 0, 255}
-#define GREEN {0, 255, 0, 255}
-#define BLUE {0, 0, 255, 255}
-#define GREY {175, 175, 175, 255}
-#define FIELD_LIGHT {255, 206, 158, 255}
-#define FIELD_DARK {206, 139, 71, 255}
-
-// Macroses
-#define MAX(a, b) (a > b ? a : b)
-#define MIN(a, b) (a < b ? a : b)
-#define SET_MIN(value, min) (value = value < min ? min : value)
-#define SET_MAX(value, max) (value = value > max ? max : value)
-#define sqr(value) ((value) * (value))

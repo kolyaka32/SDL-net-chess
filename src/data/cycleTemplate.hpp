@@ -14,12 +14,12 @@
 
 // Template for any cycles
 class CycleTemplate {
-private:
+ private:
     bool running = true;           // Flag of current running state
     static bool restarted;         // Flag of cycle was restarted (by changing language)
     IdleTimer idleTimer{1000/60};  // Timer to idle in main cycle
 
-protected:
+ protected:
     // Data for cycle
     float mouseX, mouseY;   // Current position of mouse
     void updateMousePos();  // Update mouseX and mouseY

@@ -38,7 +38,7 @@ namespace GUI {
     class StaticText : public GUItemplate {
      public:
         StaticText(const Window& target, const std::string (&text)[LNG_count], float size, float X,
-            float Y, SDL_Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
+            float Y, Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
         ~StaticText();
     };
 
@@ -47,7 +47,7 @@ namespace GUI {
     class HighlightedStaticText : public GUItemplate {
      public:
         HighlightedStaticText(const Window& target, const std::string (&text)[LNG_count], float size, float X,
-            float Y, int frame, SDL_Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
+            float Y, int frame, Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
         ~HighlightedStaticText();
     };
 
@@ -58,14 +58,14 @@ namespace GUI {
         const std::string (&text)[LNG_count];  // Text to create from
         const float posX, posY;          // Relative positions on screen
         const ALIGNMENT_types aligment;  // Aligment type to improve displasment
-        const SDL_Color color;           // Base draw color
+        const Color color;           // Base draw color
         const float height;              // Height of text to draw
         char currentText[50];            // Current text for print
      protected:
         void updateTexture(const Window& _target);
      public:
         DynamicText(const Window& _target, const std::string (&text)[LNG_count], float size, float X,
-        float Y, SDL_Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
+        float Y, Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
         ~DynamicText();
         void updateLocation(const Window& _target);
         void updateLocationArgs(const Window& _target, ...);  // Change text, depend on another arguments
@@ -99,13 +99,15 @@ namespace GUI {
     #if ANI_count
     class GIFAnimation : public GUItemplate {
      private:
-            ANI_names type;
-            Uint32 frame;
-            timer prevTick;
+        const Uint8 type;
+        SDL_Texture* texture = nullptr;
+        Uint64 prevTick;
+        const SDL_FRect dest;
+
      public:
-            GIFAnimation(Window& _target, SDL_Rect destination, ANI_names type);
-            ~GIFAnimation();
-            void update(Window& _target);
+        GIFAnimation(Window& _target, SDL_Rect destination, ANI_names type);
+        ~GIFAnimation();
+        void draw(const Window& _target);
     };
     #endif
 
@@ -117,7 +119,7 @@ namespace GUI {
         const static int bufferSize = 16;  // Size of text buffer
         const int posX;                    // Relevant x position on screen
         const ALIGNMENT_types aligment;    // Aligment type for correct placed position
-        const SDL_Color textColor;         // Color of typing text
+        const Color textColor;             // Color of typing text
         const Window& target;              // Target, where draw to
         TTF_Font* font;                    // Font for type text
 
@@ -138,7 +140,7 @@ namespace GUI {
 
      public:
         TypeField(const Window& _target, float height, float posX, float posY, const char *startText,
-            ALIGNMENT_types newAligment = MIDLE_text, SDL_Color textColor = BLACK);
+            ALIGNMENT_types newAligment = MIDLE_text, Color textColor = BLACK);
         ~TypeField();                        // Clearing font and texture
         const char* getString() const;       // Function of getting typed string
         void writeString(const char* str);   // Function of writing any string to buffer at caret position
@@ -164,9 +166,9 @@ namespace GUI {
     class Backplate : public GUItemplate {
      public:
         Backplate(const Window& _target, float centerX, float centerY, float width, float height, float radius, float border,
-            SDL_Color frontColor = GREY, SDL_Color backColor = BLACK);
-        Backplate(const Window& _target, const SDL_FRect& rect, float radius, float border, SDL_Color frontColor = GREY,
-            SDL_Color backColor = BLACK);
+            Color frontColor = GREY, Color backColor = BLACK);
+        Backplate(const Window& _target, const SDL_FRect& rect, float radius, float border, Color frontColor = GREY,
+            Color backColor = BLACK);
         ~Backplate();
     };
 
@@ -176,7 +178,7 @@ namespace GUI {
         const Backplate backplate;
      public:
         TextButton(const Window& _target, const std::string (&text)[LNG_count], float size, float X, float Y,
-            SDL_Color color = WHITE, ALIGNMENT_types alignment = MIDLE_text);
+            Color color = WHITE, ALIGNMENT_types alignment = MIDLE_text);
         void blit(const Window& _target) const override;  // Drawing current button
     };
 

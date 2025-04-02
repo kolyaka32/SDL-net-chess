@@ -3,17 +3,14 @@
  * <nik.kazankov.05@mail.ru>
  */
 
-//#include <cstdlib>
-#include <cstdio>
-
-
 #include "baseGUI.hpp"
+#include <cstdio>
 
 using namespace GUI;
 
-// Class of static text
+
 DynamicText::DynamicText(const Window& _target, const std::string (&_text)[LNG_count], float _height,
-    float _X, float _Y, SDL_Color _color, ALIGNMENT_types _aligment)
+    float _X, float _Y, Color _color, ALIGNMENT_types _aligment)
 : posX(_X), posY(_Y), aligment(_aligment), color(_color), text(_text), height(_height) {
     updateLocation(_target);
 }
