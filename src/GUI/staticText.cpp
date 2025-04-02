@@ -9,7 +9,7 @@ using namespace GUI;
 
 // Class of static text
 StaticText::StaticText(const Window& _target, const std::string (&_text)[LNG_count], float _height,
-    float _X, float _Y, SDL_Color _color, ALIGNMENT_types _aligment) {
+    float _X, float _Y, Color _color, ALIGNMENT_types _aligment) {
     // Creating texture of text
     texture = _target.createTexture(FNT_MAIN, _height, _text[currentLanguage].c_str(), 0, _color);
 

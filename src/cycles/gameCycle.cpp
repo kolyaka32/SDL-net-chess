@@ -25,7 +25,7 @@ winText{_app.window, {"Win!", "Победа!", "Sieg!", "Перамога!"}, 30
 firstWinText{_app.window, {"Fist player win!", "Первый игрок выйграл!", "Der erste Spieler hat gewonnen!", "Першы гулец выйграў!"}, 30, 0.5, 0.4, WHITE},
 secondWinText{_app.window, {"Second player win!", "Второй игрок выйграл!", "Der zweite Spieler hat gewonnen!", "Другі гулец выйграў!"}, 30, 0.5, 0.4, WHITE},
 looseText{_app.window, {"You loose...", "Вы проиграли...", "Sie haben verloren...", "Вы прайгралі..."}, 30, 0.5, 0.4, WHITE},
-nobodyWinText{_app.window, {"Nobody win", "Ничья", "Unentschieden", "Чые"},30, 0.5, 0.4, WHITE} {
+nobodyWinText{_app.window, {"Nobody win", "Ничья", "Unentschieden", "Чые"}, 30, 0.5, 0.4, WHITE} {
     endState = END_NONE;
 
     if (!isRestarted()) {

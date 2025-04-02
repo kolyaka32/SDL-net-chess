@@ -44,7 +44,6 @@ enum FIG_names {
 
 // Extra names modifires
 #define FIG_RED_TYPE 0x10   // Code of making cell red (attackable)
-#define FIG_BLUE_TYPE 0x20  // Code of making cell blue (current)
 
 
 // Type of cell

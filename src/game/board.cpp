@@ -159,47 +159,47 @@ void Board::blit(const Window& _target) const {
     _target.setDrawColor(FIELD_DARK);
     for (coord y = 0; y < FIELD_WIDTH; ++y)
         for (coord x = y % 2; x < FIELD_WIDTH; x += 2) {
-            _target.drawRect({float(LEFT_LINE + x * CELL_SIDE), float(UPPER_LINE + y * CELL_SIDE), CELL_SIDE, CELL_SIDE});
+            _target.drawRect(getRect(x, y));
         }
 
     // Drawing each figure
     for (coord y = 0; y < FIELD_WIDTH; ++y)
         for (coord x = 0; x < FIELD_WIDTH; ++x) {
             if (figures[getPos(x, y)]) {
-                SDL_FRect rect = {float(LEFT_LINE + x * CELL_SIDE), float(UPPER_LINE + y * CELL_SIDE), CELL_SIDE, CELL_SIDE};
-                Uint8 textureIndex = IMG_GAME_WHITE_PAWN - 1 + figures[getPos(x, y)];
+                SDL_FRect rect = getRect(x, y);
 
                 // Checking, if figure current (blue)
-                if (figures[getPos(x, y)] > FIG_BLUE_TYPE) {
-                    // Changing cell index to normal
-                    textureIndex -= FIG_BLUE_TYPE;
+                if (figures[getPos(x, y)] > FIG_RED_TYPE) {
+                    // Getting textyre
+                    IMG_names textureIndex = IMG_names(IMG_GAME_WHITE_PAWN - 1 + figures[getPos(x, y)] - FIG_RED_TYPE);
 
-                    // Making it blue
-                    SDL_SetTextureColorMod(_target.getTexture(IMG_names(textureIndex)), 0, 0, 255);
-
-                    // Drawing
-                    _target.blit(IMG_names(textureIndex), rect);
-
-                    // Resetting cell color
-                    SDL_SetTextureColorMod(_target.getTexture(IMG_names(textureIndex)), 0, 0, 0);
-                } else if (figures[getPos(x, y)] > FIG_RED_TYPE) {
                     // Checking, if figure attackable (red)
-                    // Changing cell index to normal
-                    textureIndex -= FIG_RED_TYPE;
-
                     // Making it red
-                    SDL_SetTextureColorMod(_target.getTexture(IMG_names(textureIndex)), 255, 0, 0);
+                    _target.setColorMode(textureIndex, RED);
 
                     // Drawing
-                    _target.blit(IMG_names(textureIndex), rect);
+                    _target.blit(textureIndex, rect);
 
                     // Resetting cell color
-                    SDL_SetTextureColorMod(_target.getTexture(IMG_names(textureIndex)), 0, 0, 0);
+                    _target.setColorMode(textureIndex);
                 } else {
-                    _target.blit(IMG_names(textureIndex), rect);
+                    _target.blit(IMG_names(IMG_GAME_WHITE_PAWN - 1 + figures[getPos(x, y)]), rect);
                 }
             }
         }
+
+    // Draw selected figure
+    if (activeCell.type) {
+        IMG_names textureIndex = IMG_names(IMG_GAME_WHITE_PAWN - 1 + activeCell.type);
+        // Making it blue
+        _target.setColorMode(textureIndex, BLUE);
+
+        // Draw
+        _target.blit(textureIndex, getRect(activeCell.pos));
+
+        // Resetting color
+        _target.setColorMode(textureIndex);
+    }
 }
 
 // Clear all selected figures
@@ -345,12 +345,9 @@ void Board::pickFigure(const coord _x, const coord _y) {
         activeCell.type = FIG_NONE;
         return;
     }
-    // Changing color of current cell
-    figures[getPos(_x, _y)] += FIG_BLUE_TYPE;
     return;
 }
 
-//
 Uint8 Board::placeFigure(const Sounds& _sounds, coord _x, coord _y) {
     // Check on game end
     if (turn == TURN_WHITE) {
@@ -540,6 +537,14 @@ Uint8 Board::move(const Sounds& _sounds, coord _x1, coord _y1, coord _x2, coord 
         resetSelection();
         return END_NONE;
     }
+}
+
+SDL_FRect Board::getRect(position pos) const {
+    return {float(LEFT_LINE + (pos % FIELD_WIDTH) * CELL_SIDE), float(UPPER_LINE + (pos / FIELD_WIDTH) * CELL_SIDE), CELL_SIDE, CELL_SIDE};
+}
+
+SDL_FRect Board::getRect(coord _x, coord _y) const {
+    return {float(LEFT_LINE + _x * CELL_SIDE), float(UPPER_LINE + _y * CELL_SIDE), CELL_SIDE, CELL_SIDE};
 }
 
 // Return previous position, where figure was

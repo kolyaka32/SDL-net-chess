@@ -40,6 +40,8 @@ class Board : public FiguresMoves, public GUI::GUItemplate {
 
     void pickFigure(coord X, coord Y);  // Function for pick figure from field
     Uint8 placeFigure(const Sounds& sounds, coord X, coord Y);  // Function to try put figure back to field
+    SDL_FRect getRect(position pos) const;
+    SDL_FRect getRect(coord x, coord y) const;
 
  public:
     void reset();                                    // Resetting field for new game

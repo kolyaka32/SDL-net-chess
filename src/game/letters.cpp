@@ -39,12 +39,12 @@ LettersCollumn::LettersCollumn(const Window& _target, char _startLetter, Uint8 _
         SDL_BlitSurface(letterSurface, nullptr, tempSurface, &dest);
 
         // Freeing temp data
-        SDL_DestroySurface(letterSurface);
+        _target.destroy(letterSurface);
     }
     // Creating texture
-    texture = _target.createTexture(tempSurface);
+    texture = _target.createTextureAndFree(tempSurface);
 
-    SDL_DestroySurface(tempSurface);
+    _target.destroy(tempSurface);
 }
 
 // Savely clear all rest data

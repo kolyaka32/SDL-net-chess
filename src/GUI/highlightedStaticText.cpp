@@ -9,7 +9,7 @@ using namespace GUI;
 
 // Class of static text
 HighlightedStaticText::HighlightedStaticText(const Window& _target, const std::string (&_text)[LNG_count], float _height,
-    float _X, float _Y, int frame, SDL_Color _color, ALIGNMENT_types _aligment) {
+    float _X, float _Y, int frame, Color _color, ALIGNMENT_types _aligment) {
     // Creating texture of text
     TTF_Font* font = _target.getFont(FNT_MAIN);
     TTF_SetFontSize(font, _height);
@@ -24,11 +24,12 @@ HighlightedStaticText::HighlightedStaticText(const Window& _target, const std::s
 
     // Merging surfaces
     SDL_SetSurfaceBlendMode(frontSurface, SDL_BLENDMODE_NONE);
+    _target.setBlendMode(frontSurface);
     SDL_BlitSurface(frontSurface, nullptr, surface, nullptr);
     SDL_DestroySurface(frontSurface);
 
     // Creating texture from created surface
-    texture = _target.createTexture(surface);
+    texture = _target.createTextureAndFree(surface);
 
     // Updating rect height for correct button
     SDL_GetTextureSize(texture, &rect.w, &rect.h);

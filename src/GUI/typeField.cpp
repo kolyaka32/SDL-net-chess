@@ -11,7 +11,7 @@ using namespace GUI;
 
 
 // Type field class
-TypeField::TypeField(const Window& _target, float _height, float _x, float _y, const char* _text, ALIGNMENT_types _aligment, SDL_Color _color)
+TypeField::TypeField(const Window& _target, float _height, float _x, float _y, const char* _text, ALIGNMENT_types _aligment, Color _color)
 : target(_target), posX(SCREEN_WIDTH*_x), aligment(_aligment), textColor(_color), font(_target.createFontCopy(FNT_MAIN, _height)) {
     // Setting rects
     rect = {0, SCREEN_HEIGHT*_y-_height/2-1, 0, 0};
@@ -41,7 +41,6 @@ void TypeField::updateTexture() {
     // Clearing previous
     if (texture) {
         SDL_DestroyTexture(texture);
-        texture = nullptr;
     }
 
     // Checking, if string exsist
@@ -72,13 +71,13 @@ void TypeField::updateTexture() {
             // Blitting inverse suface on main
             inverseRect.w = inverseSurface->w;
             inverseRect.h = inverseSurface->h;
-            
+
             // Filling area with black color
             SDL_BlitSurface(inverseSurface, NULL, mainSurface, &inverseRect);
             SDL_DestroySurface(inverseSurface);
         }
         // Updating texture
-        texture = target.createTexture(mainSurface);
+        texture = target.createTextureAndFree(mainSurface);
         SDL_DestroySurface(mainSurface);
 
         // Resetting place of text with saving aligment

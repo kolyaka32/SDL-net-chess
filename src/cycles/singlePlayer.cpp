@@ -30,7 +30,7 @@ SinglePlayerGameCycle::~SinglePlayerGameCycle() {
 
     // Resetting color for figures
     for (unsigned i = IMG_GAME_WHITE_PAWN; i <= IMG_GAME_BLACK_KING; ++i) {
-        SDL_SetTextureColorMod(app.window.getTexture(IMG_names(i)), 0, 0, 0);
+        app.window.setColorMode(IMG_names(i));
     }
 }
 
@@ -137,7 +137,7 @@ void SinglePlayerGameCycle::draw(const App& _app) const {
 
                 Uint16 caret = (x + y * width) * 4;
 
-                SDL_SetTextureColorMod(curTexture, frameData[caret+2], frameData[caret+1], frameData[caret]);
+                _app.window.setColorMode(curTexture, {frameData[caret+2], frameData[caret+1], frameData[caret]});
 
                 _app.window.blit(curTexture, dest);
             }
