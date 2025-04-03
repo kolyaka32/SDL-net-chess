@@ -20,8 +20,8 @@ void MovingBackground::blit(const Window& _target) const {
 
     // Drawing dark parts of field
     _target.setDrawColor(FIELD_DARK);
-    for (Uint8 y = 0; y < SCREEN_HEIGHT / CELL_SIDE + 1; ++y) {
-        for (Uint8 x = 0; x < SCREEN_WIDTH / CELL_SIDE + 2; ++x) {
+    for (Uint8 y = 0; y < WINDOW_HEIGHT / CELL_SIDE + 1; ++y) {
+        for (Uint8 x = 0; x < WINDOW_WIDTH / CELL_SIDE + 2; ++x) {
             // Drawing dark rects on odd cells
             SDL_FRect rect = {float((x-1)*CELL_SIDE + offset/2.0), float((y-1) * CELL_SIDE + offset/2), CELL_SIDE, CELL_SIDE};
             if ((x + y) % 2) {

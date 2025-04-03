@@ -15,8 +15,8 @@ StaticText::StaticText(const Window& _target, const std::string (&_text)[LNG_cou
 
     // Updating rect height for correct button
     SDL_GetTextureSize(texture, &rect.w, &rect.h);
-    rect.x = SDL_roundf(SCREEN_WIDTH * _X - (rect.w * _aligment / 2));
-    rect.y = SDL_roundf(SCREEN_HEIGHT * _Y - rect.h / 2);
+    rect.x = SDL_roundf(WINDOW_WIDTH * _X - (rect.w * _aligment / 2));
+    rect.y = SDL_roundf(WINDOW_HEIGHT * _Y - rect.h / 2);
 }
 
 StaticText::~StaticText() {

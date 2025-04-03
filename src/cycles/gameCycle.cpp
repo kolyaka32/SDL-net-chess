@@ -33,31 +33,7 @@ nobodyWinText{_app.window, {"Nobody win", "Ничья", "Unentschieden", "Чые
     }
 }
 
-
-// Example for getting keys input
-void GameCycle::getKeysInput(App& _app, SDL_Keycode key) {
-    // Searching for key press
-    switch (key) {
-    case SDLK_ESCAPE:
-        // Clearing selection by escape
-        if (board.isFigureSelected()) {
-            board.resetSelection();
-        // Or go to setting menu
-        } else {
-            settings.activate();
-        }
-        return;
-
-    case SDLK_Q:
-        // Quiting to menu
-        _app.startNextCycle(CYCLE_MENU);
-        stop();
-        return;
-    }
-}
-
-// Getting mouse clicking
-void GameCycle::getMouseInput(App& _app) {
+void GameCycle::inputMouseDown(App& _app) {
     if (exitButton.in(mouseX, mouseY)) {
         _app.startNextCycle(CYCLE_MENU);
         stop();
@@ -91,6 +67,27 @@ void GameCycle::getMouseInput(App& _app) {
             stop();
             return;
         }
+    }
+}
+
+void GameCycle::inputKeys(App& _app, SDL_Keycode key) {
+    // Searching for key press
+    switch (key) {
+    case SDLK_ESCAPE:
+        // Clearing selection by escape
+        if (board.isFigureSelected()) {
+            board.resetSelection();
+        // Or go to setting menu
+        } else {
+            settings.activate();
+        }
+        return;
+
+    case SDLK_Q:
+        // Quiting to menu
+        _app.startNextCycle(CYCLE_MENU);
+        stop();
+        return;
     }
 }
 

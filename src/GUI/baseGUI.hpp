@@ -8,6 +8,7 @@
 #include <string>
 #include "../data/window.hpp"
 #include "../define.hpp"
+#include "../data/colors.hpp"
 #include "../languages.hpp"
 #include "../data/time.hpp"
 

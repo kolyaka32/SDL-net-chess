@@ -13,7 +13,7 @@ using namespace GUI;
 GIFAnimation::GIFAnimation(Window& _target, SDL_Rect _rect, ANI_names _type)
 : dest(_dest), type(_type), frame(0), prevTick(0) {}
 
-void GIFAnimation::~GIFAnimation() {
+GIFAnimation::~GIFAnimation() {
     SDL_DestroyTexture(texture);
 }
 
@@ -24,6 +24,5 @@ void GIFAnimation::blit(const Window& _target) {
         texture = _target.createTexture(Animations[type]->frames[frame], false);
         prevTick = SDL_GetTicks() + Animations[type]->delays[frame] / 2;
     }
-    _target.draw(texture, dest);
 }
 #endif

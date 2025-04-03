@@ -4,17 +4,16 @@
  */
 
 #include "baseGUI.hpp"
-#include "../data/macroses.hpp"
 
 using namespace GUI;
 
 // Class of backplates (smoothed rects)
 Backplate::Backplate(const Window& _target, float _centerX, float _centerY, float _width, float _height,
     float _rad, float _bor, Color _frontColor, Color _backColor)
-: Backplate(_target, {SDL_roundf(SCREEN_WIDTH * (_centerX - _width/2)), SDL_roundf(SCREEN_HEIGHT * (_centerY - _height/2)),
-    SDL_roundf(SCREEN_WIDTH * _width), SDL_roundf(SCREEN_HEIGHT * _height)}, _rad, _bor, _frontColor, _backColor) {}
+: Backplate(_target, {SDL_roundf(WINDOW_WIDTH * (_centerX - _width/2)), SDL_roundf(WINDOW_HEIGHT * (_centerY - _height/2)),
+    SDL_roundf(WINDOW_WIDTH * _width), SDL_roundf(WINDOW_HEIGHT * _height)}, _rad, _bor, _frontColor, _backColor) {}
 
-// Creating backplate depend from rect, where it should be
+
 Backplate::Backplate(const Window& _target, const SDL_FRect& _rect, float _rad, float _bor, Color _frontColor, Color _backColor) {
     // Creating new texture for drawing
     texture = _target.createTexture(_rect.w, _rect.h);
@@ -22,7 +21,7 @@ Backplate::Backplate(const Window& _target, const SDL_FRect& _rect, float _rad, 
 
     // Setting render target to this texture
     _target.setRenderTarget(texture);
-    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
+    _target.setBlendMode(texture, SDL_BLENDMODE_BLEND);
 
     // Drawing back part
     _target.setDrawColor(_backColor);

@@ -9,6 +9,7 @@
 #include "textures.hpp"
 #include "fonts.hpp"
 #include "animations.hpp"
+#include "macroses.hpp"
 
 
 // Class of window, where all happen

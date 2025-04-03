@@ -33,9 +33,11 @@ class CycleTemplate {
     virtual void draw(const App& app) const;  // Draw all need objects
 
     // Subproframs for get need input
-    virtual void getMouseInput(App& app);                            // Checking for any mouse actions
-    virtual void getKeysInput(App& app, SDL_Keycode key);            // Checking for any keys actions
-    virtual void getAnotherInput(App& app, const SDL_Event& event);  // Getting all rest user input
+    virtual void inputMouseDown(App& app);                  // Actioning for mouse button pressing
+    virtual void inputMouseUp(App& app);                    // Actioning for mouse button unpressing
+    virtual void inputKeys(App& app, SDL_Keycode key);      // Actioning for any keys pressing
+    virtual void inputMouseWheel(App& app, float _wheelY);  // Actioning for scrolling wheel
+    virtual void inputText(App& app, const char* text);     // Actioning for typing text
 
 public:
     CycleTemplate();

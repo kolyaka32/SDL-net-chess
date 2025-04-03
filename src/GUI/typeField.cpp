@@ -6,17 +6,16 @@
 #include "baseGUI.hpp"
 #include <cstdlib>
 #include <algorithm>
-#include "../data/macroses.hpp"
 
 using namespace GUI;
 
 
 // Type field class
 TypeField::TypeField(const Window& _target, float _height, float _x, float _y, const char* _text, ALIGNMENT_types _aligment, Color _color)
-: target(_target), posX(SCREEN_WIDTH*_x), aligment(_aligment), textColor(_color), font(_target.createFontCopy(FNT_MAIN, _height)) {
+: target(_target), posX(WINDOW_WIDTH*_x), aligment(_aligment), textColor(_color), font(_target.createFontCopy(FNT_MAIN, _height)) {
     // Setting rects
-    rect = {0, SCREEN_HEIGHT*_y-_height/2-1, 0, 0};
-    caretRect = {0, SCREEN_HEIGHT*_y-_height/2-1, 2, _height*1.3f};
+    rect = {0, WINDOW_HEIGHT*_y-_height/2-1, 0, 0};
+    caretRect = {0, WINDOW_HEIGHT*_y-_height/2-1, 2, _height*1.3f};
 
     // Copying text to caret
     length = strlen(_text);

@@ -14,7 +14,7 @@
 
 
 Window::Window(const DataLoader& _loader)
- : window(SDL_CreateWindow(WINDOWNAME, SCREEN_WIDTH, SCREEN_HEIGHT, 0)),
+ : window(SDL_CreateWindow(WINDOW_NAME, WINDOW_WIDTH, WINDOW_HEIGHT, 0)),
 renderer(SDL_CreateRenderer(window, NULL)),
 textures{_loader, renderer, IMG_count, texturesFilesNames},
 fonts{_loader, FNT_count, fontsFilesNames},

@@ -16,7 +16,7 @@ class Server : public BaseCycle {
     SDLNet_DatagramSocket* server;
 
     // Main run functions
-    void getMouseInput(App& app) override;
+    void inputMouseDown(App& app) override;
     void update(App& app) override;
     void draw(const App& app) const override;
 

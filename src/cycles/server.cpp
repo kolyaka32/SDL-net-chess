@@ -26,7 +26,7 @@ Server::~Server() {
     SDLNet_DestroyDatagramSocket(server);
 }
 
-void Server::getMouseInput(App& _app) {
+void Server::inputMouseDown(App& _app) {
     // Checking on exit
     if (exitButton.in(mouseX, mouseY)) {
         _app.startNextCycle(CYCLE_MENU);

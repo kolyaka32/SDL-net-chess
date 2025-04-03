@@ -45,7 +45,7 @@ Client::~Client() {
     SDLNet_Quit();
 }
 
-void Client::getMouseInput(App& _app) {
+void Client::inputMouseDown(App& _app) {
     // Checking on exit
     if (exitButton.in(mouseX, mouseY)) {
         _app.startNextCycle(CYCLE_MENU);

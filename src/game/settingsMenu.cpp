@@ -21,7 +21,8 @@ soundText{_app.window, {"Sounds", "Звуки", "Geräusche", "Гук"}, 30, 0.5
 soundSlider{_app.window, 0.5, 0.78, _app.sounds.getVolume()},
 exitButton{_app.window, {"Exit", "Выход", "Ausfahrt", "Выхад"}, 24, 0.5, 0.85, WHITE} {}
 
-bool SettingsMenu::click(int mouseX, int mouseY) {
+
+bool SettingsMenu::click(float mouseX, float mouseY) {
     // Check, if click on setting butoon
     if (settingButton.in(mouseX, mouseY)) {
         active ^= true;  // Changing state
@@ -60,29 +61,21 @@ bool SettingsMenu::click(int mouseX, int mouseY) {
     return false;
 }
 
-// Getting special input (with mousewheel and escape button)
-void SettingsMenu::getAnotherInput(App& _app, const SDL_Event& _event) {
+
+void SettingsMenu::unClick() {
     if (active) {
-        // Position of mouse
-        float mouseX, mouseY;
-
-        switch (_event.type) {
         // Resetting selected box
-        case SDL_EVENT_MOUSE_BUTTON_UP:
-            holdingSlider = 0;
-            return;
+        holdingSlider = 0;
+    }
+}
 
-        case SDL_EVENT_MOUSE_WHEEL:
-            // Getting new mouse position on screen
-            SDL_GetMouseState(&mouseX, &mouseY);
-
-            // Checking scroll on sliders
-            if (musicSlider.in(mouseX, mouseY)) {
-                _app.music.setVolume(musicSlider.scroll(_event.wheel.y));
-            } else if (soundSlider.in(mouseX, mouseY)) {
-                _app.sounds.setVolume(soundSlider.scroll(_event.wheel.y));
-            }
-            return;
+void SettingsMenu::scroll(App& _app, float mouseX, float mouseY, float _wheelY) {
+    if (active) {
+        // Checking scroll on sliders
+        if (musicSlider.in(mouseX, mouseY)) {
+            _app.music.setVolume(musicSlider.scroll(_wheelY));
+        } else if (soundSlider.in(mouseX, mouseY)) {
+            _app.sounds.setVolume(soundSlider.scroll(_wheelY));
         }
     }
 }
@@ -140,7 +133,8 @@ void SettingsMenu::blit(const Window& _target) const {
 }
 
 void SettingsMenu::activate() {
-    active ^= true;  // Changing state
+    // Changing state to opposite
+    active ^= true;
 }
 
 bool SettingsMenu::isActive() {
