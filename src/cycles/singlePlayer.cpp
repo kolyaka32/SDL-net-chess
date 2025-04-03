@@ -34,7 +34,7 @@ SinglePlayerGameCycle::~SinglePlayerGameCycle() {
     }
 }
 
-void SinglePlayerGameCycle::getMouseInput(App& _app) {
+void SinglePlayerGameCycle::inputMouseDown(App& _app) {
     // Checking on exit
     if (exitButton.in(mouseX, mouseY)) {
         _app.startNextCycle(CYCLE_MENU);

@@ -53,21 +53,29 @@ void CycleTemplate::getInput(App& _app) {
 
         // Getting mouse input
         case SDL_EVENT_MOUSE_BUTTON_DOWN:
-            // Updating mouse position
             updateMousePos();
-
-            // Getting mouse press
-            getMouseInput(_app);
+            inputMouseDown(_app);
             break;
 
-        // Getting mouse presses
+        case SDL_EVENT_MOUSE_BUTTON_UP:
+            updateMousePos();
+            inputMouseUp(_app);
+            break;
+
+        case SDL_EVENT_MOUSE_WHEEL:
+            updateMousePos();
+            inputMouseWheel(_app, event.wheel.y);
+            break;
+
+        // Getting keys presses
         case SDL_EVENT_KEY_DOWN:
-            getKeysInput(_app, event.key.key);
+            inputKeys(_app, event.key.key);
             break;
 
-        default:
-            // Getting another user input (if need)
-            getAnotherInput(_app, event);
+        // Text inputing
+        case SDL_EVENT_TEXT_INPUT:
+            inputText(_app, event.text.text);
+            break;
         }
     }
 }
@@ -78,15 +86,19 @@ void CycleTemplate::draw(const App& app) const {}
 // Getting special update (if need)
 void CycleTemplate::update(App& app) {}
 
+
+// Getting input
 // Example for getting mouse input
-void CycleTemplate::getMouseInput(App& app) {
+void CycleTemplate::inputMouseDown(App& app) {
     /*if (startOptions[0].in(mouseX, mouseY)) {
         return;
     }*/
 }
 
+void CycleTemplate::inputMouseUp(App& app) {}
+
 // Example for getting keys input
-void CycleTemplate::getKeysInput(App& app, SDL_Keycode _key) {
+void CycleTemplate::inputKeys(App& app, SDL_Keycode _key) {
     switch (_key) {
     case SDLK_ESCAPE:
         // Stopping ruuning by escape
@@ -95,19 +107,19 @@ void CycleTemplate::getKeysInput(App& app, SDL_Keycode _key) {
     }
 }
 
-// Example function for get user input
-void CycleTemplate::getAnotherInput(App& app, const SDL_Event& event) {
-    switch (event.type) {
-    /*case SDL_MOUSEWHEEL:
-        // Mouse position on screen
-        SDL_GetMouseState(&mouseX, &mouseY);  // Getting mouse position
-
-        // Checking scroll on sliders
-        //if (MusicSlider.scroll(event.wheel.y, mouseX, mouseY));
-        //else if (SoundSlider.scroll(event.wheel.y, mouseX, mouseY));
-        break;*/
-    }
+// Example for getting mouse wheel input
+void CycleTemplate::inputMouseWheel(App& app, float _wheelY) {
+    // if (MusicSlider.scroll(event.wheel.y, mouseX, mouseY));
+    // else if (SoundSlider.scroll(event.wheel.y, mouseX, mouseY));
 }
+
+// Example for getting text input
+void CycleTemplate::inputText(App& app, const char* text) {
+    // typeBox.writeString(event.text.text);
+    // press = false;
+}
+
+
 
 // Function for start need cycle
 void CycleTemplate::run(App& _app) {

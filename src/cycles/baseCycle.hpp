@@ -17,5 +17,6 @@ class BaseCycle : public CycleTemplate {
  public:
     BaseCycle(const App& app);
     void update(App& app) override;
-    void getAnotherInput(App& app, const SDL_Event& event) override;
+    void inputMouseUp(App& app) override;
+    void inputMouseWheel(App& app, float _wheelY) override;
 };

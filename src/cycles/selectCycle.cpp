@@ -26,7 +26,7 @@ connectButton{_app.window, {"Connect", "Присоединиться", "Beitrete
 }
 
 // Getting selected button
-void SelectCycle::getMouseInput(App& _app) {
+void SelectCycle::inputMouseDown(App& _app) {
     if (settings.click(mouseX, mouseY)) {
         // Updating location
         _app.window.updateTitle();
@@ -51,7 +51,7 @@ void SelectCycle::getMouseInput(App& _app) {
 }
 
 // Example for getting keys input
-void SelectCycle::getKeysInput(App& _app, SDL_Keycode _key) {
+void SelectCycle::inputKeys(App& _app, SDL_Keycode _key) {
     switch (_key) {
     case SDLK_ESCAPE:
         settings.activate();
