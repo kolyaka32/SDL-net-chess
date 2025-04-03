@@ -30,8 +30,8 @@ void DynamicText::updateTexture(const Window& _target) {
 
     // Moving draw rect to new place
     SDL_GetTextureSize(texture, &rect.w, &rect.h);
-    rect.x = SCREEN_WIDTH * posX - (rect.w * aligment / 2);
-    rect.y = SCREEN_HEIGHT * posY - rect.h / 2;
+    rect.x = WINDOW_WIDTH * posX - (rect.w * aligment / 2);
+    rect.y = WINDOW_HEIGHT * posY - rect.h / 2;
 }
 
 void DynamicText::updateLocationArgs(const Window& _target, ...) {

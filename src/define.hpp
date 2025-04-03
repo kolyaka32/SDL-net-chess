@@ -6,7 +6,7 @@
 #pragma once
 
 // System name
-#define WINDOWNAME "Chess on SDL"
+#define WINDOW_NAME "Chess on SDL"
 
 // Game field parameters
 #define FIELD_WIDTH 8                       // Number of cells
@@ -19,8 +19,8 @@
 #define LEFT_LINE LETTER_LINE               // Place for field letters
 #define RIGHT_LINE LETTER_LINE              // Place for field letters
 #define DOWN_LINE LETTER_LINE               // Place for field letters
-#define SCREEN_WIDTH (GAME_WIDTH + LEFT_LINE + RIGHT_LINE)  // Width of all screen
-#define SCREEN_HEIGHT (GAME_HEIGHT + UPPER_LINE + DOWN_LINE)  // Height of all screen
+#define WINDOW_WIDTH (GAME_WIDTH + LEFT_LINE + RIGHT_LINE)  // Width of all screen
+#define WINDOW_HEIGHT (GAME_HEIGHT + UPPER_LINE + DOWN_LINE)  // Height of all screen
 
 // Internet constants
 #define BASE_PORT 2000                      // Base port to create/connect

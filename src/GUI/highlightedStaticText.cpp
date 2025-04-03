@@ -33,8 +33,8 @@ HighlightedStaticText::HighlightedStaticText(const Window& _target, const std::s
 
     // Updating rect height for correct button
     SDL_GetTextureSize(texture, &rect.w, &rect.h);
-    rect.x = SDL_roundf(SCREEN_WIDTH * _X - (rect.w * _aligment / 2));
-    rect.y = SDL_roundf(SCREEN_HEIGHT * _Y - rect.h / 2);
+    rect.x = SDL_roundf(WINDOW_WIDTH * _X - (rect.w * _aligment / 2));
+    rect.y = SDL_roundf(WINDOW_HEIGHT * _Y - rect.h / 2);
 }
 
 HighlightedStaticText::~HighlightedStaticText() {

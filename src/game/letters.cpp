@@ -65,11 +65,11 @@ void SurroundingLetters::blit(const Window& _target) const {
     // Left collumn
     _target.blit(numberCollumn.texture, {0, UPPER_LINE - LETTER_LINE/2 + CELL_SIDE/2, LETTER_LINE, GAME_HEIGHT});
     // Right column
-    _target.blit(numberCollumn.texture, {SCREEN_WIDTH-RIGHT_LINE, UPPER_LINE - LETTER_LINE/2 + CELL_SIDE/2, LETTER_LINE, GAME_HEIGHT});
+    _target.blit(numberCollumn.texture, {WINDOW_WIDTH - RIGHT_LINE, UPPER_LINE - LETTER_LINE/2 + CELL_SIDE/2, LETTER_LINE, GAME_HEIGHT});
 
     // Drawing letters
     // Upper collumn
     _target.blit(letterCollumn.texture, {LEFT_LINE/2 + CELL_SIDE/2, UPPER_LINE - LETTER_LINE, GAME_WIDTH, LETTER_LINE});
     // Bottom column
-    _target.blit(letterCollumn.texture, {LEFT_LINE/2 + CELL_SIDE/2, SCREEN_HEIGHT - LETTER_LINE, GAME_WIDTH, LETTER_LINE});
+    _target.blit(letterCollumn.texture, {LEFT_LINE/2 + CELL_SIDE/2, WINDOW_HEIGHT - LETTER_LINE, GAME_WIDTH, LETTER_LINE});
 }
