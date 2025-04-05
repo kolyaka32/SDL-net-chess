@@ -4,21 +4,17 @@
  */
 
 #include "cycleTemplate.hpp"
+#include <SDL3/SDL_events.h>
 
 
 // Static class members
 bool CycleTemplate::restarted = false;
 
 // Reset basic cycle template variables
-CycleTemplate::CycleTemplate()
-: mouseX(0), mouseY(0) {
+CycleTemplate::CycleTemplate() {
     // Resetting input
     SDL_Event event;
-    while ( SDL_PollEvent(&event) != 0 ) {}
-}
-
-void CycleTemplate::updateMousePos() {
-    SDL_GetMouseState(&mouseX, &mouseY);
+    while (SDL_PollEvent(&event) != 0) {}
 }
 
 void CycleTemplate::stop() {
@@ -53,17 +49,17 @@ void CycleTemplate::getInput(App& _app) {
 
         // Getting mouse input
         case SDL_EVENT_MOUSE_BUTTON_DOWN:
-            updateMousePos();
+            mouse.updatePos();
             inputMouseDown(_app);
             break;
 
         case SDL_EVENT_MOUSE_BUTTON_UP:
-            updateMousePos();
+            mouse.updatePos();
             inputMouseUp(_app);
             break;
 
         case SDL_EVENT_MOUSE_WHEEL:
-            updateMousePos();
+            mouse.updatePos();
             inputMouseWheel(_app, event.wheel.y);
             break;
 
@@ -90,7 +86,7 @@ void CycleTemplate::update(App& app) {}
 // Getting input
 // Example for getting mouse input
 void CycleTemplate::inputMouseDown(App& app) {
-    /*if (startOptions[0].in(mouseX, mouseY)) {
+    /*if (startOptions[0].in(mouse)) {
         return;
     }*/
 }
@@ -109,8 +105,8 @@ void CycleTemplate::inputKeys(App& app, SDL_Keycode _key) {
 
 // Example for getting mouse wheel input
 void CycleTemplate::inputMouseWheel(App& app, float _wheelY) {
-    // if (MusicSlider.scroll(event.wheel.y, mouseX, mouseY));
-    // else if (SoundSlider.scroll(event.wheel.y, mouseX, mouseY));
+    // if (MusicSlider.scroll(event.wheel.y, mouse));
+    // else if (SoundSlider.scroll(event.wheel.y, mouse));
 }
 
 // Example for getting text input

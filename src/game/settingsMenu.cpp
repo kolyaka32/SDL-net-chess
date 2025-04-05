@@ -22,16 +22,16 @@ soundSlider{_app.window, 0.5, 0.78, _app.sounds.getVolume()},
 exitButton{_app.window, {"Exit", "Выход", "Ausfahrt", "Выхад"}, 24, 0.5, 0.85, WHITE} {}
 
 
-bool SettingsMenu::click(float mouseX, float mouseY) {
+bool SettingsMenu::click(const Mouse _mouse) {
     // Check, if click on setting butoon
-    if (settingButton.in(mouseX, mouseY)) {
+    if (settingButton.in(_mouse)) {
         active ^= true;  // Changing state
         return false;
     }
     // Clicking in menu
     if (active) {
         // Checking on exit
-        if (exitButton.in(mouseX, mouseY)) {
+        if (exitButton.in(_mouse)) {
             active = false;
             return false;
         }
@@ -39,13 +39,13 @@ bool SettingsMenu::click(float mouseX, float mouseY) {
         LNG_types newLanguage = currentLanguage;
 
         // Checking, if click on sliders or flag
-        if (musicSlider.in(mouseX, mouseY)) {
+        if (musicSlider.in(_mouse)) {
             holdingSlider = 1;
-        } else if (soundSlider.in(mouseX, mouseY)) {
+        } else if (soundSlider.in(_mouse)) {
             holdingSlider = 2;
         } else {
             for (unsigned i = LNG_ENGLISH; i <= LNG_BELARUSIAN; ++i) {
-                if (flags[i].in(mouseX, mouseY)) {
+                if (flags[i].in(_mouse)) {
                     newLanguage = LNG_types(i);
                 }
             }
@@ -69,12 +69,12 @@ void SettingsMenu::unClick() {
     }
 }
 
-void SettingsMenu::scroll(App& _app, float mouseX, float mouseY, float _wheelY) {
+void SettingsMenu::scroll(App& _app, const Mouse mouse, float _wheelY) {
     if (active) {
         // Checking scroll on sliders
-        if (musicSlider.in(mouseX, mouseY)) {
+        if (musicSlider.in(mouse)) {
             _app.music.setVolume(musicSlider.scroll(_wheelY));
-        } else if (soundSlider.in(mouseX, mouseY)) {
+        } else if (soundSlider.in(mouse)) {
             _app.sounds.setVolume(soundSlider.scroll(_wheelY));
         }
     }
@@ -82,21 +82,20 @@ void SettingsMenu::scroll(App& _app, float mouseX, float mouseY, float _wheelY) 
 
 void SettingsMenu::update(App& _app) {
     if (active) {
-        // Horizontal position of mouse
-        float mouseX;
+        // Creating and finding mouse position
+        Mouse mouse;
+        mouse.updatePos();
 
         // Updating pressing on sliders
         switch (holdingSlider) {
         case 1:
             // Updating music slider state
-            SDL_GetMouseState(&mouseX, nullptr);
-            _app.music.setVolume(musicSlider.setValue(mouseX));
+            _app.music.setVolume(musicSlider.setValue(mouse.getX()));
             break;
 
         case 2:
             // Updating sound slider state
-            SDL_GetMouseState(&mouseX, nullptr);
-            _app.sounds.setVolume(soundSlider.setValue(mouseX));
+            _app.sounds.setVolume(soundSlider.setValue(mouse.getX()));
 
             // Playing sound effect for understanding loud
             if (getTime() > nextSound) {

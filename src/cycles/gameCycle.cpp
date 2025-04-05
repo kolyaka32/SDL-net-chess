@@ -34,11 +34,11 @@ nobodyWinText{_app.window, {"Nobody win", "Ничья", "Unentschieden", "Чые
 }
 
 void GameCycle::inputMouseDown(App& _app) {
-    if (exitButton.in(mouseX, mouseY)) {
+    if (exitButton.in(mouse)) {
         _app.startNextCycle(CYCLE_MENU);
         stop();
         return;
-    } else if (settings.click(mouseX, mouseY)) {
+    } else if (settings.click(mouse)) {
         // Updating location
         _app.window.updateTitle();
         restart();
@@ -46,11 +46,11 @@ void GameCycle::inputMouseDown(App& _app) {
         // Checking, if game start
         if (endState <= END_TURN) {
             // Clicking on field
-            endState = board.click(_app.sounds, (mouseX - LEFT_LINE) / CELL_SIDE, (mouseY - UPPER_LINE) / CELL_SIDE);
+            endState = board.click(_app.sounds, mouse);
             return;
         }
         // Starting waiting menu
-        if (restartButton.in(mouseX, mouseY)) {
+        if (restartButton.in(mouse)) {
             // Restarting current game
             endState = END_NONE;
 
@@ -61,7 +61,7 @@ void GameCycle::inputMouseDown(App& _app) {
             _app.sounds.play(SND_RESET);
             return;
         }
-        if (menuButton.in(mouseX, mouseY)) {
+        if (menuButton.in(mouse)) {
             // Going to menu
             _app.startNextCycle(CYCLE_MENU);
             stop();

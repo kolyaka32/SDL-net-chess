@@ -27,22 +27,22 @@ connectButton{_app.window, {"Connect", "Присоединиться", "Beitrete
 
 // Getting selected button
 void SelectCycle::inputMouseDown(App& _app) {
-    if (settings.click(mouseX, mouseY)) {
+    if (settings.click(mouse)) {
         // Updating location
         _app.window.updateTitle();
         restart();
         return;
     } else if (!settings.isActive()) {
-        if (singleplayerButton.in(mouseX, mouseY)) {
+        if (singleplayerButton.in(mouse)) {
             _app.startNextCycle(CYCLE_SINGLEPLAYER);
             stop();
-        } else if (twoPlayerButton.in(mouseX, mouseY)) {
+        } else if (twoPlayerButton.in(mouse)) {
             _app.startNextCycle(CYCLE_LOCALCOOP);
             stop();
-        }/* else if (serverButton.in(mouseX, mouseY)) {
+        }/* else if (serverButton.in(mouse)) {
             _app.startNextCycle(CYCLE_SERVER);
             stop();
-        } else if (connectButton.in(mouseX, mouseY)) {
+        } else if (connectButton.in(mouse)) {
             _app.startNextCycle(CYCLE_CLIENT);
             stop();
         }*/

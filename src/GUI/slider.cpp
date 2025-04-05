@@ -41,7 +41,7 @@ unsigned Slider::setValue(float _mouseX) {
 
     buttonRect.x -= buttonRect.w / 2;
 
-    // Setting new linked value
+    // Returning new setted value
     return buttonRect.x - rect.x + buttonRect.w/2;
 }
 

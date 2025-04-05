@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include "data/preloaded/music.hpp"
+#include "data/preloaded/music.cpp"
 
 // Names of music tracks
 enum MUS_names{
@@ -16,6 +18,8 @@ enum MUS_names{
     MUS_count,
 };
 
+// Shortcut for music data class
+typedef MusicData<MUS_count> Music;
 
 // File names of the corresponding music
 extern const char* musicFilesNames[MUS_count];

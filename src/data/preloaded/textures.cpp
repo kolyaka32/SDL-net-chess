@@ -6,22 +6,23 @@
 #include "textures.hpp"
 
 
-Textures::Textures(const DataLoader& _loader, SDL_Renderer* _renderer, unsigned _count, const char* _filesNames[]) {
+template <unsigned count>
+TexturesData<count>::TexturesData(const DataLoader& _loader, SDL_Renderer* _renderer, const char* _filesNames[count]) {
     // Resetting texture masiive
     #if CHECK_CORRECTION
-    for (unsigned i=0; i < _count; ++i) {
+    for (unsigned i=0; i < count; ++i) {
         textures[i] = nullptr;
     }
     #endif
 
     // Loading all needed textures
-    for (unsigned i=0; i < _count; ++i) {
+    for (unsigned i=0; i < count; ++i) {
         loadTexture(_loader, _renderer, i, _filesNames[i]);
     }
 
     // Checking massive on loading correction
     #if CHECK_CORRECTION
-    for (unsigned i=0; i < IMG_count; ++i) {
+    for (unsigned i=0; i < count; ++i) {
         if (textures[i] == NULL) {
             throw DataLoadException("Texture at index: " + std::to_string(i));
         }
@@ -29,14 +30,16 @@ Textures::Textures(const DataLoader& _loader, SDL_Renderer* _renderer, unsigned 
     #endif
 }
 
-Textures::~Textures() {
+template <unsigned count>
+TexturesData<count>::~TexturesData() {
     // Closing all used textures
-    for (unsigned i=0; i < IMG_count; ++i) {
+    for (unsigned i=0; i < count; ++i) {
         SDL_DestroyTexture(textures[i]);
     }
 }
 
-void Textures::loadTexture(const DataLoader& _loader, SDL_Renderer* _renderer, unsigned _index, const char* _name) {
+template <unsigned count>
+void TexturesData<count>::loadTexture(const DataLoader& _loader, SDL_Renderer* _renderer, unsigned _index, const char* _name) {
     // Load data of current texture
     SDL_IOStream* iodata = _loader.load(_name);
 
@@ -63,6 +66,7 @@ void Textures::loadTexture(const DataLoader& _loader, SDL_Renderer* _renderer, u
     SDL_DestroySurface(surface);
 }
 
-SDL_Texture* Textures::operator[] (IMG_names index) const {
+template <unsigned count>
+SDL_Texture* TexturesData<count>::operator[] (unsigned index) const {
     return textures[index];
 }

@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include "data/preloaded/fonts.hpp"
+#include "data/preloaded/fonts.cpp"
 
 // Names of fonts
 enum FNT_names{
@@ -14,6 +16,8 @@ enum FNT_names{
     FNT_count,
 };
 
+// Shortcut for font data class
+typedef FontsData<FNT_count> Fonts;
 
 // File names of the corresponding fonts
 extern const char* fontsFilesNames[FNT_count];

@@ -28,7 +28,6 @@ void TypeBox::blit() const {
     }
 }
 
-bool TypeBox::in(float mouseX, float mouseY) const {
-    return ((mouseX > backRect.x && mouseX < backRect.x + backRect.w) &&
-        (mouseY > backRect.y && mouseY < backRect.y + backRect.h));
+bool TypeBox::in(const Mouse _mouse) const {
+    return _mouse.in(backRect);
 }

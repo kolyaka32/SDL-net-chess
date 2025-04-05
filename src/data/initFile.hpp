@@ -6,8 +6,9 @@
 #pragma once
 
 #include "../define.hpp"
-#include "music.hpp"
-#include "sounds.hpp"
+#include "../soundsNames.hpp"
+#include "../musicNames.hpp"
+
 
 // Class for load/save settings to/from game
 class InitFile {

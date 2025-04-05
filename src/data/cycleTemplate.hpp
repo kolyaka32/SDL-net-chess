@@ -6,10 +6,10 @@
 #pragma once
 
 #include <SDL3/SDL_Keyboard.h>
-#include <SDL3/SDL_events.h>
 #include "idleTimer.hpp"
 #include "app.hpp"
 #include "../GUI/baseGUI.hpp"
+#include "mouse.hpp"
 
 
 // Template for any cycles
@@ -21,8 +21,7 @@ class CycleTemplate {
 
  protected:
     // Data for cycle
-    float mouseX, mouseY;   // Current position of mouse
-    void updateMousePos();  // Update mouseX and mouseY
+    Mouse mouse;            // Position of mouse on screen
     void stop();            // Stopping current cycle
     void restart();         // Set that cycle to restart with rememering it
     bool isRestarted();     // Tell, if cycle was restarted

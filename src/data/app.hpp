@@ -6,17 +6,17 @@
 #pragma once
 
 #include "libraries.hpp"
-#include "music.hpp"
-#include "sounds.hpp"
+#include "preloaded/music.hpp"
+#include "preloaded/sounds.hpp"
 #include "initFile.hpp"
 #include "window.hpp"
 #include "../cycles/cycles.hpp"
 
 // Load needed loader, depend on teting
 #if ARCHIEVE_LOADING
-#include "loader/archieveLoader.hpp"
+#include "preloaded/loader/archieveLoader.hpp"
 #else
-#include "loader/straightLoader.hpp"
+#include "preloaded/loader/straightLoader.hpp"
 #endif
 
 

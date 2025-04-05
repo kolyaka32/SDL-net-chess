@@ -18,7 +18,6 @@ void GUItemplate::blit(const Window& _target) const {
 }
 
 // Template function for check, if mouse press in object
-bool GUItemplate::in(float mouseX, float mouseY) const {
-    return ((mouseX > rect.x && mouseX < rect.x + rect.w) &&
-        (mouseY > rect.y && mouseY < rect.y + rect.h));
+bool GUItemplate::in(const Mouse mouse) const {
+    return mouse.in(rect);
 }

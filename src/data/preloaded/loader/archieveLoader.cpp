@@ -4,7 +4,7 @@
  */
 
 #include "archieveLoader.hpp"
-#include "../../define.hpp"
+#include "../../../define.hpp"
 
 ArchieveLoader::ArchieveLoader() {
     // Open archive with need name

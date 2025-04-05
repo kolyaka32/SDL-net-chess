@@ -6,8 +6,8 @@
 #include "cycleTemplate.hpp"
 
 App::App()
-: music{loader},
-sounds{loader},
+: music{loader, musicFilesNames},
+sounds{loader, soundsFilesNames},
 initFile(music, sounds),
 window{loader} {}
 

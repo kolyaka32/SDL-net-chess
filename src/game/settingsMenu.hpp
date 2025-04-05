@@ -34,9 +34,9 @@ class SettingsMenu : public GUI::GUItemplate {
  public:
 	SettingsMenu(const App& app);
 	void blit(const Window& target) const override;
-	bool click(float mouseX, float mouseY);
+	bool click(const Mouse mouse);
 	void unClick();
-	void scroll(App& app, float mouseX, float mouseY, float wheelY);
+	void scroll(App& app, const Mouse mouse, float wheelY);
 	void update(App& app);
 	void activate();
 	bool isActive();
