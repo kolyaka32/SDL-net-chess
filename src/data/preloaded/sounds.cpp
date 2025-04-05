@@ -66,11 +66,11 @@ template <unsigned count>
 void SoundsData<count>::setVolume(unsigned _volume) {
     // Checking correction given volume
     #if CHECK_CORRECTION
-    if (_volume > MIX_MAX_VOLUME) {
+    if (_volume/2 > MIX_MAX_VOLUME) {
         throw "Wrong volume";
     }
     #endif
-    volume = _volume;
+    volume = _volume/2;
     for (int i=0; i < count; ++i) {
         Mix_VolumeChunk(sounds[i], volume);
     }
@@ -78,5 +78,5 @@ void SoundsData<count>::setVolume(unsigned _volume) {
 
 template <unsigned count>
 unsigned SoundsData<count>::getVolume() const {
-    return volume;
+    return volume*2;
 }
