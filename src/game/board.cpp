@@ -520,6 +520,11 @@ Uint8 Board::click(const Sounds& _sounds, coord _x, coord _y) {
     return END_NONE;
 }
 
+Uint8 Board::click(const Sounds& _sounds, const Mouse _mouse) {
+    return click(_sounds,
+        (_mouse.getX() - LEFT_LINE) / CELL_SIDE,
+        (_mouse.getY() - UPPER_LINE) / CELL_SIDE);
+}
 
 // Making all like in click, but at once and without help
 Uint8 Board::move(const Sounds& _sounds, coord _x1, coord _y1, coord _x2, coord _y2) {
@@ -540,11 +545,21 @@ Uint8 Board::move(const Sounds& _sounds, coord _x1, coord _y1, coord _x2, coord 
 }
 
 SDL_FRect Board::getRect(position pos) const {
-    return {float(LEFT_LINE + (pos % FIELD_WIDTH) * CELL_SIDE), float(UPPER_LINE + (pos / FIELD_WIDTH) * CELL_SIDE), CELL_SIDE, CELL_SIDE};
+    return {
+        float(LEFT_LINE + (pos % FIELD_WIDTH) * CELL_SIDE),
+        float(UPPER_LINE + (pos / FIELD_WIDTH) * CELL_SIDE),
+        CELL_SIDE,
+        CELL_SIDE
+    };
 }
 
 SDL_FRect Board::getRect(coord _x, coord _y) const {
-    return {float(LEFT_LINE + _x * CELL_SIDE), float(UPPER_LINE + _y * CELL_SIDE), CELL_SIDE, CELL_SIDE};
+    return {
+        float(LEFT_LINE + _x * CELL_SIDE),
+        float(UPPER_LINE + _y * CELL_SIDE),
+        CELL_SIDE,
+        CELL_SIDE
+    };
 }
 
 // Return previous position, where figure was

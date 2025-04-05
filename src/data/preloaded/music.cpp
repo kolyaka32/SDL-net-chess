@@ -6,24 +6,25 @@
 #include "music.hpp"
 
 
-Music::Music(const DataLoader& _loader){
+template <unsigned count>
+MusicData<count>::MusicData(const DataLoader& _loader, const char* _names[count]){
     // Resetting all tracks
     #if CHECK_CORRECTION
-    for (unsigned i=0; i < MUS_count; ++i) {
+    for (unsigned i=0; i < count; ++i) {
         music[i] = nullptr;
     }
     #endif
 
     // Loading all needed music tracks
-    for (unsigned i=0; i < MUS_count; ++i) {
-        loadMusic(_loader, i, musicFilesNames[i]);
+    for (unsigned i=0; i < count; ++i) {
+        loadMusic(_loader, i, _names[i]);
     }
 
     // Checking massive on loading correction
     #if CHECK_CORRECTION
-    for (unsigned i=0; i < MUS_count; ++i) {
+    for (unsigned i=0; i < count; ++i) {
         if (music[i] == NULL) {
-            throw DataLoadException("Music with name: " + std::string(musicFilesNames[i]));
+            throw DataLoadException("Music with name: " + std::string(_names[i]));
         }
     }
     #endif
@@ -32,14 +33,16 @@ Music::Music(const DataLoader& _loader){
     setVolume(MIX_MAX_VOLUME/2);
 }
 
-Music::~Music(){
+template <unsigned count>
+MusicData<count>::~MusicData(){
     // Closing all tracks
-    for (unsigned i=0; i < MUS_count; ++i) {
+    for (unsigned i=0; i < count; ++i) {
         Mix_FreeMusic(music[i]);
     }
 }
 
-void Music::loadMusic(const DataLoader& _loader, unsigned _index, const char* _name) {
+template <unsigned count>
+void MusicData<count>::loadMusic(const DataLoader& _loader, unsigned _index, const char* _name) {
     // Load data of current music track
     SDL_IOStream* iodata = _loader.load(_name);
 
@@ -54,22 +57,25 @@ void Music::loadMusic(const DataLoader& _loader, unsigned _index, const char* _n
     #endif
 }
 
-void Music::start(MUS_names _index) const {
+template <unsigned count>
+void MusicData<count>::start(unsigned _index) const {
     // Infinite playing selected music
     Mix_PlayMusic(music[_index], -1);
 }
 
-void Music::setVolume(unsigned _volume) {
+template <unsigned count>
+void MusicData<count>::setVolume(unsigned _volume) {
     // Checking correction given volume
     #if CHECK_CORRECTION
-    if (_volume > MIX_MAX_VOLUME) {
+    if (_volume/2 > MIX_MAX_VOLUME) {
         throw "Wrong volume";
     }
     #endif
-    volume = _volume;
+    volume = _volume/2;
     Mix_VolumeMusic(volume);
 }
 
-unsigned Music::getVolume() const {
-    return volume;
+template <unsigned count>
+unsigned MusicData<count>::getVolume() const {
+    return volume*2;
 }

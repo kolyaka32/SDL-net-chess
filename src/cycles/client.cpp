@@ -47,13 +47,13 @@ Client::~Client() {
 
 void Client::inputMouseDown(App& _app) {
     // Checking on exit
-    if (exitButton.in(mouseX, mouseY)) {
+    if (exitButton.in(mouse)) {
         _app.startNextCycle(CYCLE_MENU);
         stop();
         return;
     }
     // Clicking in settings menu
-    settings.click(mouseX, mouseY);
+    settings.click(mouse);
     return;
 }
 

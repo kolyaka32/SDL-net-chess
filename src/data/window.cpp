@@ -16,9 +16,9 @@
 Window::Window(const DataLoader& _loader)
  : window(SDL_CreateWindow(WINDOW_NAME, WINDOW_WIDTH, WINDOW_HEIGHT, 0)),
 renderer(SDL_CreateRenderer(window, NULL)),
-textures{_loader, renderer, IMG_count, texturesFilesNames},
-fonts{_loader, FNT_count, fontsFilesNames},
-animations{_loader, ANI_count, animationsFilesNames} {
+textures{_loader, renderer, texturesFilesNames},
+fonts{_loader, fontsFilesNames},
+animations{_loader, animationsFilesNames} {
     // Checking on correction of created objects
     #if CHECK_CORRECTION
     if (window == NULL) {

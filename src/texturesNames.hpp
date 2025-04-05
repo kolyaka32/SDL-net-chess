@@ -5,6 +5,9 @@
 
 #pragma once
 
+#include "data/preloaded/textures.hpp"
+#include "data/preloaded/textures.cpp"
+
 // Names of all images with related numbers
 enum IMG_names : unsigned {
     // Base part
@@ -44,6 +47,9 @@ enum IMG_names : unsigned {
     // Global counter of all textures
     IMG_count,
 };
+
+// Shortcut for sounds data class
+typedef TexturesData<IMG_count> Textures;
 
 
 // File names of the corresponding textures

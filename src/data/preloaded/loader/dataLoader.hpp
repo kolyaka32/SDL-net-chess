@@ -7,8 +7,9 @@
 
 #include <SDL3/SDL_iostream.h>
 
-#include "../../testing.hpp"
-#include "../exceptions.hpp"
+#include "../../../testing.hpp"
+#include "../../exceptions.hpp"
+
 
 // Interface for load file
 class DataLoader {

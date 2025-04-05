@@ -6,22 +6,23 @@
 #include "animations.hpp"
 
 
-Animations::Animations(const DataLoader& _loader, unsigned _count, const char* _filesNames[]) {
+template <unsigned count>
+AnimationsData<count>::AnimationsData(const DataLoader& _loader, const char* _filesNames[count]) {
     // Resetting texture masiive
     #if CHECK_CORRECTION
-    for (unsigned i=0; i < _count; ++i) {
+    for (unsigned i=0; i < count; ++i) {
         animations[i] = nullptr;
     }
     #endif
 
     // Loading all needed textures
-    for (unsigned i=0; i < _count; ++i) {
+    for (unsigned i=0; i < count; ++i) {
         load(_loader, i, _filesNames[i]);
     }
 
     // Checking massive on loading correction
     #if CHECK_CORRECTION
-    for (unsigned i=0; i < _count; ++i) {
+    for (unsigned i=0; i < count; ++i) {
         if (animations[i] == NULL) {
             throw DataLoadException("Animation: " + std::string(_filesNames[i]));
         }
@@ -29,14 +30,23 @@ Animations::Animations(const DataLoader& _loader, unsigned _count, const char* _
     #endif
 }
 
-Animations::~Animations() {
+template <unsigned count>
+AnimationsData<count>::~AnimationsData() {
     // Closing all used textures
-    for (unsigned i=0; i < ANI_count; ++i) {
+    for (unsigned i=0; i < count; ++i) {
         IMG_FreeAnimation(animations[i]);
     }
 }
 
-void Animations::load(const DataLoader& _loader, unsigned _index, const char* _name) {
+template <unsigned count>
+void AnimationsData<count>::load(const DataLoader& _loader, unsigned _index, const char* _name) {
+    // Checking correction of trying to load
+    #if CHECK_CORRECTION
+    if (_name == nullptr) {
+        throw DataLoadException(_name);
+    }
+    #endif
+
     // Load data
     SDL_IOStream* iodata = _loader.load(_name);
 
@@ -51,6 +61,7 @@ void Animations::load(const DataLoader& _loader, unsigned _index, const char* _n
     #endif
 }
 
-IMG_Animation* Animations::operator[] (ANI_names _index) const {
+template <unsigned count>
+IMG_Animation* AnimationsData<count>::operator[] (unsigned _index) const {
     return animations[_index];
 }

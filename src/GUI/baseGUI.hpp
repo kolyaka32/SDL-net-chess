@@ -31,7 +31,7 @@ namespace GUI {
      public:
         GUItemplate();
         virtual void blit(const Window& _target) const;
-        bool in(float mouseX, float mouseY) const;
+        bool in(const Mouse mouse) const;
     };
 
 
@@ -160,7 +160,7 @@ namespace GUI {
      public:
         TypeBox(const Window& _target, float textHeight, float posX, float posY, const char* startText = "");
         void blit() const;
-        bool in(float mouseX, float mouseY) const;
+        bool in(const Mouse mouse) const;
     };
 
     // Class of backplate for

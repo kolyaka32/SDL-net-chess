@@ -44,9 +44,10 @@ class Board : public FiguresMoves, public GUI::GUItemplate {
     SDL_FRect getRect(coord x, coord y) const;
 
  public:
-    void reset();                                    // Resetting field for new game
-    void blit(const Window& target) const override;  // Bliting field at screen
+    void reset();                                         // Resetting field for new game
+    void blit(const Window& target) const override;       // Bliting field at screen
     Uint8 click(const Sounds& sounds, coord X, coord Y);  // Clicking with mouse on need cell on field
+    Uint8 click(const Sounds& sounds, const Mouse mouse);       // Clicking with mouse at need position
 
     // Simplier mover on field (for internet opponent turn)
     Uint8 move(const Sounds& sounds, coord X1, coord Y1, coord X2, coord Y2);

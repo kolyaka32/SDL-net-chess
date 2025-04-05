@@ -25,5 +25,5 @@ void BaseCycle::inputMouseUp(App& _app) {
 }
 
 void BaseCycle::inputMouseWheel(App& _app, float _wheelY) {
-    settings.scroll(_app, mouseX, mouseY, _wheelY);
+    settings.scroll(_app, mouse, _wheelY);
 }
