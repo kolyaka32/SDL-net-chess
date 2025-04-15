@@ -9,6 +9,7 @@
 #include "idleTimer.hpp"
 #include "app.hpp"
 #include "../GUI/baseGUI.hpp"
+#include "../GUI/typeField.cpp"
 #include "mouse.hpp"
 
 

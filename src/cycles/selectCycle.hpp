@@ -6,7 +6,6 @@
 #pragma once
 
 #include "baseCycle.hpp"
-#include "../GUI/baseGUI.hpp"
 #include "../game/background.hpp"
 
 

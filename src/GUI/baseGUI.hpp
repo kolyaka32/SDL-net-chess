@@ -114,14 +114,16 @@ namespace GUI {
 
 
     // Class of field, where user can type text
-    class TypeField : public GUItemplate {
+    template <unsigned bufferSize = 16>
+    class TypeField {
      protected:
         // Class constants
-        const static int bufferSize = 16;  // Size of text buffer
         const int posX;                    // Relevant x position on screen
         const ALIGNMENT_types aligment;    // Aligment type for correct placed position
         const Color textColor;             // Color of typing text
         const Window& target;              // Target, where draw to
+        SDL_Texture* backTexture;          // Texture of backplate
+        const SDL_FRect backRect;          // Rect of backplate
         TTF_Font* font;                    // Font for type text
 
         // Variables
@@ -133,34 +135,29 @@ namespace GUI {
         timer needSwapCaret = 0;           // Time, when next need to change caret
         SDL_FRect caretRect;               // Place, where caret should be at screen
         char clipboardText[bufferSize];    // Copying string for clipboard use
+        bool pressed = false;              //
+        bool selected = false;             //
+        SDL_Texture* textTexture;          // Texture of text
+        SDL_FRect textRect;                // Rect of text
 
+        void select(float _mouseX);        // Select last letter to create writing symbol
         void updateTexture();              // Creat new texture and update it position
         void deleteSelected();             // Clearing selected part
         void writeClipboard();             // Write clipboard content after caret
         void copyToClipboard();            // Writing selected text to clipboard
 
      public:
-        TypeField(const Window& _target, float height, float posX, float posY, const char *startText,
+        TypeField(const Window& _target, float height, float posX, float posY, const char *startText = "",
             ALIGNMENT_types newAligment = MIDLE_text, Color textColor = BLACK);
         ~TypeField();                        // Clearing font and texture
-        const char* getString() const;       // Function of getting typed string
         void writeString(const char* str);   // Function of writing any string to buffer at caret position
-        void press(SDL_Keycode code);        // Function of processing special keycodes
-        void updateCaret();                  // Function of change caret symbol from '|' to ' ' and back
-        void updateSelection(float mouseX);  // Function of updating selecting text
-        void select(float mouseX);           // Function of setting caret for typing after
-        void removeSelect();                 // Function of removing caret after typing
-    };
-
-    // Class of type field with frame for better writing
-    class TypeBox : public TypeField {
-     private:
-        SDL_Texture* backTexture;  // Texture of backplate
-        const SDL_FRect backRect;  // Rect of backplate
-     public:
-        TypeBox(const Window& _target, float textHeight, float posX, float posY, const char* startText = "");
-        void blit() const;
-        bool in(const Mouse mouse) const;
+        void type(SDL_Keycode code);         // Function of processing special keycodes
+        void update(float mouseX);           // Function of change caret symbol from '|' to ' ' and back
+        void press(const Mouse mouse);       // Function of setting caret for typing after
+        void unpress();                      // Function of resetting pressing
+        const char* getString() const;       // Function of getting typed string
+        void blit() const;                   // Function for draw at screen
+        bool in(const Mouse mouse);          // Function of checking pressing
     };
 
     // Class of backplate for

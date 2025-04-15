@@ -10,6 +10,7 @@
 // Files to setup
 #include "languages.hpp"
 #include "game/board.hpp"
+#include "cycles/clientLobby.hpp"
 
 
 // Data, load from setting file
@@ -39,12 +40,12 @@ void InitFile::loadSettings() {
         } else if (parameter == "sounds") {
             sounds.setVolume(getValue(currentLine));
         } else if (parameter == "startBoardConfig") {
-            strcpy_s(boardConfig, 85, getText(currentLine).c_str());
-        }/* else if (parameter == "IP") {
-            baseIP = getText(currentLine);
+            strcpy_s(boardConfig, sizeof(boardConfig), getText(currentLine).c_str());
+        } else if (parameter == "IP") {
+            strcpy_s(baseIP, sizeof(baseIP), getText(currentLine).c_str());
         } else if (parameter == "port") {
-            basePort = getText(currentLine);
-        }*/
+            strcpy_s(basePort, sizeof(basePort), getText(currentLine).c_str());
+        }
     }
 
     inSettings.close();  // Closing reading file
@@ -87,7 +88,7 @@ void InitFile::saveSettings() {
     outSettings << "startBoardConfig = " << boardConfig << "\n";
 
     // Writing internet connection data
-    /*outSettings << "\n# Internet base parameters:\n";
-    outSettings << "IP = ", baseIP << "\n";
-    outSettings << "port = ", basePort << "\n";*/
+    outSettings << "\n# Internet base parameters:\n";
+    outSettings << "IP = " << baseIP << "\n";
+    outSettings << "port = " << basePort << "\n";
 }

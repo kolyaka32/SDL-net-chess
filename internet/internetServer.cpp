@@ -7,7 +7,6 @@
 
 #include "internetServer.hpp"
 
-
 // Creating server port
 InternetServerCycle::InternetServerCycle() {
     // Openning UDP port to recieve data from client

@@ -39,13 +39,13 @@ void SelectCycle::inputMouseDown(App& _app) {
         } else if (twoPlayerButton.in(mouse)) {
             _app.startNextCycle(CYCLE_LOCALCOOP);
             stop();
-        }/* else if (serverButton.in(mouse)) {
-            _app.startNextCycle(CYCLE_SERVER);
+        } else if (serverButton.in(mouse)) {
+            _app.startNextCycle(CYCLE_SERVER_LOBBY);
             stop();
         } else if (connectButton.in(mouse)) {
-            _app.startNextCycle(CYCLE_CLIENT);
+            _app.startNextCycle(CYCLE_CLIENT_LOBBY);
             stop();
-        }*/
+        }
     }
     return;
 }
