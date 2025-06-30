@@ -3,8 +3,8 @@
  * <nik.kazankov.05@mail.ru>
  */
 
-#include "cycleTemplate.hpp"
 #include <SDL3/SDL_events.h>
+#include "cycleTemplate.hpp"
 
 
 // Static class members

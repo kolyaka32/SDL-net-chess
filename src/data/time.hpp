@@ -7,6 +7,7 @@
 
 #include <SDL3/SDL_timer.h>
 
+
 // Macros for better getting time
 #define getTime SDL_GetTicks
 

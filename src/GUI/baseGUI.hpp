@@ -38,8 +38,8 @@ namespace GUI {
     // Static text on screen
     class StaticText : public GUItemplate {
      public:
-        StaticText(const Window& target, const std::string (&text)[LNG_count], float size, float X,
-            float Y, Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
+        StaticText(const Window& target, const std::string (&text)[LNG_count], float X,
+            float Y, float size, Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
         ~StaticText();
     };
 
@@ -47,8 +47,8 @@ namespace GUI {
     // Static text on screen
     class HighlightedStaticText : public GUItemplate {
      public:
-        HighlightedStaticText(const Window& target, const std::string (&text)[LNG_count], float size, float X,
-            float Y, int frame, Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
+        HighlightedStaticText(const Window& target, const std::string (&text)[LNG_count], float X,
+            float Y, int frameThickness, float size, Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
         ~HighlightedStaticText();
     };
 
@@ -57,19 +57,29 @@ namespace GUI {
     class DynamicText : public GUItemplate {
      private:
         const std::string (&text)[LNG_count];  // Text to create from
-        const float posX, posY;          // Relative positions on screen
-        const ALIGNMENT_types aligment;  // Aligment type to improve displasment
-        const Color color;           // Base draw color
-        const float height;              // Height of text to draw
-        char currentText[50];            // Current text for print
-     protected:
-        void updateTexture(const Window& _target);
+        const float posX;                      // Relative positions on screen
+        const ALIGNMENT_types aligment;        // Aligment type to improve displasment
+        const Color color;                     // Base draw color
+        const float height;                    // Height of text to draw
+
      public:
-        DynamicText(const Window& _target, const std::string (&text)[LNG_count], float size, float X,
-        float Y, Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
+        DynamicText(const Window& _target, const std::string (&text)[LNG_count], float X,
+            float Y, float size = 20, Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
         ~DynamicText();
-        void updateLocation(const Window& _target);
-        void updateLocationArgs(const Window& _target, ...);  // Change text, depend on another arguments
+        template <typename ...Args>
+        void setValues(const Window& _target, Args&& ...args) {
+            // Checking for all chars
+            char buffer[100];
+            std::sprintf(buffer, text[currentLanguage].c_str(), std::forward<Args>(args)...);
+
+            // Creating surface with text
+            texture = _target.createTexture(FNT_MAIN, height, buffer, 0, color);
+
+            // Moving draw rect to new place
+            rect.w = texture->w;
+            rect.h = texture->h;
+            rect.x = WINDOW_WIDTH * posX - (rect.w * aligment / 2);
+        }
     };
 
 
@@ -147,7 +157,7 @@ namespace GUI {
         void copyToClipboard();            // Writing selected text to clipboard
 
      public:
-        TypeField(const Window& _target, float height, float posX, float posY, const char *startText = "",
+        TypeField(const Window& _target, float posX, float posY, float height, const char *startText = "",
             ALIGNMENT_types newAligment = MIDLE_text, Color textColor = BLACK);
         ~TypeField();                        // Clearing font and texture
         void writeString(const char* str);   // Function of writing any string to buffer at caret position
@@ -174,10 +184,11 @@ namespace GUI {
     class TextButton : public HighlightedStaticText {
      private:
         const Backplate backplate;
+
      public:
-        TextButton(const Window& _target, const std::string (&text)[LNG_count], float size, float X, float Y,
+        TextButton(const Window& _target, const std::string (&text)[LNG_count], float X, float Y, float size,
             Color color = WHITE, ALIGNMENT_types alignment = MIDLE_text);
-        void blit(const Window& _target) const override;  // Drawing current button
+        void blit(const Window& _target) const override;
     };
 
 }  // namespace GUI

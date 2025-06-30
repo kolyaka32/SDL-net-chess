@@ -5,16 +5,15 @@
 
 #include "baseGUI.hpp"
 
-using namespace GUI;
 
 // Class of backplates (smoothed rects)
-Backplate::Backplate(const Window& _target, float _centerX, float _centerY, float _width, float _height,
+GUI::Backplate::Backplate(const Window& _target, float _centerX, float _centerY, float _width, float _height,
     float _rad, float _bor, Color _frontColor, Color _backColor)
 : Backplate(_target, {SDL_roundf(WINDOW_WIDTH * (_centerX - _width/2)), SDL_roundf(WINDOW_HEIGHT * (_centerY - _height/2)),
     SDL_roundf(WINDOW_WIDTH * _width), SDL_roundf(WINDOW_HEIGHT * _height)}, _rad, _bor, _frontColor, _backColor) {}
 
 
-Backplate::Backplate(const Window& _target, const SDL_FRect& _rect, float _rad, float _bor, Color _frontColor, Color _backColor) {
+GUI::Backplate::Backplate(const Window& _target, const SDL_FRect& _rect, float _rad, float _bor, Color _frontColor, Color _backColor) {
     // Creating new texture for drawing
     texture = _target.createTexture(_rect.w, _rect.h);
     rect = _rect;
@@ -64,6 +63,6 @@ Backplate::Backplate(const Window& _target, const SDL_FRect& _rect, float _rad, 
     _target.resetRenderTarget();
 }
 
-Backplate::~Backplate() {
+GUI::Backplate::~Backplate() {
     SDL_DestroyTexture(texture);
 }

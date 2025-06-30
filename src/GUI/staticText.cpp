@@ -5,11 +5,10 @@
 
 #include "baseGUI.hpp"
 
-using namespace GUI;
 
 // Class of static text
-StaticText::StaticText(const Window& _target, const std::string (&_text)[LNG_count], float _height,
-    float _X, float _Y, Color _color, ALIGNMENT_types _aligment) {
+GUI::StaticText::StaticText(const Window& _target, const std::string (&_text)[LNG_count],
+    float _X, float _Y, float _height, Color _color, ALIGNMENT_types _aligment) {
     // Creating texture of text
     texture = _target.createTexture(FNT_MAIN, _height, _text[currentLanguage].c_str(), 0, _color);
 
@@ -19,6 +18,6 @@ StaticText::StaticText(const Window& _target, const std::string (&_text)[LNG_cou
     rect.y = SDL_roundf(WINDOW_HEIGHT * _Y - rect.h / 2);
 }
 
-StaticText::~StaticText() {
+GUI::StaticText::~StaticText() {
     SDL_DestroyTexture(texture);
 }

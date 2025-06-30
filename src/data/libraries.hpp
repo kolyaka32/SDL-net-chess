@@ -5,6 +5,7 @@
 
 #include <SDL3/SDL_audio.h>
 
+
 // Class for load and close needed libraries
 class Libraries {
 private:

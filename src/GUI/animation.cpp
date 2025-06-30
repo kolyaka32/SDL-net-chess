@@ -6,18 +6,17 @@
 
 #include "baseGUI.hpp"
 
-using namespace GUI;
 
 #if ANI_count
 // GIF animation class
-GIFAnimation::GIFAnimation(Window& _target, SDL_Rect _rect, ANI_names _type)
+GUI::GIFAnimation::GIFAnimation(Window& _target, SDL_Rect _rect, ANI_names _type)
 : dest(_dest), type(_type), frame(0), prevTick(0) {}
 
-GIFAnimation::~GIFAnimation() {
+GUI::GIFAnimation::~GIFAnimation() {
     SDL_DestroyTexture(texture);
 }
 
-void GIFAnimation::blit(const Window& _target) {
+void GUI::GIFAnimation::blit(const Window& _target) {
     if (SDL_GetTicks() > prevTick) {
         static unsigned frame = (frame + 1) % Animations[type]->count;
         _target.destroy(texture);

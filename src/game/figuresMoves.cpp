@@ -5,8 +5,8 @@
 
 #include <cstdlib>
 #include <cstring>
-
 #include "figuresMoves.hpp"
+
 
 // Figures moves class
 // Firstly resetting all figures

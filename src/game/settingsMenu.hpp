@@ -6,7 +6,7 @@
 #pragma once
 
 #include "../data/app.hpp"
-#include "../GUI/baseGUI.hpp"
+
 
 // Class of menu with game settings
 class SettingsMenu : public GUI::GUItemplate {

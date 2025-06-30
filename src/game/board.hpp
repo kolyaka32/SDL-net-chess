@@ -6,7 +6,6 @@
 #pragma once
 
 #include "figuresMoves.hpp"
-#include "../GUI/baseGUI.hpp"
 #include "../data/app.hpp"
 
 

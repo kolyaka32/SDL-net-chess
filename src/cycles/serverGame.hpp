@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include "gameCycle.hpp"
 #include <SDL3_net/SDL_net.h>
+#include "gameCycle.hpp"
 
 
 // Game cycle with game part of server
@@ -14,7 +14,7 @@ class ServerGame : public GameCycle {
  private:
     App& app;
 
-    SDLNet_DatagramSocket* server;
+    //SDLNet_DatagramSocket* server;
 
     // Main run functions
     void inputMouseDown(App& app) override;

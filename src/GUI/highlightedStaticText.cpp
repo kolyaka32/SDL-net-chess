@@ -5,11 +5,10 @@
 
 #include "baseGUI.hpp"
 
-using namespace GUI;
 
 // Class of static text
-HighlightedStaticText::HighlightedStaticText(const Window& _target, const std::string (&_text)[LNG_count], float _height,
-    float _X, float _Y, int frame, Color _color, ALIGNMENT_types _aligment) {
+GUI::HighlightedStaticText::HighlightedStaticText(const Window& _target, const std::string (&_text)[LNG_count],
+    float _X, float _Y, int frame, float _height, Color _color, ALIGNMENT_types _aligment) {
     // Creating texture of text
     TTF_Font* font = _target.getFont(FNT_MAIN);
     TTF_SetFontSize(font, _height);
@@ -37,6 +36,6 @@ HighlightedStaticText::HighlightedStaticText(const Window& _target, const std::s
     rect.y = SDL_roundf(WINDOW_HEIGHT * _Y - rect.h / 2);
 }
 
-HighlightedStaticText::~HighlightedStaticText() {
+GUI::HighlightedStaticText::~HighlightedStaticText() {
     SDL_DestroyTexture(texture);
 }

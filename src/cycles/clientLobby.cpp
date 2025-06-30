@@ -13,12 +13,12 @@ char basePort[20] = "2000";
 
 ClientLobby::ClientLobby(App& _app)
 : BaseCycle(_app),
-enterIPText{_app.window, {"Enter IP:", "Введите IP:", "-", "Увядзіце IP:"}, 30, 0.5, 0.1, WHITE},
-enterPortText{_app.window, {"Enter port:", "Введите порт:", "Port eingeben:", "Увядзіце порт:"}, 30, 0.5, 0.4, WHITE},
-cancelButton{_app.window, {"Cancel", "Отмена", "Annullierung", "Адмена"}, 24, 0.5, 0.9, WHITE},
-connectButton{_app.window, {"Connect", "Присоединится", "Beitritt", "Далучыцца"}, 24, 0.5, 0.7, WHITE},
-enterIPField{_app.window, 20, 0.5, 0.2, baseIP},
-enterPortField{_app.window, 20, 0.5, 0.5, basePort}
+enterIPText{_app.window, {"Enter IP:", "Введите IP:", "-", "Увядзіце IP:"}, 0.5, 0.1, 30, WHITE},
+enterPortText{_app.window, {"Enter port:", "Введите порт:", "Port eingeben:", "Увядзіце порт:"}, 0.5, 0.4, 30, WHITE},
+cancelButton{_app.window, {"Cancel", "Отмена", "Annullierung", "Адмена"}, 0.5, 0.9, 24, WHITE},
+connectButton{_app.window, {"Connect", "Присоединится", "Beitritt", "Далучыцца"}, 0.5, 0.7, 24, WHITE},
+enterIPField{_app.window, 0.5, 0.2, 20, baseIP},
+enterPortField{_app.window, 0.5, 0.5, 20, basePort}
 {
     /*SDLNet_Init();
 
@@ -108,9 +108,6 @@ void ClientLobby::draw(const App& _app) const {
     // Drawing buttons
     exitButton.blit(_app.window);
 
-    // Drawing settings
-    settings.blit(_app.window);
-
     // Draw main part
     enterIPText.blit(_app.window);
     enterPortText.blit(_app.window);
@@ -118,6 +115,9 @@ void ClientLobby::draw(const App& _app) const {
     connectButton.blit(_app.window);
     enterIPField.blit();
     enterPortField.blit();
+
+    // Drawing settings
+    settings.blit(_app.window);
 
     // Bliting all to screen
     _app.window.render();

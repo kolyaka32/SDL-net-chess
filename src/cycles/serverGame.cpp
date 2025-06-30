@@ -13,17 +13,17 @@ app(_app) {
     if(!isRestarted()) {
         //_app.music.start(MUS_MAIN);
     }
-    SDLNet_Init();
+    //SDLNet_Init();
 
     // Creating server
-    server = SDLNet_CreateDatagramSocket(NULL, 8000);
+    //server = SDLNet_CreateDatagramSocket(NULL, 8000);
 
-    SDL_Log("Server created: %u\n", server);
+    //SDL_Log("Server created: %u\n", server);
 }
 
 ServerGame::~ServerGame() {
-    SDLNet_Quit();
-    SDLNet_DestroyDatagramSocket(server);
+    //SDLNet_Quit();
+    //SDLNet_DestroyDatagramSocket(server);
 }
 
 void ServerGame::inputMouseDown(App& _app) {
@@ -44,7 +44,7 @@ void ServerGame::update(App& _app) {
     settings.update(_app);
 
 
-    SDLNet_Datagram* data;
+    /*SDLNet_Datagram* data;
 
 
     if (!SDLNet_ReceiveDatagram(server, &data)) {
@@ -58,7 +58,7 @@ void ServerGame::update(App& _app) {
         }
         SDL_Log("\n");
         SDLNet_DestroyDatagram(data);
-    }
+    }*/
 }
 
 void ServerGame::draw(const App& _app) const {

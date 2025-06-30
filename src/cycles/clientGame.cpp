@@ -12,7 +12,7 @@ app(_app) {
     if(!isRestarted()) {
         //_app.music.start(MUS_MAIN);
     }
-    SDLNet_Init();
+    /*SDLNet_Init();
 
     SDLNet_Address* sendTo = SDLNet_ResolveHostname("255.255.255.255");
     SDLNet_WaitUntilResolved(sendTo, -1);
@@ -33,7 +33,7 @@ app(_app) {
     SDL_Log(SDL_GetError());
 
     SDLNet_DestroyDatagramSocket(current);
-    SDLNet_UnrefAddress(sendTo);
+    SDLNet_UnrefAddress(sendTo);*/
     
     SDL_Log("Client stopped\n");
 
@@ -42,7 +42,7 @@ app(_app) {
 }
 
 ClientGame::~ClientGame() {
-    SDLNet_Quit();
+    //SDLNet_Quit();
 }
 
 void ClientGame::inputMouseDown(App& _app) {

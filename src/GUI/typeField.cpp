@@ -3,16 +3,14 @@
  * <nik.kazankov.05@mail.ru>
  */
 
-#include "baseGUI.hpp"
 #include <cstdlib>
 #include <algorithm>
-
-using namespace GUI;
+#include "baseGUI.hpp"
 
 
 // Type field class
 template <unsigned bufferSize>
-TypeField<bufferSize>::TypeField(const Window& _target, float _height, float _x, float _y, const char* _text, ALIGNMENT_types _aligment, Color _color)
+GUI::TypeField<bufferSize>::TypeField(const Window& _target, float _x, float _y, float _height, const char* _text, ALIGNMENT_types _aligment, Color _color)
 : target(_target),
 posX(WINDOW_WIDTH*_x),
 aligment(_aligment),
@@ -44,7 +42,7 @@ backRect({_x*WINDOW_WIDTH-(6.5f*bufferSize+2), _y*WINDOW_HEIGHT-_height*0.9f, 13
 }
 
 template <unsigned bufferSize>
-TypeField<bufferSize>::~TypeField() {
+GUI::TypeField<bufferSize>::~TypeField() {
     // Clearing rest texture
     SDL_DestroyTexture(textTexture);
     SDL_DestroyTexture(backTexture);
@@ -55,7 +53,7 @@ TypeField<bufferSize>::~TypeField() {
 
 // Creating new texture
 template <unsigned bufferSize>
-void TypeField<bufferSize>::updateTexture() {
+void GUI::TypeField<bufferSize>::updateTexture() {
     // Clearing previous
     if (textTexture) {
         SDL_DestroyTexture(textTexture);
@@ -119,7 +117,7 @@ void TypeField<bufferSize>::updateTexture() {
 
 // Select last letter to create writing symbol
 template <unsigned bufferSize>
-void TypeField<bufferSize>::select(float _mouseX) {
+void GUI::TypeField<bufferSize>::select(float _mouseX) {
     // Resetting swapping caret
     showCaret = true;
     selectLength = 0;
@@ -140,7 +138,7 @@ void TypeField<bufferSize>::select(float _mouseX) {
 
 // Write need string to buffer with ability to clear source
 template <unsigned bufferSize>
-void TypeField<bufferSize>::writeString(const char* _str) {
+void GUI::TypeField<bufferSize>::writeString(const char* _str) {
     if (selected) {
         // Resetting
         pressed = false;
@@ -172,7 +170,7 @@ void TypeField<bufferSize>::writeString(const char* _str) {
 
 // Getting clippboard content
 template <unsigned bufferSize>
-void TypeField<bufferSize>::writeClipboard() {
+void GUI::TypeField<bufferSize>::writeClipboard() {
     // Getting and writing clipboard to caret
     char* clippboard = SDL_GetClipboardText();
     writeString(clippboard);
@@ -181,7 +179,7 @@ void TypeField<bufferSize>::writeClipboard() {
 
 // Copying selected text to clipboard
 template <unsigned bufferSize>
-void TypeField<bufferSize>::copyToClipboard() {
+void GUI::TypeField<bufferSize>::copyToClipboard() {
     if (selectLength < 0) {
         memcpy(&clipboardText, buffer + caret + selectLength, abs(selectLength));
     } else {
@@ -192,7 +190,7 @@ void TypeField<bufferSize>::copyToClipboard() {
 }
 
 template <unsigned bufferSize>
-void TypeField<bufferSize>::deleteSelected() {
+void GUI::TypeField<bufferSize>::deleteSelected() {
     if (selectLength) {
         if (selectLength < 0) {
             for (size_t i=caret; i < length; ++i) {
@@ -212,7 +210,7 @@ void TypeField<bufferSize>::deleteSelected() {
 
 // Getting press of need KeyCode
 template <unsigned bufferSize>
-void TypeField<bufferSize>::type(SDL_Keycode _code) {
+void GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
     // Checking, if box selected
     if (!selected) {
         return;
@@ -342,7 +340,7 @@ void TypeField<bufferSize>::type(SDL_Keycode _code) {
 
 
 template <unsigned bufferSize>
-void TypeField<bufferSize>::press(const Mouse mouse) {
+void GUI::TypeField<bufferSize>::press(const Mouse mouse) {
     if (in(mouse)) {
         pressed = true;
         if (!selected) {
@@ -374,12 +372,12 @@ void TypeField<bufferSize>::press(const Mouse mouse) {
 }
 
 template <unsigned bufferSize>
-void TypeField<bufferSize>::unpress() {
+void GUI::TypeField<bufferSize>::unpress() {
     pressed = false;
 }
 
 template <unsigned bufferSize>
-void TypeField<bufferSize>::update(float _mouseX) {
+void GUI::TypeField<bufferSize>::update(float _mouseX) {
     if (pressed) {
         size_t measure;
         if (length) {
@@ -388,7 +386,6 @@ void TypeField<bufferSize>::update(float _mouseX) {
             measure = 0;
         }
         selectLength += caret - measure;
-        SDL_Log("Measured: %d, caret: %d", measure, caret);
         caret = measure;
         updateTexture();
     }
@@ -402,7 +399,7 @@ void TypeField<bufferSize>::update(float _mouseX) {
 }
 
 template <unsigned bufferSize>
-void TypeField<bufferSize>::blit() const {
+void GUI::TypeField<bufferSize>::blit() const {
     // Rendering background picture for better typing
     target.blit(backTexture, backRect);
 
@@ -417,12 +414,12 @@ void TypeField<bufferSize>::blit() const {
 }
 
 template <unsigned bufferSize>
-bool TypeField<bufferSize>::in(const Mouse mouse) {
+bool GUI::TypeField<bufferSize>::in(const Mouse mouse) {
     return mouse.in(backRect);
 }
 
 // Returning current text
 template <unsigned bufferSize>
-const char* TypeField<bufferSize>::getString() const {
+const char* GUI::TypeField<bufferSize>::getString() const {
     return buffer;
 }

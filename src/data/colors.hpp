@@ -7,6 +7,7 @@
 
 #include <SDL3/SDL_pixels.h>
 
+
 typedef SDL_Color Color;
 
 // Global game colors

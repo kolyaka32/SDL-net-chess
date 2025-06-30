@@ -4,8 +4,8 @@
  */
 
 #include <stdlib.h>
-
 #include "internetServer.hpp"
+
 
 // Creating server port
 InternetServerCycle::InternetServerCycle() {

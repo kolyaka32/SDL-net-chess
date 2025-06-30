@@ -5,8 +5,9 @@
 
 #pragma once
 
-#include "baseCycle.hpp"
 #include <SDL3_net/SDL_net.h>
+#include "baseCycle.hpp"
+
 
 // Global base connect link for type in typeboxes
 extern char baseIP[20];

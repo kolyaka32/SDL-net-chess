@@ -3,9 +3,9 @@
  * <nik.kazankov.05@mail.ru>
  */
 
-#include "data/initFile.hpp"
 #include <fstream>
 #include <string>
+#include "data/initFile.hpp"
 
 // Files to setup
 #include "languages.hpp"

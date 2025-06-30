@@ -8,18 +8,18 @@
 SettingsMenu::SettingsMenu(const App& _app)
 : settingButton{_app.window, 0.95, 0.05, IMG_GUI_PAUSE_BUTTON},
 background{_app.window, 0.5, 0.5, 0.65, 0.8, 20, 5},
-titleText{_app.window, {"Pause", "Пауза", "Pause", "Паўза"}, 34, 0.5, 0.15, 2, WHITE},
+titleText{_app.window, {"Pause", "Пауза", "Pause", "Паўза"}, 0.5, 0.15, 2, 34, WHITE},
 flags {
     {_app.window, 0.35, 0.28, IMG_GUI_FLAG_USA},
     {_app.window, 0.65, 0.28, IMG_GUI_FLAG_RUS},
     {_app.window, 0.35, 0.47, IMG_GUI_FLAG_GER},
     {_app.window, 0.65, 0.47, IMG_GUI_FLAG_BEL},
 },
-musicText{_app.window, {"Music", "Музыка", "Die Musik", "Музыка"}, 30, 0.5, 0.6, 1, WHITE},
+musicText{_app.window, {"Music", "Музыка", "Die Musik", "Музыка"}, 0.5, 0.6, 1, 30, WHITE},
 musicSlider{_app.window, 0.5, 0.66, _app.music.getVolume()},
-soundText{_app.window, {"Sounds", "Звуки", "Geräusche", "Гук"}, 30, 0.5, 0.72, 1, WHITE},
+soundText{_app.window, {"Sounds", "Звуки", "Geräusche", "Гук"}, 0.5, 0.72, 1, 30, WHITE},
 soundSlider{_app.window, 0.5, 0.78, _app.sounds.getVolume()},
-exitButton{_app.window, {"Exit", "Выход", "Ausfahrt", "Выхад"}, 24, 0.5, 0.85, WHITE} {}
+exitButton{_app.window, {"Exit", "Выход", "Ausfahrt", "Выхад"}, 0.5, 0.85, 24, WHITE} {}
 
 
 bool SettingsMenu::click(const Mouse _mouse) {
