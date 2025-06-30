@@ -6,20 +6,20 @@
 #pragma once
 
 #include <string>
-#include "../data/window.hpp"
 #include "../define.hpp"
+#include "../data/window.hpp"
 #include "../data/colors.hpp"
-#include "../languages.hpp"
+#include "../data/languages.hpp"
 #include "../data/time.hpp"
 
 
 // Namespace of objects for GUI (Graphic User Interface)
 namespace GUI {
-    // Text alignment type
-    enum ALIGNMENT_types{
-        LEFT_text,
-        MIDLE_text,
-        RIGHT_text
+    // Text aligment type
+    enum class Aligment : unsigned {
+        Left,
+        Midle,
+        Right,
     };
 
 
@@ -38,8 +38,8 @@ namespace GUI {
     // Static text on screen
     class StaticText : public GUItemplate {
      public:
-        StaticText(const Window& target, const std::string (&text)[LNG_count], float X,
-            float Y, float size, Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
+        StaticText(const Window& target, const LanguagedText texts, float X,
+            float Y, float size, Color color = BLACK, Aligment aligment = Aligment::Midle);
         ~StaticText();
     };
 
@@ -47,8 +47,8 @@ namespace GUI {
     // Static text on screen
     class HighlightedStaticText : public GUItemplate {
      public:
-        HighlightedStaticText(const Window& target, const std::string (&text)[LNG_count], float X,
-            float Y, int frameThickness, float size, Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
+        HighlightedStaticText(const Window& target, const LanguagedText texts, float X,
+            float Y, int frameThickness, float size, Color color = BLACK, Aligment aligment = Aligment::Midle);
         ~HighlightedStaticText();
     };
 
@@ -56,21 +56,21 @@ namespace GUI {
     // Dynamicly updated text on screen
     class DynamicText : public GUItemplate {
      private:
-        const std::string (&text)[LNG_count];  // Text to create from
+        const LanguagedText texts;             // Text to create from
         const float posX;                      // Relative positions on screen
-        const ALIGNMENT_types aligment;        // Aligment type to improve displasment
+        const Aligment aligment;               // Aligment type to improve displasment
         const Color color;                     // Base draw color
         const float height;                    // Height of text to draw
 
      public:
-        DynamicText(const Window& _target, const std::string (&text)[LNG_count], float X,
-            float Y, float size = 20, Color color = BLACK, ALIGNMENT_types alignment = MIDLE_text);
+        DynamicText(const Window& _target, const LanguagedText texts, float X,
+            float Y, float size = 20, Color color = BLACK, Aligment aligment = Aligment::Midle);
         ~DynamicText();
         template <typename ...Args>
         void setValues(const Window& _target, Args&& ...args) {
             // Checking for all chars
             char buffer[100];
-            std::sprintf(buffer, text[currentLanguage].c_str(), std::forward<Args>(args)...);
+            std::sprintf(buffer, texts.getString().c_str(), std::forward<Args>(args)...);
 
             // Creating surface with text
             texture = _target.createTexture(FNT_MAIN, height, buffer, 0, color);
@@ -78,7 +78,7 @@ namespace GUI {
             // Moving draw rect to new place
             rect.w = texture->w;
             rect.h = texture->h;
-            rect.x = WINDOW_WIDTH * posX - (rect.w * aligment / 2);
+            rect.x = WINDOW_WIDTH * posX - (rect.w * (unsigned)aligment / 2);
         }
     };
 
@@ -129,7 +129,7 @@ namespace GUI {
      protected:
         // Class constants
         const int posX;                    // Relevant x position on screen
-        const ALIGNMENT_types aligment;    // Aligment type for correct placed position
+        const Aligment aligment;           // Aligment type for correct placed position
         const Color textColor;             // Color of typing text
         const Window& target;              // Target, where draw to
         SDL_Texture* backTexture;          // Texture of backplate
@@ -158,7 +158,7 @@ namespace GUI {
 
      public:
         TypeField(const Window& _target, float posX, float posY, float height, const char *startText = "",
-            ALIGNMENT_types newAligment = MIDLE_text, Color textColor = BLACK);
+            Aligment aligment = Aligment::Midle, Color textColor = BLACK);
         ~TypeField();                        // Clearing font and texture
         void writeString(const char* str);   // Function of writing any string to buffer at caret position
         void type(SDL_Keycode code);         // Function of processing special keycodes
@@ -186,8 +186,8 @@ namespace GUI {
         const Backplate backplate;
 
      public:
-        TextButton(const Window& _target, const std::string (&text)[LNG_count], float X, float Y, float size,
-            Color color = WHITE, ALIGNMENT_types alignment = MIDLE_text);
+        TextButton(const Window& _target, const LanguagedText texts, float X, float Y, float size,
+            Color color = WHITE, Aligment aligment = Aligment::Midle);
         void blit(const Window& _target) const override;
     };
 

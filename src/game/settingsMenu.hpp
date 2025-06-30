@@ -22,7 +22,7 @@ class SettingsMenu : public GUI::GUItemplate {
 	// Title
 	GUI::HighlightedStaticText titleText;
 	// Flags for select language
-	const GUI::ImageButton flags[LNG_count];
+	const GUI::ImageButton flags[(unsigned)Language::Count];
 	// Sliders and it texts
 	GUI::HighlightedStaticText musicText;
 	GUI::Slider musicSlider;

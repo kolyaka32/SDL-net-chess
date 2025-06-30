@@ -8,7 +8,7 @@
 #include "data/initFile.hpp"
 
 // Files to setup
-#include "languages.hpp"
+#include "data/languages.hpp"
 #include "game/board.hpp"
 #include "cycles/clientLobby.hpp"
 
@@ -27,13 +27,13 @@ void InitFile::loadSettings() {
         if (parameter == "language") {
             std::string lang = getText(currentLine);
             if (lang == "english") {
-                currentLanguage = LNG_ENGLISH;
+                LanguagedText::setLanguage(Language::English);
             } else if (lang == "russian") {
-                currentLanguage = LNG_RUSSIAN;
+                LanguagedText::setLanguage(Language::Russian);
             } else if (lang == "german") {
-                currentLanguage = LNG_GERMAN;
+                LanguagedText::setLanguage(Language::German);
             } else if (lang == "belarusian") {
-                currentLanguage = LNG_BELARUSIAN;
+                LanguagedText::setLanguage(Language::Bellarusian);
             }
         } else if (parameter == "music") {
             music.setVolume(getValue(currentLine));
@@ -61,20 +61,20 @@ void InitFile::saveSettings() {
 
     // Writing language
     outSettings << "language = ";
-    switch (currentLanguage) {
-    case LNG_ENGLISH:
+    switch (LanguagedText::getLanguage()) {
+    case Language::English:
         outSettings << "english\n";
         break;
 
-    case LNG_RUSSIAN:
+    case Language::Russian:
         outSettings << "russian\n";
         break;
 
-    case LNG_GERMAN:
+    case Language::German:
         outSettings << "german\n";
         break;
 
-    case LNG_BELARUSIAN:
+    case Language::Bellarusian:
         outSettings << "belarusian\n";
         break;
     }

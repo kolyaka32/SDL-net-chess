@@ -89,20 +89,20 @@ void App::run() {
 // Function for setting window title depend on language
 void Window::updateTitle() const {
     // Setting window title
-    switch (currentLanguage) {
-    case LNG_ENGLISH:
+    switch (LanguagedText::getLanguage()) {
+    case Language::English:
         updateTitle("Chess on SDL");
         break;
 
-    case LNG_RUSSIAN:
+    case Language::Russian:
         updateTitle("Шахматы на SDL");
         break;
 
-    case LNG_GERMAN:
+    case Language::German:
         updateTitle("Schach на SDL");
         break;
 
-    case LNG_BELARUSIAN:
+    case Language::Bellarusian:
         updateTitle("Шахматы на SDL");
         break;
     }

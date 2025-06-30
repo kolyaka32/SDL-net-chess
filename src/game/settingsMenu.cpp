@@ -5,6 +5,7 @@
 
 #include "settingsMenu.hpp"
 
+
 SettingsMenu::SettingsMenu(const App& _app)
 : settingButton{_app.window, 0.95, 0.05, IMG_GUI_PAUSE_BUTTON},
 background{_app.window, 0.5, 0.5, 0.65, 0.8, 20, 5},
@@ -21,7 +22,6 @@ soundText{_app.window, {"Sounds", "Звуки", "Geräusche", "Гук"}, 0.5, 0.
 soundSlider{_app.window, 0.5, 0.78, _app.sounds.getVolume()},
 exitButton{_app.window, {"Exit", "Выход", "Ausfahrt", "Выхад"}, 0.5, 0.85, 24, WHITE} {}
 
-
 bool SettingsMenu::click(const Mouse _mouse) {
     // Check, if click on setting butoon
     if (settingButton.in(_mouse)) {
@@ -35,32 +35,23 @@ bool SettingsMenu::click(const Mouse _mouse) {
             active = false;
             return false;
         }
-        // Setting old language to save
-        LNG_types newLanguage = currentLanguage;
-
         // Checking, if click on sliders or flag
         if (musicSlider.in(_mouse)) {
             holdingSlider = 1;
+            return false;
         } else if (soundSlider.in(_mouse)) {
             holdingSlider = 2;
-        } else {
-            for (unsigned i = LNG_ENGLISH; i <= LNG_BELARUSIAN; ++i) {
-                if (flags[i].in(_mouse)) {
-                    newLanguage = LNG_types(i);
-                }
-            }
+            return false;
         }
-        // Updating texts language
-        if (newLanguage != currentLanguage) {
-            currentLanguage = newLanguage;
-            
-            // Returning need restart
-            return true;
+        // Check on changing language
+        for (unsigned i = 0; i < (unsigned)Language::Count; ++i) {
+            if (flags[i].in(_mouse)) {
+                return LanguagedText::setLanguage((Language)i);
+            }
         }
     }
     return false;
 }
-
 
 void SettingsMenu::unClick() {
     if (active) {
@@ -118,7 +109,7 @@ void SettingsMenu::blit(const Window& _target) const {
         titleText.blit(_target);
 
         // Blitting language buttons
-        for (unsigned i = 0; i < LNG_count; ++i) {
+        for (unsigned i = 0; i < 4; ++i) {
             flags[i].blit(_target);
         }
         // Sliders

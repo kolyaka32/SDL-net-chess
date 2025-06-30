@@ -10,7 +10,7 @@
 
 // Type field class
 template <unsigned bufferSize>
-GUI::TypeField<bufferSize>::TypeField(const Window& _target, float _x, float _y, float _height, const char* _text, ALIGNMENT_types _aligment, Color _color)
+GUI::TypeField<bufferSize>::TypeField(const Window& _target, float _x, float _y, float _height, const char* _text, Aligment _aligment, Color _color)
 : target(_target),
 posX(WINDOW_WIDTH*_x),
 aligment(_aligment),
@@ -99,7 +99,7 @@ void GUI::TypeField<bufferSize>::updateTexture() {
         // Resetting place of text with saving aligment
         textRect.w = textTexture->w;
         textRect.h = textTexture->h;
-        textRect.x = SDL_floorf(posX - textRect.w * aligment / 2);
+        textRect.x = SDL_floorf(posX - textRect.w * (unsigned)aligment / 2);
         
         // Update caret place
         if (caret) {
