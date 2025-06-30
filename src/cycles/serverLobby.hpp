@@ -9,10 +9,12 @@
 #include <SDL3_net/SDL_net.h>
 
 
-// Game cycle (for single player (special animation))
-class Client : public BaseCycle {
+// Cycle with waiting for client connect
+class ServerLobby : public BaseCycle {
  private:
     App& app;
+
+    //SDLNet_DatagramSocket* server;
 
     // Main run functions
     void inputMouseDown(App& app) override;
@@ -20,6 +22,6 @@ class Client : public BaseCycle {
     void draw(const App& app) const override;
 
  public:
-    Client(App& app);
-    ~Client();
+    ServerLobby(App& app);
+    ~ServerLobby();
 };

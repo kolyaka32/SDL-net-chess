@@ -5,7 +5,6 @@
 
 #pragma once
 
-#include "../GUI/baseGUI.hpp"
 #include "baseCycle.hpp"
 #include "../game/board.hpp"
 #include "../game/letters.hpp"

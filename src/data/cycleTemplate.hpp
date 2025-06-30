@@ -8,7 +8,6 @@
 #include <SDL3/SDL_Keyboard.h>
 #include "idleTimer.hpp"
 #include "app.hpp"
-#include "../GUI/baseGUI.hpp"
 #include "mouse.hpp"
 
 

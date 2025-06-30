@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "../GUI/baseGUI.hpp"
+#include "../data/app.hpp"
 
 
 // Class of menu moving background

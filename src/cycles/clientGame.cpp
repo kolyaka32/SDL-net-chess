@@ -3,16 +3,16 @@
  * <nik.kazankov.05@mail.ru>
  */
 
-#include "client.hpp"
+#include "clientGame.hpp"
 
-Client::Client(App& _app)
+ClientGame::ClientGame(App& _app)
 : BaseCycle(_app),
 app(_app) {
     // Starting main song (if wasn't started)
     if(!isRestarted()) {
         //_app.music.start(MUS_MAIN);
     }
-    SDLNet_Init();
+    /*SDLNet_Init();
 
     SDLNet_Address* sendTo = SDLNet_ResolveHostname("255.255.255.255");
     SDLNet_WaitUntilResolved(sendTo, -1);
@@ -33,7 +33,7 @@ app(_app) {
     SDL_Log(SDL_GetError());
 
     SDLNet_DestroyDatagramSocket(current);
-    SDLNet_UnrefAddress(sendTo);
+    SDLNet_UnrefAddress(sendTo);*/
     
     SDL_Log("Client stopped\n");
 
@@ -41,11 +41,11 @@ app(_app) {
     stop();
 }
 
-Client::~Client() {
-    SDLNet_Quit();
+ClientGame::~ClientGame() {
+    //SDLNet_Quit();
 }
 
-void Client::inputMouseDown(App& _app) {
+void ClientGame::inputMouseDown(App& _app) {
     // Checking on exit
     if (exitButton.in(mouse)) {
         _app.startNextCycle(CYCLE_MENU);
@@ -57,13 +57,13 @@ void Client::inputMouseDown(App& _app) {
     return;
 }
 
-void Client::update(App& _app) {
+void ClientGame::update(App& _app) {
 
     // Updating settings
     settings.update(_app);
 }
 
-void Client::draw(const App& _app) const {
+void ClientGame::draw(const App& _app) const {
     // Bliting background
     _app.window.setDrawColor(BLACK);
     _app.window.clear();

@@ -5,11 +5,9 @@
 
 #include "baseGUI.hpp"
 
-using namespace GUI;
-
 
 // Slider class
-Slider::Slider(const Window& _target, float _X, float _Y, unsigned _startValue,
+GUI::Slider::Slider(const Window& _target, float _X, float _Y, unsigned _startValue,
     IMG_names _lineImage, IMG_names _buttonImage, unsigned _max)
 : maxValue(_max) {
     // Getting need texture
@@ -26,12 +24,12 @@ Slider::Slider(const Window& _target, float _X, float _Y, unsigned _startValue,
     buttonRect.x = rect.x + _startValue - buttonRect.w / 2;
 }
 
-void Slider::blit(const Window& _target) const {
+void GUI::Slider::blit(const Window& _target) const {
     _target.blit(texture, rect);
     _target.blit(textureButton, buttonRect);
 }
 
-unsigned Slider::setValue(float _mouseX) {
+unsigned GUI::Slider::setValue(float _mouseX) {
     // Setting new position
     buttonRect.x = _mouseX;
 
@@ -45,7 +43,7 @@ unsigned Slider::setValue(float _mouseX) {
     return buttonRect.x - rect.x + buttonRect.w/2;
 }
 
-unsigned Slider::scroll(float _wheelY) {
+unsigned GUI::Slider::scroll(float _wheelY) {
     if (_wheelY > 0) {
         return setValue(buttonRect.x + buttonRect.w/2 + 8);
     } else {

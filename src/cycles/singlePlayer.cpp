@@ -63,20 +63,20 @@ void SinglePlayerGameCycle::update(App& _app) {
             // Waiting for full width
             if (currentWidth == width) {
                 // Setting updated window title
-                switch (currentLanguage) {
-                case LNG_ENGLISH:
+                switch (LanguagedText::getLanguage()) {
+                case Language::English:
                     app.window.updateTitle("You been rickrolled!");
                     break;
 
-                case LNG_RUSSIAN:
+                case Language::Russian:
                     app.window.updateTitle("Ты зарикролен!");
                     break;
 
-                case LNG_GERMAN:
+                case Language::German:
                     app.window.updateTitle("Schach на SDL");
                     break;
 
-                case LNG_BELARUSIAN:
+                case Language::Bellarusian:
                     app.window.updateTitle("Шахматы на SDL");
                     break;
                 }

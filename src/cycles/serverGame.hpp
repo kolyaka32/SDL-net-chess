@@ -5,15 +5,16 @@
 
 #pragma once
 
-#include "baseCycle.hpp"
 #include <SDL3_net/SDL_net.h>
+#include "gameCycle.hpp"
 
-// Game cycle (for single player (special animation))
-class Server : public BaseCycle {
+
+// Game cycle with game part of server
+class ServerGame : public GameCycle {
  private:
     App& app;
 
-    SDLNet_DatagramSocket* server;
+    //SDLNet_DatagramSocket* server;
 
     // Main run functions
     void inputMouseDown(App& app) override;
@@ -21,6 +22,6 @@ class Server : public BaseCycle {
     void draw(const App& app) const override;
 
  public:
-    Server(App& app);
-    ~Server();
+    ServerGame(App& app);
+    ~ServerGame();
 };

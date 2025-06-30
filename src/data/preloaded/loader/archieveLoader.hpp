@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include "dataLoader.hpp"
 #include <zip.h>
+#include "dataLoader.hpp"
 
 
 // Setting password for archive

@@ -9,8 +9,10 @@
 #include "preloaded/music.hpp"
 #include "preloaded/sounds.hpp"
 #include "initFile.hpp"
-#include "window.hpp"
+#include "../GUI/baseGUI.hpp"
+#include "../GUI/typeField.cpp"
 #include "../cycles/cycles.hpp"
+
 
 // Load needed loader, depend on teting
 #if ARCHIEVE_LOADING

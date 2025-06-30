@@ -10,7 +10,7 @@
 // Names of loading files
 #include "../texturesNames.hpp"
 #include "../fontsNames.hpp"
-#include "../languages.hpp"
+#include "languages.hpp"
 
 
 Window::Window(const DataLoader& _loader)

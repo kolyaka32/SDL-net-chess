@@ -9,8 +9,10 @@
 #include "cycles/selectCycle.hpp"
 #include "cycles/singlePlayer.hpp"
 #include "cycles/twoPlayer.hpp"
-#include "cycles/server.hpp"
-#include "cycles/client.hpp"
+#include "cycles/serverLobby.hpp"
+#include "cycles/serverGame.hpp"
+#include "cycles/clientLobby.hpp"
+#include "cycles/clientGame.hpp"
 
 
 // Function with selecting starting cycle
@@ -43,21 +45,37 @@ void App::run() {
             }
             break;
 
-        /*case CYCLE_SERVER:
+        case CYCLE_SERVER_LOBBY:
             {
                 // Cycle with waiting in lobby for another player
-                Server cycle(*this);
+                ServerLobby cycle(*this);
                 cycle.run(*this);
             }
             break;
 
-        case CYCLE_CLIENT:
+        case CYCLE_SERVER_GAME:
             {
-                // Cycle with trying to connect
-                Client cycle(*this);
+                // Game cycle with game part of server
+                ServerGame cycle(*this);
                 cycle.run(*this);
             }
-            break;*/
+            break;
+
+        case CYCLE_CLIENT_LOBBY:
+            {
+                // Cycle with trying to connect
+                ClientLobby cycle(*this);
+                cycle.run(*this);
+            }
+            break;
+
+        case CYCLE_CLIENT_GAME:
+            {
+                // Game cycle with game part of client
+                ClientGame cycle(*this);
+                cycle.run(*this);
+            }
+            break;
 
         // Stopping current process
         case CYCLE_NONE:
@@ -71,20 +89,20 @@ void App::run() {
 // Function for setting window title depend on language
 void Window::updateTitle() const {
     // Setting window title
-    switch (currentLanguage) {
-    case LNG_ENGLISH:
+    switch (LanguagedText::getLanguage()) {
+    case Language::English:
         updateTitle("Chess on SDL");
         break;
 
-    case LNG_RUSSIAN:
+    case Language::Russian:
         updateTitle("Шахматы на SDL");
         break;
 
-    case LNG_GERMAN:
+    case Language::German:
         updateTitle("Schach на SDL");
         break;
 
-    case LNG_BELARUSIAN:
+    case Language::Bellarusian:
         updateTitle("Шахматы на SDL");
         break;
     }

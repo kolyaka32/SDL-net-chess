@@ -3,13 +3,14 @@
  * <nik.kazankov.05@mail.ru>
  */
 
-#include "data/initFile.hpp"
 #include <fstream>
 #include <string>
+#include "data/initFile.hpp"
 
 // Files to setup
-#include "languages.hpp"
+#include "data/languages.hpp"
 #include "game/board.hpp"
+#include "cycles/clientLobby.hpp"
 
 
 // Data, load from setting file
@@ -26,25 +27,25 @@ void InitFile::loadSettings() {
         if (parameter == "language") {
             std::string lang = getText(currentLine);
             if (lang == "english") {
-                currentLanguage = LNG_ENGLISH;
+                LanguagedText::setLanguage(Language::English);
             } else if (lang == "russian") {
-                currentLanguage = LNG_RUSSIAN;
+                LanguagedText::setLanguage(Language::Russian);
             } else if (lang == "german") {
-                currentLanguage = LNG_GERMAN;
+                LanguagedText::setLanguage(Language::German);
             } else if (lang == "belarusian") {
-                currentLanguage = LNG_BELARUSIAN;
+                LanguagedText::setLanguage(Language::Bellarusian);
             }
         } else if (parameter == "music") {
             music.setVolume(getValue(currentLine));
         } else if (parameter == "sounds") {
             sounds.setVolume(getValue(currentLine));
         } else if (parameter == "startBoardConfig") {
-            strcpy_s(boardConfig, 85, getText(currentLine).c_str());
-        }/* else if (parameter == "IP") {
-            baseIP = getText(currentLine);
+            strcpy_s(boardConfig, sizeof(boardConfig), getText(currentLine).c_str());
+        } else if (parameter == "IP") {
+            strcpy_s(baseIP, sizeof(baseIP), getText(currentLine).c_str());
         } else if (parameter == "port") {
-            basePort = getText(currentLine);
-        }*/
+            strcpy_s(basePort, sizeof(basePort), getText(currentLine).c_str());
+        }
     }
 
     inSettings.close();  // Closing reading file
@@ -60,20 +61,20 @@ void InitFile::saveSettings() {
 
     // Writing language
     outSettings << "language = ";
-    switch (currentLanguage) {
-    case LNG_ENGLISH:
+    switch (LanguagedText::getLanguage()) {
+    case Language::English:
         outSettings << "english\n";
         break;
 
-    case LNG_RUSSIAN:
+    case Language::Russian:
         outSettings << "russian\n";
         break;
 
-    case LNG_GERMAN:
+    case Language::German:
         outSettings << "german\n";
         break;
 
-    case LNG_BELARUSIAN:
+    case Language::Bellarusian:
         outSettings << "belarusian\n";
         break;
     }
@@ -87,7 +88,7 @@ void InitFile::saveSettings() {
     outSettings << "startBoardConfig = " << boardConfig << "\n";
 
     // Writing internet connection data
-    /*outSettings << "\n# Internet base parameters:\n";
-    outSettings << "IP = ", baseIP << "\n";
-    outSettings << "port = ", basePort << "\n";*/
+    outSettings << "\n# Internet base parameters:\n";
+    outSettings << "IP = " << baseIP << "\n";
+    outSettings << "port = " << basePort << "\n";
 }
