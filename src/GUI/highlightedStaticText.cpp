@@ -6,8 +6,8 @@
 #include "baseGUI.hpp"
 
 
-GUI::HighlightedStaticText::HighlightedStaticText(const Window& _target, const LanguagedText _texts,
-    float _X, float _Y, int frame, float _height, Color _color, Aligment _aligment) {
+GUI::HighlightedStaticText::HighlightedStaticText(const Window& _target, float _X, float _Y,
+    const LanguagedText _texts, int frame, float _height, Color _color, Aligment _aligment) {
     // Creating texture of text
     TTF_Font* font = _target.getFont(FNT_MAIN);
     TTF_SetFontSize(font, _height);

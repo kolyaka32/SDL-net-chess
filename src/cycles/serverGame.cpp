@@ -15,9 +15,7 @@ app(_app) {
     }
 }
 
-ServerGame::~ServerGame() {
-
-}
+ServerGame::~ServerGame() {}
 
 void ServerGame::inputMouseDown(App& _app) {
     // Checking on exit
@@ -27,7 +25,15 @@ void ServerGame::inputMouseDown(App& _app) {
         return;
     }
     // Clicking in settings menu
-    settings.click(mouse);
+    if (settings.click(mouse)) {
+        // Updating location
+        _app.window.updateTitle();
+        restart();
+        return;
+    }
+    if (settings.isActive()) {
+        // Check on main actions
+    }
     return;
 }
 

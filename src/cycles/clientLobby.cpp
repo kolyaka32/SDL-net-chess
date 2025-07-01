@@ -13,10 +13,10 @@ char basePort[20] = "2000";
 
 ClientLobby::ClientLobby(App& _app)
 : BaseCycle(_app),
-enterIPText(_app.window, {"Enter IP:", "Введите IP:", "-", "Увядзіце IP:"}, 0.5, 0.1, 30, WHITE),
-enterPortText(_app.window, {"Enter port:", "Введите порт:", "Port eingeben:", "Увядзіце порт:"}, 0.5, 0.4, 30, WHITE),
-cancelButton(_app.window, {"Cancel", "Отмена", "Annullierung", "Адмена"}, 0.5, 0.9, 24, WHITE),
-connectButton(_app.window, {"Connect", "Присоединится", "Beitritt", "Далучыцца"}, 0.5, 0.7, 24, WHITE),
+enterIPText(_app.window, 0.5, 0.1, {"Enter IP:", "Введите IP:", "-", "Увядзіце IP:"}, 30, WHITE),
+enterPortText(_app.window, 0.5, 0.4, {"Enter port:", "Введите порт:", "Port eingeben:", "Увядзіце порт:"}, 30, WHITE),
+cancelButton(_app.window, 0.5, 0.9, {"Cancel", "Отмена", "Annullierung", "Адмена"}, 24, WHITE),
+connectButton(_app.window, 0.5, 0.7, {"Connect", "Присоединится", "Beitritt", "Далучыцца"}, 24, WHITE),
 enterIPField(_app.window, 0.5, 0.2, 20, baseIP),
 enterPortField(_app.window, 0.5, 0.5, 20, basePort) {
     NET_Init();

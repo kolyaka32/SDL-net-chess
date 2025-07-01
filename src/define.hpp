@@ -23,6 +23,8 @@
 #define WINDOW_HEIGHT (GAME_HEIGHT + UPPER_LINE + DOWN_LINE)  // Height of all screen
 
 // Internet constants
+#define IPv4 true                           // Type of internet connection by IPv4
+#define IPv6 !IPv4                          // Type of internet connection by IPv6
 #define BASE_PORT 2000                      // Base port to create/connect
 #define INTERNET_BUFFER 5                   // Size of data to send/recieve by connecion
 #define MAX_SEND_ID 128                     // Maximal number of send message ID

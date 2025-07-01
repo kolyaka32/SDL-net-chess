@@ -16,6 +16,17 @@ class ServerLobby : public BaseCycle {
 
     NET_DatagramSocket* server;
 
+    // Title
+    GUI::StaticText titleText;
+
+    // Text with current connection address
+    const char* currentAddress = nullptr;
+    GUI::DynamicText addressText;
+    GUI::InfoBox copiedInfoBox;
+    bool showAddress = false;
+    GUI::TextButton showAddressText;
+    GUI::TextButton hideAddressText;
+
     // Main run functions
     void inputMouseDown(App& app) override;
     void update(App& app) override;

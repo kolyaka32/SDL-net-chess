@@ -6,12 +6,12 @@
 #include "baseGUI.hpp"
 
 
-GUI::ImageButton::ImageButton(const Window& _target, float _x, float _y, IMG_names _index) {
+GUI::ImageButton::ImageButton(const Window& _target, float _X, float _Y, IMG_names _index) {
     // Setting base texture
     texture = _target.getTexture(_index);
 
     // Setting destination
     SDL_GetTextureSize(texture, &rect.w, &rect.h);
-    rect.x = WINDOW_WIDTH * _x - rect.w / 2;
-    rect.y = WINDOW_HEIGHT * _y - rect.h / 2;
+    rect.x = WINDOW_WIDTH * _X - rect.w / 2;
+    rect.y = WINDOW_HEIGHT * _Y - rect.h / 2;
 }

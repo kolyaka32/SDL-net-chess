@@ -12,20 +12,20 @@ Uint8 GameCycle::endState;
 GameCycle::GameCycle(const App& _app)
 : BaseCycle(_app),
 letters(_app.window),
-restartButton(_app.window, {"Restart", "Перезапустить", "Starten", "Перазапуск"}, 0.5, 0.5, 24, WHITE),
-menuButton(_app.window, {"Exit to menu", "Выйти в меню", "Menü verlassen", "Выйсці ў меню"}, 0.5, 0.6, 24, WHITE),
+restartButton(_app.window, 0.5, 0.5, {"Restart", "Перезапустить", "Starten", "Перазапуск"}, 24, WHITE),
+menuButton(_app.window, 0.5, 0.6, {"Exit to menu", "Выйти в меню", "Menü verlassen", "Выйсці ў меню"}, 24, WHITE),
 playersTurnsTexts {
-    {_app.window, {"First player turn", "Ход первого игрока", "Der Zug des ersten Spielers", "Ход першага гульца"}, 0.5, 0.1, 24, WHITE},
-    {_app.window, {"Second player turn", "Ход второго игрока", "Zug des zweiten Spielers", "Ход другога гульца"}, 0.5, 0.1, 24, WHITE},
-    {_app.window, {"Your turn", "Ваш ход", "Sie spielen aus", "Ваш ход"}, 0.5, 0.1, 24, WHITE},
-    {_app.window, {"Wait", "Ожидайте", "Erwartet", "Чакаць"}, 0.5, 0.1, 24, WHITE},
+    {_app.window, 0.5, 0.1, {"First player turn", "Ход первого игрока", "Der Zug des ersten Spielers", "Ход першага гульца"}, 24, WHITE},
+    {_app.window, 0.5, 0.1, {"Second player turn", "Ход второго игрока", "Zug des zweiten Spielers", "Ход другога гульца"}, 24, WHITE},
+    {_app.window, 0.5, 0.1, {"Your turn", "Ваш ход", "Sie spielen aus", "Ваш ход"}, 24, WHITE},
+    {_app.window, 0.5, 0.1, {"Wait", "Ожидайте", "Erwartet", "Чакаць"}, 24, WHITE},
 },
 endBackplate(_app.window, 0.5, 0.5, 0.6, 0.3, 40, 5),
-winText(_app.window, {"Win!", "Победа!", "Sieg!", "Перамога!"}, 0.5, 0.4, 30, WHITE),
-firstWinText(_app.window, {"Fist player win!", "Первый игрок выйграл!", "Der erste Spieler hat gewonnen!", "Першы гулец выйграў!"}, 0.5, 0.4, 30, WHITE),
-secondWinText(_app.window, {"Second player win!", "Второй игрок выйграл!", "Der zweite Spieler hat gewonnen!", "Другі гулец выйграў!"}, 0.5, 0.4, 30, WHITE),
-looseText(_app.window, {"You loose...", "Вы проиграли...", "Sie haben verloren...", "Вы прайгралі..."}, 0.5, 0.4, 30, WHITE),
-nobodyWinText(_app.window, {"Nobody win", "Ничья", "Unentschieden", "Чые"}, 0.5, 0.4, 30, WHITE) {
+winText(_app.window, 0.5, 0.4, {"Win!", "Победа!", "Sieg!", "Перамога!"}, 30, WHITE),
+firstWinText(_app.window, 0.5, 0.4, {"Fist player win!", "Первый игрок выйграл!", "Der erste Spieler hat gewonnen!", "Першы гулец выйграў!"}, 30, WHITE),
+secondWinText(_app.window, 0.5, 0.4, {"Second player win!", "Второй игрок выйграл!", "Der zweite Spieler hat gewonnen!", "Другі гулец выйграў!"}, 30, WHITE),
+looseText(_app.window, 0.5, 0.4, {"You loose...", "Вы проиграли...", "Sie haben verloren...", "Вы прайгралі..."}, 30, WHITE),
+nobodyWinText(_app.window, 0.5, 0.4, {"Nobody win", "Ничья", "Unentschieden", "Чые"}, 30, WHITE) {
     endState = END_NONE;
 
     if (!isRestarted()) {

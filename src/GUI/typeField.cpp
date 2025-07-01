@@ -10,16 +10,16 @@
 
 // Type field class
 template <unsigned bufferSize>
-GUI::TypeField<bufferSize>::TypeField(const Window& _target, float _x, float _y, float _height, const char* _text, Aligment _aligment, Color _color)
+GUI::TypeField<bufferSize>::TypeField(const Window& _target, float _X, float _Y, float _height, const char* _text, Aligment _aligment, Color _color)
 : target(_target),
-posX(WINDOW_WIDTH*_x),
+posX(WINDOW_WIDTH*_X),
 aligment(_aligment),
 textColor(_color),
 font(_target.createFontCopy(FNT_MAIN, _height)),
-backRect({_x*WINDOW_WIDTH-(6.5f*bufferSize+2), _y*WINDOW_HEIGHT-_height*0.9f, 13.0f*bufferSize+4, _height*1.8f}) {
+backRect({_X*WINDOW_WIDTH-(6.5f*bufferSize+2), _Y*WINDOW_HEIGHT-_height*0.9f, 13.0f*bufferSize+4, _height*1.8f}) {
     // Setting rects
-    textRect = {0, WINDOW_HEIGHT*_y-_height/2-1, 0, 0};
-    caretRect = {0, WINDOW_HEIGHT*_y-_height/2-1, 2, _height*1.3f};
+    textRect = {0, WINDOW_HEIGHT*_Y-_height/2-1, 0, 0};
+    caretRect = {0, WINDOW_HEIGHT*_Y-_height/2-1, 2, _height*1.3f};
 
     // Copying text to caret
     length = strlen(_text);
