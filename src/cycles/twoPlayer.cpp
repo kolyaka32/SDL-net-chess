@@ -14,4 +14,3 @@ TwoPlayerGameCycle::TwoPlayerGameCycle(const App& _app)
         _app.music.start(MUS_MAIN);
     }
 }
-

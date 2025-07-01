@@ -14,7 +14,7 @@ class ServerLobby : public BaseCycle {
  private:
     App& app;
 
-    //SDLNet_DatagramSocket* server;
+    NET_DatagramSocket* server;
 
     // Main run functions
     void inputMouseDown(App& app) override;

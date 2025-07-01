@@ -13,17 +13,17 @@ app(_app) {
     if(!isRestarted()) {
         //_app.music.start(MUS_MAIN);
     }
-    //SDLNet_Init();
+    NET_Init();
 
     // Creating server
-    //server = SDLNet_CreateDatagramSocket(NULL, 8000);
+    server = NET_CreateDatagramSocket(nullptr, 8000);
 
-    //SDL_Log("Server created: %u\n", server);
+    SDL_Log("Server created: %u\n", server);
 }
 
 ServerLobby::~ServerLobby() {
-    //SDLNet_Quit();
-    //SDLNet_DestroyDatagramSocket(server);
+    NET_DestroyDatagramSocket(server);
+    NET_Quit();
 }
 
 void ServerLobby::inputMouseDown(App& _app) {
@@ -43,22 +43,24 @@ void ServerLobby::update(App& _app) {
     // Updating settings
     settings.update(_app);
 
+    NET_Datagram* data;
 
-    /*SDLNet_Datagram* data;
 
+    if (!NET_ReceiveDatagram(server, &data)) {
+        SDL_Log("something");
+    }
 
-    if (!SDLNet_ReceiveDatagram(server, &data)) {
+    if (!NET_ReceiveDatagram(server, &data)) {
         SDL_Log("something");
     }
 
     if (data) {
-        SDL_Log("Error %s\n", SDL_GetError());
+        SDL_Log("Error: %s\n", SDL_GetError());
         for (int i=0; i < data->buflen; ++i) {
-            SDL_Log("%u ", data->buf[i]);
+            SDL_Log("%c ", data->buf[i]);
         }
-        SDL_Log("\n");
-        SDLNet_DestroyDatagram(data);
-    }*/
+        NET_DestroyDatagram(data);
+    }
 }
 
 void ServerLobby::draw(const App& _app) const {

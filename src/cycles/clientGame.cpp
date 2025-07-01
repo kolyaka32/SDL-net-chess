@@ -12,37 +12,10 @@ app(_app) {
     if(!isRestarted()) {
         //_app.music.start(MUS_MAIN);
     }
-    /*SDLNet_Init();
-
-    SDLNet_Address* sendTo = SDLNet_ResolveHostname("255.255.255.255");
-    SDLNet_WaitUntilResolved(sendTo, -1);
-    SDL_Log("Client to send created: %u\n", sendTo);
-
-    //SDLNet_Address* sendFrom = SDLNet_ResolveHostname("127.0.0.1");
-    //SDLNet_WaitUntilResolved(sendFrom, -1);
-
-    SDLNet_DatagramSocket* current = SDLNet_CreateDatagramSocket(0, 0);
-
-    SDL_Log("Client from send to: %u\n", current);
-    SDL_Log(SDL_GetError());
-
-    char data[20] = "1234";
-    
-    SDLNet_SendDatagram(current, sendTo, 8000, data, 20);
-
-    SDL_Log(SDL_GetError());
-
-    SDLNet_DestroyDatagramSocket(current);
-    SDLNet_UnrefAddress(sendTo);*/
-    
-    SDL_Log("Client stopped\n");
-
-    _app.startNextCycle(CYCLE_MENU);
-    stop();
 }
 
 ClientGame::~ClientGame() {
-    //SDLNet_Quit();
+
 }
 
 void ClientGame::inputMouseDown(App& _app) {
@@ -58,7 +31,6 @@ void ClientGame::inputMouseDown(App& _app) {
 }
 
 void ClientGame::update(App& _app) {
-
     // Updating settings
     settings.update(_app);
 }

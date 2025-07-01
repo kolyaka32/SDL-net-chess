@@ -13,44 +13,42 @@ char basePort[20] = "2000";
 
 ClientLobby::ClientLobby(App& _app)
 : BaseCycle(_app),
-enterIPText{_app.window, {"Enter IP:", "Введите IP:", "-", "Увядзіце IP:"}, 0.5, 0.1, 30, WHITE},
-enterPortText{_app.window, {"Enter port:", "Введите порт:", "Port eingeben:", "Увядзіце порт:"}, 0.5, 0.4, 30, WHITE},
-cancelButton{_app.window, {"Cancel", "Отмена", "Annullierung", "Адмена"}, 0.5, 0.9, 24, WHITE},
-connectButton{_app.window, {"Connect", "Присоединится", "Beitritt", "Далучыцца"}, 0.5, 0.7, 24, WHITE},
-enterIPField{_app.window, 0.5, 0.2, 20, baseIP},
-enterPortField{_app.window, 0.5, 0.5, 20, basePort}
-{
-    /*SDLNet_Init();
+enterIPText(_app.window, {"Enter IP:", "Введите IP:", "-", "Увядзіце IP:"}, 0.5, 0.1, 30, WHITE),
+enterPortText(_app.window, {"Enter port:", "Введите порт:", "Port eingeben:", "Увядзіце порт:"}, 0.5, 0.4, 30, WHITE),
+cancelButton(_app.window, {"Cancel", "Отмена", "Annullierung", "Адмена"}, 0.5, 0.9, 24, WHITE),
+connectButton(_app.window, {"Connect", "Присоединится", "Beitritt", "Далучыцца"}, 0.5, 0.7, 24, WHITE),
+enterIPField(_app.window, 0.5, 0.2, 20, baseIP),
+enterPortField(_app.window, 0.5, 0.5, 20, basePort) {
+    NET_Init();
 
-    SDLNet_Address* sendTo = SDLNet_ResolveHostname("255.255.255.255");
-    SDLNet_WaitUntilResolved(sendTo, -1);
+    NET_Address* sendTo = NET_ResolveHostname("127.0.0.1");
+    NET_WaitUntilResolved(sendTo, -1);
     SDL_Log("Client to send created: %u\n", sendTo);
 
-    //SDLNet_Address* sendFrom = SDLNet_ResolveHostname("127.0.0.1");
-    //SDLNet_WaitUntilResolved(sendFrom, -1);
-
-    SDLNet_DatagramSocket* current = SDLNet_CreateDatagramSocket(0, 0);
+    NET_DatagramSocket* current = NET_CreateDatagramSocket(0, 0);
 
     SDL_Log("Client from send to: %u\n", current);
-    SDL_Log(SDL_GetError());
+    SDL_Log("Error: %s", SDL_GetError());
 
     char data[20] = "1234";
-    
-    SDLNet_SendDatagram(current, sendTo, 8000, data, 20);
 
-    SDL_Log(SDL_GetError());
+    SDL_Log("Trying send packet: %s\n", data);
+    NET_SendDatagram(current, sendTo, 8000, data, 20);
 
-    SDLNet_DestroyDatagramSocket(current);
-    SDLNet_UnrefAddress(sendTo);
+    SDL_Log("Error: %s", SDL_GetError());
+
+    NET_DestroyDatagramSocket(current);
+    NET_UnrefAddress(sendTo);
     
     SDL_Log("Client stopped\n");
+    NET_Quit();
 
     _app.startNextCycle(CYCLE_MENU);
-    stop();*/
+    stop();
 }
 
 ClientLobby::~ClientLobby() {
-    //SDLNet_Quit();
+
 }
 
 void ClientLobby::inputMouseDown(App& _app) {
