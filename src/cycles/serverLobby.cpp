@@ -17,33 +17,44 @@ hideAddressText(_app.window, 0.5, 0.45, {"Hide address", "Скрыть адре�
     // Initialasing net library
     NET_Init();
 
+    // Finding avaliable server port
+    Uint16 currentPort = 8000;
+
+    // Finding avalialble port
+    srand(time(0));
+    while ((server = NET_CreateDatagramSocket(nullptr, currentPort)) == nullptr) {
+        // Creating another port
+        currentPort = rand() % 10000;
+    }
+
     // Getting current address
     int addressesNumber = 0;
     NET_Address** addresses = NET_GetLocalAddresses(&addressesNumber);
 
     // Finding usedull address
     for (int i=0; i < addressesNumber; ++i) {
-        currentAddress = NET_GetAddressString(addresses[i]);
+        const char* address = NET_GetAddressString(addresses[i]);
         bool usefull = true;
         // Check, if not IPv6 address
-        for (const char* c = currentAddress; *c; ++c) {
+        for (const char* c = address; *c; ++c) {
             if (*c == ':') {
                 usefull = false;
                 break;
             }
         }
         // Check, if not basic '127.0.0.1'
-        if (usefull && strcmp(currentAddress, "127.0.0.1")) {
+        if (usefull && strcmp(address, "127.0.0.1")) {
             // Use this address
+            sprintf(currentAddress, "%s:%u", address, currentPort);
             break;
         }
     }
+    // Setting showing address text as hidden
     addressText.setValues(_app.window, "********");
 
-    // Starting main song (if wasn't started)
-    if(!isRestarted()) {
-        //_app.music.start(MUS_MAIN);
-    }
+    #if CHECK_CORRECTION
+    SDL_Log("Server created: %u, address: %s, port: %u\n", server, currentAddress, port);
+    #endif
 }
 
 ServerLobby::~ServerLobby() {
@@ -105,10 +116,13 @@ void ServerLobby::update(App& _app) {
     }
 
     if (data) {
+        // Writing getted data for debug
+        #if CHECK_CORRECTION
         SDL_Log("Error: %s\n", SDL_GetError());
         for (int i=0; i < data->buflen; ++i) {
             SDL_Log("%c ", data->buf[i]);
         }
+        #endif
         NET_DestroyDatagram(data);
     }
 

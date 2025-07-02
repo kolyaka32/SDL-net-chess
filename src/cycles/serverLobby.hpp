@@ -14,17 +14,17 @@ class ServerLobby : public BaseCycle {
  private:
     App& app;
 
-    NET_DatagramSocket* server;
+    NET_DatagramSocket* server = nullptr;
 
     // Title
     GUI::StaticText titleText;
 
     // Text with current connection address
-    const char* currentAddress = nullptr;
-    GUI::DynamicText addressText;
-    GUI::InfoBox copiedInfoBox;
-    bool showAddress = false;
-    GUI::TextButton showAddressText;
+    char currentAddress[24];          // String with current app address for connection
+    bool showAddress = false;         // Flag of showing current address to screen
+    GUI::DynamicText addressText;     // Text for showing/copying current address
+    GUI::InfoBox copiedInfoBox;       // Message about copying to clipboard address
+    GUI::TextButton showAddressText;  // Buttons to change state of showing address at screen
     GUI::TextButton hideAddressText;
 
     // Main run functions
