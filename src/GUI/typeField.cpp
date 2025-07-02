@@ -418,8 +418,26 @@ bool GUI::TypeField<bufferSize>::in(const Mouse mouse) {
     return mouse.in(backRect);
 }
 
-// Returning current text
 template <unsigned bufferSize>
 const char* GUI::TypeField<bufferSize>::getString() const {
     return buffer;
+}
+
+template <unsigned bufferSize>
+void GUI::TypeField<bufferSize>::setString(const char* _newString) {
+    length = MIN(strlen(_newString), bufferSize);
+    memcpy(buffer, _newString, length);
+
+    // Resetting
+    selected = false;
+    pressed = false;
+
+    // Stoping entering any letters
+    target.stopTextInput();
+
+    // Clearing caret
+    showCaret = false;
+    selectLength = 0;
+
+    updateTexture();
 }

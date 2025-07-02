@@ -10,20 +10,23 @@
 
 
 // Global base connect link for type in typeboxes
-extern char baseIP[20];
-extern char basePort[20];
+extern char baseIP[12];
+extern char basePort[6];
 
 // Game cycle (for single player (special animation))
 class ClientLobby : public BaseCycle {
  private:
+	// Input fields
     GUI::StaticText enterIPText;
+	GUI::TypeField<12> enterIPField;
     GUI::StaticText enterPortText;
-    GUI::TextButton cancelButton;
+	GUI::TypeField<6> enterPortField;
     GUI::TextButton connectButton;
+    GUI::TextButton pasteButton;
 
-    // Input fields
-    GUI::TypeField<39> enterIPField;
-    GUI::TypeField<5> enterPortField;
+	// Connection parameters
+	NET_DatagramSocket* gettingSocket;
+    void tryConnect();
 
     // Main run functions
     void inputMouseDown(App& app) override;

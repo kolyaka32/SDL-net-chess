@@ -3,6 +3,7 @@
  * <nik.kazankov.05@mail.ru>
  */
 
+#include <ctime>
 #include "serverLobby.hpp"
 
 
@@ -53,7 +54,7 @@ hideAddressText(_app.window, 0.5, 0.45, {"Hide address", "Скрыть адре�
     addressText.setValues(_app.window, "********");
 
     #if CHECK_CORRECTION
-    SDL_Log("Server created: %u, address: %s, port: %u\n", server, currentAddress, port);
+    SDL_Log("Server created: %u, address: %s, port: %u", server, currentAddress, currentPort);
     #endif
 }
 
@@ -76,33 +77,34 @@ void ServerLobby::inputMouseDown(App& _app) {
         restart();
         return;
     }
-    if (!settings.isActive()) {
-        // Check on copying address
-        if (addressText.in(mouse)) {
-            // Copying address to buffer
-            static char clipboardText[20];
-            strcpy(clipboardText, currentAddress);
-            SDL_SetClipboardText(clipboardText);
-            copiedInfoBox.reset();
+    // Check, if in settings menu
+    if (settings.isActive()) {
+        return;
+    }
+    // Check on copying address
+    if (addressText.in(mouse)) {
+        // Copying address to buffer
+        static char clipboardText[20];
+        strcpy(clipboardText, currentAddress);
+        SDL_SetClipboardText(clipboardText);
+        copiedInfoBox.reset();
+        return;
+    }
+    if (showAddress) {
+        // Check on hiding address
+        if (hideAddressText.in(mouse)) {
+            showAddress = false;
+            addressText.setValues(_app.window, "********");
             return;
         }
-        if (showAddress) {
-            // Check on hiding address
-            if (hideAddressText.in(mouse)) {
-                showAddress = false;
-                addressText.setValues(_app.window, "********");
-                return;
-            }
-        } else {
-            // Check on showing address
-            if (showAddressText.in(mouse)) {
-                showAddress = true;
-                addressText.setValues(_app.window, currentAddress);
-                return;
-            }
+    } else {
+        // Check on showing address
+        if (showAddressText.in(mouse)) {
+            showAddress = true;
+            addressText.setValues(_app.window, currentAddress);
+            return;
         }
     }
-    return;
 }
 
 void ServerLobby::update(App& _app) {
@@ -118,9 +120,9 @@ void ServerLobby::update(App& _app) {
     if (data) {
         // Writing getted data for debug
         #if CHECK_CORRECTION
-        SDL_Log("Error: %s\n", SDL_GetError());
+        SDL_Log("Get packet with %u bytes, from %s, port: %u", data->buflen, NET_GetAddressString(data->addr), data->port);
         for (int i=0; i < data->buflen; ++i) {
-            SDL_Log("%c ", data->buf[i]);
+            SDL_Log("%u", data->buf[i]);
         }
         #endif
         NET_DestroyDatagram(data);
