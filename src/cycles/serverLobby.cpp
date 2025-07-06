@@ -3,7 +3,6 @@
  * <nik.kazankov.05@mail.ru>
  */
 
-#include <ctime>
 #include "serverLobby.hpp"
 
 
@@ -15,57 +14,20 @@ addressText(_app.window, 0.5, 0.3, {"Your address: %s", "Ваш адресс: %s
 copiedInfoBox(_app.window, 0.5, 0.37, {"Address copied", "Адрес скопирован", "Adresse kopiert", "Скапіяваны адрас"}, 30, WHITE),
 showAddressText(_app.window, 0.5, 0.45, {"Show address", "Показать адресс", "Adresse anzeigen", "Паказаць адрас"}, 24),
 hideAddressText(_app.window, 0.5, 0.45, {"Hide address", "Скрыть адресс", "Adresse verbergen", "Схаваць адрас"}, 24) {
-    // Initialasing net library
-    NET_Init();
+    // Initialasing internet class
+    server.start();
 
-    // Finding avaliable server port
-    Uint16 currentPort = 8000;
+    // Getting string with full address of current app
+    sprintf(currentAddress, "%s:%u", server.getLocalIP(), server.getPort());
 
-    // Finding avalialble port
-    srand(time(0));
-    while ((server = NET_CreateDatagramSocket(nullptr, currentPort)) == nullptr) {
-        // Creating another port
-        currentPort = rand() % 10000;
-    }
-
-    // Getting current address
-    int addressesNumber = 0;
-    NET_Address** addresses = NET_GetLocalAddresses(&addressesNumber);
-
-    // Finding usedull address
-    for (int i=0; i < addressesNumber; ++i) {
-        const char* address = NET_GetAddressString(addresses[i]);
-        bool usefull = true;
-        // Check, if not IPv6 address
-        for (const char* c = address; *c; ++c) {
-            if (*c == ':') {
-                usefull = false;
-                break;
-            }
-        }
-        // Check, if not basic '127.0.0.1'
-        if (usefull && strcmp(address, "127.0.0.1")) {
-            // Use this address
-            sprintf(currentAddress, "%s:%u", address, currentPort);
-            break;
-        }
-    }
     // Setting showing address text as hidden
     addressText.setValues(_app.window, "********");
-
-    #if CHECK_CORRECTION
-    SDL_Log("Server created: %u, address: %s, port: %u", server, currentAddress, currentPort);
-    #endif
-}
-
-ServerLobby::~ServerLobby() {
-    NET_DestroyDatagramSocket(server);
-    NET_Quit();
 }
 
 void ServerLobby::inputMouseDown(App& _app) {
     // Checking on exit
     if (exitButton.in(mouse)) {
+        server.stop();
         _app.startNextCycle(CYCLE_MENU);
         stop();
         return;
@@ -73,6 +35,7 @@ void ServerLobby::inputMouseDown(App& _app) {
     // Clicking in settings menu
     if (settings.click(mouse)) {
         // Updating location
+        server.stop();
         _app.window.updateTitle();
         restart();
         return;
@@ -111,25 +74,20 @@ void ServerLobby::update(App& _app) {
     // Updating settings
     settings.update(_app);
 
-    NET_Datagram* data;
-
-    if (!NET_ReceiveDatagram(server, &data)) {
-        //SDL_Log("something: %u", data);
-    }
-
-    if (data) {
-        // Writing getted data for debug
-        #if CHECK_CORRECTION
-        SDL_Log("Get packet with %u bytes, from %s, port: %u", data->buflen, NET_GetAddressString(data->addr), data->port);
-        for (int i=0; i < data->buflen; ++i) {
-            SDL_Log("%u", data->buf[i]);
-        }
-        #endif
-        NET_DestroyDatagram(data);
-    }
-
     // Update infobox
     copiedInfoBox.update();
+
+    // Getting internet packets
+    switch (server.getCode()) {
+    case ConnectionCode::Init:
+        // Sending approving code
+        server.connectToLastMessage();
+
+        // Starting game (as server)
+        _app.startNextCycle(CYCLE_SERVER_GAME);
+        stop();
+        break;
+    }
 }
 
 void ServerLobby::draw(const App& _app) const {

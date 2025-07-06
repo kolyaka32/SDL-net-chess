@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include <SDL3_net/SDL_net.h>
 #include "baseCycle.hpp"
+#include "../internet/client.hpp"
 
 
 // Global base connect link for type in typeboxes
@@ -16,17 +16,18 @@ extern char basePort[6];
 // Game cycle (for single player (special animation))
 class ClientLobby : public BaseCycle {
  private:
-	// Input fields
+    // Internet parameters
+    Client client;
+
+    // Input fields
     GUI::StaticText enterIPText;
-	GUI::TypeField<12> enterIPField;
+    GUI::TypeField<12> enterIPField;
     GUI::StaticText enterPortText;
-	GUI::TypeField<6> enterPortField;
+    GUI::TypeField<6> enterPortField;
     GUI::TextButton connectButton;
     GUI::TextButton pasteButton;
 
-	// Connection parameters
-	NET_DatagramSocket* gettingSocket;
-    void tryConnect();
+    void pasteFromClipboard();
 
     // Main run functions
     void inputMouseDown(App& app) override;
@@ -38,5 +39,4 @@ class ClientLobby : public BaseCycle {
 
  public:
     ClientLobby(App& app);
-    ~ClientLobby();
 };

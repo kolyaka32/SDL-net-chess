@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include <SDL3_net/SDL_net.h>
 #include "gameCycle.hpp"
+#include "../internet/server.hpp"
 
 
 // Game cycle with game part of server

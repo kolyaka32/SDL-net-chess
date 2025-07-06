@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include <SDL3_net/SDL_net.h>
 #include "baseCycle.hpp"
+#include "../internet/client.hpp"
 
 
 // Game cycle (for single player (special animation))

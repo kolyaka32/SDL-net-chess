@@ -19,40 +19,13 @@ enterPortText(_app.window, 0.5, 0.4, {"Enter port:", "Введите порт:",
 enterPortField(_app.window, 0.5, 0.5, 20, basePort),
 connectButton(_app.window, 0.5, 0.7, {"Connect", "Присоединится", "Beitritt", "Далучыцца"}, 24, WHITE),
 pasteButton(_app.window, 0.5, 0.9, {"Paste the copied address", "Вставить скопированный адрес", "Kopierte Adresse einfügen", "Уставіць скапіяваны адрас"}, 24, WHITE) {
-    // Initialasing SDL net library
-    NET_Init();
-
-    // Creating getting port
-    gettingSocket = NET_CreateDatagramSocket(0, 0);
-
-    /*NET_Address* sendTo = NET_ResolveHostname("127.0.0.1");
-    NET_WaitUntilResolved(sendTo, -1);
-    SDL_Log("Client to send created: %u\n", sendTo);
-
-    NET_DatagramSocket* current = NET_CreateDatagramSocket(0, 0);
-
-    SDL_Log("Client from send to: %u\n", current);
-    SDL_Log("Error: %s", SDL_GetError());
-
-    char data[20] = "1234";
-
-    SDL_Log("Trying send packet: %s\n", data);
-    NET_SendDatagram(current, sendTo, 8000, data, 20);
-
-    SDL_Log("Error: %s", SDL_GetError());
-
-    NET_DestroyDatagramSocket(current);
-    NET_UnrefAddress(sendTo);*/
-}
-
-ClientLobby::~ClientLobby() {
-    NET_DestroyDatagramSocket(gettingSocket);
-    NET_Quit();
+    client.start();
 }
 
 void ClientLobby::inputMouseDown(App& _app) {
     // Checking on exit
     if (exitButton.in(mouse)) {
+        client.stop();
         _app.startNextCycle(CYCLE_MENU);
         stop();
         return;
@@ -60,6 +33,7 @@ void ClientLobby::inputMouseDown(App& _app) {
     // Clicking in settings menu
     if (settings.click(mouse)) {
         // Updating location
+        client.stop();
         _app.window.updateTitle();
         restart();
         return;
@@ -75,53 +49,13 @@ void ClientLobby::inputMouseDown(App& _app) {
 
     // Check, if press paste data
     if (pasteButton.in(mouse)) {
-        // Getting data from clipboard
-        char* clipboard = SDL_GetClipboardText();
-
-        // Check text on correction
-        if (clipboard == nullptr) {
-            #if CHECK_CORRECTION
-            SDL_Log("Couldn't get clipboard");
-            #endif
-            return;
-        }
-        // Find IP text (first part)
-        int i=0;
-        for (; clipboard[i]; ++i) {
-            // Finding : as port separator
-            if (clipboard[i] == ':') {
-                break;
-            }
-            // Checking coorection of string
-            if (clipboard[i] != '.' && (clipboard[i] < '0' || clipboard[i] > '9')) {
-                #if CHECK_CORRECTION
-                SDL_Log("Wrong clipboard: %s", clipboard);
-                #endif
-                SDL_free(clipboard);
-                return;
-            }
-        }
-        clipboard[i] = '\0';
-        i++;
-        // Finding end of port text
-        for (int k=i;clipboard[k];++k) {
-            if (clipboard[k] < '0' || clipboard[k] > '9') {
-                clipboard[k] = '\0';
-                break;
-            }
-        }
-        #if CHECK_CORRECTION
-        SDL_Log("From clipboard: IP: %s, port: %s", clipboard, clipboard+i);
-        #endif
-        enterIPField.setString(clipboard);
-        enterPortField.setString(clipboard+i);
-        SDL_free(clipboard);
+        pasteFromClipboard();
         return;
     }
 
     // Trying to connect at specified address
     if (connectButton.in(mouse)) {
-        tryConnect();
+        client.tryConnect(enterIPField.getString(), std::stoi(enterPortField.getString()));
         return;
     }
 }
@@ -145,6 +79,17 @@ void ClientLobby::update(App& _app) {
     mouse.updatePos();
     enterIPField.update(mouse.getX());
     enterPortField.update(mouse.getX());
+
+    // Getting internet data
+    switch (client.getCode()) {
+    case ConnectionCode::Init:
+        // Settings options to this connection
+        client.connectToLastMessage();
+        // Starting game
+        _app.startNextCycle(CYCLE_CLIENT_GAME);
+        stop();
+        return;
+    }
 }
 
 void ClientLobby::inputText(App& app, const char* text) {
@@ -176,42 +121,46 @@ void ClientLobby::draw(const App& _app) const {
     _app.window.render();
 }
 
-void ClientLobby::tryConnect() {
-    #if CHECK_CORRECTION
-    SDL_Log("Trying connect to: address: %s, port: %s", enterIPField.getString(), enterPortField.getString());
-    #endif
-    NET_Address* receiverAddress = NET_ResolveHostname(enterIPField.getString());
+void ClientLobby::pasteFromClipboard() {
+    // Getting data from clipboard
+    char* clipboard = SDL_GetClipboardText();
 
-    // Check, if address is incorrect
-    if (receiverAddress == nullptr) {
+    // Check text on correction
+    if (clipboard == nullptr) {
         #if CHECK_CORRECTION
-        SDL_Log("Can't find this address");
+        SDL_Log("Couldn't get clipboard");
         #endif
         return;
     }
-
-    Uint16 receiverPort = std::stoi(enterPortField.getString());
-
-    // Waiting, if get address
-    NET_WaitUntilResolved(receiverAddress, 20);
-
-    // Check, if get address
-    if (NET_GetAddressStatus(receiverAddress) != 1) {
-        #if CHECK_CORRECTION
-        SDL_Log("Can't connect to this address");
-        #endif
-        return;
+    // Find IP text (first part)
+    int i=0;
+    for (; clipboard[i]; ++i) {
+        // Finding : as port separator
+        if (clipboard[i] == ':') {
+            break;
+        }
+        // Checking coorection of string
+        if (clipboard[i] != '.' && (clipboard[i] < '0' || clipboard[i] > '9')) {
+            #if CHECK_CORRECTION
+            SDL_Log("Wrong clipboard: %s", clipboard);
+            #endif
+            SDL_free(clipboard);
+            return;
+        }
     }
-
-    // Sending initialasing packet
+    clipboard[i] = '\0';
+    i++;
+    // Finding end of port text
+    for (int k=i; clipboard[k]; ++k) {
+        if (clipboard[k] < '0' || clipboard[k] > '9') {
+            clipboard[k] = '\0';
+            break;
+        }
+    }
     #if CHECK_CORRECTION
-    SDL_Log("Sending initialasing packet");
+    SDL_Log("From clipboard: IP: %s, port: %s", clipboard, clipboard+i);
     #endif
-    Uint8 data[] = {10, 10, 10};
-    NET_SendDatagram(gettingSocket, receiverAddress, receiverPort, data, sizeof(data));
-
-    // Waiting for get any response
-    /*SDL_Delay(20);
-    NET_Datagram* recievedDatagram;
-    NET_ReceiveDatagram(gettingSocket, &recievedDatagram);*/
+    enterIPField.setString(clipboard);
+    enterPortField.setString(clipboard+i);
+    SDL_free(clipboard);
 }

@@ -6,7 +6,7 @@
 #pragma once
 
 #include "baseCycle.hpp"
-#include <SDL3_net/SDL_net.h>
+#include "../internet/server.hpp"
 
 
 // Cycle with waiting for client connect
@@ -14,7 +14,8 @@ class ServerLobby : public BaseCycle {
  private:
     App& app;
 
-    NET_DatagramSocket* server = nullptr;
+    // Internet connection part
+    Server server;
 
     // Title
     GUI::StaticText titleText;
@@ -34,5 +35,4 @@ class ServerLobby : public BaseCycle {
 
  public:
     ServerLobby(App& app);
-    ~ServerLobby();
 };
