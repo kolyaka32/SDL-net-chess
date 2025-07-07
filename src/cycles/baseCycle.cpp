@@ -11,7 +11,7 @@ BaseCycle::BaseCycle(const App& _app)
 : exitButton(_app.window, 0.05, 0.05, IMG_GUI_QUIT_BUTTON),
 settings(_app) {
     // Opening settings menu after restart
-    if (isRestarted()) {
+    if (App::isRestarted()) {
         settings.activate();
     }
 }

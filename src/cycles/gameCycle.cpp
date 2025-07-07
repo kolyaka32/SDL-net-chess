@@ -4,6 +4,8 @@
  */
 
 #include "gameCycle.hpp"
+#include "selectCycle.hpp"
+
 
 // Static class members
 Board GameCycle::board;
@@ -28,45 +30,45 @@ looseText(_app.window, 0.5, 0.4, {"You loose...", "Вы проиграли...", 
 nobodyWinText(_app.window, 0.5, 0.4, {"Nobody win", "Ничья", "Unentschieden", "Чые"}, 30, WHITE) {
     endState = END_NONE;
 
-    if (!isRestarted()) {
+    if (!App::isRestarted()) {
         board.reset();
     }
 }
 
 void GameCycle::inputMouseDown(App& _app) {
     if (exitButton.in(mouse)) {
-        _app.startNextCycle(Cycle::Menu);
         stop();
         return;
-    } else if (settings.click(mouse)) {
-        // Updating location
-        _app.window.updateTitle();
-        restart();
-    } else if (!settings.isActive()) {
-        // Checking, if game start
-        if (endState <= END_TURN) {
-            // Clicking on field
-            endState = board.click(_app.sounds, mouse);
-            return;
-        }
-        // Starting waiting menu
-        if (restartButton.in(mouse)) {
-            // Restarting current game
-            endState = END_NONE;
+    }
+    // Clicking in settings menu
+    if (settings.click(mouse)) {
+        return;
+    }
+    if (settings.isActive()) {
+        return;
+    }
+    // Checking, if game start
+    if (endState <= END_TURN) {
+        // Clicking on field
+        endState = board.click(_app.sounds, mouse);
+        return;
+    }
+    // Starting waiting menu
+    if (restartButton.in(mouse)) {
+        // Restarting current game
+        endState = END_NONE;
 
-            // Resetting field
-            board.reset();
+        // Resetting field
+        board.reset();
 
-            // Making sound
-            _app.sounds.play(SND_RESET);
-            return;
-        }
-        if (menuButton.in(mouse)) {
-            // Going to menu
-            _app.startNextCycle(Cycle::Menu);
-            stop();
-            return;
-        }
+        // Making sound
+        _app.sounds.play(SND_RESET);
+        return;
+    }
+    if (menuButton.in(mouse)) {
+        // Going to menu
+        stop();
+        return;
     }
 }
 
@@ -85,7 +87,6 @@ void GameCycle::inputKeys(App& _app, SDL_Keycode key) {
 
     case SDLK_Q:
         // Quiting to menu
-        _app.startNextCycle(Cycle::Menu);
         stop();
         return;
     }

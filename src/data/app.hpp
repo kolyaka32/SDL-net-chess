@@ -11,7 +11,6 @@
 #include "initFile.hpp"
 #include "window.hpp"
 #include "languages.hpp"
-#include "../cycles/cycles.hpp"
 
 
 // Load needed loader, depend on teting
@@ -33,30 +32,41 @@ private:
     #endif
 
     // Flags of work
-    bool running = true;
-    Cycle nextCycle = Cycle::Menu;
-
-protected:
-    // Templated function for run new cycle
-    template <class T>
-    void runCycle() {
-        T cycle(*this);
-        cycle.run(*this);
-    }
+    static bool running;
+    static bool restarting;
 
 public:
     App();
-    ~App();
 
     // Commands to operate with global running
-    void stop();
-    void startNextCycle(Cycle type);
+    static void stop();
+    static bool isRunning();
+    static void restart();
+    static void resetRestart();
+    static bool isRestarted();
 
-    // Command to start cycles
-    void run();
+    // Templated function for run new cycle
+    template <class T>
+    void runCycle();
 
     Music music;
     Sounds sounds;
     InitFile initFile;
     const Window window;
 };
+
+
+template <class T>
+void App::runCycle() {
+    // Resetting
+    restarting = false;
+
+    // Running current cycle, while restarting
+    do {
+        // Updating location
+        App::window.updateTitle();
+        // Launching new cycle
+        T cycle(*this);
+        cycle.run(*this);
+    } while (restarting && running);
+}

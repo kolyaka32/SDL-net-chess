@@ -4,6 +4,7 @@
  */
 
 #include "clientLobby.hpp"
+#include "clientGame.hpp"
 
 
 // Base link connections realisations
@@ -26,16 +27,12 @@ void ClientLobby::inputMouseDown(App& _app) {
     // Checking on exit
     if (exitButton.in(mouse)) {
         client.stop();
-        _app.startNextCycle(Cycle::Menu);
         stop();
         return;
     }
     // Clicking in settings menu
     if (settings.click(mouse)) {
-        // Updating location
         client.stop();
-        _app.window.updateTitle();
-        restart();
         return;
     }
     // Check, if in settings menu
@@ -86,7 +83,8 @@ void ClientLobby::update(App& _app) {
         // Settings options to this connection
         client.connectToLastMessage();
         // Starting game
-        _app.startNextCycle(Cycle::ClientGame);
+        _app.runCycle<ClientGame>();
+        // Exiting to menu after game
         stop();
         return;
     }

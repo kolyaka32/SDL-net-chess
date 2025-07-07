@@ -4,6 +4,8 @@
  */
 
 #include "serverLobby.hpp"
+#include "selectCycle.hpp"
+#include "serverGame.hpp"
 
 
 ServerLobby::ServerLobby(App& _app)
@@ -28,16 +30,12 @@ void ServerLobby::inputMouseDown(App& _app) {
     // Checking on exit
     if (exitButton.in(mouse)) {
         server.stop();
-        _app.startNextCycle(Cycle::Menu);
         stop();
         return;
     }
     // Clicking in settings menu
     if (settings.click(mouse)) {
-        // Updating location
         server.stop();
-        _app.window.updateTitle();
-        restart();
         return;
     }
     // Check, if in settings menu
@@ -84,7 +82,8 @@ void ServerLobby::update(App& _app) {
         server.connectToLastMessage();
 
         // Starting game (as server)
-        _app.startNextCycle(Cycle::ServerGame);
+        _app.runCycle<ServerGame>();
+        // Exiting to menu after game
         stop();
         break;
     }

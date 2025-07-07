@@ -10,7 +10,7 @@
 TwoPlayerGameCycle::TwoPlayerGameCycle(const App& _app)
 : GameCycle(_app) {
     // Starting main music
-    if (!isRestarted()) {
+    if (!App::isRestarted()) {
         _app.music.start(MUS_MAIN);
     }
 }

@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include "../data/cycleTemplate.hpp"
 #include "../GUI/interface.hpp"
 
 

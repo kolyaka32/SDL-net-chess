@@ -5,18 +5,32 @@
 
 #include "cycleTemplate.hpp"
 
+
+bool App::running = true;
+bool App::restarting = false;
+
 App::App()
 : music{loader, musicFilesNames},
 sounds{loader, soundsFilesNames},
 initFile(music, sounds),
 window{loader} {}
 
-App::~App() {}
-
 void App::stop() {
     running = false;
 }
 
-void App::startNextCycle(Cycle _type) {
-    nextCycle = _type;
+bool App::isRunning() {
+    return running;
+}
+
+void App::restart() {
+    restarting = true;
+}
+
+void App::resetRestart() {
+    restarting = false;
+}
+
+bool App::isRestarted() {
+    return restarting;
 }

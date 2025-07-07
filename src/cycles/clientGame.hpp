@@ -21,5 +21,4 @@ class ClientGame : public BaseCycle {
 
  public:
     ClientGame(App& app);
-    ~ClientGame();
 };

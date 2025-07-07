@@ -46,7 +46,12 @@ bool SettingsMenu::click(const Mouse _mouse) {
         // Check on changing language
         for (unsigned i = 0; i < (unsigned)Language::Count; ++i) {
             if (flags[i].in(_mouse)) {
-                return LanguagedText::setLanguage((Language)i);
+                if (LanguagedText::setLanguage((Language)i)) {
+                    // Restarting game
+                    App::restart();
+                    CycleTemplate::stop();
+                    return true;
+                }
             }
         }
     }

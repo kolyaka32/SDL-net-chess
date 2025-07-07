@@ -4,6 +4,10 @@
  */
 
 #include "selectCycle.hpp"
+#include "singlePlayer.hpp"
+#include "twoPlayer.hpp"
+#include "serverLobby.hpp"
+#include "clientLobby.hpp"
 
 
 // Starting basic template with main theme
@@ -15,12 +19,12 @@ twoPlayerButton(_app.window, 0.5, 0.5, {"Two players", "Два игрока", "Z
 serverButton(_app.window, 0.5, 0.7, {"Create server", "Создать сервер", "Server erstellen", "Стварыць сервер"}, 24, WHITE),
 connectButton(_app.window, 0.5, 0.9, {"Connect", "Присоединиться", "Beitreten", "Далучыцца"}, 24, WHITE) {
     // Resetting figures color
-    for (unsigned i=IMG_GAME_WHITE_PAWN; i<=IMG_GAME_BLACK_KING; ++i) {
+    for (unsigned i=IMG_GAME_WHITE_PAWN; i <= IMG_GAME_BLACK_KING; ++i) {
         _app.window.setColorMode(IMG_names(i));
     }
 
     // Starting menu song (if wasn't started)
-    if(!isRestarted()) {
+    if(!App::isRestarted()) {
         _app.music.start(MUS_MENU);
     }
 }
@@ -28,24 +32,19 @@ connectButton(_app.window, 0.5, 0.9, {"Connect", "Присоединиться",
 // Getting selected button
 void SelectCycle::inputMouseDown(App& _app) {
     if (settings.click(mouse)) {
-        // Updating location
-        _app.window.updateTitle();
-        restart();
         return;
-    } else if (!settings.isActive()) {
-        if (singleplayerButton.in(mouse)) {
-            _app.startNextCycle(Cycle::Singleplayer);
-            stop();
-        } else if (twoPlayerButton.in(mouse)) {
-            _app.startNextCycle(Cycle::LocalCOOP);
-            stop();
-        } else if (serverButton.in(mouse)) {
-            _app.startNextCycle(Cycle::ServerLobby);
-            stop();
-        } else if (connectButton.in(mouse)) {
-            _app.startNextCycle(Cycle::ClientLobby);
-            stop();
-        }
+    }
+    if (settings.isActive()) {
+        return;
+    }
+    if (singleplayerButton.in(mouse)) {
+        _app.runCycle<SinglePlayerGameCycle>();
+    } else if (twoPlayerButton.in(mouse)) {
+        _app.runCycle<TwoPlayerGameCycle>();
+    } else if (serverButton.in(mouse)) {
+        _app.runCycle<ServerLobby>();
+    } else if (connectButton.in(mouse)) {
+        _app.runCycle<ClientLobby>();
     }
     return;
 }
@@ -60,11 +59,10 @@ void SelectCycle::inputKeys(App& _app, SDL_Keycode _key) {
 }
 
 void SelectCycle::update(App& _app) {
+    BaseCycle::update(_app);
     background.update();
-    settings.update(_app);
 }
 
-// Drawing background with all buttons
 void SelectCycle::draw(const App& _app) const {
     // Bliting background
     background.blit(_app.window);

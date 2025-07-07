@@ -4,29 +4,29 @@
  */
 
 #include "clientGame.hpp"
+#include "selectCycle.hpp"
+
 
 ClientGame::ClientGame(App& _app)
 : BaseCycle(_app),
 app(_app) {
     // Starting main song (if wasn't started)
-    if(!isRestarted()) {
-        //_app.music.start(MUS_MAIN);
+    if(!app.isRestarted()) {
+        _app.music.start(MUS_MAIN);
     }
-}
-
-ClientGame::~ClientGame() {
-
 }
 
 void ClientGame::inputMouseDown(App& _app) {
     // Checking on exit
     if (exitButton.in(mouse)) {
-        _app.startNextCycle(Cycle::Menu);
+        // Returning to menu
         stop();
         return;
     }
     // Clicking in settings menu
-    settings.click(mouse);
+    if (settings.click(mouse)) {
+        return;
+    }
     return;
 }
 

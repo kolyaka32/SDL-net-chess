@@ -10,8 +10,8 @@ ServerGame::ServerGame(App& _app)
 : GameCycle(_app),
 app(_app) {
     // Starting main song (if wasn't started)
-    if(!isRestarted()) {
-        //_app.music.start(MUS_MAIN);
+    if(!App::isRestarted()) {
+        _app.music.start(MUS_MAIN);
     }
 }
 
@@ -20,15 +20,11 @@ ServerGame::~ServerGame() {}
 void ServerGame::inputMouseDown(App& _app) {
     // Checking on exit
     if (exitButton.in(mouse)) {
-        _app.startNextCycle(Cycle::Menu);
         stop();
         return;
     }
     // Clicking in settings menu
     if (settings.click(mouse)) {
-        // Updating location
-        _app.window.updateTitle();
-        restart();
         return;
     }
     if (settings.isActive()) {
