@@ -5,7 +5,6 @@
 
 #pragma once
 
-#include "data/preloaded/sounds.hpp"
 #include "data/preloaded/sounds.cpp"
 
 // Names of sound effects

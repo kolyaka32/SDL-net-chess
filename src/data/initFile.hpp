@@ -5,7 +5,6 @@
 
 #pragma once
 
-#include "../define.hpp"
 #include "../soundsNames.hpp"
 #include "../musicNames.hpp"
 

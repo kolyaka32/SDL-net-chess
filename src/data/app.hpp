@@ -9,8 +9,8 @@
 #include "preloaded/music.hpp"
 #include "preloaded/sounds.hpp"
 #include "initFile.hpp"
-#include "../GUI/baseGUI.hpp"
-#include "../GUI/typeField.cpp"
+#include "window.hpp"
+#include "languages.hpp"
 #include "../cycles/cycles.hpp"
 
 

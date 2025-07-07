@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include "../define.hpp"
-#include "SDL3/SDL_stdinc.h"
+#include "../data/app.hpp"
+
 
 typedef Uint8 cell;
 typedef Uint8 position;

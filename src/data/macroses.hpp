@@ -5,6 +5,7 @@
 
 #pragma once
 
+
 template <typename T>
 constexpr T max(const T a, const T b) {
     if (a > b) {

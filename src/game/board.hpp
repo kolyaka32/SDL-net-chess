@@ -6,7 +6,7 @@
 #pragma once
 
 #include "figuresMoves.hpp"
-#include "../data/app.hpp"
+#include "../GUI/interface.hpp"
 
 
 // Configuration of board, for play

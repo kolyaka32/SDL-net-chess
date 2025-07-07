@@ -6,7 +6,8 @@
 #pragma once
 
 #include <SDL3/SDL_iostream.h>
-#include "../../../testing.hpp"
+#include "../../../define.hpp"
+#include "../../macroses.hpp"
 #include "../../exceptions.hpp"
 
 

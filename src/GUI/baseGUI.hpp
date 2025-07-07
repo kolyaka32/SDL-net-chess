@@ -5,12 +5,7 @@
 
 #pragma once
 
-#include <string>
-#include "../define.hpp"
-#include "../data/window.hpp"
-#include "../data/colors.hpp"
-#include "../data/languages.hpp"
-#include "../data/time.hpp"
+#include "../data/app.hpp"
 
 
 // Namespace of objects for GUI (Graphic User Interface)
