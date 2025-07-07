@@ -20,7 +20,7 @@ ServerGame::~ServerGame() {}
 void ServerGame::inputMouseDown(App& _app) {
     // Checking on exit
     if (exitButton.in(mouse)) {
-        _app.startNextCycle(CYCLE_MENU);
+        _app.startNextCycle(Cycle::Menu);
         stop();
         return;
     }

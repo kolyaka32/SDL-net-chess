@@ -28,7 +28,7 @@ void ServerLobby::inputMouseDown(App& _app) {
     // Checking on exit
     if (exitButton.in(mouse)) {
         server.stop();
-        _app.startNextCycle(CYCLE_MENU);
+        _app.startNextCycle(Cycle::Menu);
         stop();
         return;
     }
@@ -84,7 +84,7 @@ void ServerLobby::update(App& _app) {
         server.connectToLastMessage();
 
         // Starting game (as server)
-        _app.startNextCycle(CYCLE_SERVER_GAME);
+        _app.startNextCycle(Cycle::ServerGame);
         stop();
         break;
     }

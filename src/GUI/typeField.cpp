@@ -23,7 +23,7 @@ backRect({_X*WINDOW_WIDTH-(6.5f*bufferSize+2), _Y*WINDOW_HEIGHT-_height*0.9f, 13
 
     // Copying text to caret
     length = strlen(_text);
-    SET_MAX(length, bufferSize);
+    setMax(length, (size_t)bufferSize);
     memcpy(buffer, _text, length);
 
     // Creating backplate
@@ -425,7 +425,7 @@ const char* GUI::TypeField<bufferSize>::getString() const {
 
 template <unsigned bufferSize>
 void GUI::TypeField<bufferSize>::setString(const char* _newString) {
-    length = MIN(strlen(_newString), bufferSize);
+    length = min(strlen(_newString), (size_t)bufferSize);
     memcpy(buffer, _newString, length);
 
     // Resetting

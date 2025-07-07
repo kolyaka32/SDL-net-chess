@@ -26,7 +26,7 @@ void ClientLobby::inputMouseDown(App& _app) {
     // Checking on exit
     if (exitButton.in(mouse)) {
         client.stop();
-        _app.startNextCycle(CYCLE_MENU);
+        _app.startNextCycle(Cycle::Menu);
         stop();
         return;
     }
@@ -86,7 +86,7 @@ void ClientLobby::update(App& _app) {
         // Settings options to this connection
         client.connectToLastMessage();
         // Starting game
-        _app.startNextCycle(CYCLE_CLIENT_GAME);
+        _app.startNextCycle(Cycle::ClientGame);
         stop();
         return;
     }

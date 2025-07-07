@@ -5,7 +5,9 @@
 
 #pragma once
 
-#include <SDL3_net/SDL_net.h>
+#include <utility>
+#include "codes.hpp"
+#include "../data/macroses.hpp"
 #include "../define.hpp"
 #include "../testing.hpp"
 
@@ -27,6 +29,10 @@ public:
 
 // Class with data for sending somewhere
 class SendPacket : public Data {
+private:
+    int length;
+    int offset = 0;
+
 protected:
     // Functions for converting data to raw array
     template <typename T, typename ...Args>
@@ -45,6 +51,10 @@ public:
 class GetPacket : public Data {
 private:
     int offset = 0;
+    // Additional errors checks
+    #if CHECK_CORRECTION
+    int size;
+    #endif
 
 public:
     GetPacket(NET_Datagram* datagramm);
@@ -55,3 +65,46 @@ public:
     template <typename T>
     T getData(int offset);
 };
+
+
+template <typename T, typename ...Args>
+void SendPacket::write(T object, Args&& ...args) {
+    // Writing current object
+    *(data + offset) = swapLE<T>(object);
+    offset += sizeof(object);
+}
+
+template <typename T>
+T GetPacket::getData() {
+    #if CHECK_CORRECTION
+    if (offset + sizeof(T) > size) {
+        throw "Can't read data - not enogh length";
+    }
+    #endif
+
+    // Moving caret for reading next object correct
+    offset += sizeof(T);
+    return swapLE<T>((T)(*(data + offset - sizeof(T))));
+}
+
+template <typename T>
+T GetPacket::getData(int _offset) {
+    #if CHECK_CORRECTION
+    if (_offset + sizeof(T) > size) {
+        throw "Can't read data - not enogh length";
+    }
+    #endif
+    return swapLE<T>((T)(data + _offset));
+}
+
+template <typename ...Args>
+SendPacket::SendPacket(Args&& ...args) {
+    // Getting length as sum of all sizes of arguments
+    length = sizeof...(args);
+
+    // Creating array for data
+    data = new Uint8[length];
+
+    // Writing data to it (recursevly)
+    write(std::forward<Args>(args)...);
+}

@@ -21,6 +21,7 @@ void Client::start() {
 void Client::stop() {
     // Clearing rest data
     NET_DestroyDatagramSocket(gettingSocket);
+    NET_UnrefAddress(sendAddress);
 
     // Basic clearing
     Connection::stop();
@@ -64,38 +65,6 @@ void Client::tryConnect(const char* _address, Uint16 _port) {
 
 void Client::connectToLastMessage() {
     // Connecting to address from last message
-    sendAddress = recievedDatagram->addr;
+    sendAddress = NET_RefAddress(recievedDatagram->addr);
     sendPort = recievedDatagram->port;
 }
-
-// Creating getting port
-    //gettingSocket = NET_CreateDatagramSocket(0, 0);
-
-    /*NET_Address* sendTo = NET_ResolveHostname("127.0.0.1");
-    NET_WaitUntilResolved(sendTo, -1);
-    SDL_Log("Client to send created: %u\n", sendTo);
-
-    NET_DatagramSocket* current = NET_CreateDatagramSocket(0, 0);
-
-    SDL_Log("Client from send to: %u\n", current);
-    SDL_Log("Error: %s", SDL_GetError());
-
-    char data[20] = "1234";
-
-    SDL_Log("Trying send packet: %s\n", data);
-    NET_SendDatagram(current, sendTo, 8000, data, 20);
-
-    SDL_Log("Error: %s", SDL_GetError());
-
-    NET_DestroyDatagramSocket(current);
-    NET_UnrefAddress(sendTo);
-
-    // Initialasing SDL net library
-    //NET_Init();
-    client.start();
-}
-
-ClientLobby::~ClientLobby() {
-    //NET_DestroyDatagramSocket(gettingSocket);
-    //NET_Quit();
-}*/

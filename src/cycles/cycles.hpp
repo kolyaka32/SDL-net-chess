@@ -6,13 +6,13 @@
 #pragma once
 
 // Types of cycles, avalible to run
-enum CYCLE_types {
-    CYCLE_NONE,
-    CYCLE_MENU,
-    CYCLE_SINGLEPLAYER,
-    CYCLE_LOCALCOOP,
-    CYCLE_SERVER_LOBBY,
-    CYCLE_SERVER_GAME,
-    CYCLE_CLIENT_LOBBY,
-    CYCLE_CLIENT_GAME,
+enum class Cycle {
+    None,
+    Menu,
+    Singleplayer,
+    LocalCOOP,
+    ServerLobby,
+    ServerGame,
+    ClientLobby,
+    ClientGame,
 };

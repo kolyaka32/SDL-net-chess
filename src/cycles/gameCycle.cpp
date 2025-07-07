@@ -35,7 +35,7 @@ nobodyWinText(_app.window, 0.5, 0.4, {"Nobody win", "Ничья", "Unentschieden
 
 void GameCycle::inputMouseDown(App& _app) {
     if (exitButton.in(mouse)) {
-        _app.startNextCycle(CYCLE_MENU);
+        _app.startNextCycle(Cycle::Menu);
         stop();
         return;
     } else if (settings.click(mouse)) {
@@ -63,7 +63,7 @@ void GameCycle::inputMouseDown(App& _app) {
         }
         if (menuButton.in(mouse)) {
             // Going to menu
-            _app.startNextCycle(CYCLE_MENU);
+            _app.startNextCycle(Cycle::Menu);
             stop();
             return;
         }
@@ -85,7 +85,7 @@ void GameCycle::inputKeys(App& _app, SDL_Keycode key) {
 
     case SDLK_Q:
         // Quiting to menu
-        _app.startNextCycle(CYCLE_MENU);
+        _app.startNextCycle(Cycle::Menu);
         stop();
         return;
     }

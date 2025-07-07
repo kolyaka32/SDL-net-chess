@@ -34,7 +34,15 @@ private:
 
     // Flags of work
     bool running = true;
-    CYCLE_types nextCycle = CYCLE_MENU;
+    Cycle nextCycle = Cycle::Menu;
+
+protected:
+    // Templated function for run new cycle
+    template <class T>
+    void runCycle() {
+        T cycle(*this);
+        cycle.run(*this);
+    }
 
 public:
     App();
@@ -42,8 +50,8 @@ public:
 
     // Commands to operate with global running
     void stop();
-    void startNextCycle(CYCLE_types type);
-    
+    void startNextCycle(Cycle type);
+
     // Command to start cycles
     void run();
 

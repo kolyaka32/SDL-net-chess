@@ -34,16 +34,16 @@ void SelectCycle::inputMouseDown(App& _app) {
         return;
     } else if (!settings.isActive()) {
         if (singleplayerButton.in(mouse)) {
-            _app.startNextCycle(CYCLE_SINGLEPLAYER);
+            _app.startNextCycle(Cycle::Singleplayer);
             stop();
         } else if (twoPlayerButton.in(mouse)) {
-            _app.startNextCycle(CYCLE_LOCALCOOP);
+            _app.startNextCycle(Cycle::LocalCOOP);
             stop();
         } else if (serverButton.in(mouse)) {
-            _app.startNextCycle(CYCLE_SERVER_LOBBY);
+            _app.startNextCycle(Cycle::ServerLobby);
             stop();
         } else if (connectButton.in(mouse)) {
-            _app.startNextCycle(CYCLE_CLIENT_LOBBY);
+            _app.startNextCycle(Cycle::ClientLobby);
             stop();
         }
     }

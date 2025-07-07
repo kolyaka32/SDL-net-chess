@@ -21,7 +21,7 @@ void InitFile::loadSettings() {
 
     // Reading file until it end
     while (std::getline(inSettings, currentLine)) {
-        std::string parameter = currentLine.substr(0, MIN(currentLine.find(' '), currentLine.find('=')));
+        std::string parameter = currentLine.substr(0, min(currentLine.find(' '), currentLine.find('=')));
 
         // Switching between options
         if (parameter == "language") {

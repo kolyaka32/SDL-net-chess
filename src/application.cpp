@@ -21,65 +21,44 @@ void App::run() {
     while (running) {
         // Switching between running options
         switch (nextCycle) {
-        case CYCLE_MENU:
-            {
-                // Cycle with game menu and selection of mode
-                SelectCycle cycle(*this);
-                cycle.run(*this);
-            }
+        case Cycle::Menu:
+            // Cycle with game menu and selection of mode
+            runCycle<SelectCycle>();
             break;
 
-        case CYCLE_SINGLEPLAYER:
-            {
-                // Cycle with singplayer joke animation
-                SinglePlayerGameCycle cycle(*this);
-                cycle.run(*this);
-            }
+        case Cycle::Singleplayer:
+            // Cycle with singplayer joke animation
+            runCycle<SinglePlayerGameCycle>();
             break;
 
-        case CYCLE_LOCALCOOP:
-            {
-                // Cycle with game menu and selection of mode
-                TwoPlayerGameCycle cycle(*this);
-                cycle.run(*this);
-            }
+        case Cycle::LocalCOOP:
+            // Cycle with game menu and selection of mode
+            runCycle<TwoPlayerGameCycle>();
             break;
 
-        case CYCLE_SERVER_LOBBY:
-            {
-                // Cycle with waiting in lobby for another player
-                ServerLobby cycle(*this);
-                cycle.run(*this);
-            }
+        case Cycle::ServerLobby:
+            // Cycle with waiting in lobby for another player
+            runCycle<ServerLobby>();
             break;
 
-        case CYCLE_SERVER_GAME:
-            {
-                // Game cycle with game part of server
-                ServerGame cycle(*this);
-                cycle.run(*this);
-            }
+        case Cycle::ServerGame:
+            // Game cycle with game part of server
+            runCycle<ServerGame>();
             break;
 
-        case CYCLE_CLIENT_LOBBY:
-            {
-                // Cycle with trying to connect
-                ClientLobby cycle(*this);
-                cycle.run(*this);
-            }
+        case Cycle::ClientLobby:
+            // Cycle with trying to connect
+            runCycle<ClientLobby>();
             break;
 
-        case CYCLE_CLIENT_GAME:
-            {
-                // Game cycle with game part of client
-                ClientGame cycle(*this);
-                cycle.run(*this);
-            }
+        case Cycle::ClientGame:
+            // Game cycle with game part of client
+            runCycle<ClientGame>();
             break;
 
-        // Stopping current process
-        case CYCLE_NONE:
+        case Cycle::None:
         default:
+        // Stopping current process
             running = false;
             break;
         }

@@ -34,8 +34,8 @@ unsigned GUI::Slider::setValue(float _mouseX) {
     buttonRect.x = _mouseX;
 
     // Setting borders for position
-    SET_MAX(buttonRect.x, rect.x + rect.w);
-    SET_MIN(buttonRect.x, rect.x);
+    setMax(buttonRect.x, rect.x + rect.w);
+    setMax(buttonRect.x, rect.x);
 
     buttonRect.x -= buttonRect.w / 2;
 

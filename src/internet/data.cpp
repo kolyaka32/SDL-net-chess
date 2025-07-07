@@ -5,58 +5,78 @@
 
 #include "data.hpp"
 
-Uint8 swapLE(Uint8 object) {
+
+// Swap little endian function realisations
+template <>
+Uint8 Data::swapLE<Uint8>(Uint8 object) {
     return object;
 }
 
-Sint8 swapLE(Sint8 object) {
+template <>
+Sint8 Data::swapLE<Sint8>(Sint8 object) {
     return object;
 }
 
-Uint16 swapLE(Uint16 object) {
+template <>
+ConnectionCode Data::swapLE<ConnectionCode>(ConnectionCode object) {
+    return object;
+}
+
+template <>
+Uint16 Data::swapLE<Uint16>(Uint16 object) {
     return SDL_Swap16LE(object);
 }
 
-Sint16 swapLE(Sint16 object) {
+template <>
+Sint16 Data::swapLE<Sint16>(Sint16 object) {
     return SDL_Swap16LE(object);
 }
 
-Uint32 swapLE(Uint32 object) {
+template <>
+Uint32 Data::swapLE<Uint32>(Uint32 object) {
     return SDL_Swap32LE(object);
 }
 
-Sint32 swapLE(Sint32 object) {
+template <>
+Sint32 Data::swapLE<Sint32>(Sint32 object) {
     return SDL_Swap32LE(object);
 }
 
-float swapLE(float object) {
+template <>
+float Data::swapLE<float>(float object) {
     return SDL_SwapFloatLE(object);
 }
 
-Uint64 swapLE(Uint64 object) {
+template <>
+Uint64 Data::swapLE<Uint64>(Uint64 object) {
     return SDL_Swap64LE(object);
 }
 
-Sint64 swapLE(Sint64 object) {
+template <>
+Sint64 Data::swapLE<Sint64>(Sint64 object) {
     return SDL_Swap64LE(object);
 }
 
-// Templated function for rest of objects (unsecure)
-template <typename T>
-T swapLE(T object) {
+// Send packet class
+SendPacket::~SendPacket() {
+    // Clearing rest data
+    delete[] data;
+}
+
+Uint8* SendPacket::getData() {
+    return data;
+}
+
+int SendPacket::getLength() {
+    return length;
+}
+
+
+
+// Get packet class
+GetPacket::GetPacket(NET_Datagram* datagramm) {
+    data = datagramm->buf;
     #if CHECK_CORRECTION
-    throw "You not suppose to do use that value format";
+    size = datagramm->buflen;
     #endif
-    return object;
-}
-
-template <typename T>
-Uint8* writeData(Uint8* array, T object) {
-    *(array) = swapLE<T>(object);
-    return array+sizeof(object);
-}
-
-template <typename T>
-T getData(Uint8* array) {
-    return swapLE<T>((T)array);
 }

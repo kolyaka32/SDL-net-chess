@@ -33,6 +33,7 @@ void Server::start() {
 void Server::stop() {
     // Clearing rest data
     NET_DestroyDatagramSocket(gettingSocket);
+    NET_UnrefAddress(sendAddress);
 
     // Basic clearing
     Connection::stop();
@@ -45,7 +46,7 @@ Uint16 Server::getPort() {
 void Server::connectToLastMessage() {
     // Can be additional checks on versions
     // Connecting to address from last message
-    sendAddress = recievedDatagram->addr;
+    sendAddress = NET_RefAddress(recievedDatagram->addr);
     sendPort = recievedDatagram->port;
 
     // Sending applroving message

@@ -17,6 +17,6 @@ void App::stop() {
     running = false;
 }
 
-void App::startNextCycle(CYCLE_types _type) {
+void App::startNextCycle(Cycle _type) {
     nextCycle = _type;
 }

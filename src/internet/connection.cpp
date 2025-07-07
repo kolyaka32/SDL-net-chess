@@ -29,22 +29,16 @@ void Connection::start() {
 }
 
 void Connection::stop() {
+    // Destrying previous data
+    if (recievedDatagram) {
+        delete lastPacket;
+        lastPacket = nullptr;
+        NET_DestroyDatagram(recievedDatagram);
+        recievedDatagram = nullptr;
+    }
+
     // Closing new library
     NET_Quit();
-}
-
-template <typename ...Args>
-void Connection::send(ConnectionCode code, Args&& ...args) {
-    #if CHECK_CORRECTION
-    if (sendAddress == nullptr || sendPort == 0) {
-        SDL_Log("Can't send packet at unspecified address");
-    }
-    #endif
-    // Creating new send packet
-    SendPacket packet(std::forward<Args>(args)...);
-    // Sending it
-    NET_SendDatagram(gettingSocket, sendAddress, sendPort, packet.getData(), packet.getLength());
-    // Destrying packet
 }
 
 ConnectionCode Connection::getCode() {
@@ -54,7 +48,6 @@ ConnectionCode Connection::getCode() {
         lastPacket = nullptr;
         NET_DestroyDatagram(recievedDatagram);
         recievedDatagram = nullptr;
-        
     }
 
     // Getting new datagramm
