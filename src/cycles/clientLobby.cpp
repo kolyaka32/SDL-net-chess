@@ -20,7 +20,7 @@ enterPortText(_app.window, 0.5, 0.4, {"Enter port:", "Введите порт:",
 enterPortField(_app.window, 0.5, 0.5, 20, basePort),
 connectButton(_app.window, 0.5, 0.7, {"Connect", "Присоединится", "Beitritt", "Далучыцца"}, 24, WHITE),
 pasteButton(_app.window, 0.5, 0.9, {"Paste the copied address", "Вставить скопированный адрес", "Kopierte Adresse einfügen", "Уставіць скапіяваны адрас"}, 24, WHITE) {
-    client.start();
+    
 }
 
 void ClientLobby::inputMouseDown(App& _app) {
@@ -52,10 +52,13 @@ void ClientLobby::inputMouseDown(App& _app) {
 
         for (char* c = portTextCorrected; *c; ++c) {
             if (*c < '0' || *c > '9') {
+                #if CHECK_CORRECTION
+                SDL_Log("Couldn't connect - wrong port");
+                #endif
                 return;
             }
         }
-        
+
         client.tryConnect(enterIPField.getString(), std::stoi(portTextCorrected));
         return;
     }
@@ -86,7 +89,7 @@ void ClientLobby::update(App& _app) {
         // Settings options to this connection
         client.connectToLastMessage();
         // Starting game
-        _app.runCycle<ClientGame>();
+        _app.runCycle<ClientGame, Connection>(client);
         // Exiting to menu after game
         stop();
         return;

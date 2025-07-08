@@ -10,8 +10,7 @@
 
 class Client : public Connection {
 public:
-    void start();
-    void stop();
+    Client();
     void tryConnect(const char* address, Uint16 port);
     void connectToLastMessage();
 };

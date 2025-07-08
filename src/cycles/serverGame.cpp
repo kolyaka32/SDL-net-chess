@@ -6,9 +6,9 @@
 #include "serverGame.hpp"
 
 
-ServerGame::ServerGame(App& _app)
+ServerGame::ServerGame(App& _app, Connection _server)
 : GameCycle(_app),
-app(_app) {
+connection(_server) {
     // Starting main song (if wasn't started)
     if(!App::isRestarted()) {
         _app.music.start(MUS_MAIN);

@@ -32,9 +32,6 @@ void CycleTemplate::getInput(App& _app) {
         case SDL_EVENT_QUIT:
             // Stopping program at all
             App::stop();
-
-            // Stopping current cycle
-            stop();
             return;
 
         // Getting mouse input

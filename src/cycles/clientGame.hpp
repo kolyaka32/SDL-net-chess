@@ -6,13 +6,13 @@
 #pragma once
 
 #include "baseCycle.hpp"
-#include "../internet/client.hpp"
+#include "../internet/gameConnection.hpp"
 
 
 // Game cycle (for single player (special animation))
 class ClientGame : public BaseCycle {
  private:
-    App& app;
+    GameConnection connection;
 
     // Main run functions
     void inputMouseDown(App& app) override;
@@ -20,5 +20,5 @@ class ClientGame : public BaseCycle {
     void draw(const App& app) const override;
 
  public:
-    ClientGame(App& app);
+    ClientGame(App& app, Connection client);
 };

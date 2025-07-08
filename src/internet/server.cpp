@@ -8,13 +8,8 @@
 #include "server.hpp"
 
 
-Uint16 Server::currentPort;
-
-
-void Server::start() {
-    // Basic initialasing
-    Connection::start();
-
+Server::Server()
+: Connection() {
     // Resetting basic connecting port
     currentPort = 8000;
 
@@ -28,15 +23,6 @@ void Server::start() {
     #if CHECK_CORRECTION
     SDL_Log("Server created: %u, address: %s, port: %u", gettingSocket, getLocalIP(), currentPort);
     #endif
-}
-
-void Server::stop() {
-    // Clearing rest data
-    NET_DestroyDatagramSocket(gettingSocket);
-    NET_UnrefAddress(sendAddress);
-
-    // Basic clearing
-    Connection::stop();
 }
 
 Uint16 Server::getPort() {

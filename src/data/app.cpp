@@ -3,6 +3,7 @@
  * <nik.kazankov.05@mail.ru>
  */
 
+#include "app.hpp"
 #include "cycleTemplate.hpp"
 
 
@@ -13,7 +14,11 @@ App::App()
 : music{loader, musicFilesNames},
 sounds{loader, soundsFilesNames},
 initFile(music, sounds),
-window{loader} {}
+window{loader} {
+    #if CHECK_CORRECTION
+    SDL_Log("All loaded and created corretly");
+    #endif
+}
 
 void App::stop() {
     running = false;

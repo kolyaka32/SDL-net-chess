@@ -12,8 +12,6 @@
 // Cycle with waiting for client connect
 class ServerLobby : public BaseCycle {
  private:
-    App& app;
-
     // Internet connection part
     Server server;
 
@@ -22,7 +20,7 @@ class ServerLobby : public BaseCycle {
 
     // Text with current connection address
     char currentAddress[24];          // String with current app address for connection
-    bool showAddress = false;         // Flag of showing current address to screen
+    static bool showAddress;          // Flag of showing current address to screen
     GUI::DynamicText addressText;     // Text for showing/copying current address
     GUI::InfoBox copiedInfoBox;       // Message about copying to clipboard address
     GUI::TextButton showAddressText;  // Buttons to change state of showing address at screen

@@ -46,8 +46,8 @@ public:
     static bool isRestarted();
 
     // Templated function for run new cycle
-    template <class T>
-    void runCycle();
+    template <class T, typename ...Args>
+    void runCycle(const Args& ...args);
 
     Music music;
     Sounds sounds;
@@ -56,8 +56,8 @@ public:
 };
 
 
-template <class T>
-void App::runCycle() {
+template <class T, typename ...Args>
+void App::runCycle(const Args& ...args) {
     // Resetting
     restarting = false;
 
@@ -66,7 +66,7 @@ void App::runCycle() {
         // Updating location
         App::window.updateTitle();
         // Launching new cycle
-        T cycle(*this);
+        T cycle(*this, args...);
         cycle.run(*this);
     } while (restarting && running);
 }

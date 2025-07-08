@@ -6,13 +6,13 @@
 #pragma once
 
 #include "gameCycle.hpp"
-#include "../internet/server.hpp"
+#include "../internet/gameConnection.hpp"
 
 
 // Game cycle with game part of server
 class ServerGame : public GameCycle {
  private:
-    App& app;
+    GameConnection connection;
 
     // Main run functions
     void inputMouseDown(App& app) override;
@@ -20,6 +20,6 @@ class ServerGame : public GameCycle {
     void draw(const App& app) const override;
 
  public:
-    ServerGame(App& app);
+    ServerGame(App& app, Connection server);
     ~ServerGame();
 };

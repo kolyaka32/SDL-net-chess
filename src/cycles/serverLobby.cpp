@@ -8,22 +8,29 @@
 #include "serverGame.hpp"
 
 
+bool ServerLobby::showAddress = false;
+
 ServerLobby::ServerLobby(App& _app)
 : BaseCycle(_app),
-app(_app),
 titleText(_app.window, 0.5, 0.1, {"Wait for connection", "Ожидайте подключений", "Verbindungen erwarten", "Чакайце падлучэнняў"}, 30, WHITE),
 addressText(_app.window, 0.5, 0.3, {"Your address: %s", "Ваш адресс: %s", "Ihre Adresse: %s", "Ваш адрас: %s"}, 30, WHITE),
 copiedInfoBox(_app.window, 0.5, 0.37, {"Address copied", "Адрес скопирован", "Adresse kopiert", "Скапіяваны адрас"}, 30, WHITE),
 showAddressText(_app.window, 0.5, 0.45, {"Show address", "Показать адресс", "Adresse anzeigen", "Паказаць адрас"}, 24),
 hideAddressText(_app.window, 0.5, 0.45, {"Hide address", "Скрыть адресс", "Adresse verbergen", "Схаваць адрас"}, 24) {
-    // Initialasing internet class
-    server.start();
+    // Resetting flag of showing address
+    if (!App::isRestarted()) {
+        showAddress = false;
+    }
 
     // Getting string with full address of current app
     sprintf(currentAddress, "%s:%u", server.getLocalIP(), server.getPort());
 
-    // Setting showing address text as hidden
-    addressText.setValues(_app.window, "********");
+    // Setting showing/hidding address text
+    if (showAddress) {
+        addressText.setValues(_app.window, currentAddress);
+    } else {
+        addressText.setValues(_app.window, "********");
+    }
 }
 
 void ServerLobby::inputMouseDown(App& _app) {
@@ -75,7 +82,7 @@ void ServerLobby::update(App& _app) {
         server.connectToLastMessage();
 
         // Starting game (as server)
-        _app.runCycle<ServerGame>();
+        _app.runCycle<ServerGame, Connection>(server);
         // Exiting to menu after game
         stop();
         return;

@@ -7,34 +7,41 @@
 #include "connection.hpp"
 
 
-// Static class members for lobby/game unity
-NET_DatagramSocket* Connection::gettingSocket;
-NET_Datagram* Connection::recievedDatagram;
-NET_Address* Connection::sendAddress;
-Uint16 Connection::sendPort;
-
-
-Connection::Connection() {}
-
-void Connection::start() {
+Connection::Connection() {
     // Intialasing internet library
     NET_Init();
     #if CHECK_CORRECTION
     // Extra clearing
     gettingSocket = nullptr;
-    sendAddress = nullptr;
     sendPort = 0;
     #endif
+    sendAddress = nullptr;
     recievedDatagram = nullptr;
 }
 
-void Connection::stop() {
+Connection::Connection(const Connection& connection) {
+    // Resetting data
+    recievedDatagram = nullptr;
+
+    // Copying address
+    gettingSocket = connection.gettingSocket;
+    sendAddress = connection.sendAddress;
+    sendPort = connection.sendPort;
+}
+
+Connection::~Connection() {
     // Destrying previous data
     if (recievedDatagram) {
         delete lastPacket;
         lastPacket = nullptr;
         NET_DestroyDatagram(recievedDatagram);
         recievedDatagram = nullptr;
+    }
+
+    // Clearing rest data
+    NET_DestroyDatagramSocket(gettingSocket);
+    if (sendAddress) {
+       NET_UnrefAddress(sendAddress); 
     }
 
     // Closing new library

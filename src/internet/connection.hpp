@@ -13,17 +13,17 @@
 class Connection {
 protected:
     // Getting part
-    static NET_DatagramSocket* gettingSocket;
-    static NET_Datagram* recievedDatagram;
+    NET_DatagramSocket* gettingSocket;
+    NET_Datagram* recievedDatagram;
 
     // Sending part
-    static NET_Address* sendAddress;
-    static Uint16 sendPort;
+    NET_Address* sendAddress;
+    Uint16 sendPort;
 
 public:
     Connection();
-    void start();
-    void stop();
+    Connection(const Connection& connection);
+    ~Connection();
     // Templated function for send any order of data
     template <typename ...Args>
     void send(ConnectionCode code, Args&& ...args);
@@ -37,7 +37,6 @@ public:
 };
 
 
-// Sending function realisation (as templated)
 template <typename ...Args>
 void Connection::send(ConnectionCode code, Args&& ...args) {
     #if CHECK_CORRECTION

@@ -434,7 +434,7 @@ bool GUI::TypeField<bufferSize>::in(const Mouse mouse) const {
 
 template <unsigned bufferSize>
 const char* GUI::TypeField<bufferSize>::getString() {
-    buffer[length+1] = '\0';
+    buffer[length] = '\0';
     return buffer;
 }
 

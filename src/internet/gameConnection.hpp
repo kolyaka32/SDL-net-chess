@@ -8,12 +8,11 @@
 #include "connection.hpp"
 
 
-class Server : public Connection {
+class GameConnection : public Connection {
 private:
-    Uint16 currentPort;
+    /* data */
 
 public:
-    Server();
-    Uint16 getPort();
-    void connectToLastMessage();
+    GameConnection(const Connection& connection);
+    ~GameConnection();
 };

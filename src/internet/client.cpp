@@ -6,25 +6,14 @@
 #include "client.hpp"
 
 
-void Client::start() {
-    // Basic initialasing
-    Connection::start();
-
+Client::Client()
+: Connection() {
     // Creating random recieving socket
     gettingSocket = NET_CreateDatagramSocket(nullptr, 0);
 
     #if CHECK_CORRECTION
     SDL_Log("Client created: %u, address: %s", gettingSocket, getLocalIP());
     #endif
-}
-
-void Client::stop() {
-    // Clearing rest data
-    NET_DestroyDatagramSocket(gettingSocket);
-    NET_UnrefAddress(sendAddress);
-
-    // Basic clearing
-    Connection::stop();
 }
 
 void Client::tryConnect(const char* _address, Uint16 _port) {
@@ -61,6 +50,7 @@ void Client::tryConnect(const char* _address, Uint16 _port) {
 
     // Clearing temporary addresses
     NET_UnrefAddress(sendAddress);
+    sendAddress = nullptr;
 }
 
 void Client::connectToLastMessage() {

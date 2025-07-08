@@ -7,11 +7,11 @@
 #include "selectCycle.hpp"
 
 
-ClientGame::ClientGame(App& _app)
+ClientGame::ClientGame(App& _app, Connection _client)
 : BaseCycle(_app),
-app(_app) {
+connection(_client) {
     // Starting main song (if wasn't started)
-    if(!app.isRestarted()) {
+    if(!_app.isRestarted()) {
         _app.music.start(MUS_MAIN);
     }
 }
