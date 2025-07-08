@@ -18,23 +18,19 @@ app(_app) {
 ServerGame::~ServerGame() {}
 
 void ServerGame::inputMouseDown(App& _app) {
-    // Checking on exit
-    if (exitButton.in(mouse)) {
-        stop();
-        return;
-    }
     // Clicking in settings menu
     if (settings.click(mouse)) {
         return;
     }
-    if (settings.isActive()) {
-        // Check on main actions
+    // Exiting to menu
+    if (exitButton.in(mouse)) {
+        stop();
+        return;
     }
-    return;
 }
 
 void ServerGame::update(App& _app) {
-
+    BaseCycle::update(_app);
 }
 
 void ServerGame::draw(const App& _app) const {

@@ -36,26 +36,25 @@ SinglePlayerGameCycle::~SinglePlayerGameCycle() {
 }
 
 void SinglePlayerGameCycle::inputMouseDown(App& _app) {
-    // Checking on exit
-    if (exitButton.in(mouse)) {
-        // Returning to menu
-        stop();
-        return;
-    }
     // Clicking in settings menu
     if (settings.click(mouse)) {
         return;
     }
-
+    // Exiting to menu
+    if (exitButton.in(mouse)) {
+        stop();
+        return;
+    }
     // Changing volume
     if (currentWidth != width) {
         startVolume = _app.music.getVolume();
         app.music.setVolume(startVolume * (width-currentWidth)/width);
     }
-    return;
 }
 
 void SinglePlayerGameCycle::update(App& _app) {
+    BaseCycle::update(_app);
+
     // Checking, if need to change state
     if (getTime() > prevFrameUpdate) {
         // Changing length until reach need width
@@ -101,8 +100,6 @@ void SinglePlayerGameCycle::update(App& _app) {
             prevFrameUpdate = getTime() + animation->delays[frame]/3;
         }
     }
-    // Updating settings
-    settings.update(_app);
 }
 
 void SinglePlayerGameCycle::draw(const App& _app) const {

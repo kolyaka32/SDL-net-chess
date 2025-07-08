@@ -160,10 +160,10 @@ namespace GUI {
         void update(float mouseX);           // Function of change caret symbol from '|' to ' ' and back
         void press(const Mouse mouse);       // Function of setting caret for typing after
         void unpress();                      // Function of resetting pressing
-        const char* getString() const;       // Function of getting typed string
+        const char* getString();             // Function of getting typed string
         void setString(const char* string);  // Function for replace text with new string
         void blit() const;                   // Function for draw at screen
-        bool in(const Mouse mouse);          // Function of checking pressing
+        bool in(const Mouse mouse) const;    // Function of checking pressing
     };
 
     // Class of backplate for

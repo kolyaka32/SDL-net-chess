@@ -24,19 +24,13 @@ pasteButton(_app.window, 0.5, 0.9, {"Paste the copied address", "Вставит�
 }
 
 void ClientLobby::inputMouseDown(App& _app) {
-    // Checking on exit
-    if (exitButton.in(mouse)) {
-        client.stop();
-        stop();
-        return;
-    }
     // Clicking in settings menu
     if (settings.click(mouse)) {
-        client.stop();
         return;
     }
-    // Check, if in settings menu
-    if (settings.isActive()) {
+    // Checking on exit
+    if (exitButton.in(mouse)) {
+        stop();
         return;
     }
 
@@ -52,7 +46,17 @@ void ClientLobby::inputMouseDown(App& _app) {
 
     // Trying to connect at specified address
     if (connectButton.in(mouse)) {
-        client.tryConnect(enterIPField.getString(), std::stoi(enterPortField.getString()));
+        // Correcting port text
+        char portTextCorrected[7];
+        memcpy(portTextCorrected, enterPortField.getString(), 7);
+
+        for (char* c = portTextCorrected; *c; ++c) {
+            if (*c < '0' || *c > '9') {
+                return;
+            }
+        }
+        
+        client.tryConnect(enterIPField.getString(), std::stoi(portTextCorrected));
         return;
     }
 }
@@ -69,8 +73,7 @@ void ClientLobby::inputKeys(App& app, SDL_Keycode key) {
 }
 
 void ClientLobby::update(App& _app) {
-    // Updating settings
-    settings.update(_app);
+    BaseCycle::update(_app);
 
     // Updating typeboxes
     mouse.updatePos();

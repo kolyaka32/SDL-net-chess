@@ -34,9 +34,6 @@ void SelectCycle::inputMouseDown(App& _app) {
     if (settings.click(mouse)) {
         return;
     }
-    if (settings.isActive()) {
-        return;
-    }
     if (singleplayerButton.in(mouse)) {
         _app.runCycle<SinglePlayerGameCycle>();
     } else if (twoPlayerButton.in(mouse)) {

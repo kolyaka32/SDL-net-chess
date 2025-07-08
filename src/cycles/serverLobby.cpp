@@ -27,19 +27,13 @@ hideAddressText(_app.window, 0.5, 0.45, {"Hide address", "Скрыть адре�
 }
 
 void ServerLobby::inputMouseDown(App& _app) {
-    // Checking on exit
-    if (exitButton.in(mouse)) {
-        server.stop();
-        stop();
-        return;
-    }
     // Clicking in settings menu
     if (settings.click(mouse)) {
-        server.stop();
         return;
     }
-    // Check, if in settings menu
-    if (settings.isActive()) {
+    // Exiting to menu
+    if (exitButton.in(mouse)) {
+        stop();
         return;
     }
     // Check on copying address
@@ -69,8 +63,7 @@ void ServerLobby::inputMouseDown(App& _app) {
 }
 
 void ServerLobby::update(App& _app) {
-    // Updating settings
-    settings.update(_app);
+    BaseCycle::update(_app);
 
     // Update infobox
     copiedInfoBox.update();
@@ -85,7 +78,7 @@ void ServerLobby::update(App& _app) {
         _app.runCycle<ServerGame>();
         // Exiting to menu after game
         stop();
-        break;
+        return;
     }
 }
 

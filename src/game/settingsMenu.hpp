@@ -40,5 +40,4 @@ class SettingsMenu : public GUI::GUItemplate {
 	void scroll(App& app, const Mouse mouse, float wheelY);
 	void update(App& app);
 	void activate();
-	bool isActive();
 };

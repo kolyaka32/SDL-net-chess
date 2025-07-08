@@ -30,30 +30,28 @@ bool SettingsMenu::click(const Mouse _mouse) {
     }
     // Clicking in menu
     if (active) {
-        // Checking on exit
         if (exitButton.in(_mouse)) {
+            // Checking on exit
             active = false;
-            return false;
-        }
-        // Checking, if click on sliders or flag
-        if (musicSlider.in(_mouse)) {
+        } else if (musicSlider.in(_mouse)) {
+            // Checking, if click on sliders or flag
             holdingSlider = 1;
-            return false;
         } else if (soundSlider.in(_mouse)) {
             holdingSlider = 2;
-            return false;
-        }
-        // Check on changing language
-        for (unsigned i = 0; i < (unsigned)Language::Count; ++i) {
-            if (flags[i].in(_mouse)) {
-                if (LanguagedText::setLanguage((Language)i)) {
-                    // Restarting game
-                    App::restart();
-                    CycleTemplate::stop();
-                    return true;
+        } else {
+            // Check on changing language
+            for (unsigned i = 0; i < (unsigned)Language::Count; ++i) {
+                if (flags[i].in(_mouse)) {
+                    if (LanguagedText::setLanguage((Language)i)) {
+                        // Restarting game
+                        App::restart();
+                        CycleTemplate::stop();
+                        return true;
+                    }
                 }
             }
         }
+        return true;
     }
     return false;
 }
@@ -130,8 +128,4 @@ void SettingsMenu::blit(const Window& _target) const {
 void SettingsMenu::activate() {
     // Changing state to opposite
     active ^= true;
-}
-
-bool SettingsMenu::isActive() {
-    return active;
 }

@@ -17,22 +17,20 @@ app(_app) {
 }
 
 void ClientGame::inputMouseDown(App& _app) {
+    // Clicking in settings menu
+    if (settings.click(mouse)) {
+        return;
+    }
     // Checking on exit
     if (exitButton.in(mouse)) {
         // Returning to menu
         stop();
         return;
     }
-    // Clicking in settings menu
-    if (settings.click(mouse)) {
-        return;
-    }
-    return;
 }
 
 void ClientGame::update(App& _app) {
-    // Updating settings
-    settings.update(_app);
+    BaseCycle::update(_app);
 }
 
 void ClientGame::draw(const App& _app) const {

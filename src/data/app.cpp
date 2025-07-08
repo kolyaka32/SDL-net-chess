@@ -17,6 +17,7 @@ window{loader} {}
 
 void App::stop() {
     running = false;
+    CycleTemplate::stop();
 }
 
 bool App::isRunning() {

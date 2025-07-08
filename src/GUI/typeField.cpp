@@ -180,13 +180,15 @@ void GUI::TypeField<bufferSize>::writeClipboard() {
 // Copying selected text to clipboard
 template <unsigned bufferSize>
 void GUI::TypeField<bufferSize>::copyToClipboard() {
-    if (selectLength < 0) {
-        memcpy(&clipboardText, buffer + caret + selectLength, abs(selectLength));
-    } else {
-        memcpy(&clipboardText, buffer + caret, abs(selectLength));
+    if (selectLength) {
+        if (selectLength < 0) {
+            memcpy(&clipboardText, buffer + caret + selectLength, abs(selectLength));
+        } else {
+            memcpy(&clipboardText, buffer + caret, abs(selectLength));
+        }
+        clipboardText[abs(selectLength)] = '\0';
+        SDL_SetClipboardText(clipboardText);
     }
-    clipboardText[abs(selectLength)] = '\0';
-    SDL_SetClipboardText(clipboardText);
 }
 
 template <unsigned bufferSize>
@@ -311,6 +313,11 @@ void GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
         copyToClipboard();
         break;
 
+    case SDLK_CUT:
+        copyToClipboard();
+        deleteSelected();
+        break;
+
     case SDLK_V:
         if (keyMods & SDL_KMOD_CTRL) {
             writeClipboard();
@@ -320,6 +327,13 @@ void GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
     case SDLK_C:
         if (keyMods & SDL_KMOD_CTRL) {
             copyToClipboard();
+        }
+        break;
+
+    case SDLK_X:
+        if (keyMods & SDL_KMOD_CTRL) {
+            copyToClipboard();
+            deleteSelected();
         }
         break;
 
@@ -414,12 +428,13 @@ void GUI::TypeField<bufferSize>::blit() const {
 }
 
 template <unsigned bufferSize>
-bool GUI::TypeField<bufferSize>::in(const Mouse mouse) {
+bool GUI::TypeField<bufferSize>::in(const Mouse mouse) const {
     return mouse.in(backRect);
 }
 
 template <unsigned bufferSize>
-const char* GUI::TypeField<bufferSize>::getString() const {
+const char* GUI::TypeField<bufferSize>::getString() {
+    buffer[length+1] = '\0';
     return buffer;
 }
 

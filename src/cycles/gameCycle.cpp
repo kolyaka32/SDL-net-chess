@@ -36,15 +36,12 @@ nobodyWinText(_app.window, 0.5, 0.4, {"Nobody win", "Ничья", "Unentschieden
 }
 
 void GameCycle::inputMouseDown(App& _app) {
-    if (exitButton.in(mouse)) {
-        stop();
-        return;
-    }
-    // Clicking in settings menu
     if (settings.click(mouse)) {
         return;
     }
-    if (settings.isActive()) {
+    // Exiting to menu
+    if (exitButton.in(mouse)) {
+        stop();
         return;
     }
     // Checking, if game start
@@ -93,7 +90,7 @@ void GameCycle::inputKeys(App& _app, SDL_Keycode key) {
 }
 
 void GameCycle::update(App& _app) {
-    settings.update(_app);
+    BaseCycle::update(_app);
 }
 
 void GameCycle::draw(const App& _app) const {
