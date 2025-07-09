@@ -31,16 +31,17 @@ public:
 class SendPacket : public Data {
 private:
     int length;
-    int offset = 0;
 
 protected:
     // Functions for converting data to raw array
+    template <typename T>
+    void write(int offset, T object);
     template <typename T, typename ...Args>
-    void write(T object, Args&& ...args);
+    void write(int offset, T object, Args&& ...args);
 
 public:
     template <typename ...Args>
-    SendPacket(Args&& ...args);
+    SendPacket(Args ...args);
     ~SendPacket();
     Uint8* getData();
     int getLength();
@@ -67,11 +68,27 @@ public:
 };
 
 
+template <typename ...Args>
+SendPacket::SendPacket(Args ...args) {
+    // Getting length as sum of all sizes of arguments
+    length = sizeof...(args);
+
+    // Creating array for data
+    data = new Uint8[length];
+
+    write(0, args...);
+}
+
+template <typename T>
+void SendPacket::write(int _offset, T _object) {
+    *(data + _offset) = swapLE<T>(_object);
+}
+
 template <typename T, typename ...Args>
-void SendPacket::write(T object, Args&& ...args) {
+void SendPacket::write(int _offset, T _object, Args&& ...args) {
     // Writing current object
-    *(data + offset) = swapLE<T>(object);
-    offset += sizeof(object);
+    *(data + _offset) = swapLE<T>(_object);
+    write(_offset + sizeof(T), args...);
 }
 
 template <typename T>
@@ -94,17 +111,5 @@ T GetPacket::getData(int _offset) {
         throw "Can't read data - not enogh length";
     }
     #endif
-    return swapLE<T>((T)(data + _offset));
-}
-
-template <typename ...Args>
-SendPacket::SendPacket(Args&& ...args) {
-    // Getting length as sum of all sizes of arguments
-    length = sizeof...(args);
-
-    // Creating array for data
-    data = new Uint8[length];
-
-    // Writing data to it (recursevly)
-    write(std::forward<Args>(args)...);
+    return swapLE<T>((T)(*(data + _offset)));
 }

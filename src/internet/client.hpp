@@ -11,6 +11,7 @@
 class Client : public Connection {
 public:
     Client();
+    ~Client();
     void tryConnect(const char* address, Uint16 port);
     void connectToLastMessage();
 };

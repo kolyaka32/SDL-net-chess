@@ -20,5 +20,5 @@ class ClientGame : public BaseCycle {
     void draw(const App& app) const override;
 
  public:
-    ClientGame(App& app, Connection client);
+    ClientGame(App& app, Connection& client);
 };

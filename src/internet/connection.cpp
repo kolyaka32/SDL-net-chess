@@ -37,15 +37,6 @@ Connection::~Connection() {
         NET_DestroyDatagram(recievedDatagram);
         recievedDatagram = nullptr;
     }
-
-    // Clearing rest data
-    NET_DestroyDatagramSocket(gettingSocket);
-    if (sendAddress) {
-       NET_UnrefAddress(sendAddress); 
-    }
-
-    // Closing new library
-    NET_Quit();
 }
 
 ConnectionCode Connection::getCode() {
@@ -61,19 +52,22 @@ ConnectionCode Connection::getCode() {
     if (NET_ReceiveDatagram(gettingSocket, &recievedDatagram)) {
         // Check, if get any data
         if (recievedDatagram) {
-            // Writing getted data for debug
-            #if CHECK_CORRECTION
-            SDL_Log("Get packet with %u bytes, from %s, port: %u", recievedDatagram->buflen, NET_GetAddressString(recievedDatagram->addr), recievedDatagram->port);
-            for (int i=0; i < recievedDatagram->buflen; ++i) {
-                SDL_Log("%u", recievedDatagram->buf[i]);
-            }
-            #endif
             // Updating get packet
             lastPacket = new GetPacket(recievedDatagram);
             return (ConnectionCode)lastPacket->getData<Uint8>();
         }
     }
     return ConnectionCode::Null;
+}
+
+void Connection::send(SendPacket& _packet) {
+    #if CHECK_CORRECTION
+    if (sendAddress == nullptr || sendPort == 0) {
+        SDL_Log("Can't send packet at unspecified address");
+    }
+    #endif
+    // Sending it
+    NET_SendDatagram(gettingSocket, sendAddress, sendPort, _packet.getData(), _packet.getLength());
 }
 
 const char* Connection::getLocalIP() {

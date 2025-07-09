@@ -18,11 +18,6 @@ Sint8 Data::swapLE<Sint8>(Sint8 object) {
 }
 
 template <>
-ConnectionCode Data::swapLE<ConnectionCode>(ConnectionCode object) {
-    return object;
-}
-
-template <>
 Uint16 Data::swapLE<Uint16>(Uint16 object) {
     return SDL_Swap16LE(object);
 }

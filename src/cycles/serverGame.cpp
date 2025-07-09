@@ -6,16 +6,17 @@
 #include "serverGame.hpp"
 
 
-ServerGame::ServerGame(App& _app, Connection _server)
+ServerGame::ServerGame(App& _app, Connection& _server)
 : GameCycle(_app),
 connection(_server) {
-    // Starting main song (if wasn't started)
     if(!App::isRestarted()) {
+        // Sending applying initialsiation message
+        connection.sendConfirmed(ConnectionCode::Init);
+
+        // Starting main song (if wasn't started)
         _app.music.start(MUS_MAIN);
     }
 }
-
-ServerGame::~ServerGame() {}
 
 void ServerGame::inputMouseDown(App& _app) {
     // Clicking in settings menu
@@ -31,6 +32,13 @@ void ServerGame::inputMouseDown(App& _app) {
 
 void ServerGame::update(App& _app) {
     BaseCycle::update(_app);
+
+    // Getting internet messages
+    switch (connection.updateMessages()) {
+    case ConnectionCode::GameTurn:
+        
+        return;
+    }
 }
 
 void ServerGame::draw(const App& _app) const {

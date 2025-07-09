@@ -20,6 +20,5 @@ class ServerGame : public GameCycle {
     void draw(const App& app) const override;
 
  public:
-    ServerGame(App& app, Connection server);
-    ~ServerGame();
+    ServerGame(App& app, Connection& server);
 };

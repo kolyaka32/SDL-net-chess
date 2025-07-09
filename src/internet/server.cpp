@@ -11,7 +11,7 @@
 Server::Server()
 : Connection() {
     // Resetting basic connecting port
-    currentPort = 8000;
+    currentPort = BASE_PORT;
 
     // Finding avalialble port
     srand(time(0));
@@ -21,8 +21,25 @@ Server::Server()
     }
 
     #if CHECK_CORRECTION
+    // Adding some packet loss for better testing
+    NET_SimulateDatagramPacketLoss(gettingSocket, CONNECTION_LOST_PERCENT);
     SDL_Log("Server created: %u, address: %s, port: %u", gettingSocket, getLocalIP(), currentPort);
     #endif
+}
+
+Server::~Server() {
+    #if CHECK_CORRECTION
+    SDL_Log("Destroying server, closing net library");
+    #endif
+
+    // Clearing rest data
+    NET_DestroyDatagramSocket(gettingSocket);
+    if (sendAddress) {
+       NET_UnrefAddress(sendAddress); 
+    }
+
+    // Closing new library
+    NET_Quit();
 }
 
 Uint16 Server::getPort() {
@@ -34,7 +51,4 @@ void Server::connectToLastMessage() {
     // Connecting to address from last message
     sendAddress = NET_RefAddress(recievedDatagram->addr);
     sendPort = recievedDatagram->port;
-
-    // Sending applroving message
-    send(ConnectionCode::Init);
 }

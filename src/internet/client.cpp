@@ -12,8 +12,25 @@ Client::Client()
     gettingSocket = NET_CreateDatagramSocket(nullptr, 0);
 
     #if CHECK_CORRECTION
+    // Adding some packet loss for better testing
+    NET_SimulateDatagramPacketLoss(gettingSocket, CONNECTION_LOST_PERCENT);
     SDL_Log("Client created: %u, address: %s", gettingSocket, getLocalIP());
     #endif
+}
+
+Client::~Client() {
+    #if CHECK_CORRECTION
+    SDL_Log("Destroying client, closing net library");
+    #endif
+
+    // Clearing rest data
+    NET_DestroyDatagramSocket(gettingSocket);
+    if (sendAddress) {
+       NET_UnrefAddress(sendAddress); 
+    }
+
+    // Closing new library
+    NET_Quit();
 }
 
 void Client::tryConnect(const char* _address, Uint16 _port) {
@@ -42,10 +59,12 @@ void Client::tryConnect(const char* _address, Uint16 _port) {
         return;
     }
 
-    // Sending initialasing packet
     #if CHECK_CORRECTION
     SDL_Log("Sending initialasing packet");
     #endif
+    // Sending some initialasing packet (for more chances)
+    send(ConnectionCode::Init);
+    send(ConnectionCode::Init);
     send(ConnectionCode::Init);
 
     // Clearing temporary addresses

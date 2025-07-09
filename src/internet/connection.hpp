@@ -26,7 +26,8 @@ public:
     ~Connection();
     // Templated function for send any order of data
     template <typename ...Args>
-    void send(ConnectionCode code, Args&& ...args);
+    void send(ConnectionCode code, Args ...args);
+    void send(SendPacket& _packet);
     // Function for recieve new packets and update packets
     ConnectionCode getCode();
     // Packet with last getted data
@@ -38,14 +39,14 @@ public:
 
 
 template <typename ...Args>
-void Connection::send(ConnectionCode code, Args&& ...args) {
+void Connection::send(ConnectionCode _code, Args ...args) {
     #if CHECK_CORRECTION
     if (sendAddress == nullptr || sendPort == 0) {
         SDL_Log("Can't send packet at unspecified address");
     }
     #endif
     // Creating new send packet
-    SendPacket packet((Uint8)code, std::forward<Args>(args)...);
+    SendPacket packet(Uint8(_code), args...);
     // Sending it
     NET_SendDatagram(gettingSocket, sendAddress, sendPort, packet.getData(), packet.getLength());
     // Destrying packet

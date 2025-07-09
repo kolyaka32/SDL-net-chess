@@ -14,6 +14,7 @@ private:
 
 public:
     Server();
+    ~Server();
     Uint16 getPort();
     void connectToLastMessage();
 };

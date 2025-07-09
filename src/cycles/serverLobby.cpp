@@ -82,7 +82,7 @@ void ServerLobby::update(App& _app) {
         server.connectToLastMessage();
 
         // Starting game (as server)
-        _app.runCycle<ServerGame, Connection>(server);
+        _app.runCycle<ServerGame, Connection&>(server);
         // Exiting to menu after game
         stop();
         return;

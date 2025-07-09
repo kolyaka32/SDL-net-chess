@@ -16,10 +16,8 @@ enum class ConnectionCode : Uint8 {
     Quit,     // Code for break connection (not need aprove)
     Confirm,  // Code for confirm, that importane message was delivered (with number of message)
     ApplyConnection,  // Code of confirmation of continued connection
-    ResetIndexing,    // Code of resetting indexes of message
 
     // Game codes
     GameRestart,  // Code of restart game with options of new game (field, turn)
     GameTurn,     // Code of normal game turn with it options
-
 };
