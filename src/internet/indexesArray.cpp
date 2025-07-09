@@ -21,7 +21,7 @@ bool IndexesArray<length>::isUnique(Uint8 _index) {
     // Check, if index in array
     for (int i=0; i < length; ++i) {
         if (array[i] == _index) {
-            #if CHECK_CORRECTION
+            #if CHECK_ALL
             SDL_Log("Index: %u was already get", _index);
             #endif
             return false;

@@ -25,7 +25,7 @@ GameConnection::~GameConnection() {
         SDL_Log("Destroying game connection");
         #endif
         // Sending message with quiting connection
-        send(ConnectionCode::Quit);
+        send(ConnectionCode::Quit, 0);
 
         // Clearing rest messages
         for (int i=0; i < unconfirmedMessages.size(); ++i) {
@@ -45,7 +45,7 @@ void GameConnection::checkConnectionStatus() {
     // Check, if getting over timer
     if (getTime() > needDisconect) {
         // Disconneting, as lost connection
-        #if CHECK_CORRECTION
+        #if CHECK_ALL
         SDL_Log("Connection lost");
         #endif
         // Stopping current cycle
@@ -80,19 +80,18 @@ ConnectionCode GameConnection::checkNewMessage() {
     needDisconect = getTime() + MESSAGE_GET_TIMEOUT;
 
     // Writing getted data for debug
-    #if CHECK_CORRECTION
-    if (recievedDatagram->buflen > 1) {
-        SDL_Log("Get packet with %u bytes, from %s, port: %u, code: %u, index: %u", recievedDatagram->buflen, NET_GetAddressString(recievedDatagram->addr), recievedDatagram->port, (Uint8)code, lastPacket->getData<Uint8>(1));
-    } else {
-        SDL_Log("Get 1 byte, from %s, port: %u, code: %u", NET_GetAddressString(recievedDatagram->addr), (Uint8)recievedDatagram->port, code);
-    }
+    #if CHECK_ALL
+    SDL_Log("Get packet with %u bytes, from %s, port: %u, code: %u, index: %u", recievedDatagram->buflen, NET_GetAddressString(recievedDatagram->addr), recievedDatagram->port, (Uint8)code, lastPacket->getData<Uint8>(1));
     #endif
+
+    // Getting index of message
+    Uint8 index = lastPacket->getData<Uint8>();
 
     // Checking get message on type
     switch (code) {
     case ConnectionCode::Quit:
         // Connection forced terminatted
-        #if CHECK_CORRECTION
+        #if CHECK_ALL
         SDL_Log("Connection terminatted");
         #endif
         // Stopping current cycle
@@ -103,17 +102,12 @@ ConnectionCode GameConnection::checkNewMessage() {
         return ConnectionCode::Null;
 
     case ConnectionCode::Confirm:
-        {
-            // Applying index of getted message
-            Uint8 index = lastPacket->getData<Uint8>();
-
-            // Applying in sended array, that message was delivered
-            for (int i=0; i < unconfirmedMessages.size(); ++i) {
-                if (unconfirmedMessages[i]->applyMessage(index)) {
-                    delete unconfirmedMessages[i];
-                    unconfirmedMessages.erase(unconfirmedMessages.begin() + i);
-                    break;
-                }
+        // Applying in sended array, that message was delivered
+        for (int i=0; i < unconfirmedMessages.size(); ++i) {
+            if (unconfirmedMessages[i]->applyMessage(index)) {
+                delete unconfirmedMessages[i];
+                unconfirmedMessages.erase(unconfirmedMessages.begin() + i);
+                break;
             }
         }
         return ConnectionCode::Null;
@@ -124,21 +118,22 @@ ConnectionCode GameConnection::checkNewMessage() {
         code = ConnectionCode::Null;
 
     default:
-        {
-            // Check, if message was alredy gotten
-            Uint8 index = lastPacket->getData<Uint8>();
-            // Sending message, applying that message was get
-            send(ConnectionCode::Confirm, index);
-            // Updating timer
-            needResendApplyConnection = getTime() + MESSAGE_APPLY_TIMEOUT;
-            // Check, if need any additional actions with this code
-            if (getIndexes.isUnique(index)) {
-                // Adding to list for next checks
-                getIndexes.add(index);
-                // In other cases - external updation
-                return code;
+        // Sending message, applying that message was get
+        send(ConnectionCode::Confirm, index);
+        // Updating timer
+        needResendApplyConnection = getTime() + MESSAGE_APPLY_TIMEOUT;
+        // Check, if need any additional actions with this code
+        if (getIndexes.isUnique(index)) {
+            // Adding to list for next checks
+            getIndexes.add(index);
+            #if CHECK_CORRECTION
+            if (code != ConnectionCode::Null) {
+                SDL_Log("Get data with code: %u, index: %u", (Uint8)code, index);
             }
-            return ConnectionCode::Null;
+            #endif
+            // In other cases - external updation
+            return code;
         }
+        return ConnectionCode::Null;
     }
 }

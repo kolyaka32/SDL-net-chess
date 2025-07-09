@@ -19,7 +19,7 @@ void Message::resend(Connection& connection) {
 void Message::checkNeedResend(Connection& _connection) {
     // Check, if get over timer
     if (getTime() > nextResend) {
-        #if CHECK_CORRECTION
+        #if CHECK_ALL
         SDL_Log("Resending packet with code: %u, index: %u", packet.getData()[0], messageIndex);
         #endif
         resend(_connection);

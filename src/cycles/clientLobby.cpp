@@ -50,7 +50,7 @@ void ClientLobby::inputMouseDown(App& _app) {
 
         for (char* c = portTextCorrected; *c; ++c) {
             if (*c < '0' || *c > '9') {
-                #if CHECK_CORRECTION
+                #if CHECK_ALL
                 SDL_Log("Couldn't connect - wrong port");
                 #endif
                 return;
@@ -129,7 +129,7 @@ void ClientLobby::pasteFromClipboard() {
 
     // Check text on correction
     if (clipboard == nullptr) {
-        #if CHECK_CORRECTION
+        #if CHECK_ALL
         SDL_Log("Couldn't get clipboard");
         #endif
         return;
@@ -143,7 +143,7 @@ void ClientLobby::pasteFromClipboard() {
         }
         // Checking coorection of string
         if (clipboard[i] != '.' && (clipboard[i] < '0' || clipboard[i] > '9')) {
-            #if CHECK_CORRECTION
+            #if CHECK_ALL
             SDL_Log("Wrong clipboard: %s", clipboard);
             #endif
             SDL_free(clipboard);
@@ -159,7 +159,7 @@ void ClientLobby::pasteFromClipboard() {
             break;
         }
     }
-    #if CHECK_CORRECTION
+    #if CHECK_ALL
     SDL_Log("From clipboard: IP: %s, port: %s", clipboard, clipboard+i);
     #endif
     enterIPField.setString(clipboard);

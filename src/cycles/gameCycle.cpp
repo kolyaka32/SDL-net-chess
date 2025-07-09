@@ -28,9 +28,8 @@ firstWinText(_app.window, 0.5, 0.4, {"Fist player win!", "Первый игро�
 secondWinText(_app.window, 0.5, 0.4, {"Second player win!", "Второй игрок выйграл!", "Der zweite Spieler hat gewonnen!", "Другі гулец выйграў!"}, 30, WHITE),
 looseText(_app.window, 0.5, 0.4, {"You loose...", "Вы проиграли...", "Sie haben verloren...", "Вы прайгралі..."}, 30, WHITE),
 nobodyWinText(_app.window, 0.5, 0.4, {"Nobody win", "Ничья", "Unentschieden", "Чые"}, 30, WHITE) {
-    endState = END_NONE;
-
     if (!App::isRestarted()) {
+        endState = END_NONE;
         board.reset();
     }
 }
@@ -39,7 +38,6 @@ void GameCycle::inputMouseDown(App& _app) {
     if (settings.click(mouse)) {
         return;
     }
-    // Exiting to menu
     if (exitButton.in(mouse)) {
         stop();
         return;
@@ -48,6 +46,12 @@ void GameCycle::inputMouseDown(App& _app) {
     if (endState <= END_TURN) {
         // Clicking on field
         endState = board.click(_app.sounds, mouse);
+
+        #if CHECK_CORRECTION
+        if (endState != END_NONE) {
+            SDL_Log("Turn of current player: from %u to %u", board.getPreviousTurn(), getPos((mouse.getX() - LEFT_LINE) / CELL_SIDE, (mouse.getY() - UPPER_LINE) / CELL_SIDE));
+        }
+        #endif
         return;
     }
     // Starting waiting menu
@@ -87,10 +91,6 @@ void GameCycle::inputKeys(App& _app, SDL_Keycode key) {
         stop();
         return;
     }
-}
-
-void GameCycle::update(App& _app) {
-    BaseCycle::update(_app);
 }
 
 void GameCycle::draw(const App& _app) const {

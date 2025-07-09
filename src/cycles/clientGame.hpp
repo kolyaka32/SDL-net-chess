@@ -5,14 +5,15 @@
 
 #pragma once
 
-#include "baseCycle.hpp"
+#include "gameCycle.hpp"
 #include "../internet/gameConnection.hpp"
 
 
 // Game cycle (for single player (special animation))
-class ClientGame : public BaseCycle {
+class ClientGame : public GameCycle {
  private:
     GameConnection connection;
+    static bool currentTurn;
 
     // Main run functions
     void inputMouseDown(App& app) override;

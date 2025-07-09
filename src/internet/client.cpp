@@ -42,7 +42,7 @@ void Client::tryConnect(const char* _address, Uint16 _port) {
 
     // Check, if address is incorrect
     if (sendAddress == nullptr) {
-        #if CHECK_CORRECTION
+        #if CHECK_ALL
         SDL_Log("Can't find this address");
         #endif
         return;
@@ -53,19 +53,19 @@ void Client::tryConnect(const char* _address, Uint16 _port) {
 
     // Check, if get address
     if (NET_GetAddressStatus(sendAddress) != 1) {
-        #if CHECK_CORRECTION
+        #if CHECK_ALL
         SDL_Log("Can't connect to this address");
         #endif
         return;
     }
 
-    #if CHECK_CORRECTION
+    #if CHECK_ALL
     SDL_Log("Sending initialasing packet");
     #endif
     // Sending some initialasing packet (for more chances)
-    send(ConnectionCode::Init);
-    send(ConnectionCode::Init);
-    send(ConnectionCode::Init);
+    send(ConnectionCode::Init, 0);
+    send(ConnectionCode::Init, 0);
+    send(ConnectionCode::Init, 0);
 
     // Clearing temporary addresses
     NET_UnrefAddress(sendAddress);

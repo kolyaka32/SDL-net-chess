@@ -13,6 +13,7 @@
 class ServerGame : public GameCycle {
  private:
     GameConnection connection;
+    static bool currentTurn;
 
     // Main run functions
     void inputMouseDown(App& app) override;

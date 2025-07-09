@@ -52,6 +52,10 @@ ConnectionCode Connection::getCode() {
     if (NET_ReceiveDatagram(gettingSocket, &recievedDatagram)) {
         // Check, if get any data
         if (recievedDatagram) {
+            // Checking on length
+            if (recievedDatagram->buflen <= 1) {
+                return ConnectionCode::Null;
+            }
             // Updating get packet
             lastPacket = new GetPacket(recievedDatagram);
             return (ConnectionCode)lastPacket->getData<Uint8>();

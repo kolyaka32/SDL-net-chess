@@ -39,7 +39,7 @@ enum FIG_names {
 };
 
 // Macros for getting position from coordinats
-#define getPos(x, y) ((x) + (y) * FIELD_WIDTH)
+#define getPos(x, y) ((((x)) + ((y)) * FIELD_WIDTH))
 
 
 // Extra names modifires

@@ -8,6 +8,22 @@
 // Configuration of board, for play
 char boardConfig[85] = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq";
 
+
+Position::Position(const Mouse _mouse)
+: x((_mouse.getX() - LEFT_LINE) / CELL_SIDE),
+y((_mouse.getY() - UPPER_LINE) / CELL_SIDE) {}
+
+Position::Position(const position pos)
+: x(pos%FIELD_WIDTH), y(pos/FIELD_WIDTH) {}
+
+Position::Position(coord _x, coord _y)
+: x(_x), y(_y) {}
+
+position Position::getPosition() {
+    return x + y*FIELD_WIDTH;
+}
+
+
 // Clearing field and setting
 void Board::reset() {
     // Resetting field parametrs
@@ -159,14 +175,14 @@ void Board::blit(const Window& _target) const {
     _target.setDrawColor(FIELD_DARK);
     for (coord y = 0; y < FIELD_WIDTH; ++y)
         for (coord x = y % 2; x < FIELD_WIDTH; x += 2) {
-            _target.drawRect(getRect(x, y));
+            _target.drawRect(getRect({x, y}));
         }
 
     // Drawing each figure
     for (coord y = 0; y < FIELD_WIDTH; ++y)
         for (coord x = 0; x < FIELD_WIDTH; ++x) {
             if (figures[getPos(x, y)]) {
-                SDL_FRect rect = getRect(x, y);
+                SDL_FRect rect = getRect({x, y});
 
                 // Checking, if figure current (blue)
                 if (figures[getPos(x, y)] > FIG_RED_TYPE) {
@@ -496,43 +512,37 @@ Uint8 Board::placeFigure(const Sounds& _sounds, coord _x, coord _y) {
 
 
 // Clicking on field (grab and put figures)
-Uint8 Board::click(const Sounds& _sounds, coord _x, coord _y) {
+Uint8 Board::click(const Sounds& _sounds, Position pos) {
     // Checking, which type of action do
     if (!activeCell.type) {
         // Picking up figure from field
-        pickFigure(_x, _y);
+        pickFigure(pos.x, pos.y);
 
         // Return, that don't do anything
         return END_NONE;
-    } else if (activeCell.pos == getPos(_x, _y)) {
+    } else if (activeCell.pos == pos.getPosition()) {
         // Checking, if click on old place
         // Clearing field for next turns
         resetSelection();
 
         // Returning, that nothing happen
         return END_NONE;
-    } else if (figures[getPos(_x, _y)] >= FIG_MOVE_TO) {
+    } else if (figures[pos.getPosition()] >= FIG_MOVE_TO) {
         // Checking, if click on avalible position
         // Placing figure there
-        return placeFigure(_sounds, _x, _y);
+        return placeFigure(_sounds, pos.x, pos.y);
     }
     // Return, that nothing happen
     return END_NONE;
 }
 
-Uint8 Board::click(const Sounds& _sounds, const Mouse _mouse) {
-    return click(_sounds,
-        (_mouse.getX() - LEFT_LINE) / CELL_SIDE,
-        (_mouse.getY() - UPPER_LINE) / CELL_SIDE);
-}
-
 // Making all like in click, but at once and without help
-Uint8 Board::move(const Sounds& _sounds, coord _x1, coord _y1, coord _x2, coord _y2) {
+Uint8 Board::move(const Sounds& _sounds, Position _p1, Position _p2) {
     // Emulating first click on field
-    pickFigure(_x1, _y1);
+    pickFigure(_p1.x, _p1.y);
 
     // Emulating second click on field
-    Uint8 state = click(_sounds, _x2, _y2);
+    Uint8 state = click(_sounds, _p2);
 
     // Check, if there was turn
     if (state) {
@@ -544,19 +554,10 @@ Uint8 Board::move(const Sounds& _sounds, coord _x1, coord _y1, coord _x2, coord 
     }
 }
 
-SDL_FRect Board::getRect(position pos) const {
+SDL_FRect Board::getRect(Position pos) const {
     return {
-        float(LEFT_LINE + (pos % FIELD_WIDTH) * CELL_SIDE),
-        float(UPPER_LINE + (pos / FIELD_WIDTH) * CELL_SIDE),
-        CELL_SIDE,
-        CELL_SIDE
-    };
-}
-
-SDL_FRect Board::getRect(coord _x, coord _y) const {
-    return {
-        float(LEFT_LINE + _x * CELL_SIDE),
-        float(UPPER_LINE + _y * CELL_SIDE),
+        float(LEFT_LINE + pos.x * CELL_SIDE),
+        float(UPPER_LINE + pos.y * CELL_SIDE),
         CELL_SIDE,
         CELL_SIDE
     };
@@ -567,7 +568,7 @@ position Board::getPreviousTurn() const {
     return activeCell.pos;
 }
 
-// Return, which of users currently moving (1/2)
+// Return, which of users currently moving (0/1)
 Uint8 Board::currentTurn() const {
     return turn;
 }

@@ -29,7 +29,7 @@
 #define MESSAGE_GET_TIMEOUT 5000            // Time after which connection is considered lost
 #define MESSAGE_APPLY_TIMEOUT 2000          // Time to send apply message to keep connecion
 #define MESSAGE_RESEND_TIMEOUT 250          // Time after which need to resend message, as it was lost
-#define CONNECTION_LOST_PERCENT 25          // Option for better testing of connection stability
+#define CONNECTION_LOST_PERCENT 0           // Option for better testing of connection stability
 
 // Base file names
 #define SETTING_FILE "settings5.ini"        // File with all starting data (width, height...)
