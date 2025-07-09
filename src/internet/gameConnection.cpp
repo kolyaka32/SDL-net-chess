@@ -5,6 +5,7 @@
 
 #include "gameConnection.hpp"
 #include "../data/cycleTemplate.hpp"
+#include "../game/messageBox.hpp"
 
 
 GameConnection::GameConnection(const Connection& _connection)
@@ -50,8 +51,8 @@ void GameConnection::checkConnectionStatus() {
         // Stopping current cycle
         CycleTemplate::stop();
 
-        // Optional (later)
         // Show message of disconect
+        MessageBox::activate(1);
         return;
     }
 }
@@ -97,8 +98,8 @@ ConnectionCode GameConnection::checkNewMessage() {
         // Stopping current cycle
         CycleTemplate::stop();
 
-        // Optional (later)
         // Show message of disconect
+        MessageBox::activate(2);
         return ConnectionCode::Null;
 
     case ConnectionCode::Confirm:

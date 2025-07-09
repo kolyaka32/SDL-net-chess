@@ -7,6 +7,7 @@
 
 #include "baseCycle.hpp"
 #include "../game/background.hpp"
+#include "../game/messageBox.hpp"
 
 
 // Cycle for select variants to start
@@ -14,12 +15,14 @@ class SelectCycle : public BaseCycle {
  private:
     MovingBackground background;
 
-    // GUI objects
     GUI::HighlightedStaticText titleText;
     GUI::TextButton singleplayerButton;
     GUI::TextButton twoPlayerButton;
     GUI::TextButton serverButton;
     GUI::TextButton connectButton;
+
+    MessageBox disconnectedMessageBox;
+    MessageBox terminatedMessageBox;
 
     // New overrided cycle functions
     void inputMouseDown(App& app) override;
