@@ -5,14 +5,15 @@
 
 #pragma once
 
-#include <SDL3_net/SDL_net.h>
-#include "baseCycle.hpp"
+#include "gameCycle.hpp"
+#include "../internet/gameConnection.hpp"
 
 
 // Game cycle (for single player (special animation))
-class ClientGame : public BaseCycle {
+class ClientGame : public GameCycle {
  private:
-    App& app;
+    GameConnection connection;
+    static bool currentTurn;
 
     // Main run functions
     void inputMouseDown(App& app) override;
@@ -20,6 +21,5 @@ class ClientGame : public BaseCycle {
     void draw(const App& app) const override;
 
  public:
-    ClientGame(App& app);
-    ~ClientGame();
+    ClientGame(App& app, Connection& client);
 };

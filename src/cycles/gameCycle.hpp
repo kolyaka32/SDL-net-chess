@@ -36,7 +36,6 @@ class GameCycle : public BaseCycle {
     // New overrided cycle functions
     void inputMouseDown(App& app) override;
     void inputKeys(App& app, const SDL_Keycode key) override;
-    void update(App& app) override;
     void draw(const App& app) const override;
 
  public:

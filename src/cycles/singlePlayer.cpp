@@ -4,6 +4,7 @@
  */
 
 #include "singlePlayer.hpp"
+#include "selectCycle.hpp"
 
 
 SinglePlayerGameCycle::SinglePlayerGameCycle(App& _app)
@@ -16,7 +17,7 @@ height(animation->h) {
     prevFrameUpdate = getTime() + 400;
 
     // Starting main song (if wasn't started)
-    if(!isRestarted()) {
+    if(!App::isRestarted()) {
         _app.music.start(MUS_MAIN);
     }
 }
@@ -35,24 +36,25 @@ SinglePlayerGameCycle::~SinglePlayerGameCycle() {
 }
 
 void SinglePlayerGameCycle::inputMouseDown(App& _app) {
-    // Checking on exit
+    // Clicking in settings menu
+    if (settings.click(mouse)) {
+        return;
+    }
+    // Exiting to menu
     if (exitButton.in(mouse)) {
-        _app.startNextCycle(CYCLE_MENU);
         stop();
         return;
     }
-    // Clicking in settings menu
-    settings.click(mouse);
-
     // Changing volume
     if (currentWidth != width) {
         startVolume = _app.music.getVolume();
         app.music.setVolume(startVolume * (width-currentWidth)/width);
     }
-    return;
 }
 
 void SinglePlayerGameCycle::update(App& _app) {
+    BaseCycle::update(_app);
+
     // Checking, if need to change state
     if (getTime() > prevFrameUpdate) {
         // Changing length until reach need width
@@ -98,8 +100,6 @@ void SinglePlayerGameCycle::update(App& _app) {
             prevFrameUpdate = getTime() + animation->delays[frame]/3;
         }
     }
-    // Updating settings
-    settings.update(_app);
 }
 
 void SinglePlayerGameCycle::draw(const App& _app) const {

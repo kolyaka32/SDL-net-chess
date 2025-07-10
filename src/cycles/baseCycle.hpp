@@ -5,8 +5,11 @@
 
 #pragma once
 
+
 #include "../data/cycleTemplate.hpp"
-#include "../game/SettingsMenu.hpp"
+#include "../GUI/interface.hpp"
+#include "../game/settingsMenu.hpp"
+
 
 // Base cycle for use in any game mode
 class BaseCycle : public CycleTemplate {

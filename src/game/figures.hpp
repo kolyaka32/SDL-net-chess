@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include "../define.hpp"
-#include "SDL3/SDL_stdinc.h"
+#include "../data/app.hpp"
+
 
 typedef Uint8 cell;
 typedef Uint8 position;
@@ -39,7 +39,7 @@ enum FIG_names {
 };
 
 // Macros for getting position from coordinats
-#define getPos(x, y) ((x) + (y) * FIELD_WIDTH)
+#define getPos(x, y) ((((x)) + ((y)) * FIELD_WIDTH))
 
 
 // Extra names modifires

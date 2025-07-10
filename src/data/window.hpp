@@ -5,12 +5,12 @@
 
 #pragma once
 
+#include "colors.hpp"
+#include "mouse.hpp"
+#include "time.hpp"
 #include "../texturesNames.hpp"
 #include "../fontsNames.hpp"
 #include "../animationsNames.hpp"
-#include "colors.hpp"
-#include "macroses.hpp"
-#include "mouse.hpp"
 
 
 // Class of window, where all happen

@@ -5,16 +5,15 @@
 
 #pragma once
 
-#include <SDL3_net/SDL_net.h>
 #include "gameCycle.hpp"
+#include "../internet/gameConnection.hpp"
 
 
 // Game cycle with game part of server
 class ServerGame : public GameCycle {
  private:
-    App& app;
-
-    //SDLNet_DatagramSocket* server;
+    GameConnection connection;
+    static bool currentTurn;
 
     // Main run functions
     void inputMouseDown(App& app) override;
@@ -22,6 +21,5 @@ class ServerGame : public GameCycle {
     void draw(const App& app) const override;
 
  public:
-    ServerGame(App& app);
-    ~ServerGame();
+    ServerGame(App& app, Connection& server);
 };

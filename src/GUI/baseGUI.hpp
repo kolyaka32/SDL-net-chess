@@ -5,12 +5,7 @@
 
 #pragma once
 
-#include <string>
-#include "../define.hpp"
-#include "../data/window.hpp"
-#include "../data/colors.hpp"
-#include "../data/languages.hpp"
-#include "../data/time.hpp"
+#include "../data/app.hpp"
 
 
 // Namespace of objects for GUI (Graphic User Interface)
@@ -38,8 +33,8 @@ namespace GUI {
     // Static text on screen
     class StaticText : public GUItemplate {
      public:
-        StaticText(const Window& target, const LanguagedText texts, float X,
-            float Y, float size, Color color = BLACK, Aligment aligment = Aligment::Midle);
+        StaticText(const Window& target, float X, float Y, const LanguagedText texts,
+            float size, Color color = BLACK, Aligment aligment = Aligment::Midle);
         ~StaticText();
     };
 
@@ -47,8 +42,8 @@ namespace GUI {
     // Static text on screen
     class HighlightedStaticText : public GUItemplate {
      public:
-        HighlightedStaticText(const Window& target, const LanguagedText texts, float X,
-            float Y, int frameThickness, float size, Color color = BLACK, Aligment aligment = Aligment::Midle);
+        HighlightedStaticText(const Window& target, float X, float Y, const LanguagedText texts, 
+            int frameThickness, float size, Color color = BLACK, Aligment aligment = Aligment::Midle);
         ~HighlightedStaticText();
     };
 
@@ -63,8 +58,8 @@ namespace GUI {
         const float height;                    // Height of text to draw
 
      public:
-        DynamicText(const Window& _target, const LanguagedText texts, float X,
-            float Y, float size = 20, Color color = BLACK, Aligment aligment = Aligment::Midle);
+        DynamicText(const Window& _target, float X, float Y, const LanguagedText texts,
+            float size = 20, Color color = BLACK, Aligment aligment = Aligment::Midle);
         ~DynamicText();
         template <typename ...Args>
         void setValues(const Window& _target, Args&& ...args) {
@@ -116,9 +111,9 @@ namespace GUI {
         const SDL_FRect dest;
 
      public:
-        GIFAnimation(Window& _target, SDL_Rect destination, ANI_names type);
+        GIFAnimation(Window& target, SDL_Rect destination, ANI_names type);
         ~GIFAnimation();
-        void draw(const Window& _target);
+        void draw(const Window& target);
     };
     #endif
 
@@ -157,7 +152,7 @@ namespace GUI {
         void copyToClipboard();            // Writing selected text to clipboard
 
      public:
-        TypeField(const Window& _target, float posX, float posY, float height, const char *startText = "",
+        TypeField(const Window& target, float posX, float posY, float height, const char *startText = "",
             Aligment aligment = Aligment::Midle, Color textColor = BLACK);
         ~TypeField();                        // Clearing font and texture
         void writeString(const char* str);   // Function of writing any string to buffer at caret position
@@ -165,15 +160,16 @@ namespace GUI {
         void update(float mouseX);           // Function of change caret symbol from '|' to ' ' and back
         void press(const Mouse mouse);       // Function of setting caret for typing after
         void unpress();                      // Function of resetting pressing
-        const char* getString() const;       // Function of getting typed string
+        const char* getString();             // Function of getting typed string
+        void setString(const char* string);  // Function for replace text with new string
         void blit() const;                   // Function for draw at screen
-        bool in(const Mouse mouse);          // Function of checking pressing
+        bool in(const Mouse mouse) const;    // Function of checking pressing
     };
 
     // Class of backplate for
     class Backplate : public GUItemplate {
      public:
-        Backplate(const Window& _target, float centerX, float centerY, float width, float height, float radius, float border,
+        Backplate(const Window& target, float centerX, float centerY, float width, float height, float radius, float border,
             Color frontColor = GREY, Color backColor = BLACK);
         Backplate(const Window& _target, const SDL_FRect& rect, float radius, float border, Color frontColor = GREY,
             Color backColor = BLACK);
@@ -186,9 +182,22 @@ namespace GUI {
         const Backplate backplate;
 
      public:
-        TextButton(const Window& _target, const LanguagedText texts, float X, float Y, float size,
+        TextButton(const Window& target, float X, float Y, const LanguagedText texts, float size,
             Color color = WHITE, Aligment aligment = Aligment::Midle);
         void blit(const Window& _target) const override;
+    };
+
+    // Class of appearing for time and hidden by time text
+    class InfoBox : public StaticText {
+     private:
+        unsigned counter = 0;
+        static const unsigned maxCounter = 100;
+
+     public:
+        InfoBox(const Window& target, float X, float Y, const LanguagedText texts,
+            float size, Color color = WHITE, Aligment aligment = Aligment::Midle);
+        void update();
+        void reset();
     };
 
 }  // namespace GUI

@@ -5,7 +5,6 @@
 
 #pragma once
 
-#include "data/preloaded/textures.hpp"
 #include "data/preloaded/textures.cpp"
 
 // Names of all images with related numbers

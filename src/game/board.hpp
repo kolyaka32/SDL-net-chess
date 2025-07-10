@@ -6,14 +6,14 @@
 #pragma once
 
 #include "figuresMoves.hpp"
-#include "../data/app.hpp"
+#include "../GUI/interface.hpp"
 
 
 // Configuration of board, for play
 extern char boardConfig[85];
 
 // Types of current game state
-enum END_names{
+enum END_names {
     END_NONE,    // Nothing happen
     END_TURN,    // Flag of happened turn, equal to none
     END_WIN,     // Win of 1 or current player
@@ -23,11 +23,22 @@ enum END_names{
 
 
 // Types of castling
-enum CASTLING_names{
+enum CASTLING_names {
     CASTLING_W_K = 1,  // If castling possible for white from king side
     CASTLING_W_Q = 2,  // If castling possible for white from queen side
     CASTLING_B_K = 4,  // If castling possible for black from king side
     CASTLING_B_Q = 8,  // If castling possible for black from queen side
+};
+
+
+// Structure with current position
+class Position {
+public:
+    Position(const Mouse mouse);
+    Position(const position pos);
+    Position(coord x, coord y);
+    position getPosition();
+    coord x, y;
 };
 
 
@@ -39,17 +50,15 @@ class Board : public FiguresMoves, public GUI::GUItemplate {
 
     void pickFigure(coord X, coord Y);  // Function for pick figure from field
     Uint8 placeFigure(const Sounds& sounds, coord X, coord Y);  // Function to try put figure back to field
-    SDL_FRect getRect(position pos) const;
-    SDL_FRect getRect(coord x, coord y) const;
+    SDL_FRect getRect(Position pos) const;
 
  public:
-    void reset();                                         // Resetting field for new game
-    void blit(const Window& target) const override;       // Bliting field at screen
-    Uint8 click(const Sounds& sounds, coord X, coord Y);  // Clicking with mouse on need cell on field
-    Uint8 click(const Sounds& sounds, const Mouse mouse);       // Clicking with mouse at need position
+    void reset();                                     // Resetting field for new game
+    void blit(const Window& target) const override;   // Bliting field at screen
+    Uint8 click(const Sounds& sounds, Position pos);  // Clicking with mouse on need cell on field
 
     // Simplier mover on field (for internet opponent turn)
-    Uint8 move(const Sounds& sounds, coord X1, coord Y1, coord X2, coord Y2);
+    Uint8 move(const Sounds& sounds, Position p1, Position p2);
     void resetSelection();             // Reset currently selected figure
     position getPreviousTurn() const;  // Return, where was made previous turn
     Uint8 currentTurn() const;         // Return, which person is now active

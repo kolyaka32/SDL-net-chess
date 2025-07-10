@@ -9,6 +9,7 @@
 #include <SDL3/SDL_log.h>
 #include "../testing.hpp"
 
+
 // Custom exceptions
 #if CHECK_CORRECTION
 // Any error of loading

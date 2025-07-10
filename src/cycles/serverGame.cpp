@@ -6,70 +6,134 @@
 #include "serverGame.hpp"
 
 
-ServerGame::ServerGame(App& _app)
+bool ServerGame::currentTurn = false;
+
+ServerGame::ServerGame(App& _app, Connection& _server)
 : GameCycle(_app),
-app(_app) {
-    // Starting main song (if wasn't started)
-    if(!isRestarted()) {
-        //_app.music.start(MUS_MAIN);
+connection(_server) {
+    if(!App::isRestarted()) {
+        // Sending applying initialsiation message
+        connection.sendConfirmed(ConnectionCode::Init);
+
+        // Selecting current player as first (white)
+        currentTurn = true;
+
+        // Starting main song (if wasn't started)
+        _app.music.start(MUS_MAIN);
     }
-    //SDLNet_Init();
-
-    // Creating server
-    //server = SDLNet_CreateDatagramSocket(NULL, 8000);
-
-    //SDL_Log("Server created: %u\n", server);
-}
-
-ServerGame::~ServerGame() {
-    //SDLNet_Quit();
-    //SDLNet_DestroyDatagramSocket(server);
 }
 
 void ServerGame::inputMouseDown(App& _app) {
-    // Checking on exit
+    if (settings.click(mouse)) {
+        return;
+    }
     if (exitButton.in(mouse)) {
-        _app.startNextCycle(CYCLE_MENU);
         stop();
         return;
     }
-    // Clicking in settings menu
-    settings.click(mouse);
-    return;
+    // Checking, if game start
+    if (endState <= END_TURN) {
+        // Check, if turn of current player
+        if (currentTurn) {
+            // Clicking on field
+            endState = board.click(_app.sounds, mouse);
+
+            // Check, if change state
+            if (endState != END_NONE) {
+                currentTurn = false;
+                Position endPos{mouse};
+                #if CHECK_CORRECTION
+                SDL_Log("Turn of current player: from %u to %u", board.getPreviousTurn(), endPos.getPosition());
+                #endif
+                // Sending turn to opponent
+                connection.sendConfirmed(ConnectionCode::GameTurn, board.getPreviousTurn(), endPos.getPosition());
+            }
+        }
+        return;
+    }
+    // Waiting menu
+    if (restartButton.in(mouse)) {
+        #if CHECK_CORRECTION
+        SDL_Log("Game restart by current user");
+        #endif
+
+        // Restarting current game
+        endState = END_NONE;
+        currentTurn = true;
+
+        // Resetting field
+        board.reset();
+
+        // Sending message of game restart
+        connection.sendConfirmed(ConnectionCode::GameRestart);
+
+        // Making sound
+        _app.sounds.play(SND_RESET);
+        return;
+    }
+    if (menuButton.in(mouse)) {
+        // Going to menu
+        stop();
+        return;
+    }
 }
 
 void ServerGame::update(App& _app) {
+    BaseCycle::update(_app);
 
-    // Updating settings
-    settings.update(_app);
-
-
-    /*SDLNet_Datagram* data;
-
-
-    if (!SDLNet_ReceiveDatagram(server, &data)) {
-        SDL_Log("something");
-    }
-
-    if (data) {
-        SDL_Log("Error %s\n", SDL_GetError());
-        for (int i=0; i < data->buflen; ++i) {
-            SDL_Log("%u ", data->buf[i]);
+    // Getting internet messages
+    switch (connection.updateMessages()) {
+    case ConnectionCode::GameTurn:
+        // Check, if turn of another player (for security)
+        if (currentTurn == false) {
+            #if CHECK_CORRECTION
+            SDL_Log("Turn of opponent player: from %u to %u", connection.lastPacket->getData<Uint8>(2), connection.lastPacket->getData<Uint8>(3));
+            #endif
+            endState = board.move(_app.sounds, {connection.lastPacket->getData<Uint8>(2)}, {connection.lastPacket->getData<Uint8>(3)});
+            currentTurn = true;
         }
-        SDL_Log("\n");
-        SDLNet_DestroyDatagram(data);
-    }*/
+        return;
+    }
 }
 
 void ServerGame::draw(const App& _app) const {
-    // Bliting background
-    _app.window.setDrawColor(BLACK);
-    _app.window.clear();
+    // Bliting field
+    board.blit(_app.window);
+
+    // Draw surround letters
+    letters.blit(_app.window);
+
+    // Drawing player state
+    playersTurnsTexts[board.currentTurn() + 2].blit(_app.window);
 
     // Drawing buttons
     exitButton.blit(_app.window);
 
-    // Drawing settings
+    // Bliting game state, if need
+    if (endState > END_TURN) {
+        // Bliting end background
+        endBackplate.blit(_app.window);
+
+        // Bliting text with end state
+        switch (endState) {
+        case END_WIN:
+            winText.blit(_app.window);
+            break;
+
+        case END_LOOSE:
+            looseText.blit(_app.window);
+            break;
+
+        case END_NOBODY:
+            nobodyWinText.blit(_app.window);
+            break;
+        }
+
+        // Blitting buttons
+        restartButton.blit(_app.window);
+        menuButton.blit(_app.window);
+    }
+    // Drawing setting menu
     settings.blit(_app.window);
 
     // Bliting all to screen

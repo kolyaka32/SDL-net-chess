@@ -6,7 +6,6 @@
 #pragma once
 
 #include "figures.hpp"
-#include "../data/macroses.hpp"
 
 
 // Types of which player is active

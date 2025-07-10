@@ -4,77 +4,66 @@
  */
 
 #include "clientLobby.hpp"
+#include "clientGame.hpp"
 
 
 // Base link connections realisations
-char baseIP[20] = "::1";
-char basePort[20] = "2000";
+char baseIP[12] = "127.0.0.1";
+char basePort[6] = "8000";
 
 
 ClientLobby::ClientLobby(App& _app)
 : BaseCycle(_app),
-enterIPText{_app.window, {"Enter IP:", "Введите IP:", "-", "Увядзіце IP:"}, 0.5, 0.1, 30, WHITE},
-enterPortText{_app.window, {"Enter port:", "Введите порт:", "Port eingeben:", "Увядзіце порт:"}, 0.5, 0.4, 30, WHITE},
-cancelButton{_app.window, {"Cancel", "Отмена", "Annullierung", "Адмена"}, 0.5, 0.9, 24, WHITE},
-connectButton{_app.window, {"Connect", "Присоединится", "Beitritt", "Далучыцца"}, 0.5, 0.7, 24, WHITE},
-enterIPField{_app.window, 0.5, 0.2, 20, baseIP},
-enterPortField{_app.window, 0.5, 0.5, 20, basePort}
-{
-    /*SDLNet_Init();
-
-    SDLNet_Address* sendTo = SDLNet_ResolveHostname("255.255.255.255");
-    SDLNet_WaitUntilResolved(sendTo, -1);
-    SDL_Log("Client to send created: %u\n", sendTo);
-
-    //SDLNet_Address* sendFrom = SDLNet_ResolveHostname("127.0.0.1");
-    //SDLNet_WaitUntilResolved(sendFrom, -1);
-
-    SDLNet_DatagramSocket* current = SDLNet_CreateDatagramSocket(0, 0);
-
-    SDL_Log("Client from send to: %u\n", current);
-    SDL_Log(SDL_GetError());
-
-    char data[20] = "1234";
-    
-    SDLNet_SendDatagram(current, sendTo, 8000, data, 20);
-
-    SDL_Log(SDL_GetError());
-
-    SDLNet_DestroyDatagramSocket(current);
-    SDLNet_UnrefAddress(sendTo);
-    
-    SDL_Log("Client stopped\n");
-
-    _app.startNextCycle(CYCLE_MENU);
-    stop();*/
-}
-
-ClientLobby::~ClientLobby() {
-    //SDLNet_Quit();
-}
+enterIPText(_app.window, 0.5, 0.1, {"Enter IP:", "Введите IP:", "-", "Увядзіце IP:"}, 30, WHITE),
+enterIPField(_app.window, 0.5, 0.2, 20, baseIP),
+enterPortText(_app.window, 0.5, 0.4, {"Enter port:", "Введите порт:", "Port eingeben:", "Увядзіце порт:"}, 30, WHITE),
+enterPortField(_app.window, 0.5, 0.5, 20, basePort),
+connectButton(_app.window, 0.5, 0.7, {"Connect", "Присоединится", "Beitritt", "Далучыцца"}, 24, WHITE),
+pasteButton(_app.window, 0.5, 0.9, {"Paste the copied address", "Вставить скопированный адрес", "Kopierte Adresse einfügen", "Уставіць скапіяваны адрас"}, 24, WHITE) {}
 
 void ClientLobby::inputMouseDown(App& _app) {
+    // Clicking in settings menu
+    if (settings.click(mouse)) {
+        return;
+    }
     // Checking on exit
-    if (exitButton.in(mouse) || cancelButton.in(mouse)) {
-        _app.startNextCycle(CYCLE_MENU);
+    if (exitButton.in(mouse)) {
         stop();
         return;
     }
-    // Clicking in settings menu
-    settings.click(mouse);
 
     // Connection part
     enterIPField.press(mouse);
     enterPortField.press(mouse);
 
-    // Trying to connect
-    if (connectButton.in(mouse)) {
-
+    // Check, if press paste data
+    if (pasteButton.in(mouse)) {
+        pasteFromClipboard();
+        return;
     }
-    return;
+
+    // Trying to connect at specified address
+    if (connectButton.in(mouse)) {
+        // Correcting port text
+        char portTextCorrected[7];
+        memcpy(portTextCorrected, enterPortField.getString(), 7);
+
+        for (char* c = portTextCorrected; *c; ++c) {
+            if (*c < '0' || *c > '9') {
+                #if CHECK_ALL
+                SDL_Log("Couldn't connect - wrong port");
+                #endif
+                return;
+            }
+        }
+
+        client.tryConnect(enterIPField.getString(), std::stoi(portTextCorrected));
+        return;
+    }
 }
 
 void ClientLobby::inputMouseUp(App& app) {
+    settings.unClick();
     enterIPField.unpress();
     enterPortField.unpress(); 
 }
@@ -85,13 +74,24 @@ void ClientLobby::inputKeys(App& app, SDL_Keycode key) {
 }
 
 void ClientLobby::update(App& _app) {
-    // Updating settings
-    settings.update(_app);
+    BaseCycle::update(_app);
 
     // Updating typeboxes
     mouse.updatePos();
     enterIPField.update(mouse.getX());
     enterPortField.update(mouse.getX());
+
+    // Getting internet data
+    switch (client.getCode()) {
+    case ConnectionCode::Init:
+        // Settings options to this connection
+        client.connectToLastMessage();
+        // Starting game
+        _app.runCycle<ClientGame, Connection&>(client);
+        // Exiting to menu after game
+        stop();
+        return;
+    }
 }
 
 void ClientLobby::inputText(App& app, const char* text) {
@@ -111,7 +111,7 @@ void ClientLobby::draw(const App& _app) const {
     // Draw main part
     enterIPText.blit(_app.window);
     enterPortText.blit(_app.window);
-    cancelButton.blit(_app.window);
+    pasteButton.blit(_app.window);
     connectButton.blit(_app.window);
     enterIPField.blit();
     enterPortField.blit();
@@ -121,4 +121,48 @@ void ClientLobby::draw(const App& _app) const {
 
     // Bliting all to screen
     _app.window.render();
+}
+
+void ClientLobby::pasteFromClipboard() {
+    // Getting data from clipboard
+    char* clipboard = SDL_GetClipboardText();
+
+    // Check text on correction
+    if (clipboard == nullptr) {
+        #if CHECK_ALL
+        SDL_Log("Couldn't get clipboard");
+        #endif
+        return;
+    }
+    // Find IP text (first part)
+    int i=0;
+    for (; clipboard[i]; ++i) {
+        // Finding : as port separator
+        if (clipboard[i] == ':') {
+            break;
+        }
+        // Checking coorection of string
+        if (clipboard[i] != '.' && (clipboard[i] < '0' || clipboard[i] > '9')) {
+            #if CHECK_ALL
+            SDL_Log("Wrong clipboard: %s", clipboard);
+            #endif
+            SDL_free(clipboard);
+            return;
+        }
+    }
+    clipboard[i] = '\0';
+    i++;
+    // Finding end of port text
+    for (int k=i; clipboard[k]; ++k) {
+        if (clipboard[k] < '0' || clipboard[k] > '9') {
+            clipboard[k] = '\0';
+            break;
+        }
+    }
+    #if CHECK_ALL
+    SDL_Log("From clipboard: IP: %s, port: %s", clipboard, clipboard+i);
+    #endif
+    enterIPField.setString(clipboard);
+    enterPortField.setString(clipboard+i);
+    SDL_free(clipboard);
 }

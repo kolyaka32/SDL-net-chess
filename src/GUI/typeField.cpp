@@ -10,20 +10,20 @@
 
 // Type field class
 template <unsigned bufferSize>
-GUI::TypeField<bufferSize>::TypeField(const Window& _target, float _x, float _y, float _height, const char* _text, Aligment _aligment, Color _color)
+GUI::TypeField<bufferSize>::TypeField(const Window& _target, float _X, float _Y, float _height, const char* _text, Aligment _aligment, Color _color)
 : target(_target),
-posX(WINDOW_WIDTH*_x),
+posX(WINDOW_WIDTH*_X),
 aligment(_aligment),
 textColor(_color),
 font(_target.createFontCopy(FNT_MAIN, _height)),
-backRect({_x*WINDOW_WIDTH-(6.5f*bufferSize+2), _y*WINDOW_HEIGHT-_height*0.9f, 13.0f*bufferSize+4, _height*1.8f}) {
+backRect({_X*WINDOW_WIDTH-(6.5f*bufferSize+2), _Y*WINDOW_HEIGHT-_height*0.9f, 13.0f*bufferSize+4, _height*1.8f}) {
     // Setting rects
-    textRect = {0, WINDOW_HEIGHT*_y-_height/2-1, 0, 0};
-    caretRect = {0, WINDOW_HEIGHT*_y-_height/2-1, 2, _height*1.3f};
+    textRect = {0, WINDOW_HEIGHT*_Y-_height/2-1, 0, 0};
+    caretRect = {0, WINDOW_HEIGHT*_Y-_height/2-1, 2, _height*1.3f};
 
     // Copying text to caret
     length = strlen(_text);
-    SET_MAX(length, bufferSize);
+    setMax(length, (size_t)bufferSize);
     memcpy(buffer, _text, length);
 
     // Creating backplate
@@ -180,13 +180,15 @@ void GUI::TypeField<bufferSize>::writeClipboard() {
 // Copying selected text to clipboard
 template <unsigned bufferSize>
 void GUI::TypeField<bufferSize>::copyToClipboard() {
-    if (selectLength < 0) {
-        memcpy(&clipboardText, buffer + caret + selectLength, abs(selectLength));
-    } else {
-        memcpy(&clipboardText, buffer + caret, abs(selectLength));
+    if (selectLength) {
+        if (selectLength < 0) {
+            memcpy(&clipboardText, buffer + caret + selectLength, abs(selectLength));
+        } else {
+            memcpy(&clipboardText, buffer + caret, abs(selectLength));
+        }
+        clipboardText[abs(selectLength)] = '\0';
+        SDL_SetClipboardText(clipboardText);
     }
-    clipboardText[abs(selectLength)] = '\0';
-    SDL_SetClipboardText(clipboardText);
 }
 
 template <unsigned bufferSize>
@@ -311,6 +313,11 @@ void GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
         copyToClipboard();
         break;
 
+    case SDLK_CUT:
+        copyToClipboard();
+        deleteSelected();
+        break;
+
     case SDLK_V:
         if (keyMods & SDL_KMOD_CTRL) {
             writeClipboard();
@@ -320,6 +327,13 @@ void GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
     case SDLK_C:
         if (keyMods & SDL_KMOD_CTRL) {
             copyToClipboard();
+        }
+        break;
+
+    case SDLK_X:
+        if (keyMods & SDL_KMOD_CTRL) {
+            copyToClipboard();
+            deleteSelected();
         }
         break;
 
@@ -414,12 +428,31 @@ void GUI::TypeField<bufferSize>::blit() const {
 }
 
 template <unsigned bufferSize>
-bool GUI::TypeField<bufferSize>::in(const Mouse mouse) {
+bool GUI::TypeField<bufferSize>::in(const Mouse mouse) const {
     return mouse.in(backRect);
 }
 
-// Returning current text
 template <unsigned bufferSize>
-const char* GUI::TypeField<bufferSize>::getString() const {
+const char* GUI::TypeField<bufferSize>::getString() {
+    buffer[length] = '\0';
     return buffer;
+}
+
+template <unsigned bufferSize>
+void GUI::TypeField<bufferSize>::setString(const char* _newString) {
+    length = min(strlen(_newString), (size_t)bufferSize);
+    memcpy(buffer, _newString, length);
+
+    // Resetting
+    selected = false;
+    pressed = false;
+
+    // Stoping entering any letters
+    target.stopTextInput();
+
+    // Clearing caret
+    showCaret = false;
+    selectLength = 0;
+
+    updateTexture();
 }

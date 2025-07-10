@@ -4,14 +4,15 @@
  */
 
 #include "app.hpp"
+#include "../cycles/selectCycle.hpp"
 
 // Global application data
 App application;
 
 // Main function
 int main(int argv, char **args) {
-    // Running selected app
-    application.run();
+    // Running menu
+    application.runCycle<SelectCycle>();
 
     // Successful end of program
     return 0;

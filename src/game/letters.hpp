@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include "../define.hpp"
-#include "../data/window.hpp"
+#include "../GUI/interface.hpp"
+
 
 // Class with letters, placed in collumn
 class LettersCollumn {

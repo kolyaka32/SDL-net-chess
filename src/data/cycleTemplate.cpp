@@ -3,12 +3,11 @@
  * <nik.kazankov.05@mail.ru>
  */
 
-#include <SDL3/SDL_events.h>
 #include "cycleTemplate.hpp"
 
 
 // Static class members
-bool CycleTemplate::restarted = false;
+bool CycleTemplate::running;
 
 // Reset basic cycle template variables
 CycleTemplate::CycleTemplate() {
@@ -19,15 +18,6 @@ CycleTemplate::CycleTemplate() {
 
 void CycleTemplate::stop() {
     running = false;
-}
-
-void CycleTemplate::restart() {
-    restarted = true;
-    running = false;
-}
-
-bool CycleTemplate::isRestarted() {
-    return restarted;
 }
 
 // Getting user input
@@ -41,10 +31,7 @@ void CycleTemplate::getInput(App& _app) {
         // Code of program exiting
         case SDL_EVENT_QUIT:
             // Stopping program at all
-            _app.stop();
-
-            // Stopping current cycle
-            running = false;
+            App::stop();
             return;
 
         // Getting mouse input
@@ -115,12 +102,11 @@ void CycleTemplate::inputText(App& app, const char* text) {
     // press = false;
 }
 
-
-
 // Function for start need cycle
 void CycleTemplate::run(App& _app) {
     // Resetting restart flag after all started
-    restarted = false;
+    App::resetRestart();
+    running = true;
 
     // Starting main cycle
     while (running) {
@@ -136,4 +122,7 @@ void CycleTemplate::run(App& _app) {
         // Standing in idle state
         idleTimer.sleep();
     }
+
+    // Resetting flag for external running cycle
+    running = _app.isRunning();
 }

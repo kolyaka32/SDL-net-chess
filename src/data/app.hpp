@@ -9,9 +9,8 @@
 #include "preloaded/music.hpp"
 #include "preloaded/sounds.hpp"
 #include "initFile.hpp"
-#include "../GUI/baseGUI.hpp"
-#include "../GUI/typeField.cpp"
-#include "../cycles/cycles.hpp"
+#include "window.hpp"
+#include "languages.hpp"
 
 
 // Load needed loader, depend on teting
@@ -33,22 +32,41 @@ private:
     #endif
 
     // Flags of work
-    bool running = true;
-    CYCLE_types nextCycle = CYCLE_MENU;
+    static bool running;
+    static bool restarting;
 
 public:
     App();
-    ~App();
 
     // Commands to operate with global running
-    void stop();
-    void startNextCycle(CYCLE_types type);
-    
-    // Command to start cycles
-    void run();
+    static void stop();
+    static bool isRunning();
+    static void restart();
+    static void resetRestart();
+    static bool isRestarted();
+
+    // Templated function for run new cycle
+    template <class T, typename ...Args>
+    void runCycle(const Args& ...args);
 
     Music music;
     Sounds sounds;
     InitFile initFile;
     const Window window;
 };
+
+
+template <class T, typename ...Args>
+void App::runCycle(const Args& ...args) {
+    // Resetting
+    restarting = false;
+
+    // Running current cycle, while restarting
+    do {
+        // Updating location
+        App::window.updateTitle();
+        // Launching new cycle
+        T cycle(*this, args...);
+        cycle.run(*this);
+    } while (restarting && running);
+}

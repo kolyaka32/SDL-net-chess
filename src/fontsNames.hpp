@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include "data/preloaded/fonts.hpp"
 #include "data/preloaded/fonts.cpp"
+
 
 // Names of fonts
 enum FNT_names{
