@@ -14,12 +14,10 @@ connection(_server) {
     if(!App::isRestarted()) {
         // Sending applying initialsiation message
         connection.sendConfirmed(ConnectionCode::Init);
-
-        // Selecting current player as first (white)
+        // Resetting game
+        endState = END_NONE;
         currentTurn = true;
-
-        // Starting main song (if wasn't started)
-        _app.music.start(MUS_MAIN);
+        board.reset();
     }
 }
 
@@ -41,12 +39,8 @@ void ServerGame::inputMouseDown(App& _app) {
             // Check, if change state
             if (endState != END_NONE) {
                 currentTurn = false;
-                Position endPos{mouse};
-                #if CHECK_CORRECTION
-                SDL_Log("Turn of current player: from %u to %u", board.getPreviousTurn(), endPos.getPosition());
-                #endif
                 // Sending turn to opponent
-                connection.sendConfirmed(ConnectionCode::GameTurn, board.getPreviousTurn(), endPos.getPosition());
+                connection.sendConfirmed(ConnectionCode::GameTurn, board.getLastTurnStart(), board.getLastTurnEnd());
             }
         }
         return;
@@ -56,17 +50,11 @@ void ServerGame::inputMouseDown(App& _app) {
         #if CHECK_CORRECTION
         SDL_Log("Game restart by current user");
         #endif
-
         // Restarting current game
         endState = END_NONE;
         currentTurn = true;
-
         // Resetting field
         board.reset();
-
-        // Sending message of game restart
-        connection.sendConfirmed(ConnectionCode::GameRestart);
-
         // Making sound
         _app.sounds.play(SND_RESET);
         return;
@@ -75,6 +63,23 @@ void ServerGame::inputMouseDown(App& _app) {
         // Going to menu
         stop();
         return;
+    }
+}
+
+void ServerGame::inputKeys(App& _app, SDL_Keycode _key) {
+    if (_key == SDLK_R) {
+        // Sending message of game restart
+        connection.sendConfirmed(ConnectionCode::GameRestart);
+        // Restarting current game
+        endState = END_NONE;
+        currentTurn = true;
+        // Resetting field
+        board.reset();
+        // Making sound
+        _app.sounds.play(SND_RESET);
+        return;
+    } else {
+        GameCycle::inputKeys(_app, _key);
     }
 }
 
@@ -104,7 +109,7 @@ void ServerGame::draw(const App& _app) const {
     letters.blit(_app.window);
 
     // Drawing player state
-    playersTurnsTexts[board.currentTurn() + 2].blit(_app.window);
+    playersTurnsTexts[3 - currentTurn].blit(_app.window);
 
     // Drawing buttons
     exitButton.blit(_app.window);

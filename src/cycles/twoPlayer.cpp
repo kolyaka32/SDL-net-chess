@@ -8,9 +8,4 @@
 
 // Two player mode (standart game)
 TwoPlayerGameCycle::TwoPlayerGameCycle(const App& _app)
-: GameCycle(_app) {
-    // Starting main music
-    if (!App::isRestarted()) {
-        _app.music.start(MUS_MAIN);
-    }
-}
+: GameCycle(_app) {}

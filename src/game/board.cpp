@@ -236,9 +236,9 @@ void Board::resetSelection() {
 }
 
 // Function of picking figure from field
-void Board::pickFigure(const coord _x, const coord _y) {
+void Board::pickFigure(Position p) {
     // Finding clicked cell, it position
-    activeCell.pos = getPos(_x, _y);
+    activeCell.pos = p.getPosition();
     activeCell.type = figures[activeCell.pos];
 
     // Resetting flag of moving figure
@@ -251,53 +251,53 @@ void Board::pickFigure(const coord _x, const coord _y) {
         switch (activeCell.type) {
         case FIG_WHITE_PAWN:
             // Basic move
-            tryMove(_x, _y - 1);
+            tryMove(p.x, p.y - 1);
 
             // Check, if in start position and wasn't any move
-            if (wasMoven && _y == FIELD_WIDTH - 2) {
-                tryMove(_x, _y - 2);
+            if (wasMoven && p.y == FIELD_WIDTH - 2) {
+                tryMove(p.x, p.y - 2);
             }
 
             // Attack positions
-            tryAttack(_x-1, _y-1);
-            tryAttack(_x+1, _y-1);
+            tryAttack(p.x-1, p.y-1);
+            tryAttack(p.x+1, p.y-1);
             break;
 
         case FIG_WHITE_BISHOP:
-            setDiagonals(_x, _y);
+            setDiagonals(p.x, p.y);
             break;
 
         case FIG_WHITE_ROOK:
             // Check castling
             if (castling & CASTLING_W_Q) {
-                setCastlingRight(_x, _y, FIG_WHITE_KING);
+                setCastlingRight(p.x, p.y, FIG_WHITE_KING);
             }
             if (castling & CASTLING_W_K) {
-                setCastlingLeft(_x, _y, FIG_WHITE_KING);
+                setCastlingLeft(p.x, p.y, FIG_WHITE_KING);
             }
             // Main move
-            setStraight(_x, _y);
+            setStraight(p.x, p.y);
             break;
 
         case FIG_WHITE_KNIGHT:
-            setAround(_x, _y, knightMoves);
+            setAround(p.x, p.y, knightMoves);
             break;
 
         case FIG_WHITE_QUEEN:
-            setDiagonals(_x, _y);
-            setStraight(_x, _y);
+            setDiagonals(p.x, p.y);
+            setStraight(p.x, p.y);
             break;
 
         case FIG_WHITE_KING:
             // Check castling
             if (castling & CASTLING_W_Q) {
-                setCastlingLeft(_x, _y, FIG_WHITE_ROOK);
+                setCastlingLeft(p.x, p.y, FIG_WHITE_ROOK);
             }
             if (castling & CASTLING_W_K) {
-                setCastlingRight(_x, _y, FIG_WHITE_ROOK);
+                setCastlingRight(p.x, p.y, FIG_WHITE_ROOK);
             }
             // Main move
-            setAround(_x, _y, kingMoves);
+            setAround(p.x, p.y, kingMoves);
             break;
         }
     } else {
@@ -306,53 +306,53 @@ void Board::pickFigure(const coord _x, const coord _y) {
         switch (activeCell.type) {
         case FIG_BLACK_PAWN:
             // Basic move
-            tryMove(_x, _y + 1);
+            tryMove(p.x, p.y + 1);
 
             // Check, if in start position and wasn't any move
-            if (wasMoven && _y == 1) {
-                tryMove(_x, _y + 2);
+            if (wasMoven && p.y == 1) {
+                tryMove(p.x, p.y + 2);
             }
 
             // Attack positions
-            tryAttack(_x-1, _y+1);
-            tryAttack(_x+1, _y+1);
+            tryAttack(p.x-1, p.y+1);
+            tryAttack(p.x+1, p.y+1);
             break;
 
         case FIG_BLACK_BISHOP:
-            setDiagonals(_x, _y);
+            setDiagonals(p.x, p.y);
             break;
 
         case FIG_BLACK_ROOK:
             // Check castling
             if (castling & CASTLING_B_Q) {
-                setCastlingRight(_x, _y, FIG_BLACK_KING);
+                setCastlingRight(p.x, p.y, FIG_BLACK_KING);
             }
             if (castling & CASTLING_B_K) {
-                setCastlingLeft(_x, _y, FIG_BLACK_KING);
+                setCastlingLeft(p.x, p.y, FIG_BLACK_KING);
             }
             // Main move
-            setStraight(_x, _y);
+            setStraight(p.x, p.y);
             break;
 
         case FIG_BLACK_KNIGHT:
-            setAround(_x, _y, knightMoves);
+            setAround(p.x, p.y, knightMoves);
             break;
 
         case FIG_BLACK_QUEEN:
-            setDiagonals(_x, _y);
-            setStraight(_x, _y);
+            setDiagonals(p.x, p.y);
+            setStraight(p.x, p.y);
             break;
 
         case FIG_BLACK_KING:
             // Check castling
             if (castling & CASTLING_B_Q) {
-                setCastlingLeft(_x, _y, FIG_BLACK_ROOK);
+                setCastlingLeft(p.x, p.y, FIG_BLACK_ROOK);
             }
             if (castling & CASTLING_B_K) {
-                setCastlingRight(_x, _y, FIG_BLACK_ROOK);
+                setCastlingRight(p.x, p.y, FIG_BLACK_ROOK);
             }
             // Main move
-            setAround(_x, _y, kingMoves);
+            setAround(p.x, p.y, kingMoves);
             break;
         }
     }
@@ -364,16 +364,16 @@ void Board::pickFigure(const coord _x, const coord _y) {
     return;
 }
 
-Uint8 Board::placeFigure(const Sounds& _sounds, coord _x, coord _y) {
+Uint8 Board::placeFigure(const Sounds& _sounds, Position p) {
     // Check on game end
     if (turn == TURN_WHITE) {
         // Checking on game end (if there king of another command)
-        if (figures[getPos(_x, _y)] == FIG_RED_TYPE + FIG_BLACK_KING) {
+        if (figures[p.getPosition()] == FIG_RED_TYPE + FIG_BLACK_KING) {
             return END_WIN + turn;
         }
     } else {
         // Checking on game end (if there king of another command)
-        if (figures[getPos(_x, _y)] == FIG_RED_TYPE + FIG_WHITE_KING) {
+        if (figures[p.getPosition()] == FIG_RED_TYPE + FIG_WHITE_KING) {
             return END_WIN + turn;
         }
     }
@@ -383,18 +383,21 @@ Uint8 Board::placeFigure(const Sounds& _sounds, coord _x, coord _y) {
     switch (activeCell.type) {
     case FIG_WHITE_ROOK:
         // Disabling posible castling for next turns
-        if (_x < FIELD_WIDTH/2) {
-            castling |= CASTLING_B_K | CASTLING_B_Q | CASTLING_W_K;
-        } else {
-            castling |= CASTLING_B_K | CASTLING_B_Q | CASTLING_W_Q;
+        if (activeCell.pos == getPos(0, 7)) {
+            castling &= CASTLING_B_K | CASTLING_B_Q | CASTLING_W_K;
+        }
+        if (activeCell.pos == getPos(7, 7)) {
+            castling &= CASTLING_B_K | CASTLING_B_Q | CASTLING_W_Q;
         }
 
         // Check, if castling
-        if (figures[getPos(_x, _y)] == FIG_WHITE_KING + FIG_RED_TYPE) {
+        if (figures[p.getPosition()] == FIG_WHITE_KING + FIG_RED_TYPE) {
             makeMove = false;
             // Clearing current figures
             figures[activeCell.pos] = FIG_NONE;
             figures[60] = FIG_NONE;
+            // Resetting castling for next turns
+            castling &= CASTLING_B_K | CASTLING_B_Q;
 
             // Setting rook to new place
             if (activeCell.pos % FIELD_WIDTH < FIELD_WIDTH/2) {
@@ -412,14 +415,14 @@ Uint8 Board::placeFigure(const Sounds& _sounds, coord _x, coord _y) {
         castling &= CASTLING_B_Q | CASTLING_B_K;
 
         // Check, if castling
-        if (figures[getPos(_x, _y)] == FIG_WHITE_ROOK + FIG_RED_TYPE) {
+        if (figures[p.getPosition()] == FIG_WHITE_ROOK + FIG_RED_TYPE) {
             makeMove = false;
             // Clearing current figures
             figures[activeCell.pos] = FIG_NONE;
-            figures[_x+56] = FIG_NONE;
+            figures[p.x+56] = FIG_NONE;
 
             // Disabling previous cell clearing
-            if (_x < FIELD_WIDTH/2) {
+            if (p.x < FIELD_WIDTH/2) {
                 figures[58] = FIG_WHITE_KING;
                 figures[59] = FIG_WHITE_ROOK;
             } else {
@@ -431,18 +434,21 @@ Uint8 Board::placeFigure(const Sounds& _sounds, coord _x, coord _y) {
 
     case FIG_BLACK_ROOK:
         // Disabling posible castling for next turns
-        if (_x < FIELD_WIDTH/2) {
-            castling |= CASTLING_W_K | CASTLING_W_Q | CASTLING_B_K;
-        } else {
-            castling |= CASTLING_W_K | CASTLING_W_Q | CASTLING_B_Q;
+        if (activeCell.pos == getPos(0, 0)) {
+            castling &= CASTLING_W_K | CASTLING_W_Q | CASTLING_B_K;
+        }
+        if (activeCell.pos == getPos(7, 0)) {
+            castling &= CASTLING_W_K | CASTLING_W_Q | CASTLING_B_Q;
         }
 
         // Check, if castling
-        if (figures[getPos(_x, _y)] == FIG_BLACK_KING + FIG_RED_TYPE) {
+        if (figures[p.getPosition()] == FIG_BLACK_KING + FIG_RED_TYPE) {
             makeMove = false;
             // Clearing current figures
             figures[activeCell.pos] = FIG_NONE;
             figures[4] = FIG_NONE;
+            // Disabling posible castling for next turns
+            castling &= CASTLING_W_Q | CASTLING_W_K;
 
             // Disabling previous cell clearing
             if (activeCell.pos % FIELD_WIDTH < FIELD_WIDTH/2) {
@@ -460,14 +466,14 @@ Uint8 Board::placeFigure(const Sounds& _sounds, coord _x, coord _y) {
         castling &= CASTLING_W_Q | CASTLING_W_K;
 
         // Check, if castling
-        if (figures[getPos(_x, _y)] == FIG_BLACK_ROOK + FIG_RED_TYPE) {
+        if (figures[p.getPosition()] == FIG_BLACK_ROOK + FIG_RED_TYPE) {
             makeMove = false;
             // Clearing current figures
             figures[activeCell.pos] = FIG_NONE;
-            figures[_x] = FIG_NONE;
+            figures[p.x] = FIG_NONE;
 
             // Disabling previous cell clearing
-            if (_x < FIELD_WIDTH/2) {
+            if (p.x < FIELD_WIDTH/2) {
                 figures[2] = FIG_BLACK_KING;
                 figures[3] = FIG_BLACK_ROOK;
             } else {
@@ -479,21 +485,21 @@ Uint8 Board::placeFigure(const Sounds& _sounds, coord _x, coord _y) {
 
     case FIG_BLACK_PAWN:
         // Check, if on last line - convert into queen
-        if (_y == FIELD_WIDTH - 1) {
+        if (p.y == FIELD_WIDTH - 1) {
             activeCell.type = FIG_BLACK_QUEEN;
         }
         break;
 
     case FIG_WHITE_PAWN:
         // Check, if on last line - convert into queen
-        if (_y == 0) {
+        if (p.y == 0) {
             activeCell.type = FIG_WHITE_QUEEN;
         }
         break;
     }
     // Setting new position to cell (if wasn't castling)
     if (makeMove) {
-        figures[getPos(_x, _y)] = activeCell.type;
+        figures[p.getPosition()] = activeCell.type;
         figures[activeCell.pos] = FIG_NONE;
     }
 
@@ -510,13 +516,21 @@ Uint8 Board::placeFigure(const Sounds& _sounds, coord _x, coord _y) {
     return END_TURN;
 }
 
+Uint8 Board::click(const Sounds& _sounds, const Mouse _mouse) {
+    // Check, if get over field borders
+    if (_mouse.getX() > LEFT_LINE && _mouse.getX() < LEFT_LINE+GAME_WIDTH
+        && _mouse.getY() > UPPER_LINE && _mouse.getY() < UPPER_LINE+GAME_WIDTH) {
+        return click(_sounds, Position{_mouse});
+    }
+    return END_NONE;
+}
 
 // Clicking on field (grab and put figures)
 Uint8 Board::click(const Sounds& _sounds, Position pos) {
     // Checking, which type of action do
     if (!activeCell.type) {
         // Picking up figure from field
-        pickFigure(pos.x, pos.y);
+        pickFigure(pos);
 
         // Return, that don't do anything
         return END_NONE;
@@ -527,10 +541,12 @@ Uint8 Board::click(const Sounds& _sounds, Position pos) {
 
         // Returning, that nothing happen
         return END_NONE;
+    // Checking, if click on avalible position
     } else if (figures[pos.getPosition()] >= FIG_MOVE_TO) {
-        // Checking, if click on avalible position
+        // Set last position as current
+        endPosition = pos.getPosition();
         // Placing figure there
-        return placeFigure(_sounds, pos.x, pos.y);
+        return placeFigure(_sounds, pos);
     }
     // Return, that nothing happen
     return END_NONE;
@@ -539,19 +555,16 @@ Uint8 Board::click(const Sounds& _sounds, Position pos) {
 // Making all like in click, but at once and without help
 Uint8 Board::move(const Sounds& _sounds, Position _p1, Position _p2) {
     // Emulating first click on field
-    pickFigure(_p1.x, _p1.y);
+    pickFigure(_p1);
 
     // Emulating second click on field
-    Uint8 state = click(_sounds, _p2);
-
-    // Check, if there was turn
-    if (state) {
-        return state;
-    } else {
-        // Clearing everything after none-stated turn
-        resetSelection();
-        return END_NONE;
+    if (figures[_p2.getPosition()] >= FIG_MOVE_TO) {
+        if (placeFigure(_sounds, _p2) == END_NONE) {
+            // Wasn't any turns - resetting field for correct turns
+            resetSelection();
+        }
     }
+    return END_NONE;
 }
 
 SDL_FRect Board::getRect(Position pos) const {
@@ -563,17 +576,17 @@ SDL_FRect Board::getRect(Position pos) const {
     };
 }
 
-// Return previous position, where figure was
-position Board::getPreviousTurn() const {
-    return activeCell.pos;
-}
-
-// Return, which of users currently moving (0/1)
 Uint8 Board::currentTurn() const {
     return turn;
 }
 
-// Return, if selected any figure
 bool Board::isFigureSelected() const {
     return activeCell.type;
+}
+
+position Board::getLastTurnStart() const {
+    return activeCell.pos;
+}
+position Board::getLastTurnEnd() const {
+    return endPosition;
 }
