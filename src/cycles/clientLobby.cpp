@@ -87,7 +87,7 @@ void ClientLobby::update(App& _app) {
         // Settings options to this connection
         client.connectToLastMessage();
         // Starting game
-        _app.runCycle<ClientGame, Connection&>(client);
+        runCycle<ClientGame, Connection&>(_app, client);
         // Exiting to menu after game
         stop();
         return;

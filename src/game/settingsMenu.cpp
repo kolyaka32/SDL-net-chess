@@ -6,6 +6,8 @@
 #include "settingsMenu.hpp"
 
 
+bool SettingsMenu::active = false;
+
 SettingsMenu::SettingsMenu(const App& _app)
 : settingButton{_app.window, 0.95, 0.05, IMG_GUI_PAUSE_BUTTON},
 background{_app.window, 0.5, 0.5, 0.65, 0.8, 20, 5},
@@ -44,8 +46,7 @@ bool SettingsMenu::click(const Mouse _mouse) {
                 if (flags[i].in(_mouse)) {
                     if (LanguagedText::setLanguage((Language)i)) {
                         // Restarting game
-                        App::restart();
-                        CycleTemplate::stop();
+                        CycleTemplate::restart();
                         return true;
                     }
                 }

@@ -8,6 +8,8 @@
 
 // Static class members
 bool CycleTemplate::running;
+bool CycleTemplate::restarting;
+bool CycleTemplate::additionalRestart;
 
 // Reset basic cycle template variables
 CycleTemplate::CycleTemplate() {
@@ -18,6 +20,15 @@ CycleTemplate::CycleTemplate() {
 
 void CycleTemplate::stop() {
     running = false;
+}
+
+void CycleTemplate::restart() {
+    restarting = true;
+    running = false;
+}
+
+bool CycleTemplate::isRestarted() {
+    return restarting;
 }
 
 // Getting user input
@@ -105,7 +116,7 @@ void CycleTemplate::inputText(App& app, const char* text) {
 // Function for start need cycle
 void CycleTemplate::run(App& _app) {
     // Resetting restart flag after all started
-    App::resetRestart();
+    restarting = false;
     running = true;
 
     // Starting main cycle
@@ -122,7 +133,4 @@ void CycleTemplate::run(App& _app) {
         // Standing in idle state
         idleTimer.sleep();
     }
-
-    // Resetting flag for external running cycle
-    running = _app.isRunning();
 }

@@ -9,12 +9,7 @@
 // Base cycle class
 BaseCycle::BaseCycle(const App& _app)
 : exitButton(_app.window, 0.05, 0.05, IMG_GUI_QUIT_BUTTON),
-settings(_app) {
-    // Opening settings menu after restart
-    if (App::isRestarted()) {
-        settings.activate();
-    }
-}
+settings(_app) {}
 
 void BaseCycle::update(App& _app) {
     settings.update(_app);

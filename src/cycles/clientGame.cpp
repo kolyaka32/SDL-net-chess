@@ -10,7 +10,7 @@
 ClientGame::ClientGame(App& _app, Connection& _client)
 : InternetCycle(_app),
 connection(_client) {
-    if(!App::isRestarted()) {
+    if(!isRestarted()) {
         // Resetting game
         endState = END_NONE;
         currentTurn = false;

@@ -21,7 +21,7 @@ GameConnection::GameConnection(const Connection& _connection)
 
 GameConnection::~GameConnection() {
     // Checking on game restart
-    if (!App::isRestarted()) {
+    if (!CycleTemplate::isRestarted()) {
         #if CHECK_CORRECTION
         SDL_Log("Destroying game connection");
         #endif

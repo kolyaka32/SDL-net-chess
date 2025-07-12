@@ -26,7 +26,7 @@ firstWinText(_app.window, 0.5, 0.4, {"Fist player win!", "Первый игро�
 secondWinText(_app.window, 0.5, 0.4, {"Second player win!", "Второй игрок выйграл!", "Der zweite Spieler hat gewonnen!", "Другі гулец выйграў!"}, 30, WHITE),
 looseText(_app.window, 0.5, 0.4, {"You loose...", "Вы проиграли...", "Sie haben verloren...", "Вы прайгралі..."}, 30, WHITE),
 nobodyWinText(_app.window, 0.5, 0.4, {"Nobody win", "Ничья", "Unentschieden", "Чые"}, 30, WHITE) {
-    if (!App::isRestarted()) {
+    if (!isRestarted()) {
         // Resetting field
         endState = END_NONE;
         board.reset();

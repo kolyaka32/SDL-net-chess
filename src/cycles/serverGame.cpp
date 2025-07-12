@@ -9,7 +9,7 @@
 ServerGame::ServerGame(App& _app, Connection& _server)
 : InternetCycle(_app),
 connection(_server) {
-    if(!App::isRestarted()) {
+    if(!isRestarted()) {
         // Sending applying initialsiation message
         connection.sendConfirmed(ConnectionCode::Init);
         // Resetting game

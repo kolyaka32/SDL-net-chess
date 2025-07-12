@@ -24,7 +24,7 @@ connectButton(_app.window, 0.5, 0.9, {"Connect", "Присоединиться",
     }
 
     // Starting menu song (if wasn't started)
-    if(!App::isRestarted()) {
+    if(!isRestarted()) {
         _app.music.start(MUS_MENU);
     }
 }
@@ -35,13 +35,13 @@ void SelectCycle::inputMouseDown(App& _app) {
         return;
     }
     if (singleplayerButton.in(mouse)) {
-        _app.runCycle<SinglePlayerGameCycle>();
+        runCycle<SinglePlayerGameCycle>(_app);
     } else if (twoPlayerButton.in(mouse)) {
-        _app.runCycle<TwoPlayerGameCycle>();
+        runCycle<TwoPlayerGameCycle>(_app);
     } else if (serverButton.in(mouse)) {
-        _app.runCycle<ServerLobby>();
+        runCycle<ServerLobby>(_app);
     } else if (connectButton.in(mouse)) {
-        _app.runCycle<ClientLobby>();
+        runCycle<ClientLobby>(_app);
     }
     return;
 }

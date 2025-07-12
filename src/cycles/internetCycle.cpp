@@ -17,7 +17,7 @@ playersTurnsTexts {
 disconnectedBox(_app.window),
 termianatedBox(_app.window) {
     // Resetting flag
-    if (!App::isRestarted()) {
+    if (!isRestarted()) {
         disconnectedBox.reset();
         termianatedBox.reset();
     }
