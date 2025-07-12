@@ -29,8 +29,11 @@ secondWinText(_app.window, 0.5, 0.4, {"Second player win!", "Второй игр
 looseText(_app.window, 0.5, 0.4, {"You loose...", "Вы проиграли...", "Sie haben verloren...", "Вы прайгралі..."}, 30, WHITE),
 nobodyWinText(_app.window, 0.5, 0.4, {"Nobody win", "Ничья", "Unentschieden", "Чые"}, 30, WHITE) {
     if (!App::isRestarted()) {
+        // Resetting field
         endState = END_NONE;
         board.reset();
+        // Starting main song (if wasn't started)
+        _app.music.start(MUS_MAIN);
     }
 }
 
@@ -58,8 +61,6 @@ void GameCycle::inputMouseDown(App& _app) {
     if (restartButton.in(mouse)) {
         // Restarting current game
         endState = END_NONE;
-
-        // Resetting field
         board.reset();
 
         // Making sound
@@ -84,6 +85,14 @@ void GameCycle::inputKeys(App& _app, SDL_Keycode key) {
         } else {
             settings.activate();
         }
+        return;
+
+    case SDLK_R:
+        // Restarting game
+        endState = END_NONE;
+        board.reset();
+        // Making sound
+        _app.sounds.play(SND_RESET);
         return;
 
     case SDLK_Q:

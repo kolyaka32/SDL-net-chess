@@ -45,22 +45,25 @@ public:
 // Class of game board to with
 class Board : public FiguresMoves, public GUI::GUItemplate {
  private:
-    Figure activeCell;  // Cell, that active (now move by player), or NULL if not
-    Uint8 castling;     // Data of all now posible varhishes
+    Figure activeCell;     // Cell, that active (now move by player), or NULL if not
+    Uint8 castling;        // Data of all now posible varhishes
+    position endPosition;  // Postion, where end last move
 
-    void pickFigure(coord X, coord Y);  // Function for pick figure from field
-    Uint8 placeFigure(const Sounds& sounds, coord X, coord Y);  // Function to try put figure back to field
+    Uint8 click(const Sounds& sounds, Position pos);        // Clicking with mouse on cell on field
+    void pickFigure(Position pos);                          // Function for pick figure from field
+    Uint8 placeFigure(const Sounds& sounds, Position pos);  // Function to try put figure back to field
     SDL_FRect getRect(Position pos) const;
 
  public:
     void reset();                                     // Resetting field for new game
     void blit(const Window& target) const override;   // Bliting field at screen
-    Uint8 click(const Sounds& sounds, Position pos);  // Clicking with mouse on need cell on field
+    Uint8 click(const Sounds& sounds, const Mouse mouse);  // Clicking with mouse on cell on field
+    void resetSelection();                                 // Reset currently selected figure
 
     // Simplier mover on field (for internet opponent turn)
     Uint8 move(const Sounds& sounds, Position p1, Position p2);
-    void resetSelection();             // Reset currently selected figure
-    position getPreviousTurn() const;  // Return, where was made previous turn
-    Uint8 currentTurn() const;         // Return, which person is now active
-    bool isFigureSelected() const;
+    position getLastTurnStart() const;  // Return start position in last turn
+    position getLastTurnEnd() const;    // Return end position in last turn
+    Uint8 currentTurn() const;          // Return, which person is now active
+    bool isFigureSelected() const;      // Returns, if any figures now selected
 };

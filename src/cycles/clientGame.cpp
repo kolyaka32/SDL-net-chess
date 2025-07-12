@@ -12,13 +12,11 @@ bool ClientGame::currentTurn = false;
 ClientGame::ClientGame(App& _app, Connection& _client)
 : GameCycle(_app),
 connection(_client) {
-    // Starting main song (if wasn't started)
-    if(!_app.isRestarted()) {
-        // Selecting current player as second (black)
+    if(!App::isRestarted()) {
+        // Resetting game
+        endState = END_NONE;
         currentTurn = false;
-
-        // Starting main song (if wasn't started)
-        _app.music.start(MUS_MAIN);
+        board.reset();
     }
 }
 
@@ -40,12 +38,8 @@ void ClientGame::inputMouseDown(App& _app) {
             // Check, if change state
             if (endState != END_NONE) {
                 currentTurn = false;
-                Position endPos{mouse};
-                #if CHECK_CORRECTION
-                SDL_Log("Turn of current player: from %u to %u", board.getPreviousTurn(), endPos.getPosition());
-                #endif
                 // Sending turn to opponent
-                connection.sendConfirmed(ConnectionCode::GameTurn, board.getPreviousTurn(), endPos.getPosition());
+                connection.sendConfirmed(ConnectionCode::GameTurn, board.getLastTurnStart(), board.getLastTurnEnd());
             }
         }
         return;
@@ -55,6 +49,13 @@ void ClientGame::inputMouseDown(App& _app) {
         // Going to menu
         stop();
         return;
+    }
+}
+
+void ClientGame::inputKeys(App& _app, const SDL_Keycode _key) {
+    // If not restart - act like normal key input
+    if (_key != SDLK_R) {
+        GameCycle::inputKeys(_app, _key);
     }
 }
 
@@ -78,14 +79,10 @@ void ClientGame::update(App& _app) {
         #if CHECK_CORRECTION
         SDL_Log("Game restart by server");
         #endif
-
-        // Restarting current game
+        // Resetting game
         endState = END_NONE;
         currentTurn = false;
-
-        // Resetting field
         board.reset();
-
         // Making sound
         _app.sounds.play(SND_RESET);
         return;
@@ -100,7 +97,7 @@ void ClientGame::draw(const App& _app) const {
     letters.blit(_app.window);
 
     // Drawing player state (inversed)
-    playersTurnsTexts[3 - board.currentTurn()].blit(_app.window);
+    playersTurnsTexts[3 - currentTurn].blit(_app.window);
 
     // Drawing buttons
     exitButton.blit(_app.window);

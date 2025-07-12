@@ -23,7 +23,7 @@ void FiguresMoves::resetField() {
 }
 
 // Check, if cell at need position can be attacked
-bool FiguresMoves::isAttackable(const position _pos) {
+bool FiguresMoves::isAttackable(position _pos) {
     cell c = figures[_pos];
     if (turn == TURN_WHITE) {
         // White turn
@@ -35,9 +35,9 @@ bool FiguresMoves::isAttackable(const position _pos) {
 }
 
 // Try set point, where you can move
-void FiguresMoves::tryMove(const Sint8 _x, const Sint8 _y) {
+void FiguresMoves::tryMove(Sint8 _x, Sint8 _y) {
     // Checking getting over border
-    if (_y < 0 || _y > FIELD_WIDTH) {
+    if (_y < 0 || _y >= FIELD_WIDTH) {
         return;
     }
     // Setting new state
@@ -49,9 +49,9 @@ void FiguresMoves::tryMove(const Sint8 _x, const Sint8 _y) {
 }
 
 // Try set point, where you can move
-void FiguresMoves::tryAttack(const Sint8 _x, const Sint8 _y) {
+void FiguresMoves::tryAttack(Sint8 _x, Sint8 _y) {
     // Checking getting over border
-    if (_x < 0 || _x > FIELD_WIDTH || _y < 0 || _y > FIELD_WIDTH) {
+    if (_x < 0 || _x >= FIELD_WIDTH || _y < 0 || _y >= FIELD_WIDTH) {
         return;
     }
     if (isAttackable(getPos(_x, _y))) {
@@ -62,7 +62,7 @@ void FiguresMoves::tryAttack(const Sint8 _x, const Sint8 _y) {
 }
 
 //
-bool FiguresMoves::tryMoveTo(const position pos) {
+bool FiguresMoves::tryMoveTo(position pos) {
     // Checking on getting on figure
     if (figures[pos]) {
         // Checking, if that figure attackable (in opposite command)
@@ -83,7 +83,7 @@ bool FiguresMoves::tryMoveTo(const position pos) {
 }
 
 // Set all cells at diagonals for movable target
-void FiguresMoves::setDiagonals(const coord _x, const coord _y) {
+void FiguresMoves::setDiagonals(coord _x, coord _y) {
     // Diagonal to left up
     for (Sint8 x = _x-1; (x >= 0) && (_y - _x + x >= 0); --x) {
         if (tryMoveTo(getPos(x, _y - _x + x))) {
@@ -114,7 +114,7 @@ void FiguresMoves::setDiagonals(const coord _x, const coord _y) {
 }
 
 // Set all cells at straight lines for movable target
-void FiguresMoves::setStraight(const coord _x, const coord _y) {
+void FiguresMoves::setStraight(coord _x, coord _y) {
     // To left part
     for (Sint8 i = _x-1; i >= 0; --i) {
         if (tryMoveTo(getPos(i, _y))) {
@@ -165,8 +165,7 @@ void FiguresMoves::setAround(coord _x, coord _y, const Sint8 _moves[][2]) {
     }
 }
 
-//
-void FiguresMoves::setCastlingLeft(const coord _x, const coord _y, const cell _need) {
+void FiguresMoves::setCastlingLeft(coord _x, coord _y, cell _need) {
     // Checking, if all space between is free
     for (Sint8 x=_x-1; x >= 0; --x) {
         // Check, if need cell
@@ -185,7 +184,7 @@ void FiguresMoves::setCastlingLeft(const coord _x, const coord _y, const cell _n
 }
 
 //
-void FiguresMoves::setCastlingRight(const coord _x, const coord _y, const cell _need) {
+void FiguresMoves::setCastlingRight(coord _x, coord _y, cell _need) {
     // Checking, if all space between is free
     for (Uint8 x=_x+1; x < FIELD_WIDTH; ++x) {
         // Check, if need cell

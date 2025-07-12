@@ -11,12 +11,13 @@
 
 // Game cycle with game part of server
 class ServerGame : public GameCycle {
- private:
+ protected:
     GameConnection connection;
     static bool currentTurn;
 
     // Main run functions
     void inputMouseDown(App& app) override;
+    void inputKeys(App& app, SDL_Keycode key);
     void update(App& app) override;
     void draw(const App& app) const override;
 
