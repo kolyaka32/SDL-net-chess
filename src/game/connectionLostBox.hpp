@@ -9,23 +9,24 @@
 
 
 // Class with message box, showing information at center of screen
-class MessageBox {
+class ConnectionLostBox {
 private:
-    // System for acivate need box globaly
-    static int currentIndex;  // Index of currently selected box for showing
-    const int index;          // Index of current box
+    // Flag of activity
+    static bool active;
 
     // Main text
     const GUI::HighlightedStaticText mainText;
-    // Button for close this box
+    // Button for try to recconect
+    const GUI::TextButton reconnectButton;
+    // Button for return to menu
     const GUI::TextButton closeButton;
     // Background plate for better visability
     const GUI::Backplate background;
 
 public:
-    MessageBox(const Window& target, const LanguagedText text, int boxIndex);
-    bool click(const Mouse mouse);
+    ConnectionLostBox(const Window& target);
+    int click(const Mouse mouse);  // Return non zero, if active, 2 if try to reconnect
     void blit(const Window& target) const;
-    void activate();
-    static void activate(int number);
+    static void activate();
+    static void reset();
 };

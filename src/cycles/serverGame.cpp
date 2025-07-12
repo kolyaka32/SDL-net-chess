@@ -6,10 +6,8 @@
 #include "serverGame.hpp"
 
 
-bool ServerGame::currentTurn = false;
-
 ServerGame::ServerGame(App& _app, Connection& _server)
-: GameCycle(_app),
+: InternetCycle(_app),
 connection(_server) {
     if(!App::isRestarted()) {
         // Sending applying initialsiation message
@@ -28,6 +26,15 @@ void ServerGame::inputMouseDown(App& _app) {
     if (exitButton.in(mouse)) {
         stop();
         return;
+    }
+    if (termianatedBox.click(mouse)) {
+        return;
+    }
+    if (int code = disconnectedBox.click(mouse)) {
+        // Check, if try to reconnect
+        if (code == 2) {
+            connection;
+        }
     }
     // Checking, if game start
     if (endState <= END_TURN) {
@@ -109,10 +116,7 @@ void ServerGame::draw(const App& _app) const {
     letters.blit(_app.window);
 
     // Drawing player state
-    playersTurnsTexts[3 - currentTurn].blit(_app.window);
-
-    // Drawing buttons
-    exitButton.blit(_app.window);
+    playersTurnsTexts[currentTurn].blit(_app.window);
 
     // Bliting game state, if need
     if (endState > END_TURN) {
@@ -138,6 +142,13 @@ void ServerGame::draw(const App& _app) const {
         restartButton.blit(_app.window);
         menuButton.blit(_app.window);
     }
+    // Messages
+    disconnectedBox.blit(_app.window);
+    termianatedBox.blit(_app.window);
+
+    // Drawing buttons
+    exitButton.blit(_app.window);
+
     // Drawing setting menu
     settings.blit(_app.window);
 

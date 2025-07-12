@@ -7,10 +7,8 @@
 #include "selectCycle.hpp"
 
 
-bool ClientGame::currentTurn = false;
-
 ClientGame::ClientGame(App& _app, Connection& _client)
-: GameCycle(_app),
+: InternetCycle(_app),
 connection(_client) {
     if(!App::isRestarted()) {
         // Resetting game
@@ -27,6 +25,15 @@ void ClientGame::inputMouseDown(App& _app) {
     if (exitButton.in(mouse)) {
         stop();
         return;
+    }
+    if (termianatedBox.click(mouse)) {
+        return;
+    }
+    if (int code = disconnectedBox.click(mouse)) {
+        // Check, if try to reconnect
+        if (code == 2) {
+            connection;
+        }
     }
     // Checking, if game start
     if (endState <= END_TURN) {
@@ -97,10 +104,7 @@ void ClientGame::draw(const App& _app) const {
     letters.blit(_app.window);
 
     // Drawing player state (inversed)
-    playersTurnsTexts[3 - currentTurn].blit(_app.window);
-
-    // Drawing buttons
-    exitButton.blit(_app.window);
+    playersTurnsTexts[currentTurn].blit(_app.window);
 
     // Bliting game state, if need
     if (endState > END_TURN) {
@@ -125,6 +129,13 @@ void ClientGame::draw(const App& _app) const {
         // Blitting buttons
         menuButton.blit(_app.window);
     }
+    // Messages
+    disconnectedBox.blit(_app.window);
+    termianatedBox.blit(_app.window);
+
+    // Drawing buttons
+    exitButton.blit(_app.window);
+
     // Drawing setting menu
     settings.blit(_app.window);
 

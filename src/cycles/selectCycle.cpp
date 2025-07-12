@@ -17,9 +17,7 @@ titleText(_app.window, 0.5, 0.1, {"Chess", "Шахматы", "Schach", "Шахм
 singleplayerButton(_app.window, 0.5, 0.3, {"Singleplayer", "Одиночная игра", "Einzelspiel", "Адзіночная гульня"}, 24, WHITE),
 twoPlayerButton(_app.window, 0.5, 0.5, {"Two players", "Два игрока", "Zwei Spieler", "Два гульца"}, 24, WHITE),
 serverButton(_app.window, 0.5, 0.7, {"Create server", "Создать сервер", "Server erstellen", "Стварыць сервер"}, 24, WHITE),
-connectButton(_app.window, 0.5, 0.9, {"Connect", "Присоединиться", "Beitreten", "Далучыцца"}, 24, WHITE),
-disconnectedMessageBox(_app.window, {"Connection lost", "Соединение потярено", "Verbindung verloren", "Злучэнне страчана"}, 1),
-terminatedMessageBox(_app.window, {"Connection terminated", "Соединение разорвано", "Verbindung unterbrochen", "Злучэнне разарвана"}, 2) {
+connectButton(_app.window, 0.5, 0.9, {"Connect", "Присоединиться", "Beitreten", "Далучыцца"}, 24, WHITE) {
     // Resetting figures color
     for (unsigned i=IMG_GAME_WHITE_PAWN; i <= IMG_GAME_BLACK_KING; ++i) {
         _app.window.setColorMode(IMG_names(i));
@@ -33,12 +31,6 @@ terminatedMessageBox(_app.window, {"Connection terminated", "Соединени�
 
 // Getting selected button
 void SelectCycle::inputMouseDown(App& _app) {
-    if (disconnectedMessageBox.click(mouse)) {
-        return;
-    }
-    if (terminatedMessageBox.click(mouse)) {
-        return;
-    }
     if (settings.click(mouse)) {
         return;
     }
@@ -83,10 +75,6 @@ void SelectCycle::draw(const App& _app) const {
 
     // Settings menu
     settings.blit(_app.window);
-
-    // Message boxes
-    disconnectedMessageBox.blit(_app.window);
-    terminatedMessageBox.blit(_app.window);
 
     // Bliting all to screen
     _app.window.render();

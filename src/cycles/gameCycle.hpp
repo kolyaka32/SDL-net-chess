@@ -23,7 +23,7 @@ class GameCycle : public BaseCycle {
     GUI::TextButton menuButton;
 
     // Current game states
-    GUI::StaticText playersTurnsTexts[4];
+    GUI::StaticText playersTurnsTexts[2];
 
     // Ending options
     GUI::Backplate endBackplate;

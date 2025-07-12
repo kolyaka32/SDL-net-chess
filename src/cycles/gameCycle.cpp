@@ -18,9 +18,7 @@ restartButton(_app.window, 0.5, 0.5, {"Restart", "Перезапустить", "
 menuButton(_app.window, 0.5, 0.6, {"Exit to menu", "Выйти в меню", "Menü verlassen", "Выйсці ў меню"}, 24, WHITE),
 playersTurnsTexts {
     {_app.window, 0.5, 0.1, {"First player turn", "Ход первого игрока", "Der Zug des ersten Spielers", "Ход першага гульца"}, 24, WHITE},
-    {_app.window, 0.5, 0.1, {"Second player turn", "Ход второго игрока", "Zug des zweiten Spielers", "Ход другога гульца"}, 24, WHITE},
-    {_app.window, 0.5, 0.1, {"Your turn", "Ваш ход", "Sie spielen aus", "Ваш ход"}, 24, WHITE},
-    {_app.window, 0.5, 0.1, {"Wait", "Ожидайте", "Erwartet", "Чакаць"}, 24, WHITE},
+    {_app.window, 0.5, 0.1, {"Second player turn", "Ход второго игрока", "Zug des zweiten Spielers", "Ход другога гульца"}, 24, WHITE}
 },
 endBackplate(_app.window, 0.5, 0.5, 0.6, 0.3, 40, 5),
 winText(_app.window, 0.5, 0.4, {"Win!", "Победа!", "Sieg!", "Перамога!"}, 30, WHITE),
