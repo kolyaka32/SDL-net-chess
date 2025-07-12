@@ -118,6 +118,7 @@ ConnectionCode GameConnection::checkNewMessage() {
         #endif
         // Showing message of terminated connection
         TerminatedBox::activate();
+        disconnected = true;
         return ConnectionCode::Null;
 
     case ConnectionCode::Confirm:

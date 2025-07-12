@@ -26,4 +26,5 @@ public:
     void blit(const Window& target) const;
     static void activate();
     static void reset();
+    static bool isActive();
 };

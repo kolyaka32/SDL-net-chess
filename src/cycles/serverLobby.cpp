@@ -21,6 +21,10 @@ hideAddressText(_app.window, 0.5, 0.45, {"Hide address", "Скрыть адре�
     if (!isRestarted()) {
         showAddress = false;
     }
+    if (isAdditionalRestarted()) {
+        stop();
+        return;
+    }
 
     // Getting string with full address of current app
     sprintf(currentAddress, "%s:%u", server.getLocalIP(), server.getPort());

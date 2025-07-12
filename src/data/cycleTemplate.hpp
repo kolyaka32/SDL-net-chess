@@ -41,6 +41,7 @@ class CycleTemplate {
     static void stop();
     static void restart();
     static bool isRestarted();
+    static bool isAdditionalRestarted();
     // Function for starting new cycle with posible arguments
     template <class T, typename ...Args>
     static void runCycle(App& app, const Args& ...args);

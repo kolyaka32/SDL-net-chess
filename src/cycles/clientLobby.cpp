@@ -19,7 +19,12 @@ enterIPField(_app.window, 0.5, 0.2, 20, baseIP),
 enterPortText(_app.window, 0.5, 0.4, {"Enter port:", "Введите порт:", "Port eingeben:", "Увядзіце порт:"}, 30, WHITE),
 enterPortField(_app.window, 0.5, 0.5, 20, basePort),
 connectButton(_app.window, 0.5, 0.7, {"Connect", "Присоединится", "Beitritt", "Далучыцца"}, 24, WHITE),
-pasteButton(_app.window, 0.5, 0.9, {"Paste the copied address", "Вставить скопированный адрес", "Kopierte Adresse einfügen", "Уставіць скапіяваны адрас"}, 24, WHITE) {}
+pasteButton(_app.window, 0.5, 0.9, {"Paste the copied address", "Вставить скопированный адрес", "Kopierte Adresse einfügen", "Уставіць скапіяваны адрас"}, 24, WHITE) {
+    if (isAdditionalRestarted()) {
+        stop();
+        return;
+    }
+}
 
 void ClientLobby::inputMouseDown(App& _app) {
     // Clicking in settings menu

@@ -16,6 +16,7 @@ CycleTemplate::CycleTemplate() {
     // Resetting input
     SDL_Event event;
     while (SDL_PollEvent(&event) != 0) {}
+    running = true;
 }
 
 void CycleTemplate::stop() {
@@ -29,6 +30,10 @@ void CycleTemplate::restart() {
 
 bool CycleTemplate::isRestarted() {
     return restarting;
+}
+
+bool CycleTemplate::isAdditionalRestarted() {
+    return additionalRestart;
 }
 
 // Getting user input
@@ -117,7 +122,7 @@ void CycleTemplate::inputText(App& app, const char* text) {
 void CycleTemplate::run(App& _app) {
     // Resetting restart flag after all started
     restarting = false;
-    running = true;
+    additionalRestart = false;
 
     // Starting main cycle
     while (running) {

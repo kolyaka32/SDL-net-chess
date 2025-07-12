@@ -41,3 +41,7 @@ void TerminatedBox::activate() {
 void TerminatedBox::reset() {
     active = false;
 }
+
+bool TerminatedBox::isActive() {
+    return active;
+}
