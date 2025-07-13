@@ -17,7 +17,7 @@ height(animation->h) {
     prevFrameUpdate = getTime() + 400;
 
     // Starting main song (if wasn't started)
-    if(!App::isRestarted()) {
+    if(!isRestarted()) {
         _app.music.start(MUS_MAIN);
     }
 }

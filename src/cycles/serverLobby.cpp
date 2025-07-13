@@ -18,8 +18,12 @@ copiedInfoBox(_app.window, 0.5, 0.37, {"Address copied", "Адрес скопи�
 showAddressText(_app.window, 0.5, 0.45, {"Show address", "Показать адресс", "Adresse anzeigen", "Паказаць адрас"}, 24),
 hideAddressText(_app.window, 0.5, 0.45, {"Hide address", "Скрыть адресс", "Adresse verbergen", "Схаваць адрас"}, 24) {
     // Resetting flag of showing address
-    if (!App::isRestarted()) {
+    if (!isRestarted()) {
         showAddress = false;
+    }
+    if (isAdditionalRestarted()) {
+        stop();
+        return;
     }
 
     // Getting string with full address of current app
@@ -82,7 +86,7 @@ void ServerLobby::update(App& _app) {
         server.connectToLastMessage();
 
         // Starting game (as server)
-        _app.runCycle<ServerGame, Connection&>(server);
+        runCycle<ServerGame, Connection&>(_app, server);
         // Exiting to menu after game
         stop();
         return;

@@ -33,7 +33,6 @@ private:
 
     // Flags of work
     static bool running;
-    static bool restarting;
 
 public:
     App();
@@ -41,32 +40,9 @@ public:
     // Commands to operate with global running
     static void stop();
     static bool isRunning();
-    static void restart();
-    static void resetRestart();
-    static bool isRestarted();
-
-    // Templated function for run new cycle
-    template <class T, typename ...Args>
-    void runCycle(const Args& ...args);
 
     Music music;
     Sounds sounds;
     InitFile initFile;
     const Window window;
 };
-
-
-template <class T, typename ...Args>
-void App::runCycle(const Args& ...args) {
-    // Resetting
-    restarting = false;
-
-    // Running current cycle, while restarting
-    do {
-        // Updating location
-        App::window.updateTitle();
-        // Launching new cycle
-        T cycle(*this, args...);
-        cycle.run(*this);
-    } while (restarting && running);
-}

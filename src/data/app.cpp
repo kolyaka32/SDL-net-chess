@@ -8,7 +8,6 @@
 
 
 bool App::running = true;
-bool App::restarting = false;
 
 App::App()
 : music{loader, musicFilesNames},
@@ -27,16 +26,4 @@ void App::stop() {
 
 bool App::isRunning() {
     return running;
-}
-
-void App::restart() {
-    restarting = true;
-}
-
-void App::resetRestart() {
-    restarting = false;
-}
-
-bool App::isRestarted() {
-    return restarting;
 }

@@ -6,12 +6,10 @@
 #include "serverGame.hpp"
 
 
-bool ServerGame::currentTurn = false;
-
 ServerGame::ServerGame(App& _app, Connection& _server)
-: GameCycle(_app),
+: InternetCycle(_app),
 connection(_server) {
-    if(!App::isRestarted()) {
+    if(!isRestarted()) {
         // Sending applying initialsiation message
         connection.sendConfirmed(ConnectionCode::Init);
         // Resetting game
@@ -27,6 +25,30 @@ void ServerGame::inputMouseDown(App& _app) {
     }
     if (exitButton.in(mouse)) {
         stop();
+        return;
+    }
+    if (termianatedBox.click(mouse)) {
+        return;
+    }
+    if (int code = disconnectedBox.click(mouse)) {
+        // Check, if try to reconnect
+        if (code == 2) {
+            connection;
+        }
+    }
+    if (gameRestartButton.in(mouse)) {
+        #if CHECK_CORRECTION
+        SDL_Log("Game restart by current user");
+        #endif
+        // Sending message of game restart
+        connection.sendConfirmed(ConnectionCode::GameRestart);
+        // Restarting current game
+        endState = END_NONE;
+        currentTurn = true;
+        // Resetting field
+        board.reset();
+        // Making sound
+        _app.sounds.play(SND_RESET);
         return;
     }
     // Checking, if game start
@@ -46,7 +68,7 @@ void ServerGame::inputMouseDown(App& _app) {
         return;
     }
     // Waiting menu
-    if (restartButton.in(mouse)) {
+    if (menuRestartButton.in(mouse)) {
         #if CHECK_CORRECTION
         SDL_Log("Game restart by current user");
         #endif
@@ -59,7 +81,7 @@ void ServerGame::inputMouseDown(App& _app) {
         _app.sounds.play(SND_RESET);
         return;
     }
-    if (menuButton.in(mouse)) {
+    if (menuExitButton.in(mouse)) {
         // Going to menu
         stop();
         return;
@@ -109,15 +131,12 @@ void ServerGame::draw(const App& _app) const {
     letters.blit(_app.window);
 
     // Drawing player state
-    playersTurnsTexts[3 - currentTurn].blit(_app.window);
-
-    // Drawing buttons
-    exitButton.blit(_app.window);
+    playersTurnsTexts[currentTurn].blit(_app.window);
 
     // Bliting game state, if need
     if (endState > END_TURN) {
         // Bliting end background
-        endBackplate.blit(_app.window);
+        menuBackplate.blit(_app.window);
 
         // Bliting text with end state
         switch (endState) {
@@ -135,9 +154,17 @@ void ServerGame::draw(const App& _app) const {
         }
 
         // Blitting buttons
-        restartButton.blit(_app.window);
-        menuButton.blit(_app.window);
+        menuRestartButton.blit(_app.window);
+        menuExitButton.blit(_app.window);
     }
+    // Messages
+    disconnectedBox.blit(_app.window);
+    termianatedBox.blit(_app.window);
+
+    // Drawing buttons
+    exitButton.blit(_app.window);
+    gameRestartButton.blit(_app.window);
+
     // Drawing setting menu
     settings.blit(_app.window);
 

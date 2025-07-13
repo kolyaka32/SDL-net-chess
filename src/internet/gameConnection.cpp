@@ -5,7 +5,8 @@
 
 #include "gameConnection.hpp"
 #include "../data/cycleTemplate.hpp"
-#include "../game/messageBox.hpp"
+#include "../game/connectionLostBox.hpp"
+#include "../game/terminatedBox.hpp"
 
 
 GameConnection::GameConnection(const Connection& _connection)
@@ -20,7 +21,7 @@ GameConnection::GameConnection(const Connection& _connection)
 
 GameConnection::~GameConnection() {
     // Checking on game restart
-    if (!App::isRestarted()) {
+    if (!CycleTemplate::isRestarted()) {
         #if CHECK_CORRECTION
         SDL_Log("Destroying game connection");
         #endif
@@ -35,10 +36,33 @@ GameConnection::~GameConnection() {
 }
 
 ConnectionCode GameConnection::updateMessages() {
-    checkConnectionStatus();
-    checkNeedApplyConnection();
-    checkNeedResending();
-    return checkNewMessage();
+    // Check, if disconnected
+    if (disconnected) {
+        checkReconnecting();
+        return ConnectionCode::Null;
+    } else {
+        checkConnectionStatus();
+        checkNeedApplyConnection();
+        checkNeedResending();
+        return checkNewMessage();
+    }
+}
+
+void GameConnection::checkReconnecting() {
+    // Checking, if restore connection
+    switch (getCode()) {
+    case ConnectionCode::Null:
+        return;
+    
+    default:
+        disconnected = false;
+        ConnectionLostBox::reset();
+        // Updating timer of last get message
+        needDisconect = getTime() + MESSAGE_GET_TIMEOUT;
+        // Sending new message that connection restored
+        sendConfirmed(ConnectionCode::ApplyConnection);
+        break;
+    }
 }
 
 void GameConnection::checkConnectionStatus() {
@@ -48,11 +72,9 @@ void GameConnection::checkConnectionStatus() {
         #if CHECK_ALL
         SDL_Log("Connection lost");
         #endif
-        // Stopping current cycle
-        CycleTemplate::stop();
-
-        // Show message of disconect
-        MessageBox::activate(1);
+        // Showing disconect message
+        ConnectionLostBox::activate();
+        disconnected = true;
         return;
     }
 }
@@ -94,11 +116,9 @@ ConnectionCode GameConnection::checkNewMessage() {
         #if CHECK_ALL
         SDL_Log("Connection terminatted");
         #endif
-        // Stopping current cycle
-        CycleTemplate::stop();
-
-        // Show message of disconect
-        MessageBox::activate(2);
+        // Showing message of terminated connection
+        TerminatedBox::activate();
+        disconnected = true;
         return ConnectionCode::Null;
 
     case ConnectionCode::Confirm:
@@ -136,4 +156,10 @@ ConnectionCode GameConnection::checkNewMessage() {
         }
         return ConnectionCode::Null;
     }
+}
+
+void GameConnection::tryReconnect() {
+    // Sending init message
+    send(ConnectionCode::Init, 0);
+    send(ConnectionCode::Init, 0);
 }

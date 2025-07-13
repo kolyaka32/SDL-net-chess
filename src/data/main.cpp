@@ -12,7 +12,7 @@ App application;
 // Main function
 int main(int argv, char **args) {
     // Running menu
-    application.runCycle<SelectCycle>();
+    CycleTemplate::runCycle<SelectCycle>(application);
 
     // Successful end of program
     return 0;

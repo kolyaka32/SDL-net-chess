@@ -12,10 +12,11 @@ enum IMG_names : unsigned {
     // Base part
     // Graphic interface sprites
     IMG_GUI_PAUSE_BUTTON,
-    IMG_GUI_QUIT_BUTTON,
     IMG_GUI_SLIDER_BUTTON,
     IMG_GUI_SLIDER_LINE,
     IMG_GUI_TYPE_BOX,
+    IMG_GUI_QUIT_BUTTON,
+    IMG_GUI_RESTART_BUTTON,
 
     // Base flags in settings
     IMG_GUI_FLAG_USA,

@@ -8,16 +8,32 @@
 
 // Static class members
 bool CycleTemplate::running;
+bool CycleTemplate::restarting;
+bool CycleTemplate::additionalRestart;
 
 // Reset basic cycle template variables
 CycleTemplate::CycleTemplate() {
     // Resetting input
     SDL_Event event;
     while (SDL_PollEvent(&event) != 0) {}
+    running = true;
 }
 
 void CycleTemplate::stop() {
     running = false;
+}
+
+void CycleTemplate::restart() {
+    restarting = true;
+    running = false;
+}
+
+bool CycleTemplate::isRestarted() {
+    return restarting;
+}
+
+bool CycleTemplate::isAdditionalRestarted() {
+    return additionalRestart;
 }
 
 // Getting user input
@@ -105,8 +121,8 @@ void CycleTemplate::inputText(App& app, const char* text) {
 // Function for start need cycle
 void CycleTemplate::run(App& _app) {
     // Resetting restart flag after all started
-    App::resetRestart();
-    running = true;
+    restarting = false;
+    additionalRestart = false;
 
     // Starting main cycle
     while (running) {
@@ -122,7 +138,4 @@ void CycleTemplate::run(App& _app) {
         // Standing in idle state
         idleTimer.sleep();
     }
-
-    // Resetting flag for external running cycle
-    running = _app.isRunning();
 }

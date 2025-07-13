@@ -5,15 +5,14 @@
 
 #pragma once
 
-#include "gameCycle.hpp"
+#include "internetCycle.hpp"
 #include "../internet/gameConnection.hpp"
 
 
 // Game cycle with game part of server
-class ServerGame : public GameCycle {
+class ServerGame : public InternetCycle {
  protected:
     GameConnection connection;
-    static bool currentTurn;
 
     // Main run functions
     void inputMouseDown(App& app) override;

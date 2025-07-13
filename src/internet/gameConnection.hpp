@@ -16,8 +16,10 @@ private:
     timer needDisconect;              // Time, after which connection will be recognized as disconected
     std::vector<Message*> unconfirmedMessages;
     IndexesArray<10> getIndexes;
+    bool disconnected = false;
 
 protected:
+    void checkReconnecting();
     void checkConnectionStatus();
     void checkNeedApplyConnection();
     void checkNeedResending();
@@ -29,6 +31,7 @@ public:
     ConnectionCode updateMessages();
     template <typename ...Args>
     void sendConfirmed(ConnectionCode code, Args&& ...args);
+    void tryReconnect();
 };
 
 template <typename ...Args>

@@ -12,7 +12,7 @@
 // Class of menu with game settings
 class SettingsMenu : public GUI::GUItemplate {
  private:
-	bool active = false;      // Flag of showing current menu
+	static bool active;       // Flag of showing current menu
 	timer nextSound = 0;      // Time to play next sound
 	Uint8 holdingSlider = 0;  // Index of holded slider
 

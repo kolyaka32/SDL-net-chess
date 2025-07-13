@@ -9,10 +9,11 @@
 const char* texturesFilesNames[IMG_count] = {
     // Graphic interface sprites
     "img/GUI/esc_button.png",
-    "img/GUI/quit_button.png",
     "img/GUI/slider_button.png",
     "img/GUI/slider_line.png",
     "img/GUI/type_box.png",
+    "img/GUI/quit_button.png",
+    "img/GUI/restart_button.png",
 
     // Base flags in settings
     "img/GUI/Flag_USA.png",

@@ -13,24 +13,21 @@
 // Cycle with game template
 class GameCycle : public BaseCycle {
  protected:
+    // Active game part
     static Board board;     // Main game field
     static Uint8 endState;  // State of game (end)
-
+    
     SurroundingLetters letters;  // Letters, that surround field
+    const GUI::ImageButton gameRestartButton;  // Button for restart game
+    GUI::StaticText playersTurnsTexts[2];
 
-    // GUI objects
-    GUI::TextButton restartButton;
-    GUI::TextButton menuButton;
-
-    // Current game states
-    GUI::StaticText playersTurnsTexts[4];
-
+    // Menu after game end
+    GUI::TextButton menuRestartButton;
+    GUI::TextButton menuExitButton;
+    GUI::Backplate menuBackplate;
     // Ending options
-    GUI::Backplate endBackplate;
-    GUI::StaticText winText;
     GUI::StaticText firstWinText;
     GUI::StaticText secondWinText;
-    GUI::StaticText looseText;
     GUI::StaticText nobodyWinText;
 
     // New overrided cycle functions

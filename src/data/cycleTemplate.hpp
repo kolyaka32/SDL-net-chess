@@ -15,6 +15,8 @@
 class CycleTemplate {
  private:
     static bool running;           // Flag of current running state
+    static bool restarting;        // Flag, if game was restarted
+    static bool additionalRestart; // Flag of additional game restart
     IdleTimer idleTimer{1000/60};  // Timer to idle in main cycle
 
  protected:
@@ -37,4 +39,30 @@ class CycleTemplate {
     void run(App& app);
     // Function for stop current running cycle
     static void stop();
+    static void restart();
+    static bool isRestarted();
+    static bool isAdditionalRestarted();
+    // Function for starting new cycle with posible arguments
+    template <class T, typename ...Args>
+    static void runCycle(App& app, const Args& ...args);
 };
+
+
+template <class T, typename ...Args>
+void CycleTemplate::runCycle(App& _app, const Args& ...args) {
+    restarting = false;
+    additionalRestart = false;
+
+    // Running current cycle, while restarting
+    do {
+        // Updating title location
+        _app.window.updateTitle();
+        // Launching new cycle
+        T cycle(_app, args...);
+        cycle.run(_app);
+    } while (_app.isRunning() && (restarting | additionalRestart));
+
+    // Restarting external running cycle for correct language change
+    additionalRestart = true;
+    running = false;
+}
