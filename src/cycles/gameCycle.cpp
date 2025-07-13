@@ -14,17 +14,16 @@ Uint8 GameCycle::endState;
 GameCycle::GameCycle(const App& _app)
 : BaseCycle(_app),
 letters(_app.window),
-restartButton(_app.window, 0.5, 0.5, {"Restart", "Перезапустить", "Starten", "Перазапуск"}, 24, WHITE),
-menuButton(_app.window, 0.5, 0.6, {"Exit to menu", "Выйти в меню", "Menü verlassen", "Выйсці ў меню"}, 24, WHITE),
+menuRestartButton(_app.window, 0.5, 0.5, {"Restart", "Перезапустить", "Starten", "Перазапуск"}, 24, WHITE),
+menuExitButton(_app.window, 0.5, 0.6, {"Exit to menu", "Выйти в меню", "Menü verlassen", "Выйсці ў меню"}, 24, WHITE),
+gameRestartButton(_app.window, 0.12, 0.05, IMG_GUI_RESTART_BUTTON),
 playersTurnsTexts {
     {_app.window, 0.5, 0.1, {"First player turn", "Ход первого игрока", "Der Zug des ersten Spielers", "Ход першага гульца"}, 24, WHITE},
     {_app.window, 0.5, 0.1, {"Second player turn", "Ход второго игрока", "Zug des zweiten Spielers", "Ход другога гульца"}, 24, WHITE}
 },
-endBackplate(_app.window, 0.5, 0.5, 0.6, 0.3, 40, 5),
-winText(_app.window, 0.5, 0.4, {"Win!", "Победа!", "Sieg!", "Перамога!"}, 30, WHITE),
+menuBackplate(_app.window, 0.5, 0.5, 0.6, 0.3, 40, 5),
 firstWinText(_app.window, 0.5, 0.4, {"Fist player win!", "Первый игрок выйграл!", "Der erste Spieler hat gewonnen!", "Першы гулец выйграў!"}, 30, WHITE),
 secondWinText(_app.window, 0.5, 0.4, {"Second player win!", "Второй игрок выйграл!", "Der zweite Spieler hat gewonnen!", "Другі гулец выйграў!"}, 30, WHITE),
-looseText(_app.window, 0.5, 0.4, {"You loose...", "Вы проиграли...", "Sie haben verloren...", "Вы прайгралі..."}, 30, WHITE),
 nobodyWinText(_app.window, 0.5, 0.4, {"Nobody win", "Ничья", "Unentschieden", "Чые"}, 30, WHITE) {
     if (!isRestarted()) {
         // Resetting field
@@ -43,6 +42,15 @@ void GameCycle::inputMouseDown(App& _app) {
         stop();
         return;
     }
+    if (gameRestartButton.in(mouse)) {
+        // Restarting current game
+        endState = END_NONE;
+        board.reset();
+
+        // Making sound
+        _app.sounds.play(SND_RESET);
+        return;
+    }
     // Checking, if game start
     if (endState <= END_TURN) {
         // Clicking on field
@@ -56,7 +64,7 @@ void GameCycle::inputMouseDown(App& _app) {
         return;
     }
     // Starting waiting menu
-    if (restartButton.in(mouse)) {
+    if (menuRestartButton.in(mouse)) {
         // Restarting current game
         endState = END_NONE;
         board.reset();
@@ -65,7 +73,7 @@ void GameCycle::inputMouseDown(App& _app) {
         _app.sounds.play(SND_RESET);
         return;
     }
-    if (menuButton.in(mouse)) {
+    if (menuExitButton.in(mouse)) {
         // Going to menu
         stop();
         return;
@@ -112,11 +120,12 @@ void GameCycle::draw(const App& _app) const {
 
     // Drawing buttons
     exitButton.blit(_app.window);
+    gameRestartButton.blit(_app.window);
 
     // Bliting game state, if need
     if (endState > END_TURN) {
         // Bliting end background
-        endBackplate.blit(_app.window);
+        menuBackplate.blit(_app.window);
 
         // Bliting text with end state
         switch (endState) {
@@ -134,8 +143,8 @@ void GameCycle::draw(const App& _app) const {
         }
 
         // Blitting buttons
-        restartButton.blit(_app.window);
-        menuButton.blit(_app.window);
+        menuRestartButton.blit(_app.window);
+        menuExitButton.blit(_app.window);
     }
     // Drawing setting menu
     settings.blit(_app.window);

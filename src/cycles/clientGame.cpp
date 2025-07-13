@@ -52,7 +52,7 @@ void ClientGame::inputMouseDown(App& _app) {
         return;
     }
     // Waiting menu
-    if (menuButton.in(mouse)) {
+    if (menuExitButton.in(mouse)) {
         // Going to menu
         stop();
         return;
@@ -109,7 +109,7 @@ void ClientGame::draw(const App& _app) const {
     // Bliting game state, if need
     if (endState > END_TURN) {
         // Bliting end background
-        endBackplate.blit(_app.window);
+        menuBackplate.blit(_app.window);
 
         // Bliting text with end state
         switch (endState) {
@@ -127,7 +127,7 @@ void ClientGame::draw(const App& _app) const {
         }
 
         // Blitting buttons
-        menuButton.blit(_app.window);
+        menuExitButton.blit(_app.window);
     }
     // Messages
     disconnectedBox.blit(_app.window);

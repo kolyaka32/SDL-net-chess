@@ -20,6 +20,8 @@ protected:
     GUI::StaticText playersTurnsTexts[2];
     ConnectionLostBox disconnectedBox;
     TerminatedBox termianatedBox;
+    GUI::StaticText winText;
+    GUI::StaticText looseText;
 
 public:
     InternetCycle(const App& app);

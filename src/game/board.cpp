@@ -559,10 +559,10 @@ Uint8 Board::move(const Sounds& _sounds, Position _p1, Position _p2) {
 
     // Emulating second click on field
     if (figures[_p2.getPosition()] >= FIG_MOVE_TO) {
-        if (placeFigure(_sounds, _p2) == END_NONE) {
-            // Wasn't any turns - resetting field for correct turns
-            resetSelection();
-        }
+        Uint8 turn = placeFigure(_sounds, _p2);
+        // Resetting field for correct next turns
+        resetSelection();
+        return turn;
     }
     return END_NONE;
 }

@@ -36,6 +36,21 @@ void ServerGame::inputMouseDown(App& _app) {
             connection;
         }
     }
+    if (gameRestartButton.in(mouse)) {
+        #if CHECK_CORRECTION
+        SDL_Log("Game restart by current user");
+        #endif
+        // Sending message of game restart
+        connection.sendConfirmed(ConnectionCode::GameRestart);
+        // Restarting current game
+        endState = END_NONE;
+        currentTurn = true;
+        // Resetting field
+        board.reset();
+        // Making sound
+        _app.sounds.play(SND_RESET);
+        return;
+    }
     // Checking, if game start
     if (endState <= END_TURN) {
         // Check, if turn of current player
@@ -53,7 +68,7 @@ void ServerGame::inputMouseDown(App& _app) {
         return;
     }
     // Waiting menu
-    if (restartButton.in(mouse)) {
+    if (menuRestartButton.in(mouse)) {
         #if CHECK_CORRECTION
         SDL_Log("Game restart by current user");
         #endif
@@ -66,7 +81,7 @@ void ServerGame::inputMouseDown(App& _app) {
         _app.sounds.play(SND_RESET);
         return;
     }
-    if (menuButton.in(mouse)) {
+    if (menuExitButton.in(mouse)) {
         // Going to menu
         stop();
         return;
@@ -121,7 +136,7 @@ void ServerGame::draw(const App& _app) const {
     // Bliting game state, if need
     if (endState > END_TURN) {
         // Bliting end background
-        endBackplate.blit(_app.window);
+        menuBackplate.blit(_app.window);
 
         // Bliting text with end state
         switch (endState) {
@@ -139,8 +154,8 @@ void ServerGame::draw(const App& _app) const {
         }
 
         // Blitting buttons
-        restartButton.blit(_app.window);
-        menuButton.blit(_app.window);
+        menuRestartButton.blit(_app.window);
+        menuExitButton.blit(_app.window);
     }
     // Messages
     disconnectedBox.blit(_app.window);
@@ -148,6 +163,7 @@ void ServerGame::draw(const App& _app) const {
 
     // Drawing buttons
     exitButton.blit(_app.window);
+    gameRestartButton.blit(_app.window);
 
     // Drawing setting menu
     settings.blit(_app.window);
