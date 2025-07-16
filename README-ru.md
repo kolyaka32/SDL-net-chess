@@ -56,8 +56,8 @@
 
 
 ## Установка для собственного использования (unux системы)
-1. Проверить наличие компиляторов [g++], [make] и [cmake];
-2. Проверить наличие [git];
+1. Проверить наличие компиляторов g++, make и cmake;
+2. Проверить наличие git;
 3. Установить (или собрать самому) следующие библиотеки:
 4. Внешние SDL библиотеки ([SDL3](https://github.com/libsdl-org/SDL/releases), [SDL3-image](https://github.com/libsdl-org/SDL_image/releases), [SDL3-mixer](https://github.com/libsdl-org/SDL_mixer/releases), [SDL3-ttf](https://github.com/libsdl-org/SDL_ttf/releases), [SDL3-net](https://github.com/libsdl-org/SDL_net/releases));
 5. Внешняя библиотека архивации (собирается самостоятельно): [libzip](https://libzip.org/download/);

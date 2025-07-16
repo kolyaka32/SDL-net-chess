@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include <SDL3/SDL_Keyboard.h>
+#include <SDL3/SDL_keyboard.h>
 #include <SDL3/SDL_events.h>
 #include "idleTimer.hpp"
 #include "app.hpp"

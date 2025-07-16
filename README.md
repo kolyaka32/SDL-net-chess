@@ -62,6 +62,24 @@ Also you can change start configuration and other usefull things from "settings5
 4. External SDL libraries ([SDL3](https://github.com/libsdl-org/SDL/releases), [SDL3-image](https://github.com/libsdl-org/SDL_image/releases), [SDL3-mixer](https://github.com/libsdl-org/SDL_mixer/releases), [SDL3-ttf](https://github.com/libsdl-org/SDL_ttf/releases), [SDL3-net](https://github.com/libsdl-org/SDL_net/releases));
 5. External archieve library - libzip (build by you own), required: [libzip](https://libzip.org/download/);
 6. (Optional) Code editor [Visual Studio Code](https://code.visualstudio.com/download) (for better usage).
+```bash
+cd ./Shaft-production-planner
+mkdir build
+cmake --build ./build --config Release --target all --
+
+
+
+g++ make cmake
+SDL3_mixer:
+wavpack
+libxmp
+libfreetype-dev
+
+
+manual:
+SDL3, SDL3_image, SDL3_mixer, SDL3_ttf, SDL3_net
+libzip
+```
 
 
 ## Prepaired sources

@@ -40,11 +40,11 @@ void InitFile::loadSettings() {
         } else if (parameter == "sounds") {
             sounds.setVolume(getValue(currentLine));
         } else if (parameter == "startBoardConfig") {
-            strcpy_s(boardConfig, sizeof(boardConfig), getText(currentLine).c_str());
+            strncpy(boardConfig, getText(currentLine).c_str(), sizeof(boardConfig));
         } else if (parameter == "IP") {
-            strcpy_s(baseIP, sizeof(baseIP), getText(currentLine).c_str());
+            strncpy(baseIP, getText(currentLine).c_str(), sizeof(baseIP));
         } else if (parameter == "port") {
-            strcpy_s(basePort, sizeof(basePort), getText(currentLine).c_str());
+            strncpy(basePort, getText(currentLine).c_str(), sizeof(basePort));
         }
     }
 
