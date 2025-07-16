@@ -4,14 +4,11 @@
 .vscode/
 
 # Build folder
-build/.cmake
-build/CMakeFiles
-build/cmake_install.cmake
-build/CMakeCache.txt
-build/compile_commands.json
-build/Makefile
-build/Testing
-*.ini
+build/
+
+# Adding create-archieve files in build folder
+!build/create-data-file.sh
+!build/create-data-file.bat
 
 # Old include libraries
 i686-w64-mingw32/
@@ -50,12 +47,13 @@ include/
 # Executables
 *.exe
 
+# Settings and data file of program
+*.dat
+*.ini
+
 # Archives
 *.7z
 *.zip
-
-# Data files
-*.dat
 
 # CppCheck folders
 codeTester-cppcheck-build-dir/
