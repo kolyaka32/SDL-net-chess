@@ -32,5 +32,5 @@
 #define CONNECTION_LOST_PERCENT 0           // Option for better testing of connection stability
 
 // Base file names
-#define SETTING_FILE "settings5.ini"        // File with all starting data (width, height...)
-#define DATA_FILE "data5.dat"               // File with all GFX
+#define SETTING_FILE "settings-chess.ini"   // File with all starting data (width, height...)
+#define DATA_FILE "chess.dat"               // File with all GFX
