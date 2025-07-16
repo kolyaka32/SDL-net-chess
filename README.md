@@ -71,6 +71,7 @@ cmake --build ./build --config Release --target all --
 
 g++ make cmake
 SDL3_mixer:
+libasound2-dev
 wavpack
 libxmp
 libfreetype-dev

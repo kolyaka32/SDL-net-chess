@@ -58,7 +58,7 @@ void GameCycle::inputMouseDown(App& _app) {
 
         #if CHECK_CORRECTION
         if (endState != END_NONE) {
-            SDL_Log("Turn of current player: from %u to %u", board.getPreviousTurn(), getPos((mouse.getX() - LEFT_LINE) / CELL_SIDE, (mouse.getY() - UPPER_LINE) / CELL_SIDE));
+            SDL_Log("Turn of current player: from %u to %u", board.getLastTurnStart(), board.getLastTurnEnd());
         }
         #endif
         return;

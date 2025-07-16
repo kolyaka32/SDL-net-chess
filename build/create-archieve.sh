@@ -1,1 +1,1 @@
-zip -9 build5.zip Chess *.dat
+zip -9u build-chess-unix.zip Chess *.dat

@@ -1,1 +1,1 @@
-zip -9r build/data5.dat ani/* img/* mus/* snd/* fnt/*
+zip -9ru build/chess.dat ani/* img/* mus/* snd/* fnt/*
