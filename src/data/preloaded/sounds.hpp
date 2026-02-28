@@ -1,26 +1,35 @@
 /*
- * Copyright (C) 2025-2026, Kazankov Nikolay 
+ * Copyright (C) 2024-2026, Kazankov Nikolay
  * <nik.kazankov.05@mail.ru>
  */
 
 #pragma once
 
+#include "../../soundsNames.hpp"
+
+#if (PRELOAD_SOUNDS)
+
+#if (USE_SDL_MIXER)
 #include <SDL3_mixer/SDL_mixer.h>
-#include "loader/dataLoader.hpp"
+#else
+#error "Can't preload sounds without library"
+#endif
 
 
 // Class for playing sound with need name
-template <unsigned count>
 class SoundsData {
  private:
-    Mix_Chunk* sounds[count];
-    Uint8 volume = 0;
-    void loadSound(const DataLoader& loader, unsigned index, const char* name);
+    MIX_Audio* sounds[unsigned(Sounds::Count)];
+    MIX_Track* tracks[unsigned(Sounds::Count)];  // ! Should be optimised to use less tracks
+    void loadSound(MIX_Mixer* mixer, unsigned index, const char* name);
 
  public:
-    SoundsData(const DataLoader& loader, const char* names[count]);
+    explicit SoundsData(MIX_Mixer* mixer);
     ~SoundsData();
-    void play(unsigned name) const;
-    void setVolume(unsigned _volume);
-    unsigned getVolume() const;
+    void play(Sounds name) const;
+    // Get/set volume for all sounds: 1.0f - is normal
+    void setVolume(float volume);
+    float getVolume() const;
 };
+
+#endif  // (PRELOAD_SOUNDS)

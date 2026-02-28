@@ -16,5 +16,5 @@ enum class Language : unsigned {
     Count,
 
     // Standart pre-selected language
-    Default = Russian
+    Default = English
 };

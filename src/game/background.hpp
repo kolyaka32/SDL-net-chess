@@ -9,7 +9,7 @@
 
 
 // Class of menu moving background
-class MovingBackground : GUI::GUItemplate {
+class MovingBackground : GUI::Template {
  private:
     const Uint8 maxIndex = 33;  // Maximal index, if greater - reset
     static Uint16 offset;       // Offset (in pixels) for moving background

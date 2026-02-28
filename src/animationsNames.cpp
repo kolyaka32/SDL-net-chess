@@ -5,7 +5,11 @@
 
 #include "animationsNames.hpp"
 
+#if (PRELOAD_ANIMATIONS)
+
 // File names of the corresponding sounds
-const char* animationsFilesNames[ANI_count] = {
+const char* animationsFilesNames[unsigned(Animations::Count)] = {
     "ani/singlePlayer.gif",
 };
+
+#endif  // (PRELOAD_ANIMATIONS)

@@ -43,7 +43,7 @@ public:
 
 
 // Class of game board to with
-class Board : public FiguresMoves, public GUI::GUItemplate {
+class Board : public FiguresMoves, public GUI::Template {
  private:
     Figure activeCell;     // Cell, that active (now move by player), or NULL if not
     Uint8 castling;        // Data of all now posible varhishes

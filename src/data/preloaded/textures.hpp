@@ -1,23 +1,31 @@
 /*
- * Copyright (C) 2025-2026, Kazankov Nikolay 
+ * Copyright (C) 2024-2026, Kazankov Nikolay
  * <nik.kazankov.05@mail.ru>
  */
 
 #pragma once
 
+#include "../../texturesNames.hpp"
+
+#if (PRELOAD_TEXTURES)
+
+#if (USE_SDL_IMAGE)
 #include <SDL3_image/SDL_image.h>
-#include "loader/dataLoader.hpp"
+#else
+#error "Can't preload images without library"
+#endif
 
 
 // Class for load, draw and clear textures
-template <unsigned count>
 class TexturesData {
  private:
-    SDL_Texture* textures[count];
-    void loadTexture(const DataLoader& loader, SDL_Renderer* renderer, unsigned index, const char* name);
+    SDL_Texture* textures[unsigned(Textures::Count)];
+    void loadTexture(SDL_Renderer* renderer, Textures name, const char* fileName);
 
  public:
-    TexturesData(const DataLoader& loader, SDL_Renderer* renderer, const char* names[count]);
+    explicit TexturesData(SDL_Renderer* renderer);
     ~TexturesData();
-    SDL_Texture* operator[] (unsigned index) const;
+    SDL_Texture* operator[] (Textures name) const;
 };
+
+#endif  // (PRELOAD_TEXTURES)

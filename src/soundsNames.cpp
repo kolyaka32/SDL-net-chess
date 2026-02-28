@@ -5,8 +5,12 @@
 
 #include "soundsNames.hpp"
 
+#if (PRELOAD_SOUNDS)
+
 // File names of the corresponding sounds
-const char* soundsFilesNames[SND_count] = {
+const char* soundsFilesNames[unsigned(Sounds::Count)] = {
     "snd/turn.wav",
     "snd/reset.wav",
 };
+
+#endif  // (PRELOAD_SOUNDS)

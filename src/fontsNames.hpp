@@ -5,19 +5,31 @@
 
 #pragma once
 
-#include "data/preloaded/fonts.cpp"
+#include "define.hpp"
+
+#if (PRELOAD_FONTS)
 
 
 // Names of fonts
-enum FNT_names{
-    FNT_MAIN,    // Main using font (now only one)
+enum class Fonts {
+    Main,  // Main using font (now only one)
 
     // Global counter of all loaded fonts
-    FNT_count,
+    Count,
 };
 
-// Shortcut for font data class
-typedef FontsData<FNT_count> Fonts;
+// Heights of text (for uniformity)
+enum Height : int {
+    Title = 40,        // Intuding title
+    SubTitle = 28,     // Title in subcycles
+    Info = 32,
+    Main = 24,         // Main text
+    Medium = 20,       //
+    TypeBox = Medium,  // Special height for typeboxes
+    Small = 12,        // Small text
+};
 
 // File names of the corresponding fonts
-extern const char* fontsFilesNames[FNT_count];
+extern const char* fontsFilesNames[unsigned(Fonts::Count)];
+
+#endif  // (PRELOAD_FONTS)

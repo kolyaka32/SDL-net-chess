@@ -1,22 +1,31 @@
 /*
- * Copyright (C) 2025-2026, Kazankov Nikolay 
+ * Copyright (C) 2024-2026, Kazankov Nikolay
  * <nik.kazankov.05@mail.ru>
  */
 
 #pragma once
 
+#include "../../animationsNames.hpp"
+
+#if (PRELOAD_ANIMATIONS)
+
+#if (USE_SDL_IMAGE)
 #include <SDL3_image/SDL_image.h>
-#include "loader/dataLoader.hpp"
+#else
+#error "Can't preload animations without library"
+#endif
 
 
-// Class for load, draw and clear animations
-template <unsigned count>
+// Class for load, get and clear preloaded animations
 class AnimationsData {
  private:
-    IMG_Animation* animations[count];
-    void load(const DataLoader& loader, unsigned index, const char* name);
+    IMG_Animation* animations[unsigned(Animations::Count)];
+    void loadAnimation(Animations name, const char* fileName);
+
  public:
-    AnimationsData(const DataLoader& loader, const char* names[count]);
+    explicit AnimationsData();
     ~AnimationsData();
-    IMG_Animation* operator[] (unsigned index) const;
+    IMG_Animation* operator[] (Animations name) const;
 };
+
+#endif  // (PRELOAD_TEXTURES)

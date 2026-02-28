@@ -5,20 +5,24 @@
 
 #pragma once
 
-#include "data/preloaded/music.cpp"
+#include "define.hpp"
+
+#if (PRELOAD_MUSIC)
 
 // Names of music tracks
-enum MUS_names{
-    MUS_MENU,          // Music for menu
-    MUS_MAIN,          // Music of cycles game
-    MUS_SINGLEPLAYER,  // Special music for singleplayer mode
+enum class Music {
+    // Menu part
+    Menu,
+
+    // Game part
+    Main,          // Music of cycles game
+    Singleplayer,  // Special music for singleplayer mode
 
     // Global counter of all loaded sounds
-    MUS_count,
+    Count,
 };
 
-// Shortcut for music data class
-typedef MusicData<MUS_count> Music;
-
 // File names of the corresponding music
-extern const char* musicFilesNames[MUS_count];
+extern const char* musicFilesNames[unsigned(Music::Count)];
+
+#endif  // (PRELOAD_MUSIC)

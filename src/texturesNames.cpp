@@ -5,8 +5,10 @@
 
 #include "texturesNames.hpp"
 
+#if (PRELOAD_TEXTURES)
+
 // File names of the corresponding textures
-const char* texturesFilesNames[IMG_count] = {
+const char* texturesFilesNames[unsigned(Textures::Count)] = {
     // Graphic interface sprites
     "img/GUI/esc_button.png",
     "img/GUI/slider_button.png",
@@ -41,3 +43,5 @@ const char* texturesFilesNames[IMG_count] = {
     // Point, where figure can go
     "img/chess-pack-1/point.png",
 };
+
+#endif  // (PRELOAD_TEXTURES)
