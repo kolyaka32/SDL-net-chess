@@ -44,4 +44,12 @@ const char* texturesFilesNames[unsigned(Textures::Count)] = {
     "img/chess-pack-1/point.png",
 };
 
+Textures operator+(const Textures _color, int _offset) {
+    return Textures(unsigned(_color) + _offset);
+}
+
+Textures operator-(const Textures _color, int _offset) {
+    return Textures(unsigned(_color) - _offset);
+}
+
 #endif  // (PRELOAD_TEXTURES)

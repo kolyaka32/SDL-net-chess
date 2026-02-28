@@ -231,6 +231,10 @@ void Window::stopTextInput() const {
     SDL_StopTextInput(window);
 }
 
+void Window::setTitle(const LanguagedText newTitles) const {
+    updateTitle(newTitles.getString().c_str());
+}
+
 void Window::updateTitle(const char* _name) const {
     SDL_SetWindowTitle(window, _name);
 }

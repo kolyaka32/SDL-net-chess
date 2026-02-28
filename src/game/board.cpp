@@ -5,7 +5,7 @@
 
 #include "board.hpp"
 
-// Configuration of board, for play
+// Basic configuration of board for normal start
 char boardConfig[85] = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq";
 
 
@@ -24,7 +24,11 @@ position Position::getPosition() {
 }
 
 
-// Clearing field and setting
+Board::Board(const Window& _window)
+: Template(_window),
+FiguresMoves(),
+rect({LEFT_LINE, UPPER_LINE, GAME_WIDTH, GAME_HEIGHT}) {}
+
 void Board::reset() {
     // Resetting field parametrs
     resetField();
@@ -162,21 +166,22 @@ void Board::reset() {
 }
 
 // Drawing all figures with background
-void Board::blit(const Window& _target) const {
+void Board::blit() const {
     // Drawing global background
-    _target.setDrawColor(BLACK);
-    _target.clear();
+    window.setDrawColor(BLACK);
+    window.clear();
 
     // Drawing field light part
-    _target.setDrawColor(FIELD_LIGHT);
-    _target.drawRect({LEFT_LINE, UPPER_LINE, GAME_WIDTH, GAME_HEIGHT});
+    window.setDrawColor(FIELD_LIGHT);
+    window.drawRect(rect);
 
     // Drawing background
-    _target.setDrawColor(FIELD_DARK);
-    for (coord y = 0; y < FIELD_WIDTH; ++y)
+    window.setDrawColor(FIELD_DARK);
+    for (coord y = 0; y < FIELD_WIDTH; ++y) {
         for (coord x = y % 2; x < FIELD_WIDTH; x += 2) {
-            _target.drawRect(getRect({x, y}));
+            window.drawRect(getRect({x, y}));
         }
+    }
 
     // Drawing each figure
     for (coord y = 0; y < FIELD_WIDTH; ++y)
@@ -187,34 +192,34 @@ void Board::blit(const Window& _target) const {
                 // Checking, if figure current (blue)
                 if (figures[getPos(x, y)] > FIG_RED_TYPE) {
                     // Getting textyre
-                    IMG_names textureIndex = IMG_names(IMG_GAME_WHITE_PAWN - 1 + figures[getPos(x, y)] - FIG_RED_TYPE);
+                    SDL_Texture* textureIndex = window.getTexture(Textures::WhitePawn - 1 + figures[getPos(x, y)] - FIG_RED_TYPE);
 
                     // Checking, if figure attackable (red)
                     // Making it red
-                    _target.setColorMode(textureIndex, RED);
+                    window.setColorMode(textureIndex, RED);
 
                     // Drawing
-                    _target.blit(textureIndex, rect);
+                    window.blit(textureIndex, rect);
 
                     // Resetting cell color
-                    _target.setColorMode(textureIndex);
+                    window.setColorMode(textureIndex);
                 } else {
-                    _target.blit(IMG_names(IMG_GAME_WHITE_PAWN - 1 + figures[getPos(x, y)]), rect);
+                    window.blit(window.getTexture(Textures::WhitePawn - 1 + figures[getPos(x, y)]), rect);
                 }
             }
         }
 
     // Draw selected figure
     if (activeCell.type) {
-        IMG_names textureIndex = IMG_names(IMG_GAME_WHITE_PAWN - 1 + activeCell.type);
+        SDL_Texture* textureIndex = window.getTexture(Textures::WhitePawn - 1 + activeCell.type);
         // Making it blue
-        _target.setColorMode(textureIndex, BLUE);
+        window.setColorMode(textureIndex, BLUE);
 
         // Draw
-        _target.blit(textureIndex, getRect(activeCell.pos));
+        window.blit(textureIndex, getRect(activeCell.pos));
 
         // Resetting color
-        _target.setColorMode(textureIndex);
+        window.setColorMode(textureIndex);
     }
 }
 
@@ -504,7 +509,7 @@ Uint8 Board::placeFigure(const Sounds& _sounds, Position p) {
     }
 
     // Making sound
-    _sounds.play(SND_TURN);
+    audio.sounds.play(Sounds::Turn);
 
     // Clearing field after turn
     resetSelection();

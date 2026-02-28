@@ -5,38 +5,37 @@
 
 #pragma once
 
-#include "baseCycle.hpp"
-#include "../internet/client.hpp"
+#include "internetCycle.hpp"
+#include "../menu/serverInfo.hpp"
+#include "../menu/targetConnect.hpp"
 
-
-// Global base connect link for type in typeboxes
-extern char baseIP[12];
-extern char basePort[6];
 
 // Game cycle (for single player (special animation))
-class ClientLobby : public BaseCycle {
- private:
-    // Internet parameters
-    Client client;
+class ClientLobbyCycle : public BaseCycle {
+ protected:
+    // Object with all servers for connection
+    std::vector<ServerData> serverDatas;
+    // Special socket for broadcast send data (for finding servers)
+    Socket broadcastSendSocket;
+    timer startSearchTimer = 0;
 
-    // Input fields
-    GUI::StaticText enterIPText;
-    GUI::TypeField<12> enterIPField;
-    GUI::StaticText enterPortText;
-    GUI::TypeField<6> enterPortField;
-    GUI::TextButton connectButton;
-    GUI::TextButton pasteButton;
+    // Server selection
+    GUI::ScrollBox<ServerInfo, ServerData> serverScroller;
+    GUI::TextButton updateButton;
+    // Target connection
+    GUI::TextButton targetConnectButton;
+    TargetConnect targetConnectMenu;
 
-    void pasteFromClipboard();
+    void updateList();
 
-    // Main run functions
-    void inputMouseDown(App& app) override;
-    void inputMouseUp(App& app) override;
-    void inputKeys(App& app, SDL_Keycode key) override;
-    void inputText(App& app, const char* text) override;
-    void update(App& app) override;
-    void draw(const App& app) const override;
+ protected:
+    bool inputMouseDown() override;
+    void inputMouseUp() override;
+    void inputKeys(SDL_Keycode key) override;
+    void inputText(const char* text) override;
+    void update() override;
+    void draw() const override;
 
  public:
-    ClientLobby(App& app);
+    ClientLobbyCycle(Window& window);
 };

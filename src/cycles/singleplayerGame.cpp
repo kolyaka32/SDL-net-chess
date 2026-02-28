@@ -6,53 +6,47 @@
 #include "singleplayerGame.hpp"
 
 
-SinglePlayerGameCycle::SinglePlayerGameCycle(App& _app)
-: BaseCycle(_app),
-app(_app),
-startVolume(_app.music.getVolume()),
-animation(_app.window.getAnimation(ANI_SINGLEPLAYER)),
+SinglePlayerGameCycle::SinglePlayerGameCycle(Window& _window)
+: BaseCycle(_window),
+startVolume(audio.music.getVolume()),
+animation(_window.getAnimation(Animations::SinglePlayer)),
 width(animation->w),
 height(animation->h) {
     prevFrameUpdate = getTime() + 400;
 
     // Starting main song (if wasn't started)
     if(!isRestarted()) {
-        _app.music.start(MUS_MAIN);
+        audio.music.start(Music::Main);
     }
 }
 
 SinglePlayerGameCycle::~SinglePlayerGameCycle() {
     // Resetting title
-    app.window.updateTitle();
+    window.updateTitle();
 
     // Resetting volume
-    app.music.setVolume(startVolume);
+    audio.music.setVolume(startVolume);
 
     // Resetting color for figures
-    for (unsigned i = IMG_GAME_WHITE_PAWN; i <= IMG_GAME_BLACK_KING; ++i) {
-        app.window.setColorMode(IMG_names(i));
+    for (Textures i = Textures::WhitePawn; i <= Textures::BlackKing; i=i+1) {
+        window.setColorMode(window.getTexture(i));
     }
 }
 
-void SinglePlayerGameCycle::inputMouseDown(App& _app) {
-    // Clicking in settings menu
-    if (settings.click(mouse)) {
-        return;
+bool SinglePlayerGameCycle::inputMouseDown() {
+    if (BaseCycle::inputMouseDown()) {
+        // Correcting volume (if have any changes)
+        if (currentWidth != width) {
+            startVolume = audio.music.getVolume();
+            audio.music.setVolume(startVolume * (width-currentWidth)/width);
+        }
+        return true;
     }
-    // Exiting to menu
-    if (exitButton.in(mouse)) {
-        stop();
-        return;
-    }
-    // Changing volume
-    if (currentWidth != width) {
-        startVolume = _app.music.getVolume();
-        app.music.setVolume(startVolume * (width-currentWidth)/width);
-    }
+    return false;
 }
 
-void SinglePlayerGameCycle::update(App& _app) {
-    BaseCycle::update(_app);
+void SinglePlayerGameCycle::update() {
+    BaseCycle::update();
 
     // Checking, if need to change state
     if (getTime() > prevFrameUpdate) {
@@ -64,32 +58,17 @@ void SinglePlayerGameCycle::update(App& _app) {
             // Waiting for full width
             if (currentWidth == width) {
                 // Setting updated window title
-                switch (LanguagedText::getLanguage()) {
-                case Language::English:
-                    app.window.updateTitle("You been rickrolled!");
-                    break;
+                window.setTitle({"You been rickrolled!","Ты зарикролен!","Schach на SDL","Шахматы на SDL"});
 
-                case Language::Russian:
-                    app.window.updateTitle("Ты зарикролен!");
-                    break;
-
-                case Language::German:
-                    app.window.updateTitle("Schach на SDL");
-                    break;
-
-                case Language::Bellarusian:
-                    app.window.updateTitle("Шахматы на SDL");
-                    break;
-                }
                 // Setting new music and volume back
-                _app.music.setVolume(startVolume*2);
-                _app.music.start(MUS_SINGLEPLAYER);
+                audio.music.setVolume(startVolume);
+                audio.music.start(Music::Singleplayer);
                 return;
             }
             // Correcting height
             currentHeight = height * currentWidth / width;
             // Correcting music volume
-            app.music.setVolume(startVolume * (width-currentWidth)/width);
+            audio.music.setVolume(startVolume * (width-currentWidth)/width);
 
             // Setting timer to update
             prevFrameUpdate = getTime() + (width - currentWidth)*5;
@@ -101,13 +80,13 @@ void SinglePlayerGameCycle::update(App& _app) {
     }
 }
 
-void SinglePlayerGameCycle::draw(const App& _app) const {
+void SinglePlayerGameCycle::draw() const {
     // Bliting background
-    _app.window.setDrawColor(BLACK);
-    _app.window.clear();
+    window.setDrawColor(BLACK);
+    window.clear();
 
     // Drawing buttons
-    exitButton.blit(_app.window);
+    exitButton.blit();
 
     // Getting pixels of current frame
     const Uint8* frameData = (Uint8*)animation->frames[frame][0].pixels;
@@ -123,28 +102,28 @@ void SinglePlayerGameCycle::draw(const App& _app) const {
 
             // Drawing rect for field
             if ((x+y)%2) {
-                _app.window.setDrawColor(FIELD_LIGHT);
+                window.setDrawColor(FIELD_LIGHT);
             } else {
-                _app.window.setDrawColor(FIELD_DARK);
+                window.setDrawColor(FIELD_DARK);
             }
             
-            _app.window.drawRect(dest);
+            window.drawRect(dest);
 
             // Checkig, if need to make free cell
             if (currentWidth == width || (rand() % width < currentWidth)) {
-                SDL_Texture* curTexture = _app.window.getTexture(IMG_names(IMG_GAME_BLACK_PAWN + rand() % 6));
+                SDL_Texture* curTexture = window.getTexture(Textures::BlackPawn + rand() % 6);
 
                 Uint16 caret = (x + y * width) * 4;
 
-                _app.window.setColorMode(curTexture, {frameData[caret+2], frameData[caret+1], frameData[caret]});
+                window.setColorMode(curTexture, {frameData[caret+2], frameData[caret+1], frameData[caret]});
 
-                _app.window.blit(curTexture, dest);
+                window.blit(curTexture, dest);
             }
         }
     }
     // Drawing settings
-    settings.blit(_app.window);
+    settings.blit();
 
     // Bliting all to screen
-    _app.window.render();
+    window.render();
 }

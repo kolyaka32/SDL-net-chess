@@ -16,7 +16,7 @@ class MovingBackground : GUI::Template {
     static Uint8 index;         // Index of drawing line (for figures)
 
  public:
-    MovingBackground();
-    void blit(const Window& target) const override;
+    MovingBackground(const Window& window);
+    void blit() const override;
     void update();
 };

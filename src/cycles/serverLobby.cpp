@@ -4,117 +4,125 @@
  */
 
 #include "serverLobby.hpp"
-#include "selectCycle.hpp"
-#include "serverGame.hpp"
 
 
-bool ServerLobby::showAddress = false;
+bool ServerLobbyCycle::showAddress = false;
 
-ServerLobby::ServerLobby(App& _app)
-: BaseCycle(_app),
-titleText(_app.window, 0.5, 0.1, {"Wait for connection", "Ожидайте подключений", "Verbindungen erwarten", "Чакайце падлучэнняў"}, 30, WHITE),
-addressText(_app.window, 0.5, 0.3, {"Your address: %s", "Ваш адресс: %s", "Ihre Adresse: %s", "Ваш адрас: %s"}, 30, WHITE),
-copiedInfoBox(_app.window, 0.5, 0.37, {"Address copied", "Адрес скопирован", "Adresse kopiert", "Скапіяваны адрас"}, 30, WHITE),
-showAddressText(_app.window, 0.5, 0.45, {"Show address", "Показать адресс", "Adresse anzeigen", "Паказаць адрас"}, 24),
-hideAddressText(_app.window, 0.5, 0.45, {"Hide address", "Скрыть адресс", "Adresse verbergen", "Схаваць адрас"}, 24) {
+ServerLobbyCycle::ServerLobbyCycle(Window& _window)
+: BaseCycle(_window),
+broadcastRecieveSocket(),
+titleText(_window, 0.5, 0.15,
+    {"Wait for connection", "Ожидайте подключения", "Verbindungen erwarten", "Чакайце падлучэнняў"}, 2, Height::SubTitle),
+hideAddressText(_window, 0.5, 0.3,
+    {"Your address: **************", "Ваш адресс: **************", "Ihre Adresse: **************", "Ваш адрас: **************"}),
+showAddressText(_window, 0.5, 0.3, {"Your address: %s:%d", "Ваш адресс: %s:%d", "Ihre Adresse: %s:%d", "Ваш адрас: %s:%d"},
+    Height::Main, WHITE, GUI::Aligment::Midle, internet.getHostName(), internet.getPort()),
+copiedInfoBox(_window, 0.5, 0.4, {"Address copied", "Адрес скопирован", "Adresse kopiert", "Скапіяваны адрас"}),
+showAddressButton(_window, 0.5, 0.5, {"Show address", "Показать адресс", "Adresse anzeigen", "Паказаць адрас"}),
+hideAddressButton(_window, 0.5, 0.5, {"Hide address", "Скрыть адресс", "Adresse verbergen", "Схаваць адрас"}) {
     // Resetting flag of showing address
     if (!isRestarted()) {
         showAddress = false;
     }
-    if (isAdditionalRestarted()) {
-        stop();
-        return;
-    }
 
-    // Getting string with full address of current app
-    sprintf(currentAddress, "%s:%u", server.getLocalIP(), server.getPort());
+    // Openning socket for recieving broadcast
+    broadcastRecieveSocket.setRecieveBroadcast();
 
-    // Setting showing/hidding address text
-    if (showAddress) {
-        addressText.setValues(_app.window, currentAddress);
-    } else {
-        addressText.setValues(_app.window, "********");
-    }
+    logAdditional("Start server lobby cycle");
 }
 
-void ServerLobby::inputMouseDown(App& _app) {
-    // Clicking in settings menu
-    if (settings.click(mouse)) {
-        return;
-    }
-    // Exiting to menu
-    if (exitButton.in(mouse)) {
-        stop();
-        return;
+bool ServerLobbyCycle::inputMouseDown() {
+    if (BaseCycle::inputMouseDown()) {
+        return true;
     }
     // Check on copying address
-    if (addressText.in(mouse)) {
+    if (hideAddressText.in(mouse)) {
         // Copying address to buffer
-        static char clipboardText[20];
-        strcpy(clipboardText, currentAddress);
+        static char clipboardText[24];
+        snprintf(clipboardText, sizeof(clipboardText), "%s:%d", internet.getHostName(), internet.getPort());
         SDL_SetClipboardText(clipboardText);
         copiedInfoBox.reset();
-        return;
+        return true;
     }
     if (showAddress) {
         // Check on hiding address
-        if (hideAddressText.in(mouse)) {
+        if (hideAddressButton.in(mouse)) {
             showAddress = false;
-            addressText.setValues(_app.window, "********");
-            return;
+            return true;
         }
     } else {
         // Check on showing address
-        if (showAddressText.in(mouse)) {
+        if (showAddressButton.in(mouse)) {
             showAddress = true;
-            addressText.setValues(_app.window, currentAddress);
-            return;
+            return true;
         }
     }
+    return false;
 }
 
-void ServerLobby::update(App& _app) {
-    BaseCycle::update(_app);
+void ServerLobbyCycle::update() {
+    BaseCycle::update();
 
     // Update infobox
     copiedInfoBox.update();
 
-    // Getting internet packets
-    switch (server.getCode()) {
-    case ConnectionCode::Init:
-        // Sending approving code
-        server.connectToLastMessage();
+    // Getting internet messages (for main connection)
+    while (const GetPacket* packet = internet.getNewMessages()) {
+        switch (ConnectionCode(packet->getData<Uint8>(0))) {
+        case ConnectionCode::Init:
+            // ! Fix that could connect to wrong type
+            // Connecting to getted address
+            internet.connectTo(Destination{packet->getSourceAddress()});
 
-        // Starting game (as server)
-        runCycle<ServerGame, Connection&>(_app, server);
-        // Exiting to menu after game
-        stop();
-        return;
+            // Sending applying initialsiation message
+            internet.sendAllConfirmed({ConnectionCode::Init, Uint8(1)});
+
+            // Starting game (as server)
+            App::setNextCycle(Cycle::ServerGame);
+            return;
+
+        default:
+            return;
+        }
+    }
+
+    // Getting internet messges (for broadcast)
+    while (const GetPacket* packet = broadcastRecieveSocket.recieve()) {
+        switch (ConnectionCode(packet->getData<Uint8>(0))) {
+        case ConnectionCode::Search:
+            // Reporting about itself
+            internet.sendFirst(Destination{packet->getSourceAddress()}, {ConnectionCode::Server, Uint8(1)});
+            return;
+
+        default:
+            return;
+        }
     }
 }
 
-void ServerLobby::draw(const App& _app) const {
+void ServerLobbyCycle::draw() const {
     // Bliting background
-    _app.window.setDrawColor(BLACK);
-    _app.window.clear();
+    window.setDrawColor(BLACK);
+    window.clear();
 
     // Draw main part
-    titleText.blit(_app.window);
-    addressText.blit(_app.window);
-    copiedInfoBox.blit(_app.window);
+    titleText.blit();
+    copiedInfoBox.blit();
 
     if (showAddress) {
-        hideAddressText.blit(_app.window);
+        showAddressText.blit();
+        hideAddressButton.blit();
     } else {
-        showAddressText.blit(_app.window);
+        hideAddressText.blit();
+        showAddressButton.blit();
     }
 
     // Drawing buttons
-    exitButton.blit(_app.window);
+    exitButton.blit();
 
     // Drawing settings
-    settings.blit(_app.window);
+    settings.blit();
 
     // Bliting all to screen
-    _app.window.render();
+    window.render();
 }

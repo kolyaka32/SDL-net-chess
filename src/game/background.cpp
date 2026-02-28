@@ -11,28 +11,29 @@
 Uint16 MovingBackground::offset = 0;   // Offset (in pixels) for moving background
 Uint8 MovingBackground::index = 0;     // Index of drawing line (for figures)
 
-MovingBackground::MovingBackground() {}
+MovingBackground::MovingBackground(const Window& _window)
+: Template(_window) {}
 
-void MovingBackground::blit(const Window& _target) const {
+void MovingBackground::blit() const {
     // Filling background with light color
-    _target.setDrawColor(FIELD_LIGHT);
-    _target.clear();
+    window.setDrawColor(FIELD_LIGHT);
+    window.clear();
 
     // Drawing dark parts of field
-    _target.setDrawColor(FIELD_DARK);
+    window.setDrawColor(FIELD_DARK);
     for (Uint8 y = 0; y < WINDOW_HEIGHT / CELL_SIDE + 1; ++y) {
         for (Uint8 x = 0; x < WINDOW_WIDTH / CELL_SIDE + 2; ++x) {
             // Drawing dark rects on odd cells
             SDL_FRect rect = {float((x-1)*CELL_SIDE + offset/2.0), float((y-1) * CELL_SIDE + offset/2), CELL_SIDE, CELL_SIDE};
             if ((x + y) % 2) {
-                _target.drawRect(rect);
+                window.drawRect(rect);
             }
 
             // Setting seed for random, to save position and prevent jump
             srand((144 + index - x - 12 * y) % 208);
             // Drawing figure (if need)
             if (rand() % 5 == 0) {
-                _target.blit(IMG_names(IMG_GAME_WHITE_PAWN + rand() % 12), rect);
+                window.blit(window.getTexture(Textures::WhitePawn + rand() % 12), rect);
             }
         }
     }

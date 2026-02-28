@@ -53,4 +53,8 @@ enum class Textures : unsigned {
 // File names of the corresponding textures
 extern const char* texturesFilesNames[unsigned(Textures::Count)];
 
+// Operators for change textures depend on offset
+Textures operator+(const Textures index, int offset);
+Textures operator-(const Textures index, int offset);
+
 #endif  // (PRELOAD_TEXTURES)

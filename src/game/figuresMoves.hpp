@@ -9,7 +9,7 @@
 
 
 // Types of which player is active
-enum TURN_names{
+enum TURN_names {
     TURN_WHITE,
     TURN_BLACK,
 };

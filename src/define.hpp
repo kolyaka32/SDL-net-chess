@@ -36,6 +36,16 @@
 // Game field parameters
 #define FIELD_WIDTH 8  // Number of cells
 #define CELL_SIDE 64   // Width and height of cell in pixels
+// ! Should be removed
+#define GAME_WIDTH FIELD_WIDTH * CELL_SIDE  // Width of game area
+#define GAME_HEIGHT GAME_WIDTH              // Height of game area
+#define LETTER_LINE 20                      // Place for letters for field
+#define UPPER_LINE (90 + LETTER_LINE)       // Extra place for better UI options
+#define LEFT_LINE LETTER_LINE               // Place for field letters
+#define RIGHT_LINE LETTER_LINE              // Place for field letters
+#define DOWN_LINE LETTER_LINE               // Place for field letters
+#define WINDOW_WIDTH (GAME_WIDTH + LEFT_LINE + RIGHT_LINE)    // Width of all screen
+#define WINDOW_HEIGHT (GAME_HEIGHT + UPPER_LINE + DOWN_LINE)  // Height of all screen
 
 // Base file names
 // File with all GFX

@@ -10,11 +10,9 @@
 
 // Game cycle (for single player (special animation))
 class SinglePlayerGameCycle : public BaseCycle {
- private:
-    App& app;
-
+ protected:
     // Volume from start of cycle to reset later
-    unsigned startVolume;
+    float startVolume;
 
     // Data for transition to animation
     Uint16 currentWidth = 8;
@@ -26,12 +24,12 @@ class SinglePlayerGameCycle : public BaseCycle {
     Uint16 frame = 0;             // Current frame of animation
     timer prevFrameUpdate;        // Timer, when was last frame change
 
-    // Main run functions
-    void inputMouseDown(App& app) override;
-    void update(App& app) override;
-    void draw(const App& app) const override;
+ protected:
+    bool inputMouseDown() override;
+    void update() override;
+    void draw() const override;
 
  public:
-    SinglePlayerGameCycle(App& app);
+    SinglePlayerGameCycle(Window& window);
     ~SinglePlayerGameCycle();
 };

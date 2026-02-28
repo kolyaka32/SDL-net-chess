@@ -8,19 +8,82 @@
 
 bool InternetCycle::currentTurn = false;
 
-InternetCycle::InternetCycle(const App& _app)
-: GameCycle(_app),
+InternetCycle::InternetCycle(Window& _window)
+: GameCycle(_window),
 playersTurnsTexts {
-    {_app.window, 0.5, 0.1, {"Wait", "Ожидайте", "Erwartet", "Чакаць"}, 24, WHITE},
-    {_app.window, 0.5, 0.1, {"Your turn", "Ваш ход", "Sie spielen aus", "Ваш ход"}, 24, WHITE},
+    {window, 0.5, 0.05, {"Your turn", "Ваш ход", "Sie spielen aus", "Ваш ход"}},
+    {window, 0.5, 0.05, {"Wait", "Ожидайте", "Erwartet", "Чакаць"}},
 },
-disconnectedBox(_app.window),
-termianatedBox(_app.window),
-looseText(_app.window, 0.5, 0.4, {"You loose...", "Вы проиграли...", "Sie haben verloren...", "Вы прайгралі..."}, 30, WHITE),
-winText(_app.window, 0.5, 0.4, {"Win!", "Победа!", "Sieg!", "Перамога!"}, 30, WHITE) {
+disconnectedBox(window, {"Connection lost", "Соединение потярено", "Verbindung verloren", "Злучэнне страчана"},
+    {"Reconnect", "Переприсоединится", "Wiederverbinden", "Паўторна падлучыцца"},
+    {"Close", "Закрыть", "Schließen", "Зачыніць"}),
+termianatedBox(window, {"Connection terminated", "Соединение разорвано", "Verbindung unterbrochen", "Злучэнне разарвана"},
+    {"Close", "Закрыть", "Schließen", "Зачыніць"}),
+looseText(window, 0.5, 0.05, {"You loose", "Вы проиграли", "Sie haben verloren", "Вы прайгралі"}, 1),
+winText(window, 0.5, 0.05, {"Win", "Победа", "Sieg", "Перамога"}, 1) {
     // Resetting flag
     if (!isRestarted()) {
         disconnectedBox.reset();
         termianatedBox.reset();
     }
+    logAdditional("Start internet game cycle");
 }
+
+bool InternetCycle::inputMouseDown() {
+    if (GameCycle::inputMouseDown()) {
+        return true;
+    }
+    if (int code = termianatedBox.click(mouse)) {
+        if (code == 2) {
+            // Quiting to menu
+            App::setNextCycle(Cycle::Menu);
+        }
+        // Not allowing to any another actions
+        return true;
+    }
+    if (int code = disconnectedBox.click(mouse)) {
+        if (code == 2) {
+            // Trying to reconnect
+            internet.sendAll({ConnectionCode::ApplyConnection});
+        } else if (code == 3) {
+            // Going to menu
+            App::setNextCycle(Cycle::Menu);
+        }
+        // Not allowing to any another actions
+        return true;
+    }
+    return false;
+}
+
+void InternetCycle::update() {
+    // Basic update
+    GameCycle::update();
+    // Getting messages
+    while (const GetPacket* packet = internet.getNewMessages()) {
+        getInternetPacket(*packet);
+    }
+    // Checking applied messages
+    internet.checkResendMessages();
+
+    // Appling status
+    internet.checkNeedApplyConnection();
+
+    // Checking status
+    if (internet.checkStatus()) {
+        disconnectedBox.activate();
+    } else {
+        disconnectedBox.reset();
+    }
+}
+
+void InternetCycle::getInternetPacket(const GetPacket& packet) {
+    switch (ConnectionCode(packet.getData<Uint8>(0))) {
+    case ConnectionCode::Quit:
+        termianatedBox.activate();
+        break;
+
+    default:
+        break;
+    }
+}
+

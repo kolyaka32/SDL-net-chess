@@ -48,6 +48,7 @@ class Board : public FiguresMoves, public GUI::Template {
     Figure activeCell;     // Cell, that active (now move by player), or NULL if not
     Uint8 castling;        // Data of all now posible varhishes
     position endPosition;  // Postion, where end last move
+    const SDL_FRect rect;  // Global position of board
 
     Uint8 click(const Sounds& sounds, Position pos);        // Clicking with mouse on cell on field
     void pickFigure(Position pos);                          // Function for pick figure from field
@@ -55,10 +56,11 @@ class Board : public FiguresMoves, public GUI::Template {
     SDL_FRect getRect(Position pos) const;
 
  public:
-    void reset();                                     // Resetting field for new game
-    void blit(const Window& target) const override;   // Bliting field at screen
+    Board(const Window& window);
+    void reset();                // Resetting field for new game
+    void blit() const override;  // Bliting field at screen
     Uint8 click(const Sounds& sounds, const Mouse mouse);  // Clicking with mouse on cell on field
-    void resetSelection();                                 // Reset currently selected figure
+    void resetSelection();       // Reset currently selected figure
 
     // Simplier mover on field (for internet opponent turn)
     Uint8 move(const Sounds& sounds, Position p1, Position p2);
