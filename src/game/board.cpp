@@ -29,142 +29,6 @@ Board::Board(const Window& _window)
 FiguresMoves(),
 rect({LEFT_LINE, UPPER_LINE, GAME_WIDTH, GAME_HEIGHT}) {}
 
-void Board::reset() {
-    // Resetting field parametrs
-    resetField();
-    activeCell.type = FIG_NONE;  // None cell selected
-    castling = 0;                // All castlings not possible
-
-    // Forsyth–Edwards Notation
-    // White figures: pawn = "P", knight = "N", bishop = "B", rook = "R", queen = "Q" and king = "K"
-    // Black figures - "pnbrqk"
-    // 1-8 - spaces between figures
-    // '\', '/' - lines separator
-    // 'w', 'l' - which command start
-
-    // Base notation:
-    // rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
-
-    // Setting figures on them places by given text
-    position c = 0;  // Counter of place on field
-
-    // Parsing text for setting figures
-    unsigned i=0;
-    for (; boardConfig[i] && (c < sqr(FIELD_WIDTH)); ++i) {
-        switch (boardConfig[i]) {
-        // White figures
-        case 'K':
-            figures[c++] = FIG_WHITE_KING;
-            break;
-
-        case 'Q':
-            figures[c++] = FIG_WHITE_QUEEN;
-            break;
-
-        case 'R':
-            figures[c++] = FIG_WHITE_ROOK;
-            break;
-
-        case 'B':
-            figures[c++] = FIG_WHITE_BISHOP;
-            break;
-
-        case 'N':
-            figures[c++] = FIG_WHITE_KNIGHT;
-            break;
-
-        case 'P':
-            figures[c++] = FIG_WHITE_PAWN;
-            break;
-
-        // Black figures
-        case 'k':
-            figures[c++] = FIG_BLACK_KING;
-            break;
-
-        case 'q':
-            figures[c++] = FIG_BLACK_QUEEN;
-            break;
-
-        case 'r':
-            figures[c++] = FIG_BLACK_ROOK;
-            break;
-
-        case 'b':
-            figures[c++] = FIG_BLACK_BISHOP;
-            break;
-
-        case 'n':
-            figures[c++] = FIG_BLACK_KNIGHT;
-            break;
-
-        case 'p':
-            figures[c++] = FIG_BLACK_PAWN;
-            break;
-
-        // Spaces between
-        case '1':
-        case '2':
-        case '3':
-        case '4':
-        case '5':
-        case '6':
-        case '7':
-        case '8':
-        case '9':
-            c += boardConfig[i] - '0';
-            break;
-
-        // Line separator
-        case '\\':
-        case '/':
-            // Checking, if not on another line
-            if (c % FIELD_WIDTH) {
-                // Forced going to next line
-                c = ((c-1) / FIELD_WIDTH + 1) * FIELD_WIDTH;
-            }
-            break;
-
-        // Separator of second part
-        case ' ':
-            c = 64;
-            break;
-        }
-    }
-    // Parsing last part of text for rest data
-    for (; boardConfig[i]; ++i) {
-        switch (boardConfig[i]) {
-        // Starting player config
-        case 'w':
-        case 'W':
-            turn = TURN_WHITE;
-            break;
-
-        case 'b':
-        case 'B':
-            turn = TURN_BLACK;
-            break;
-
-        // Castling posoblity
-        case 'K':
-            castling |= CASTLING_W_K;
-            break;
-
-        case 'Q':
-            castling |= CASTLING_W_Q;
-            break;
-
-        case 'k':
-            castling |= CASTLING_B_K;
-            break;
-
-        case 'q':
-            castling |= CASTLING_B_Q;
-            break;
-        }
-    }
-}
-
 // Drawing all figures with background
 void Board::blit() const {
     // Drawing global background
@@ -250,7 +114,7 @@ void Board::pickFigure(Position p) {
     wasMoven = false;
 
     // Checking, which color is active
-    if (turn == TURN_WHITE) {
+    if (state == GameState::CurrentPlay) {
         // White figures turn
         // Setting positions of cell, where active can go, depend on figure
         switch (activeCell.type) {
@@ -369,9 +233,9 @@ void Board::pickFigure(Position p) {
     return;
 }
 
-Uint8 Board::placeFigure(const Sounds& _sounds, Position p) {
+Uint8 Board::placeFigure(Position p) {
     // Check on game end
-    if (turn == TURN_WHITE) {
+    if (state == GameState::CurrentPlay) {
         // Checking on game end (if there king of another command)
         if (figures[p.getPosition()] == FIG_RED_TYPE + FIG_BLACK_KING) {
             return END_WIN + turn;
@@ -521,17 +385,17 @@ Uint8 Board::placeFigure(const Sounds& _sounds, Position p) {
     return END_TURN;
 }
 
-Uint8 Board::click(const Sounds& _sounds, const Mouse _mouse) {
+Uint8 Board::click(const Mouse _mouse) {
     // Check, if get over field borders
     if (_mouse.getX() > LEFT_LINE && _mouse.getX() < LEFT_LINE+GAME_WIDTH
         && _mouse.getY() > UPPER_LINE && _mouse.getY() < UPPER_LINE+GAME_WIDTH) {
-        return click(_sounds, Position{_mouse});
+        return click(Position{_mouse});
     }
     return END_NONE;
 }
 
 // Clicking on field (grab and put figures)
-Uint8 Board::click(const Sounds& _sounds, Position pos) {
+Uint8 Board::click(Position pos) {
     // Checking, which type of action do
     if (!activeCell.type) {
         // Picking up figure from field
@@ -551,20 +415,20 @@ Uint8 Board::click(const Sounds& _sounds, Position pos) {
         // Set last position as current
         endPosition = pos.getPosition();
         // Placing figure there
-        return placeFigure(_sounds, pos);
+        return placeFigure(pos);
     }
     // Return, that nothing happen
     return END_NONE;
 }
 
 // Making all like in click, but at once and without help
-Uint8 Board::move(const Sounds& _sounds, Position _p1, Position _p2) {
+Uint8 Board::move(Position _p1, Position _p2) {
     // Emulating first click on field
     pickFigure(_p1);
 
     // Emulating second click on field
     if (figures[_p2.getPosition()] >= FIG_MOVE_TO) {
-        Uint8 turn = placeFigure(_sounds, _p2);
+        Uint8 turn = placeFigure(_p2);
         // Resetting field for correct next turns
         resetSelection();
         return turn;
