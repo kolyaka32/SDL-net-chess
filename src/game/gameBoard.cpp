@@ -3,7 +3,7 @@
  * <nik.kazankov.05@mail.ru>
  */
 
-#include "board.hpp"
+#include "gameBoard.hpp"
 
 // Basic configuration of board for normal start
 char boardConfig[85] = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq";

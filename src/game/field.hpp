@@ -30,20 +30,19 @@ enum CASTLING_names {
 
 
 // Interface of figures moves
-class FiguresMoves {
+class Field {
  protected:
     // Data for moves
-    cell figures[sqr(FIELD_WIDTH)];  // Array of figures on field
+    // Array of figures on field
+    cell figures[sqr(FIELD_WIDTH)];
     // Flag of current game state
     GameState state;
-    // Data of all now posible varhishes
+    // Data of all now posible varhishes (ORed-together)
     Uint8 castling;
     // Flag of board, that it was moven
     bool wasMoven;
 
-    // Data for save/load
-    SDL_Time saveTime;
-
+ protected:
     // Functions for interact with board
     void resetField();  // Reset field parametrs
     // Check, if cell at need position can be attacked
@@ -64,17 +63,11 @@ class FiguresMoves {
     void setCastlingRight(coord _x, coord _y, cell need);
 
  public:
-    FiguresMoves();
-    FiguresMoves(const FiguresMoves& field);
+    Field();
+    Field(const Field& field);
     // Create field from saved string (from iternet/load file)
-    FiguresMoves(const char* saveText);
-    // Save this field to text file
-    const char* getSaveTime() const;
-    // Save system
-    void updateSaveInfo();
-    const Array<char> getSave() const;
-    char getCheckSum() const;
-    static int getSaveSize(int width);
+    // Field(const char* saveText);
+
     //FiguresMoves& operator=(const Field* field);
     //void reset();
 };

@@ -47,10 +47,10 @@ enum FIG_names {
 
 
 // Type of cell
-struct Figure {
+/*struct Figure {
     cell type;  // Type of current cell
     position pos;   // Coordinats of current cell
-};
+};*/
 
 // Array of king possible ways to go
 const Sint8 kingMoves[8][2] = {
