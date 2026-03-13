@@ -8,10 +8,6 @@
 #include "../data/app.hpp"
 
 
-typedef Uint8 cell;
-typedef Uint8 position;
-typedef Uint8 coord;
-
 // Names of all figures in game
 enum FIG_names {
     // None-element
@@ -38,19 +34,19 @@ enum FIG_names {
     FIG_MOVE_TO,
 };
 
+// Extra cell modifires
+#define FIG_RED_TYPE 0x10  // Code for making cell red (attackable)
+#define CELL_TYPE_MASK 0xFF  // Mask for get type of cell
+
+// Type for storing one cell (from FIG_names)
+typedef Uint8 cell;
+// Type for storing one-dimanional position
+typedef Uint8 coord;
+// Type for storing two-dimansinal position (get from getPos())
+typedef Uint8 position;
+
 // Macros for getting position from coordinats
 #define getPos(x, y) ((((x)) + ((y)) * FIELD_WIDTH))
-
-
-// Extra names modifires
-#define FIG_RED_TYPE 0x10   // Code of making cell red (attackable)
-
-
-// Type of cell
-/*struct Figure {
-    cell type;  // Type of current cell
-    position pos;   // Coordinats of current cell
-};*/
 
 // Array of king possible ways to go
 const Sint8 kingMoves[8][2] = {

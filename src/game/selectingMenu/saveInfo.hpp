@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "../board.hpp"
+#include "../fieldSave.hpp"
 #include "../../GUI/interface.hpp"
 
 
@@ -19,7 +19,7 @@ class SaveInfo : public GUI::TextureTemplate {
     GUI::HighlightedStaticText lastModifiedText;
 
  public:
-    explicit SaveInfo(const Window& window, int position, const Field& field);
+    explicit SaveInfo(const Window& window, int position, const FieldSave& field);
     SaveInfo(SaveInfo&& info) noexcept;
     ~SaveInfo() noexcept;
     void moveUp();

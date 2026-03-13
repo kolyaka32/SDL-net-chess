@@ -8,19 +8,18 @@
 
 
 bool SelectingMenu::active = false;
+FieldSave SelectingMenu::basicStart{"0000000000000000 rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq"};
 
 SelectingMenu::SelectingMenu(const Window& _window)
-: startFields(_window),
-savedFields(_window),
+: savedFields(_window),
 backplate(_window, 0.5, 0.5, 0.7, 0.6, 40, 4),
 continueButton(_window, 0.5, 0.29, {"Continue", "Продолжить", "Fortfahren", "Прадоўжыць"}),
-startNewButton(_window, 0.5, 0.43, {"Create new", "Создать", "Schaffen", "Стварыць"}),
+startNewButton(_window, 0.5, 0.43, {"Create new", "Создать новую", "Schaffen", "Стварыць"}),
 loadButton(_window, 0.5, 0.57, {"Load", "Загрузить", "Hochladen", "Загрузіць"}),
 exitButton(_window, 0.5, 0.71, {"Exit to menu", "Выйти в меню", "Menü verlassen", "Выйсці ў меню"}) {}
 
 void SelectingMenu::activate() {
     active ^= true;
-    startFields.reset();
     savedFields.reset();
 }
 
@@ -43,11 +42,6 @@ void SelectingMenu::addField(const Field& _field) {
 const Field* SelectingMenu::click(const Mouse _mouse) {
     // If in menu
     if (active) {
-        // Check, if selecting new field
-        if (startFields.isActive()) {
-            // Check, if select
-            return startFields.click(_mouse);
-        }
         // Check, if loading fields
         if (savedFields.isActive()) {
             // Check, if select
@@ -61,9 +55,8 @@ const Field* SelectingMenu::click(const Mouse _mouse) {
             return nullptr;
         }
         if (startNewButton.in(_mouse)) {
-            // Starting selecting new field from avaliable
-            startFields.activate();
-            return nullptr;
+            // Starting new standart round
+            return &basicStart;
         }
         if (loadButton.in(_mouse)) {
             // Starting selecting field from previous games
@@ -97,10 +90,6 @@ void SelectingMenu::scroll(float _wheelY) {
 
 void SelectingMenu::escape() {
     // Closing top object
-    if (startFields.isActive()) {
-        startFields.reset();
-        return;
-    }
     if (savedFields.isActive()) {
         savedFields.reset();
         return;
@@ -121,7 +110,6 @@ void SelectingMenu::blit() const {
         exitButton.blit();
 
         // Blitting start variants
-        startFields.blit();
         savedFields.blit();
     }
 }

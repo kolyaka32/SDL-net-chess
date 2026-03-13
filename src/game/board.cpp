@@ -3,7 +3,22 @@
  * <nik.kazankov.05@mail.ru>
  */
 
-#include "gameBoard.hpp"
+#include "board.hpp"
+
+
+Position::Position(const Mouse _mouse)
+: x((_mouse.getX() - LEFT_LINE) / CELL_SIDE),
+y((_mouse.getY() - UPPER_LINE) / CELL_SIDE) {}
+
+Position::Position(const position pos)
+: x(pos%FIELD_WIDTH), y(pos/FIELD_WIDTH) {}
+
+Position::Position(coord _x, coord _y)
+: x(_x), y(_y) {}
+
+position Position::getPosition() {
+    return x + y*FIELD_WIDTH;
+}
 
 
 Board::Board(const Window& _window)
@@ -11,6 +26,7 @@ Board::Board(const Window& _window)
 FiguresMoves(),
 rect({LEFT_LINE, UPPER_LINE, GAME_WIDTH, GAME_HEIGHT}) {}
 
+// Drawing all figures with background
 void Board::blit() const {
     // Drawing global background
     window.setDrawColor(BLACK);
@@ -68,6 +84,7 @@ void Board::blit() const {
     }
 }
 
+// Clear all selected figures
 void Board::resetSelection() {
     // Resetting selected figure
     activeCell.type = FIG_NONE;
@@ -84,6 +101,7 @@ void Board::resetSelection() {
     }
 }
 
+// Function of picking figure from field
 void Board::pickFigure(Position p) {
     // Finding clicked cell, it position
     activeCell.pos = p.getPosition();
@@ -373,6 +391,7 @@ Uint8 Board::click(const Mouse _mouse) {
     return END_NONE;
 }
 
+// Clicking on field (grab and put figures)
 Uint8 Board::click(Position pos) {
     // Checking, which type of action do
     if (!activeCell.type) {
@@ -399,6 +418,7 @@ Uint8 Board::click(Position pos) {
     return END_NONE;
 }
 
+// Making all like in click, but at once and without help
 Uint8 Board::move(Position _p1, Position _p2) {
     // Emulating first click on field
     pickFigure(_p1);

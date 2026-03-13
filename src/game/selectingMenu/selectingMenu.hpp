@@ -5,7 +5,6 @@
 
 #pragma once
 
-#include "startFields.hpp"
 #include "savedFields.hpp"
 
 
@@ -14,7 +13,8 @@ class SelectingMenu {
  private:
     static bool active;
 
-    StartFields startFields;
+    // Start options
+    static FieldSave basicStart;
     SavedFields savedFields;
 
     // Menu after game end

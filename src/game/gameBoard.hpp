@@ -5,48 +5,33 @@
 
 #pragma once
 
-#include "figuresMoves.hpp"
 #include "../GUI/interface.hpp"
+#include "board.hpp"
+#include "letters.hpp"
 
 
-// Configuration of board, for play
-//extern char boardConfig[85];
-
-
-// Structure with current position
-class Position {
- public:
-    Position(const Mouse mouse);
-    Position(const position pos);
-    Position(coord x, coord y);
-    position getPosition();
-    coord x, y;
-};
-
-
-// Class of game board to with
-class Board : public FiguresMoves, public GUI::Template {
- private:
-    Figure activeCell;     // Cell, that active (now move by player), or NULL if not
-    position endPosition;  // Postion, where end last move
-    const SDL_FRect rect;  // Global position of board
-
-    Uint8 click(Position pos);        // Clicking with mouse on cell on field
-    void pickFigure(Position pos);    // Function for pick figure from field
-    Uint8 placeFigure(Position pos);  // Function to try put figure back to field
-    SDL_FRect getRect(Position pos) const;
+// Class for interaction with whole game
+class GameBoard : public GUI::Template {
+ protected:
+    // Current game board for interaction
+    static Board board;
+    // Additional graphic part
+    SurroundingLetters letters;
 
  public:
-    Board(const Window& window);
-    void reset();                // Resetting field for new game
-    void blit() const override;  // Bliting field at screen
-    Uint8 click(const Mouse mouse);  // Clicking with mouse on cell on field
-    void resetSelection();       // Reset currently selected figure
+    GameBoard(const Window& window);
 
-    // Simplier mover on field (for internet opponent turn)
-    Uint8 move(Position p1, Position p2);
-    position getLastTurnStart() const;  // Return start position in last turn
-    position getLastTurnEnd() const;    // Return end position in last turn
-    Uint8 currentTurn() const;          // Return, which person is now active
-    bool isFigureSelected() const;      // Returns, if any figures now selected
+    // Setting field for play
+    void setNewField(const Field& field);
+
+    // Main interaction with game (depend on game mode)
+    // Clicking with mouse on cell on field
+    // void clickSingle(const Mouse mouse);
+    void clickCooperative(const Mouse mouse);
+    void clickServer(const Mouse mouse);
+    void clickClient(const Mouse mouse);
+    // Reseting currently selected figure
+    void resetSelection();
+
+    void blit() const override;
 };

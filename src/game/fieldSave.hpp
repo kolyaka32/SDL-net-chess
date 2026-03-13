@@ -9,13 +9,15 @@
 
 
 // Class with field save with additional data for loadding (time, name)
-class FieldSave : Field {
+class FieldSave : public Field {
  private:
     // Data for save/load
     SDL_Time saveTime;
 
  public:
+    // Create from excisting field (current)
     FieldSave(const Field& field);
+    // Create from save file (straight)
     FieldSave(const char* save);
 
     // Functions for show load information

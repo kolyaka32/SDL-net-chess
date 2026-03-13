@@ -15,6 +15,22 @@ FieldSave::FieldSave(const Field& _field)
 FieldSave::FieldSave(const char* _save) {
     resetField();
 
+    // Text position counter
+    unsigned pos=0;
+
+    // Skipping first check sum byte
+    pos++;
+
+    // Getting time
+    saveTime = 0;
+    for (; pos < 17; ++pos) {
+        saveTime << 4;
+        saveTime += (_save[pos] - '0');
+    }
+
+    // Skipping separating symbol
+    pos++;
+
     // Loading field from text
     // Forsyth–Edwards Notation
     // White figures: pawn = "P", knight = "N", bishop = "B", rook = "R", queen = "Q" and king = "K"
@@ -31,9 +47,8 @@ FieldSave::FieldSave(const char* _save) {
     position c = 0;  // Counter of place on field
 
     // Parsing text for setting figures
-    unsigned i=0;
-    for (; _save[i] && (c < sqr(FIELD_WIDTH)); ++i) {
-        switch (_save[i]) {
+    for (; _save[pos] && (c < sqr(FIELD_WIDTH)); ++pos) {
+        switch (_save[pos]) {
         // White figures
         case 'K':
             figures[c++] = FIG_WHITE_KING;
@@ -94,7 +109,7 @@ FieldSave::FieldSave(const char* _save) {
         case '7':
         case '8':
         case '9':
-            c += _save[i] - '0';
+            c += _save[pos] - '0';
             break;
 
         // Line separator
@@ -114,8 +129,8 @@ FieldSave::FieldSave(const char* _save) {
         }
     }
     // Parsing last part of text for rest data
-    for (; _save[i]; ++i) {
-        switch (_save[i]) {
+    for (; _save[pos]; ++pos) {
+        switch (_save[pos]) {
         // Starting player config
         case 'w':
         case 'W':
@@ -206,14 +221,18 @@ const char* FieldSave::getSave() const {
 
     // Writing time of creation
     Uint64 time = saveTime;
-    for (int i=1; i < 17; ++i) {
-        buffer[pos++] = time & 0xFF + '0';
+    for (; pos < 17; ++pos) {
+        buffer[pos] = time & 0xFF + '0';
         time = time >> 4;
     }
 
+    // Setting separating symbol
+    buffer[pos++] = ' ';
+
+    // Writing all cells
     // ! should be optimised to fit better (write straight bits)
     for (int i=0; i < sqr(FIELD_WIDTH); ++i) {
-        switch (figures[i] & 0xFF) {
+        switch (figures[i] & CELL_TYPE_MASK) {
         case FIG_WHITE_KING:
             buffer[pos++] = 'K';
             break;
