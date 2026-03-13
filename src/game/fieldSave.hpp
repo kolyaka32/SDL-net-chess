@@ -17,14 +17,12 @@ class FieldSave : Field {
  public:
     FieldSave(const Field& field);
     FieldSave(const char* save);
-    ~FieldSave();
 
     // Functions for show load information
     const char* getSaveTime() const;  // Getting field create time
     // const char* getName() const;   // Getting field name
 
     // Save system
-    const Array<char> getSave() const;
+    const char* getSave() const;
     char getCheckSum() const;
-    //static int getSaveSize(int width);
 };
