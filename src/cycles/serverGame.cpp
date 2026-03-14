@@ -68,7 +68,7 @@ bool ServerGameCycle::inputMouseDown() {
     if (menu.isActive()) {
         if (const Field* f = menu.click(mouse)) {
             // Setting new field localy
-            field.setNewField(f, window);
+            board.setNewField(f, window);
             // Sending it
             internet.sendAllConfirmed({ConnectionCode::GameNew, field.getSave()});
             menu.reset();
@@ -158,7 +158,7 @@ void ServerGameCycle::update() {
 
 void ServerGameCycle::draw() const {
     // Blitting field
-    field.blit();
+    board.blit();
 
     // Draw game state
     switch (field.getState()) {

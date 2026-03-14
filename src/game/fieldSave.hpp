@@ -20,9 +20,10 @@ class FieldSave : public Field {
     // Create from save file (straight)
     FieldSave(const char* save);
 
-    // Functions for show load information
+    // Functions for show create information
     const char* getSaveTime() const;  // Getting field create time
     // const char* getName() const;   // Getting field name
+    void blit(const Window& window) const;  // Special blitting for draw icone
 
     // Save system
     const char* getSave() const;

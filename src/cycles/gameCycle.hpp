@@ -6,15 +6,14 @@
 #pragma once
 
 #include "baseCycle.hpp"
-#include "../game/board.hpp"
-#include "../game/letters.hpp"
+#include "../game/gameBoard.hpp"
 
 
 // Cycle with game template
 class GameCycle : public BaseCycle {
  protected:
     // Active game part
-    Board board;  // Main game field
+    GameBoard board;  // Main game field
     //static Uint8 endState;  // State of game (end)
     SurroundingLetters letters;  // Letters, that surround field
 

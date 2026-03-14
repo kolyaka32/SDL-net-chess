@@ -6,6 +6,7 @@
 #pragma once
 
 #include "../data/app.hpp"
+#include "position.hpp"
 
 
 // Names of all figures in game
@@ -40,16 +41,9 @@ enum FIG_names {
 
 // Type for storing one cell (from FIG_names)
 typedef Uint8 cell;
-// Type for storing one-dimanional position
-typedef Uint8 coord;
-// Type for storing two-dimansinal position (get from getPos())
-typedef Uint8 position;
-
-// Macros for getting position from coordinats
-#define getPos(x, y) ((((x)) + ((y)) * FIELD_WIDTH))
 
 // Array of king possible ways to go
-const Sint8 kingMoves[8][2] = {
+const Position kingMoves[8] = {
     {0, 1},
     {1, 1},
     {1, 0},
@@ -61,7 +55,7 @@ const Sint8 kingMoves[8][2] = {
 };
 
 // Array of possible knight ways to go
-const Sint8 knightMoves[8][2] = {
+const Position knightMoves[8] = {
     {-1, 2},
     {1, 2},
     {2, 1},

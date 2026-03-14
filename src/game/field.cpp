@@ -15,7 +15,18 @@ Field::Field(const Field& _field)
 : state(_field.state),
 castling(_field.castling),
 wasMoven(_field.wasMoven) {
+    // Copying cell by cell with removing selection
+    for (int i=0; i < sqr(FIELD_WIDTH); ++i) {
+        figures[i] = _field.figures[i] & CELL_TYPE_MASK;
+    }
+}
+
+Field& Field::operator=(const Field& _field) {
     memcpy(figures, _field.figures, sizeof(figures));
+    state = _field.state;
+    castling = _field.castling;
+    wasMoven = false;
+    return *this;
 }
 
 void Field::resetField() {
@@ -30,8 +41,8 @@ void Field::resetField() {
     castling = 0;
 }
 
-bool Field::isAttackable(position _pos) {
-    cell c = figures[_pos];
+bool Field::isAttackable(Position _pos) const {
+    cell c = figures[_pos.getPosition()];
     if (state == GameState::CurrentPlay) {
         // White turn
         return (c >= FIG_BLACK_PAWN) && (c < FIG_RED_TYPE);
@@ -41,163 +52,181 @@ bool Field::isAttackable(position _pos) {
     }
 }
 
-void Field::tryMove(Sint8 _x, Sint8 _y) {
+void Field::tryMove(Position _pos) {
     // Checking getting over border
-    if (_y < 0 || _y >= FIELD_WIDTH) {
+    if (_pos.y < 0 || _pos.y >= FIELD_WIDTH) {
         return;
     }
     // Setting new state
-    if (figures[getPos(_x, _y)] == FIG_NONE) {
+    if (figures[_pos.getPosition()] == FIG_NONE) {
         // Setting new position
-        figures[getPos(_x, _y)] = FIG_MOVE_TO;
+        figures[_pos.getPosition()] = FIG_MOVE_TO;
         wasMoven = true;
     }
 }
 
-void Field::tryAttack(Sint8 _x, Sint8 _y) {
+void Field::tryAttack(Position _pos) {
     // Checking getting over border
-    if (_x < 0 || _x >= FIELD_WIDTH || _y < 0 || _y >= FIELD_WIDTH) {
+    if (_pos.x < 0 || _pos.x >= FIELD_WIDTH || _pos.y < 0 || _pos.y >= FIELD_WIDTH) {
         return;
     }
-    if (isAttackable(getPos(_x, _y))) {
+    if (isAttackable(_pos)) {
         // Setting figure to be attacked
-        figures[getPos(_x, _y)] += FIG_RED_TYPE;
+        figures[_pos.getPosition()] += FIG_RED_TYPE;
         wasMoven = true;
     }
 }
 
-bool Field::tryMoveTo(position pos) {
+bool Field::tryMoveTo(Position _pos) {
     // Checking on getting on figure
-    if (figures[pos]) {
+    if (figures[_pos.getPosition()]) {
         // Checking, if that figure attackable (in opposite command)
-        if (isAttackable(pos)) {
+        if (isAttackable(_pos)) {
             // Making figure attackable
-            figures[pos] += FIG_RED_TYPE;
+            figures[_pos.getPosition()] += FIG_RED_TYPE;
             wasMoven = true;
         }
         // Breaking cycle
         return true;
     }
     // Setting point to move to
-    figures[pos] = FIG_MOVE_TO;
+    figures[_pos.getPosition()] = FIG_MOVE_TO;
     wasMoven = true;
 
     // Normal return
     return false;
 }
 
-void Field::setDiagonals(coord _x, coord _y) {
+void Field::setDiagonals(Position _pos) {
     // Diagonal to left up
-    for (int x = _x-1; (x >= 0) && (_y - _x + x >= 0); --x) {
-        if (tryMoveTo(getPos(x, _y - _x + x))) {
+    for (int x = _pos.x-1; (x >= 0) && (_pos.y - _pos.x + x >= 0); --x) {
+        if (tryMoveTo(Position(x, _pos.y - _pos.x + x))) {
             break;
         }
     }
 
     // Diagonal to down right
-    for (int x = _x+1; (x < FIELD_WIDTH) && (_y - _x + x < FIELD_WIDTH); ++x) {
-        if (tryMoveTo(getPos(x, _y - _x + x))) {
+    for (int x = _pos.x+1; (x < FIELD_WIDTH) && (_pos.y - _pos.x + x < FIELD_WIDTH); ++x) {
+        if (tryMoveTo(Position(x, _pos.y - _pos.x + x))) {
             break;
         }
     }
 
     // Diagonal to down left
-    for (int x = _x - 1; (x >= 0) && (_y + _x - x < FIELD_WIDTH); --x) {
-        if (tryMoveTo(getPos(x, _y + _x - x))) {
+    for (int x = _pos.x - 1; (x >= 0) && (_pos.y + _pos.x - x < FIELD_WIDTH); --x) {
+        if (tryMoveTo(Position(x, _pos.y + _pos.x - x))) {
             break;
         }
     }
 
     // Diagonal to up right
-    for (int x = _x + 1; (x < FIELD_WIDTH) && (_y + _x - x >= 0); ++x) {
-        if (tryMoveTo(getPos(x, _y + _x - x))) {
+    for (int x = _pos.x + 1; (x < FIELD_WIDTH) && (_pos.y + _pos.x - x >= 0); ++x) {
+        if (tryMoveTo(Position(x, _pos.y + _pos.x - x))) {
             break;
         }
     }
 }
 
-void Field::setStraight(coord _x, coord _y) {
+void Field::setStraight(Position _pos) {
     // To left part
-    for (int i = _x-1; i >= 0; --i) {
-        if (tryMoveTo(getPos(i, _y))) {
+    for (int i = _pos.x-1; i >= 0; --i) {
+        if (tryMoveTo(Position(i, _pos.y))) {
             break;
         }
     }
 
     // To right part
-    for (int i = _x+1; i < FIELD_WIDTH; ++i) {
-        if (tryMoveTo(getPos(i, _y))) {
+    for (int i = _pos.x+1; i < FIELD_WIDTH; ++i) {
+        if (tryMoveTo(Position(i, _pos.y))) {
             break;
         }
     }
 
     // To up part
-    for (int i = _y-1; i >= 0; --i) {
-        if (tryMoveTo(getPos(_x, i))) {
+    for (int i = _pos.y-1; i >= 0; --i) {
+        if (tryMoveTo(Position(_pos.x, i))) {
             break;
         }
     }
 
     // To down part
-    for (int i = _y+1; i < FIELD_WIDTH; ++i) {
-        if (tryMoveTo(getPos(_x, i))) {
+    for (int i = _pos.y+1; i < FIELD_WIDTH; ++i) {
+        if (tryMoveTo(Position(_pos.x, i))) {
             break;
         }
     }
 }
 
-void Field::setAround(coord _x, coord _y, const Sint8 _moves[][2]) {
+void Field::setAroundKing(Position _pos) {
     // Checking all cells in array
     for (Uint8 i=0; i < 8; ++i) {
-        Sint8 x = _x + _moves[i][0];
-        Sint8 y = _y + _moves[i][1];
+        Position pos = _pos + kingMoves[i];
         // Checking on getting over border
-        if ((x >= 0) && (x < FIELD_WIDTH) && (y >= 0) && (y < FIELD_WIDTH)) {
-            if (figures[getPos(x, y)] == FIG_NONE) {
+        if ((pos.x >= 0) && (pos.x < FIELD_WIDTH) && (pos.y >= 0) && (pos.y < FIELD_WIDTH)) {
+            if (figures[pos.getPosition()] == FIG_NONE) {
                 // Checking on free cell
-                figures[getPos(x, y)] = FIG_MOVE_TO;
+                figures[pos.getPosition()] = FIG_MOVE_TO;
                 wasMoven = true;
-            } else if (isAttackable(getPos(x, y))) {
+            } else if (isAttackable(pos)) {
                 // Checking on attackable cell
-                figures[getPos(x, y)] += FIG_RED_TYPE;
+                figures[pos.getPosition()] += FIG_RED_TYPE;
                 wasMoven = true;
             }
         }
     }
 }
 
-void Field::setCastlingLeft(coord _x, coord _y, cell _need) {
-    // Checking, if all space between is free
-    for (int x = _x-1; x >= 0; --x) {
-        // Check, if need cell
-        if (figures[getPos(x, _y)] == _need) {
-            // Set cell to can swap
-            figures[getPos(x, _y)] += FIG_RED_TYPE;
-            // Returning
-            return;
-        } else if (figures[getPos(x, _y)] != FIG_NONE) {
-            // Check, if place free
-            return;
+void Field::setAroundKnight(Position _pos) {
+    // Checking all cells in array
+    for (Uint8 i=0; i < 8; ++i) {
+        Position pos = _pos + knightMoves[i];
+        // Checking on getting over border
+        if ((pos.x >= 0) && (pos.x < FIELD_WIDTH) && (pos.y >= 0) && (pos.y < FIELD_WIDTH)) {
+            if (figures[pos.getPosition()] == FIG_NONE) {
+                // Checking on free cell
+                figures[pos.getPosition()] = FIG_MOVE_TO;
+                wasMoven = true;
+            } else if (isAttackable(pos)) {
+                // Checking on attackable cell
+                figures[pos.getPosition()] += FIG_RED_TYPE;
+                wasMoven = true;
+            }
         }
     }
-    // Return, if don't find need cell
-    return;
 }
 
-void Field::setCastlingRight(coord _x, coord _y, cell _need) {
+void Field::setCastlingLeft(Position _pos, cell _need) {
     // Checking, if all space between is free
-    for (int x = _x + 1; x < FIELD_WIDTH; ++x) {
+    for (int x = _pos.x-1; x >= 0; --x) {
+        // Get need cell
+        position pos = Position(x, _pos.y).getPosition();
         // Check, if need cell
-        if (figures[getPos(x, _y)] == _need) {
+        if (figures[pos] == _need) {
             // Set cell to can swap
-            figures[getPos(x, _y)] += FIG_RED_TYPE;
+            figures[pos] += FIG_RED_TYPE;
             // Returning
             return;
-        } else if (figures[getPos(x, _y)] != FIG_NONE) {
-            // Check, if place free
+        } else if (figures[pos] != FIG_NONE) {
+            // Check, if place don't free
             return;
         }
     }
-    // Return, if don't find need cell
-    return;
+}
+
+void Field::setCastlingRight(Position _pos, cell _need) {
+    // Checking, if all space between is free
+    for (int x = _pos.x + 1; x < FIELD_WIDTH; ++x) {
+        // Get need cell
+        position pos = Position(x, _pos.y).getPosition();
+        // Check, if need cell
+        if (figures[pos] == _need) {
+            // Set cell to can swap
+            figures[pos] += FIG_RED_TYPE;
+            // Returning
+            return;
+        } else if (figures[pos] != FIG_NONE) {
+            // Check, if place don't free
+            return;
+        }
+    }
 }

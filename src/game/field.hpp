@@ -44,27 +44,33 @@ class Field {
 
  protected:
     // Functions for interact with board
-    void resetField();  // Reset field parametrs
+    // Reset field parametrs
+    void resetField();
     // Check, if cell at need position can be attacked
-    bool isAttackable(position pos);
+    bool isAttackable(Position pos) const;
     // Try set point, where you can move
-    bool tryMoveTo(position pos);
+    bool tryMoveTo(Position pos);
     // Set points, where you can move or attack
-    void tryMove(Sint8 X, Sint8 Y);
+    void tryMove(Position pos);
     // Try set point, where you can move
-    void tryAttack(Sint8 X, Sint8 Y);
+    void tryAttack(Position pos);
     // Set all cells at diagonals for movable target
-    void setDiagonals(coord _x, coord _y);
+    void setDiagonals(Position pos);
     // Set all cells at straight lines for movable target
-    void setStraight(coord _x, coord _y);
-    // Set all cells from array for place, where you can move
-    void setAround(coord _x, coord _y, const Sint8 pos[][2]);
-    void setCastlingLeft(coord _x, coord _y, cell need);
-    void setCastlingRight(coord _x, coord _y, cell need);
+    void setStraight(Position pos);
+    // Set all cells around for king
+    void setAroundKing(Position pos);
+    // Set all cells around for knight
+    void setAroundKnight(Position pos);
+    // Set cells for allowing castling left to cell
+    void setCastlingLeft(Position pos, cell swapableType);
+    // Set cells for allowing castling right to cell
+    void setCastlingRight(Position pos, cell swapableType);
 
  public:
     Field();
     Field(const Field& field);
+    Field& operator=(const Field& field);
     // Create field from saved string (from iternet/load file)
     // Field(const char* saveText);
 

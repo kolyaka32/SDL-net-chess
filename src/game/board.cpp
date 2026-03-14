@@ -6,88 +6,24 @@
 #include "board.hpp"
 
 
-Position::Position(const Mouse _mouse)
-: x((_mouse.getX() - LEFT_LINE) / CELL_SIDE),
-y((_mouse.getY() - UPPER_LINE) / CELL_SIDE) {}
+Board::Board()
+: Field(),
+rect({LEFT_LINE, UPPER_LINE, GAME_WIDTH, GAME_HEIGHT}),
+activeCell(FIG_NONE),
+activePosition(0, 0) {}
 
-Position::Position(const position pos)
-: x(pos%FIELD_WIDTH), y(pos/FIELD_WIDTH) {}
+/*Board& Board::operator=(const Field& _field) {
+    memcpy(figures, _field.figures, sizeof(figures));
+    state = _field.state;
+    castling = _field.castling;
+    wasMoven = false;
 
-Position::Position(coord _x, coord _y)
-: x(_x), y(_y) {}
+    return *this;
+}*/
 
-position Position::getPosition() {
-    return x + y*FIELD_WIDTH;
-}
-
-
-Board::Board(const Window& _window)
-: Template(_window),
-FiguresMoves(),
-rect({LEFT_LINE, UPPER_LINE, GAME_WIDTH, GAME_HEIGHT}) {}
-
-// Drawing all figures with background
-void Board::blit() const {
-    // Drawing global background
-    window.setDrawColor(BLACK);
-    window.clear();
-
-    // Drawing field light part
-    window.setDrawColor(FIELD_LIGHT);
-    window.drawRect(rect);
-
-    // Drawing background
-    window.setDrawColor(FIELD_DARK);
-    for (coord y = 0; y < FIELD_WIDTH; ++y) {
-        for (coord x = y % 2; x < FIELD_WIDTH; x += 2) {
-            window.drawRect(getRect({x, y}));
-        }
-    }
-
-    // Drawing each figure
-    for (coord y = 0; y < FIELD_WIDTH; ++y)
-        for (coord x = 0; x < FIELD_WIDTH; ++x) {
-            if (figures[getPos(x, y)]) {
-                SDL_FRect rect = getRect({x, y});
-
-                // Checking, if figure current (blue)
-                if (figures[getPos(x, y)] > FIG_RED_TYPE) {
-                    // Getting textyre
-                    SDL_Texture* textureIndex = window.getTexture(Textures::WhitePawn - 1 + figures[getPos(x, y)] - FIG_RED_TYPE);
-
-                    // Checking, if figure attackable (red)
-                    // Making it red
-                    window.setColorMode(textureIndex, RED);
-
-                    // Drawing
-                    window.blit(textureIndex, rect);
-
-                    // Resetting cell color
-                    window.setColorMode(textureIndex);
-                } else {
-                    window.blit(window.getTexture(Textures::WhitePawn - 1 + figures[getPos(x, y)]), rect);
-                }
-            }
-        }
-
-    // Draw selected figure
-    if (activeCell.type) {
-        SDL_Texture* textureIndex = window.getTexture(Textures::WhitePawn - 1 + activeCell.type);
-        // Making it blue
-        window.setColorMode(textureIndex, BLUE);
-
-        // Draw
-        window.blit(textureIndex, getRect(activeCell.pos));
-
-        // Resetting color
-        window.setColorMode(textureIndex);
-    }
-}
-
-// Clear all selected figures
 void Board::resetSelection() {
     // Resetting selected figure
-    activeCell.type = FIG_NONE;
+    activeCell = FIG_NONE;
 
     // Clearing field after turn (resetting figure move to and red type)
     for (position i=0; i < sqr(FIELD_WIDTH); ++i) {
@@ -101,11 +37,10 @@ void Board::resetSelection() {
     }
 }
 
-// Function of picking figure from field
-void Board::pickFigure(Position p) {
+void Board::pickFigure(Position _p) {
     // Finding clicked cell, it position
-    activeCell.pos = p.getPosition();
-    activeCell.type = figures[activeCell.pos];
+    activePosition = _p;
+    activeCell = figures[_p.getPosition()];
 
     // Resetting flag of moving figure
     wasMoven = false;
@@ -114,159 +49,161 @@ void Board::pickFigure(Position p) {
     if (state == GameState::CurrentPlay) {
         // White figures turn
         // Setting positions of cell, where active can go, depend on figure
-        switch (activeCell.type) {
+        switch (activeCell) {
         case FIG_WHITE_PAWN:
             // Basic move
-            tryMove(p.x, p.y - 1);
+            tryMove(_p - Position(0, 1));
 
             // Check, if in start position and wasn't any move
-            if (wasMoven && p.y == FIELD_WIDTH - 2) {
-                tryMove(p.x, p.y - 2);
+            if (wasMoven && _p.y == FIELD_WIDTH - 2) {
+                tryMove(_p - Position(0, 2));
             }
 
             // Attack positions
-            tryAttack(p.x-1, p.y-1);
-            tryAttack(p.x+1, p.y-1);
+            tryAttack(_p - Position(-1, 1));
+            tryAttack(_p - Position( 1, 1));
             break;
 
         case FIG_WHITE_BISHOP:
-            setDiagonals(p.x, p.y);
+            setDiagonals(_p);
             break;
 
         case FIG_WHITE_ROOK:
             // Check castling
             if (castling & CASTLING_W_Q) {
-                setCastlingRight(p.x, p.y, FIG_WHITE_KING);
+                setCastlingRight(_p, FIG_WHITE_KING);
             }
             if (castling & CASTLING_W_K) {
-                setCastlingLeft(p.x, p.y, FIG_WHITE_KING);
+                setCastlingLeft(_p, FIG_WHITE_KING);
             }
             // Main move
-            setStraight(p.x, p.y);
+            setStraight(_p);
             break;
 
         case FIG_WHITE_KNIGHT:
-            setAround(p.x, p.y, knightMoves);
+            setAroundKnight(_p);
             break;
 
         case FIG_WHITE_QUEEN:
-            setDiagonals(p.x, p.y);
-            setStraight(p.x, p.y);
+            setDiagonals(_p);
+            setStraight(_p);
             break;
 
         case FIG_WHITE_KING:
             // Check castling
             if (castling & CASTLING_W_Q) {
-                setCastlingLeft(p.x, p.y, FIG_WHITE_ROOK);
+                setCastlingLeft(_p, FIG_WHITE_ROOK);
             }
             if (castling & CASTLING_W_K) {
-                setCastlingRight(p.x, p.y, FIG_WHITE_ROOK);
+                setCastlingRight(_p, FIG_WHITE_ROOK);
             }
             // Main move
-            setAround(p.x, p.y, kingMoves);
+            setAroundKing(_p);
             break;
         }
     } else {
         // Black figures turn
         // Setting positions of cell, where active can go, depend on figure
-        switch (activeCell.type) {
+        switch (activeCell) {
         case FIG_BLACK_PAWN:
             // Basic move
-            tryMove(p.x, p.y + 1);
+            tryMove(_p + Position(0, 1));
 
             // Check, if in start position and wasn't any move
-            if (wasMoven && p.y == 1) {
-                tryMove(p.x, p.y + 2);
+            if (wasMoven && _p.y == 1) {
+                tryMove(_p + Position(0, 2));
             }
 
             // Attack positions
-            tryAttack(p.x-1, p.y+1);
-            tryAttack(p.x+1, p.y+1);
+            tryAttack(_p + Position(-1, 1));
+            tryAttack(_p + Position( 1, 1));
             break;
 
         case FIG_BLACK_BISHOP:
-            setDiagonals(p.x, p.y);
+            setDiagonals(_p);
             break;
 
         case FIG_BLACK_ROOK:
             // Check castling
             if (castling & CASTLING_B_Q) {
-                setCastlingRight(p.x, p.y, FIG_BLACK_KING);
+                setCastlingRight(_p, FIG_BLACK_KING);
             }
             if (castling & CASTLING_B_K) {
-                setCastlingLeft(p.x, p.y, FIG_BLACK_KING);
+                setCastlingLeft(_p, FIG_BLACK_KING);
             }
             // Main move
-            setStraight(p.x, p.y);
+            setStraight(_p);
             break;
 
         case FIG_BLACK_KNIGHT:
-            setAround(p.x, p.y, knightMoves);
+            setAroundKnight(_p);
             break;
 
         case FIG_BLACK_QUEEN:
-            setDiagonals(p.x, p.y);
-            setStraight(p.x, p.y);
+            setDiagonals(_p);
+            setStraight(_p);
             break;
 
         case FIG_BLACK_KING:
             // Check castling
             if (castling & CASTLING_B_Q) {
-                setCastlingLeft(p.x, p.y, FIG_BLACK_ROOK);
+                setCastlingLeft(_p, FIG_BLACK_ROOK);
             }
             if (castling & CASTLING_B_K) {
-                setCastlingRight(p.x, p.y, FIG_BLACK_ROOK);
+                setCastlingRight(_p, FIG_BLACK_ROOK);
             }
             // Main move
-            setAround(p.x, p.y, kingMoves);
+            setAroundKing(_p);
             break;
         }
     }
     // Checking, if wasn't any move
     if (!wasMoven) {
-        activeCell.type = FIG_NONE;
+        activeCell = FIG_NONE;
         return;
     }
     return;
 }
 
-Uint8 Board::placeFigure(Position p) {
+void Board::placeFigure(Position _p) {
     // Check on game end
     if (state == GameState::CurrentPlay) {
         // Checking on game end (if there king of another command)
-        if (figures[p.getPosition()] == FIG_RED_TYPE + FIG_BLACK_KING) {
-            return END_WIN + turn;
+        if (figures[_p.getPosition()] == FIG_RED_TYPE + FIG_BLACK_KING) {
+            state = GameState::CurrentWin;
+            return;
         }
     } else {
         // Checking on game end (if there king of another command)
-        if (figures[p.getPosition()] == FIG_RED_TYPE + FIG_WHITE_KING) {
-            return END_WIN + turn;
+        if (figures[_p.getPosition()] == FIG_RED_TYPE + FIG_WHITE_KING) {
+            state = GameState::OpponentWin;
+            return;
         }
     }
     bool makeMove = true;  // Flag of normal turn
 
     // Check on special moves (castling and pawn transform)
-    switch (activeCell.type) {
+    switch (activeCell) {
     case FIG_WHITE_ROOK:
         // Disabling posible castling for next turns
-        if (activeCell.pos == getPos(0, 7)) {
+        if (activePosition == Position(0, 7)) {
             castling &= CASTLING_B_K | CASTLING_B_Q | CASTLING_W_K;
         }
-        if (activeCell.pos == getPos(7, 7)) {
+        if (activePosition == Position(7, 7)) {
             castling &= CASTLING_B_K | CASTLING_B_Q | CASTLING_W_Q;
         }
 
         // Check, if castling
-        if (figures[p.getPosition()] == FIG_WHITE_KING + FIG_RED_TYPE) {
+        if (figures[_p.getPosition()] == FIG_WHITE_KING + FIG_RED_TYPE) {
             makeMove = false;
             // Clearing current figures
-            figures[activeCell.pos] = FIG_NONE;
+            figures[activePosition.getPosition()] = FIG_NONE;
             figures[60] = FIG_NONE;
             // Resetting castling for next turns
             castling &= CASTLING_B_K | CASTLING_B_Q;
 
             // Setting rook to new place
-            if (activeCell.pos % FIELD_WIDTH < FIELD_WIDTH/2) {
+            if (activePosition.x < FIELD_WIDTH/2) {
                 figures[59] = FIG_WHITE_ROOK;
                 figures[58] = FIG_WHITE_KING;
             } else {
@@ -281,14 +218,14 @@ Uint8 Board::placeFigure(Position p) {
         castling &= CASTLING_B_Q | CASTLING_B_K;
 
         // Check, if castling
-        if (figures[p.getPosition()] == FIG_WHITE_ROOK + FIG_RED_TYPE) {
+        if (figures[_p.getPosition()] == FIG_WHITE_ROOK + FIG_RED_TYPE) {
             makeMove = false;
             // Clearing current figures
-            figures[activeCell.pos] = FIG_NONE;
-            figures[p.x+56] = FIG_NONE;
+            figures[activePosition.getPosition()] = FIG_NONE;
+            figures[_p.x+56] = FIG_NONE;
 
             // Disabling previous cell clearing
-            if (p.x < FIELD_WIDTH/2) {
+            if (_p.x < FIELD_WIDTH/2) {
                 figures[58] = FIG_WHITE_KING;
                 figures[59] = FIG_WHITE_ROOK;
             } else {
@@ -300,24 +237,24 @@ Uint8 Board::placeFigure(Position p) {
 
     case FIG_BLACK_ROOK:
         // Disabling posible castling for next turns
-        if (activeCell.pos == getPos(0, 0)) {
+        if (activePosition == Position(0, 0)) {
             castling &= CASTLING_W_K | CASTLING_W_Q | CASTLING_B_K;
         }
-        if (activeCell.pos == getPos(7, 0)) {
+        if (activePosition == Position(7, 0)) {
             castling &= CASTLING_W_K | CASTLING_W_Q | CASTLING_B_Q;
         }
 
         // Check, if castling
-        if (figures[p.getPosition()] == FIG_BLACK_KING + FIG_RED_TYPE) {
+        if (figures[_p.getPosition()] == FIG_BLACK_KING + FIG_RED_TYPE) {
             makeMove = false;
             // Clearing current figures
-            figures[activeCell.pos] = FIG_NONE;
+            figures[activePosition.getPosition()] = FIG_NONE;
             figures[4] = FIG_NONE;
             // Disabling posible castling for next turns
             castling &= CASTLING_W_Q | CASTLING_W_K;
 
             // Disabling previous cell clearing
-            if (activeCell.pos % FIELD_WIDTH < FIELD_WIDTH/2) {
+            if (activePosition.x < FIELD_WIDTH/2) {
                 figures[3] = FIG_BLACK_ROOK;
                 figures[2] = FIG_BLACK_KING;
             } else {
@@ -332,14 +269,14 @@ Uint8 Board::placeFigure(Position p) {
         castling &= CASTLING_W_Q | CASTLING_W_K;
 
         // Check, if castling
-        if (figures[p.getPosition()] == FIG_BLACK_ROOK + FIG_RED_TYPE) {
+        if (figures[_p.getPosition()] == FIG_BLACK_ROOK + FIG_RED_TYPE) {
             makeMove = false;
             // Clearing current figures
-            figures[activeCell.pos] = FIG_NONE;
-            figures[p.x] = FIG_NONE;
+            figures[activePosition.getPosition()] = FIG_NONE;
+            figures[_p.x] = FIG_NONE;
 
             // Disabling previous cell clearing
-            if (p.x < FIELD_WIDTH/2) {
+            if (_p.x < FIELD_WIDTH/2) {
                 figures[2] = FIG_BLACK_KING;
                 figures[3] = FIG_BLACK_ROOK;
             } else {
@@ -351,22 +288,22 @@ Uint8 Board::placeFigure(Position p) {
 
     case FIG_BLACK_PAWN:
         // Check, if on last line - convert into queen
-        if (p.y == FIELD_WIDTH - 1) {
-            activeCell.type = FIG_BLACK_QUEEN;
+        if (_p.y == (FIELD_WIDTH - 1)) {
+            activeCell = FIG_BLACK_QUEEN;
         }
         break;
 
     case FIG_WHITE_PAWN:
         // Check, if on last line - convert into queen
-        if (p.y == 0) {
-            activeCell.type = FIG_WHITE_QUEEN;
+        if (_p.y == 0) {
+            activeCell = FIG_WHITE_QUEEN;
         }
         break;
     }
     // Setting new position to cell (if wasn't castling)
     if (makeMove) {
-        figures[p.getPosition()] = activeCell.type;
-        figures[activeCell.pos] = FIG_NONE;
+        figures[_p.getPosition()] = activeCell;
+        figures[activePosition.getPosition()] = FIG_NONE;
     }
 
     // Making sound
@@ -376,23 +313,24 @@ Uint8 Board::placeFigure(Position p) {
     resetSelection();
 
     // Changing moving player
-    turn = !turn;
-
-    // Shwoing making turn
-    return END_TURN;
-}
-
-Uint8 Board::click(const Mouse _mouse) {
-    // Check, if get over field borders
-    if (_mouse.getX() > LEFT_LINE && _mouse.getX() < LEFT_LINE+GAME_WIDTH
-        && _mouse.getY() > UPPER_LINE && _mouse.getY() < UPPER_LINE+GAME_WIDTH) {
-        return click(Position{_mouse});
+    if (state == GameState::CurrentPlay) {
+        state = GameState::OpponentPlay;
+    } else {
+        state = GameState::CurrentPlay;
     }
-    return END_NONE;
 }
 
-// Clicking on field (grab and put figures)
-Uint8 Board::click(Position pos) {
+bool Board::isValid(const Mouse _mouse) {
+    return _mouse.in(rect);
+}
+
+Position Board::getPosition(const Mouse _mouse) {
+    return Position((_mouse.getX()-rect.x)/CELL_SIDE,
+        (_mouse.getY()-rect.y)/CELL_SIDE);
+}
+
+void Board::clickCooperative(const Mouse mouse) {
+    /*
     // Checking, which type of action do
     if (!activeCell.type) {
         // Picking up figure from field
@@ -415,13 +353,12 @@ Uint8 Board::click(Position pos) {
         return placeFigure(pos);
     }
     // Return, that nothing happen
-    return END_NONE;
+    return END_NONE;*/
 }
 
-// Making all like in click, but at once and without help
-Uint8 Board::move(Position _p1, Position _p2) {
+void Board::clickServer(const Mouse mouse) {
     // Emulating first click on field
-    pickFigure(_p1);
+    /*pickFigure(_p1);
 
     // Emulating second click on field
     if (figures[_p2.getPosition()] >= FIG_MOVE_TO) {
@@ -430,29 +367,77 @@ Uint8 Board::move(Position _p1, Position _p2) {
         resetSelection();
         return turn;
     }
-    return END_NONE;
+    return END_NONE;*/
 }
 
-SDL_FRect Board::getRect(Position pos) const {
-    return {
-        float(LEFT_LINE + pos.x * CELL_SIDE),
-        float(UPPER_LINE + pos.y * CELL_SIDE),
-        CELL_SIDE,
-        CELL_SIDE
-    };
+void Board::clickClient(const Mouse mouse) {
+
 }
 
-Uint8 Board::currentTurn() const {
-    return turn;
-}
+void Board::blit(const Window& _window) const {
+    // Drawing global background
+    _window.setDrawColor(BLACK);
+    _window.clear();
 
-bool Board::isFigureSelected() const {
-    return activeCell.type;
-}
+    // Drawing field light part
+    _window.setDrawColor(FIELD_LIGHT);
+    _window.drawRect(rect);
 
-position Board::getLastTurnStart() const {
-    return activeCell.pos;
-}
-position Board::getLastTurnEnd() const {
-    return endPosition;
+    // One cell fro rendering
+    SDL_FRect cellRect = {0, 0, CELL_SIDE, CELL_SIDE};
+
+    // Fill drawing dark part of background
+    _window.setDrawColor(FIELD_DARK);
+
+    // Drawing each figure
+    for (coord y = 0; y < FIELD_WIDTH; ++y)
+        for (coord x = 0; x < FIELD_WIDTH; ++x) {
+            // Getting rect
+            cellRect.x = rect.x + x*CELL_SIDE;
+            cellRect.y = rect.y + y*CELL_SIDE;
+
+            // Draw dark part
+            if ((x + y) % 2) {
+                _window.drawRect(cellRect);
+            }
+
+            // Getting type of
+            cell type = figures[y * FIELD_WIDTH + x];
+
+            // Drawing figures
+            if (type) {
+                // Checking, if figure current (blue)
+                if (type > FIG_RED_TYPE) {
+                    // Getting textyre
+                    SDL_Texture* textureIndex = _window.getTexture(Textures::WhitePawn - 1 + type - FIG_RED_TYPE);
+
+                    // Checking, if figure attackable (red)
+                    // Making it red
+                    _window.setColorMode(textureIndex, RED);
+
+                    // Drawing
+                    _window.blit(textureIndex, cellRect);
+
+                    // Resetting cell color
+                    _window.setColorMode(textureIndex);
+                } else {
+                    _window.blit(_window.getTexture(Textures::WhitePawn - 1 + type), cellRect);
+                }
+            }
+        }
+
+    // Draw selected figure
+    if (activeCell) {
+        SDL_Texture* textureIndex = _window.getTexture(Textures::WhitePawn - 1 + activeCell);
+        // Making it blue
+        _window.setColorMode(textureIndex, BLUE);
+
+        // Draw it
+        cellRect.x = rect.x + activePosition.x*CELL_SIDE;
+        cellRect.y = rect.y + activePosition.y*CELL_SIDE;
+        _window.blit(textureIndex, cellRect);
+
+        // Resetting color
+        _window.setColorMode(textureIndex);
+    }
 }

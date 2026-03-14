@@ -13,7 +13,7 @@
 // Class for store all game saves and load it, when need
 class SavedFields : GUI::Template {
  private:
-    static std::vector<Field> startOptions;
+    static std::vector<FieldSave> startOptions;
     static bool active;
 
     // Draw options

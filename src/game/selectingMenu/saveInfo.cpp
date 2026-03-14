@@ -6,17 +6,17 @@
 #include "saveInfo.hpp"
 
 
-SaveInfo::SaveInfo(const Window& _window, int _position, const Field& _field)
+SaveInfo::SaveInfo(const Window& _window, int _position, const FieldSave& _field)
 : TextureTemplate(_window, {0.06f * _window.getWidth(), (_position*0.2f + 0.14f) * _window.getHeight(),
     0.18f * _window.getWidth(), 0.18f * _window.getHeight()},
-    _window.createTexture(_field.getWindowWidth(), _field.getWindowWidth())),
+    _window.createTexture(GAME_WIDTH, GAME_HEIGHT)),
 backplate(_window, 0.48, _position*0.2f+0.23f, 0.9, 0.2, 15, 2),
 //saveNameText(_window, 0.75, position*0.2f+0.16f, {field.getSaveName()}),
 lastModifiedText(_window, 0.25, _position*0.2f+0.23f, {_field.getSaveTime()}, 1, Height::Main, WHITE, GUI::Aligment::Left) {
     // Creating texture
     _window.setRenderTarget(texture);
     // Render full field at it
-    _field.blitIcon(_window);
+    _field.blit(_window);
     _window.resetRenderTarget();
 }
 
