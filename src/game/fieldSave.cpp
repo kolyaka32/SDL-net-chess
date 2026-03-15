@@ -6,6 +6,9 @@
 #include "fieldSave.hpp"
 
 
+// Static objects
+FieldSave basicStart{"0000000000000000 rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq"};
+
 FieldSave::FieldSave(const Field& _field)
 : Field(_field) {
     // Getting current time
@@ -213,7 +216,7 @@ const char* FieldSave::getSaveTime() const {
 
 const char* FieldSave::getSave() const {
     // Buffer with field and it additional information
-    static char buffer[95];
+    static char buffer[100];
     // Current writing position
     unsigned pos = 0;
     // Writing system data

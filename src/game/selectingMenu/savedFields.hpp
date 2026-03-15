@@ -18,7 +18,7 @@ class SavedFields : GUI::Template {
 
     // Draw options
     GUI::RoundedBackplate backplate;
-    GUI::ScrollBox<SaveInfo, Field> scroller;
+    GUI::ScrollBox<SaveInfo, FieldSave> scroller;
     GUI::TextButton exitButton;
 
  public:

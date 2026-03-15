@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include <array>
 #include "../library.hpp"
 
 
@@ -19,12 +20,17 @@ class Message {
     template <typename ...Args>
     Message(const Args ...args);
     // Writing functions
-    // Write multiple function
-    template <typename T, typename ...Args>
-    void write(const T object, const Args ...argv);
     // Write single object
     template <typename T>
     void write(const T object);
+    // Write multiple function
+    template <typename T, typename ...Args>
+    void write(const T object, const Args ...argv);
+    // Write C-string
+    void write(const char* string);
+    // Write standart array
+    template<typename T, unsigned N>
+    void write(const std::array<T, N> object);
     // Write custom array
     template<typename T>
     void write(const Array<T> object);
@@ -53,13 +59,19 @@ void Message::write(const T _object) {
     size += sizeof(T);
 }
 
+template<typename T, unsigned N>
+void Message::write(const std::array<T, N> _object) {
+    for (int i=0; i < _object.size(); ++i) {
+        write(_object[i]);
+    }
+}
+
 template<typename T>
 void Message::write(const Array<T> _object) {
     for (int i=0; i < _object.getSize(); ++i) {
         write(_object[i]);
     }
 }
-
 template <typename T, typename ...Args>
 void Message::write(const T _object, const Args ...args) {
     // Writing current object

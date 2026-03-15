@@ -13,6 +13,7 @@ class ClientGameCycle : public InternetCycle {
  protected:
     // Additional text
     GUI::StaticText waitText;
+    // ! Should add own menu
 
  protected:
     bool inputMouseDown() override;

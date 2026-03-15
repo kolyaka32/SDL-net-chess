@@ -29,3 +29,6 @@ class FieldSave : public Field {
     const char* getSave() const;
     char getCheckSum() const;
 };
+
+// Basic start field
+extern FieldSave basicStart;

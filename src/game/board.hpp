@@ -18,23 +18,25 @@ class Board : public Field {
     position endPosition;  // Postion, where end last move
     const SDL_FRect rect;  // Global position of board
 
-    Uint8 click(Position pos);        // Clicking with mouse on cell on field
-    void pickFigure(Position pos);    // Function for pick figure from field
+    Uint8 click(Position pos);       // Clicking with mouse on cell on field
+    void pickFigure(Position pos);   // Function for pick figure from field
     void placeFigure(Position pos);  // Function to try put figure back to field
+
+ protected:
+    // Check, if position is valid game place
+    bool isValid(const Mouse mouse);
+    // Getting relative position in field coordiants
+    Position getPosition(const Mouse mouse);
 
  public:
     // Creating empty field (for static start)
     Board();
     // Setting new field from loaded
-    //Board& operator=(const Field& field);
+    Board& operator=(const Field& field);
 
     // Active game part
     // Getting current game state
     GameState getState();
-    // Check, if position is valid game place
-    bool isValid(const Mouse mouse);
-    // Getting relative position in field coordiants
-    Position getPosition(const Mouse mouse);
 
     // Main interaction with game (depend on game mode)
     // Clicking with mouse on cell on field

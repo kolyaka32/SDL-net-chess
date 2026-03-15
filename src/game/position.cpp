@@ -16,14 +16,14 @@ position Position::getPosition() const {
     return x + y*FIELD_WIDTH;
 }
 
-Position Position::operator+(Position _p) const {
+Position Position::operator+(const Position _p) const {
     return Position(x + _p.x, y + _p.y);
 }
 
-Position Position::operator-(Position _p) const {
+Position Position::operator-(const Position _p) const {
     return Position(x - _p.x, y - _p.y);
 }
 
-bool Position:operator==(Position _p) const {
-    return x == _p.x && y = _p.y;
+bool Position::operator==(const Position _p) const {
+    return (x == _p.x) && (y == _p.y);
 }

@@ -8,7 +8,6 @@
 
 
 bool SelectingMenu::active = false;
-FieldSave SelectingMenu::basicStart{"0000000000000000 rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq"};
 
 SelectingMenu::SelectingMenu(const Window& _window)
 : savedFields(_window),

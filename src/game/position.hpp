@@ -26,8 +26,7 @@ class Position {
     position getPosition() const;
 
     // Math options
-    Position operator+(Position p) const;
-    Position operator-(Position p) const;
-    bool operator==(Position p) const;
+    Position operator+(const Position p) const;
+    Position operator-(const Position p) const;
+    bool operator==(const Position p) const;
 };
-

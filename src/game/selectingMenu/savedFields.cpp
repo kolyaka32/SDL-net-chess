@@ -6,7 +6,7 @@
 #include "savedFields.hpp"
 
 
-std::vector<Field> SavedFields::startOptions{};
+std::vector<FieldSave> SavedFields::startOptions{};
 bool SavedFields::active = false;
 
 SavedFields::SavedFields(const Window& _window)
@@ -102,8 +102,7 @@ void SavedFields::addField(const std::string _saveText) {
 void SavedFields::saveFields(std::ofstream& _fout) {
     for (auto f : startOptions) {
         _fout << "save = ";
-        const Array<char> save = f.getSave();
-        _fout.write(save.getData(), save.getSize());
+        _fout << f.getSave();
         _fout << '\n';
     }
 }

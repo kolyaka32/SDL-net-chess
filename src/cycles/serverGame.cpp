@@ -4,6 +4,7 @@
  */
 
 #include "serverGame.hpp"
+#include "../game/fieldSave.hpp"
 
 
 ServerGameCycle::ServerGameCycle(Window& _window)
@@ -11,12 +12,10 @@ ServerGameCycle::ServerGameCycle(Window& _window)
 menu(_window) {
     if(!isRestarted()) {
         menu.reset();
-        // Resetting game
-        //endState = END_NONE;
-        currentTurn = true;
-        board.reset();
+        // Creating save
+        const FieldSave fieldSave{basicStart};
         // Sending first field
-        internet.sendAllConfirmed({ConnectionCode::GameNew, field.getSave()});
+        internet.sendAllConfirmed({ConnectionCode::GameNew, fieldSave.getSave()});
     }
     logAdditional("Start server game cycle");
 }
@@ -35,26 +34,9 @@ bool ServerGameCycle::inputMouseDown() {
     if (InternetCycle::inputMouseDown()) {
         return true;
     }
-    /*
-    if (gameRestartButton.in(mouse)) {
-        #if CHECK_CORRECTION
-        SDL_Log("Game restart by current user");
-        #endif
-        // Sending message of game restart
-        connection.sendConfirmed(ConnectionCode::GameRestart);
-        // Restarting current game
-        endState = END_NONE;
-        currentTurn = true;
-        // Resetting field
-        board.reset();
-        // Making sound
-        _app.sounds.play(SND_RESET);
-        return;
-    }
-    */
     if (gameSaveButton.in(mouse)) {
         // Save current game field
-        menu.addField(field.saveField());
+        menu.addField((Field)board);
         // Showing message of sucsessful saving
         savedInfo.reset();
         logAdditional("Saving field");
@@ -64,41 +46,39 @@ bool ServerGameCycle::inputMouseDown() {
         menu.activate();
         return true;
     }
-    // Checking, if game start
+    // Check, if in menu
     if (menu.isActive()) {
         if (const Field* f = menu.click(mouse)) {
             // Setting new field localy
-            board.setNewField(f, window);
+            board = *f;
+            // Create save for send
+            FieldSave fieldSave{*f};
             // Sending it
-            internet.sendAllConfirmed({ConnectionCode::GameNew, field.getSave()});
+            internet.sendAllConfirmed({ConnectionCode::GameNew, fieldSave.getSave()});
             menu.reset();
             logAdditional("Selecting new field");
         }
         return true;
-    } else {
-        // Normal turn
-        if (field.tryClickServerCurrent(mouse)) {
-            // Sending to opponent
-            internet.sendAllConfirmed({ConnectionCode::GameTurn, field.getLastTurn(mouse)});
-        }
-        /*
-        // Checking, if game start
-        if (endState <= END_TURN) {
-            // Check, if turn of current player
-            if (currentTurn) {
-                // Clicking on field
-                endState = board.click(_app.sounds, mouse);
-
-                // Check, if change state
-                if (endState != END_NONE) {
-                    currentTurn = false;
-                    // Sending turn to opponent
-                    connection.sendConfirmed(ConnectionCode::GameTurn, board.getLastTurnStart(), board.getLastTurnEnd());
-                }
-            }
-            return;
-        }*/
     }
+    // Normal turn
+    board.clickServerCurrent(mouse);
+    /*
+    // Checking, if game start
+    if (endState <= END_TURN) {
+        // Check, if turn of current player
+        if (currentTurn) {
+            // Clicking on field
+            endState = board.click(_app.sounds, mouse);
+
+            // Check, if change state
+            if (endState != END_NONE) {
+                currentTurn = false;
+                // Sending turn to opponent
+                connection.sendConfirmed(ConnectionCode::GameTurn, board.getLastTurnStart(), board.getLastTurnEnd());
+            }
+        }
+        return;
+    }*/
     return false;
 }
 
@@ -136,13 +116,9 @@ void ServerGameCycle::getInternetPacket(const GetPacket& packet) {
 
     case ConnectionCode::GameTurn:
         if (packet.isBytesAvaliable(3)) {
-            // Check, if turn of another player (for security)
-            if (currentTurn == false) {
-                logAdditional("Turn of opponent player: from %u to %u",
-                    packet.getData<Uint8>(2), packet.getData<Uint8>(3));
-                endState = board.move({packet.getData<Uint8>(2)}, {packet.getData<Uint8>(3)});
-                currentTurn = true;
-            }
+            logAdditional("Turn of opponent player: from %u to %u",
+                packet.getData<Uint8>(2), packet.getData<Uint8>(3));
+            board.move({packet.getData<Uint8>(2), packet.getData<Uint8>(3)});
         }
         break;
 
@@ -158,16 +134,17 @@ void ServerGameCycle::update() {
 
 void ServerGameCycle::draw() const {
     // Blitting field
-    board.blit();
+    board.blit(window);
+    letters.blit(window);
 
     // Draw game state
-    switch (field.getState()) {
+    switch (board.getState()) {
     case GameState::CurrentPlay:
-        playersTurnsTexts[0].blit();
+        currentTurnText.blit();
         break;
 
     case GameState::OpponentPlay:
-        playersTurnsTexts[1].blit();
+        opponentTurnText.blit();
         break;
 
     case GameState::CurrentWin:

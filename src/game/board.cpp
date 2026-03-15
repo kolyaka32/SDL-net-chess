@@ -4,6 +4,7 @@
  */
 
 #include "board.hpp"
+#include "../internet/internet.hpp"
 
 
 Board::Board()
@@ -12,14 +13,11 @@ rect({LEFT_LINE, UPPER_LINE, GAME_WIDTH, GAME_HEIGHT}),
 activeCell(FIG_NONE),
 activePosition(0, 0) {}
 
-/*Board& Board::operator=(const Field& _field) {
-    memcpy(figures, _field.figures, sizeof(figures));
-    state = _field.state;
-    castling = _field.castling;
-    wasMoven = false;
+Board& Board::operator=(const Field& _field) {
+    *this = _field;
 
     return *this;
-}*/
+}
 
 void Board::resetSelection() {
     // Resetting selected figure
@@ -371,7 +369,7 @@ void Board::clickServer(const Mouse mouse) {
 }
 
 void Board::clickClient(const Mouse mouse) {
-
+    //internet.sendAllConfirmed({ConnectionCode::GameTurn, getLastTurn(mouse)});
 }
 
 void Board::blit(const Window& _window) const {

@@ -6,15 +6,15 @@
 #pragma once
 
 #include "baseCycle.hpp"
-#include "../game/gameBoard.hpp"
+#include "../game/board.hpp"
+#include "../game/letters.hpp"
 
 
 // Cycle with game template
 class GameCycle : public BaseCycle {
  protected:
     // Active game part
-    GameBoard board;  // Main game field
-    //static Uint8 endState;  // State of game (end)
+    static Board board;  // Main game field
     SurroundingLetters letters;  // Letters, that surround field
 
     // Save options
@@ -24,7 +24,8 @@ class GameCycle : public BaseCycle {
     //const GUI::ImageButton gameRestartButton;  // Button for restart game
 
     // Current turn texts
-    GUI::StaticText playersTurnsTexts[2];
+    GUI::StaticText currentTurnText;
+    GUI::StaticText opponentTurnText;
 
     // Ending options
     GUI::StaticText firstWinText;

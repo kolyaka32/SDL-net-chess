@@ -14,7 +14,6 @@ class SelectingMenu {
     static bool active;
 
     // Start options
-    static FieldSave basicStart;
     SavedFields savedFields;
 
     // Menu after game end

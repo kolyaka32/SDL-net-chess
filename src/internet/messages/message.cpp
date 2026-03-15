@@ -13,3 +13,20 @@ const char* Message::getData() const {
 size_t Message::getLength() const {
     return size;
 }
+
+void Message::write(const char* _str) {
+    // Getting it length
+    unsigned length = SDL_strlen(_str);
+
+    #if (CHECK_CORRECTION)
+    if (size + length > maxSize) {
+        logImportant("Can't write data - not enogh size");
+        return;
+    }
+    #endif
+
+    // Copying data
+    memcpy(data, _str, length);
+
+    size += length;
+}

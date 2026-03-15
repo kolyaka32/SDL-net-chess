@@ -11,8 +11,6 @@ TwoPlayerGameCycle::TwoPlayerGameCycle(Window& _window)
 menu(_window) {
     if (!isRestarted()) {
         menu.reset();
-        // Starting selecting game
-        field.restart();
     }
     logAdditional("Start coop game cycle");
 }
@@ -23,28 +21,29 @@ bool TwoPlayerGameCycle::inputMouseDown() {
     }
     if (gameSaveButton.in(mouse)) {
         // Save current game field
-        menu.addField(field.saveField());
+        menu.addField((Field)board);
         // Showing message of sucsessful saving
         savedInfo.reset();
-        logAdditional("Saving field");
+        logAdditional("Saving current field");
+        return true;
     }
     if (gameMenuButton.in(mouse)) {
         // Starting game menu
         menu.activate();
         return true;
     }
-    // Checking, if game start
+    // Check if in menu
     if (menu.isActive()) {
         if (const Field* f = menu.click(mouse)) {
-            field.setNewField(f, window);
+            board = *f;
             menu.reset();
             logAdditional("Selecting new field");
         }
         return true;
-    } else {
-        // Normal turn
-        field.tryClickCoop(mouse);
     }
+    // Normal turn
+    board.clickCooperative(mouse);
+
     return false;
 }
 
@@ -84,16 +83,17 @@ void TwoPlayerGameCycle::draw() const {
     window.clear();
 
     // Blitting field
-    field.blit();
+    board.blit(window);
+    letters.blit(window);
 
     // Draw game state
-    switch (field.getState()) {
+    switch (board.getState()) {
     case GameState::CurrentPlay:
-        playersTurnsTexts[0].blit();
+        currentTurnText.blit();
         break;
 
     case GameState::OpponentPlay:
-        playersTurnsTexts[1].blit();
+        opponentTurnText.blit();
         break;
 
     case GameState::CurrentWin:
