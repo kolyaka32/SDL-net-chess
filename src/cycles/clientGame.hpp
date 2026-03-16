@@ -22,4 +22,5 @@ class ClientGameCycle : public InternetCycle {
 
  public:
     ClientGameCycle(Window& window);
+    ~ClientGameCycle();
 };

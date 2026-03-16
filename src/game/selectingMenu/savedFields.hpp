@@ -33,8 +33,8 @@ class SavedFields : GUI::Template {
     void blit() const override;
 
     // Work with global saves
-    void addFieldRuntime(const Field& field);  // Add another field during runtime
+    void addFieldRuntime(const Field& field);  // Add field during runtime 
     static void addField(const Field& field);
-    static void addField(const std::string saveText);
+    static void addField(const std::string);
     static void saveFields(std::ofstream& stream);
 };

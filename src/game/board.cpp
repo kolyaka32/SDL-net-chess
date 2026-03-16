@@ -14,7 +14,7 @@ activeCell(FIG_NONE),
 activePosition(0, 0) {}
 
 Board& Board::operator=(const Field& _field) {
-    *this = _field;
+    (Field)*this = _field;
 
     return *this;
 }
@@ -354,22 +354,35 @@ void Board::clickCooperative(const Mouse mouse) {
     return END_NONE;*/
 }
 
-void Board::clickServer(const Mouse mouse) {
+
+void Board::clickServerCurrent(const Mouse mouse) {
     // Emulating first click on field
     /*pickFigure(_p1);
-
+    
     // Emulating second click on field
     if (figures[_p2.getPosition()] >= FIG_MOVE_TO) {
         Uint8 turn = placeFigure(_p2);
         // Resetting field for correct next turns
         resetSelection();
         return turn;
-    }
-    return END_NONE;*/
+        }
+        return END_NONE;*/
 }
 
-void Board::clickClient(const Mouse mouse) {
+void Board::clickServerOpponent(Uint8 p1, Uint8 p2) {
+    
+}
+
+void Board::clickClientCurrent(const Mouse mouse) {
     //internet.sendAllConfirmed({ConnectionCode::GameTurn, getLastTurn(mouse)});
+}
+
+void Board::clickClientOpponent(Uint8 p1, Uint8 p2) {
+    //
+}
+
+GameState Board::getState() {
+    return state;
 }
 
 void Board::blit(const Window& _window) const {

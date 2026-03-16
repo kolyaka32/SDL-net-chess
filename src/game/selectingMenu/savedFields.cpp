@@ -83,19 +83,14 @@ void SavedFields::addField(const Field& _field) {
 
 void SavedFields::addField(const std::string _saveText) {
     // Check on size (has need byte of size and fit correctly)
-    if (_saveText.size() > 4 && _saveText.size() == Field::getSaveSize(_saveText[1]-'0')) {
-        // Create field
+    if (_saveText.size() > 65) {
+        // Add this field
         startOptions.emplace_back(_saveText.c_str());
         // Check control sum
         if (startOptions[startOptions.size()-1].getCheckSum() != _saveText[0]) {
             startOptions.pop_back();
             return;
         }
-        // Adding to counter
-        /*if (endField >= maxFieldNumber) {
-            startField++;
-        }
-        endField++;*/
     }
 }
 

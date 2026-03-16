@@ -161,6 +161,9 @@ FieldSave::FieldSave(const char* _save) {
         case 'q':
             castling |= CASTLING_B_Q;
             break;
+
+        default:
+            break;
         }
     }
     // Getting current time
@@ -348,4 +351,42 @@ char FieldSave::getCheckSum() const {
         sum += (char)figures[i];
     }
     return sum;
+}
+
+void FieldSave::blit(const Window& _window) const {
+    // Drawing global background
+    _window.setDrawColor(BLACK);
+    _window.clear();
+
+    // Drawing field light part
+    _window.setDrawColor(FIELD_LIGHT);
+    _window.clear();
+
+    // One cell fro rendering
+    SDL_FRect cellRect = {0, 0, CELL_SIDE, CELL_SIDE};
+
+    // Fill drawing dark part of background
+    _window.setDrawColor(FIELD_DARK);
+
+    // Drawing each figure
+    for (coord y = 0; y < FIELD_WIDTH; ++y) {
+        for (coord x = 0; x < FIELD_WIDTH; ++x) {
+            // Getting rect
+            cellRect.x = x*CELL_SIDE;
+            cellRect.y = y*CELL_SIDE;
+
+            // Draw dark part
+            if ((x + y) % 2) {
+                _window.drawRect(cellRect);
+            }
+
+            // Getting type of
+            cell type = figures[y * FIELD_WIDTH + x];
+
+            // Drawing figures
+            if (type) {
+                _window.blit(_window.getTexture(Textures::WhitePawn - 1 + type), cellRect);
+            }
+        }
+    }
 }

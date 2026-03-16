@@ -116,9 +116,9 @@ void ServerGameCycle::getInternetPacket(const GetPacket& packet) {
 
     case ConnectionCode::GameTurn:
         if (packet.isBytesAvaliable(3)) {
-            logAdditional("Turn of opponent player: from %u to %u",
+            board.clickServerOpponent(packet.getData<Uint8>(2), packet.getData<Uint8>(3));
+            logAdditional("Turn of opponent player from %u to %u",
                 packet.getData<Uint8>(2), packet.getData<Uint8>(3));
-            board.move({packet.getData<Uint8>(2), packet.getData<Uint8>(3)});
         }
         break;
 

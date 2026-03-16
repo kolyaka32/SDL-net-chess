@@ -38,12 +38,13 @@ class Board : public Field {
     // Getting current game state
     GameState getState();
 
-    // Main interaction with game (depend on game mode)
-    // Clicking with mouse on cell on field
+    // Clicking with mouse on cell on field (depend game mode and player)
     // void clickSingle(const Mouse mouse);
     void clickCooperative(const Mouse mouse);
-    void clickServer(const Mouse mouse);
-    void clickClient(const Mouse mouse);
+    void clickServerCurrent(const Mouse mouse);
+    void clickServerOpponent(Uint8 p1, Uint8 p2);
+    void clickClientCurrent(const Mouse mouse);
+    void clickClientOpponent(Uint8 p1, Uint8 p2);
     // Reseting currently selected figure
     void resetSelection();
 

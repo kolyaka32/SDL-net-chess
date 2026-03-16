@@ -32,7 +32,8 @@ class GetPacket {
     // Functions for get data from message at specified position
     template <typename T>
     T getData(int offset) const;
-    const void* getPointer() const;
+    // Getting pointer to data in message
+    const void* getPointer(int offset) const;
 };
 
 

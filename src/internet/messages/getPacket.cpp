@@ -33,6 +33,6 @@ int GetPacket::getLength() const {
     return length;
 }
 
-const void* GetPacket::getPointer() const {
-    return buffer;
+const void* GetPacket::getPointer(int _offset) const {
+    return buffer + _offset;
 }

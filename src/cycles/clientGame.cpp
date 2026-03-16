@@ -23,7 +23,6 @@ ClientGameCycle::~ClientGameCycle() {
     }
 }
 
-
 void ClientGameCycle::getInternetPacket(const GetPacket& packet) {
     // Getting internet messages
     switch (ConnectionCode(packet.getData<Uint8>(0))) {
@@ -33,15 +32,16 @@ void ClientGameCycle::getInternetPacket(const GetPacket& packet) {
 
     case ConnectionCode::GameTurn:
         if (packet.isBytesAvaliable(3)) {
-            board.clickClientOpponent(packet.getData<Uint8>(2));
-            logAdditional("Turn of opponent player to %u", packet.getData<Uint8>(2));
+            board.clickClientOpponent(packet.getData<Uint8>(2), packet.getData<Uint8>(3));
+            logAdditional("Turn of opponent player from %u to %u",
+                packet.getData<Uint8>(2), packet.getData<Uint8>(3));
         }
         return;
 
     case ConnectionCode::GameNew:
-        if (packet.isBytesAvaliable(3)) {
+        if (packet.isBytesAvaliable(69)) {
             // Creating new field from get data
-            const FieldSave fieldSave{(char*)(packet.getPointer())+2};
+            const FieldSave fieldSave{(char*)(packet.getPointer(2))};
             // Setting it as current
             board = (Field)fieldSave;
 
