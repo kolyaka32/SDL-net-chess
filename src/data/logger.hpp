@@ -23,7 +23,7 @@ void logImportant(const char* text, const Args& ...args) {
     SDL_Log(text, args...);
     // Writing to file
     char buffer[100];
-    snprintf(buffer, sizeof(buffer), text, args...);
+    SDL_snprintf(buffer, sizeof(buffer), text, args...);
     logFile << buffer << '\n';
     #endif
 }
@@ -36,7 +36,7 @@ void logAdditional(const char* text, const Args& ...args) {
     SDL_Log(text, args...);
     // Writing to file
     char buffer[100];
-    snprintf(buffer, sizeof(buffer), text, args...);
+    SDL_snprintf(buffer, sizeof(buffer), text, args...);
     logFile << buffer << '\n';
     #endif
 }

@@ -22,8 +22,8 @@ class InternetCycle : public GameCycle {
     // Redefined current texts
     GUI::StaticText currentTurnText;
     GUI::StaticText opponentTurnText;
-    GUI::HighlightedStaticText winText;
-    GUI::HighlightedStaticText looseText;
+    GUI::StaticText winText;
+    GUI::StaticText looseText;
 
     virtual void getInternetPacket(const GetPacket& packet);
 

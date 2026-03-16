@@ -5,6 +5,7 @@
 
 #include "board.hpp"
 #include "../internet/internet.hpp"
+#include "selectingMenu/selectingMenu.hpp"
 
 
 Board::Board()
@@ -31,6 +32,21 @@ void Board::resetSelection() {
             // Clearing all extra codes
             figures[i] &= (FIG_RED_TYPE-1);
         }
+    }
+}
+
+void Board::swapState() {
+    switch (state) {
+    case GameState::CurrentPlay:
+        state = GameState::OpponentPlay;
+        break;
+
+    case GameState::OpponentPlay:
+        state = GameState::CurrentPlay;
+        break;
+
+    default:
+        break;
     }
 }
 
@@ -168,16 +184,19 @@ void Board::placeFigure(Position _p) {
         // Checking on game end (if there king of another command)
         if (figures[_p.getPosition()] == FIG_RED_TYPE + FIG_BLACK_KING) {
             state = GameState::CurrentWin;
+            // Opponening menu
+            SelectingMenu::open();
             return;
         }
     } else {
         // Checking on game end (if there king of another command)
         if (figures[_p.getPosition()] == FIG_RED_TYPE + FIG_WHITE_KING) {
             state = GameState::OpponentWin;
+            // Opponening menu
+            SelectingMenu::open();
             return;
         }
     }
-    bool makeMove = true;  // Flag of normal turn
 
     // Check on special moves (castling and pawn transform)
     switch (activeCell) {
@@ -192,7 +211,6 @@ void Board::placeFigure(Position _p) {
 
         // Check, if castling
         if (figures[_p.getPosition()] == FIG_WHITE_KING + FIG_RED_TYPE) {
-            makeMove = false;
             // Clearing current figures
             figures[activePosition.getPosition()] = FIG_NONE;
             figures[60] = FIG_NONE;
@@ -207,6 +225,7 @@ void Board::placeFigure(Position _p) {
                 figures[61] = FIG_WHITE_ROOK;
                 figures[62] = FIG_WHITE_KING;
             }
+            return;
         }
         break;
 
@@ -216,7 +235,6 @@ void Board::placeFigure(Position _p) {
 
         // Check, if castling
         if (figures[_p.getPosition()] == FIG_WHITE_ROOK + FIG_RED_TYPE) {
-            makeMove = false;
             // Clearing current figures
             figures[activePosition.getPosition()] = FIG_NONE;
             figures[_p.x+56] = FIG_NONE;
@@ -229,6 +247,7 @@ void Board::placeFigure(Position _p) {
                 figures[62] = FIG_WHITE_KING;
                 figures[61] = FIG_WHITE_ROOK;
             }
+            return;
         }
         break;
 
@@ -243,7 +262,6 @@ void Board::placeFigure(Position _p) {
 
         // Check, if castling
         if (figures[_p.getPosition()] == FIG_BLACK_KING + FIG_RED_TYPE) {
-            makeMove = false;
             // Clearing current figures
             figures[activePosition.getPosition()] = FIG_NONE;
             figures[4] = FIG_NONE;
@@ -258,6 +276,7 @@ void Board::placeFigure(Position _p) {
                 figures[5] = FIG_BLACK_ROOK;
                 figures[6] = FIG_BLACK_KING;
             }
+            return;
         }
         break;
 
@@ -267,7 +286,6 @@ void Board::placeFigure(Position _p) {
 
         // Check, if castling
         if (figures[_p.getPosition()] == FIG_BLACK_ROOK + FIG_RED_TYPE) {
-            makeMove = false;
             // Clearing current figures
             figures[activePosition.getPosition()] = FIG_NONE;
             figures[_p.x] = FIG_NONE;
@@ -280,6 +298,7 @@ void Board::placeFigure(Position _p) {
                 figures[6] = FIG_BLACK_KING;
                 figures[5] = FIG_BLACK_ROOK;
             }
+            return;
         }
         break;
 
@@ -297,24 +316,9 @@ void Board::placeFigure(Position _p) {
         }
         break;
     }
-    // Setting new position to cell (if wasn't castling)
-    if (makeMove) {
-        figures[_p.getPosition()] = activeCell;
-        figures[activePosition.getPosition()] = FIG_NONE;
-    }
-
-    // Making sound
-    audio.sounds.play(Sounds::Turn);
-
-    // Clearing field after turn
-    resetSelection();
-
-    // Changing moving player
-    if (state == GameState::CurrentPlay) {
-        state = GameState::OpponentPlay;
-    } else {
-        state = GameState::CurrentPlay;
-    }
+    // Setting new position to cell
+    figures[_p.getPosition()] = activeCell;
+    figures[activePosition.getPosition()] = FIG_NONE;
 }
 
 bool Board::isValid(const Mouse _mouse) {
@@ -326,33 +330,36 @@ Position Board::getPosition(const Mouse _mouse) {
         (_mouse.getY()-rect.y)/CELL_SIDE);
 }
 
-void Board::clickCooperative(const Mouse mouse) {
-    /*
-    // Checking, which type of action do
-    if (!activeCell.type) {
-        // Picking up figure from field
-        pickFigure(pos);
-
-        // Return, that don't do anything
-        return END_NONE;
-    } else if (activeCell.pos == pos.getPosition()) {
+void Board::clickCooperative(const Mouse _mouse) {
+    // Check if action posible
+    if (isValid(_mouse) && (state == GameState::CurrentPlay || state == GameState::OpponentPlay)) {
+        Position pos = getPosition(_mouse);
+        // Check if try to pick up figure
+        if (activeCell == FIG_NONE) {
+            // Picking up figure from field - showing posible moves
+            pickFigure(pos);
+            return;
+        }
         // Checking, if click on old place
-        // Clearing field for next turns
-        resetSelection();
-
-        // Returning, that nothing happen
-        return END_NONE;
-    // Checking, if click on avalible position
-    } else if (figures[pos.getPosition()] >= FIG_MOVE_TO) {
-        // Set last position as current
-        endPosition = pos.getPosition();
-        // Placing figure there
-        return placeFigure(pos);
+        if (activePosition == pos.getPosition()) {
+            // Clearing field for next turns
+            resetSelection();
+            return;
+        }
+        // Checking, if click on avalible position
+        if (figures[pos.getPosition()] >= FIG_MOVE_TO) {
+            // Placing figure there
+            placeFigure(pos);
+            // Making sound
+            audio.sounds.play(Sounds::Turn);
+            // Changing moving player
+            swapState();
+            // Clearing field after turn
+            resetSelection();
+            return;
+        }
     }
-    // Return, that nothing happen
-    return END_NONE;*/
 }
-
 
 void Board::clickServerCurrent(const Mouse mouse) {
     // Emulating first click on field
@@ -369,7 +376,8 @@ void Board::clickServerCurrent(const Mouse mouse) {
 }
 
 void Board::clickServerOpponent(Uint8 p1, Uint8 p2) {
-    
+    // Set last position as current
+            //position endPosition = pos.getPosition();
 }
 
 void Board::clickClientCurrent(const Mouse mouse) {

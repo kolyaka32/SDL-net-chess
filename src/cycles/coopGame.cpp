@@ -37,6 +37,8 @@ bool TwoPlayerGameCycle::inputMouseDown() {
         if (const Field* f = menu.click(mouse)) {
             board = *f;
             menu.reset();
+            // Making sound
+            audio.sounds.play(Sounds::Reset);
             logAdditional("Selecting new field");
         }
         return true;

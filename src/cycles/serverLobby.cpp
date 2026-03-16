@@ -39,7 +39,7 @@ bool ServerLobbyCycle::inputMouseDown() {
     if (hideAddressText.in(mouse)) {
         // Copying address to buffer
         static char clipboardText[24];
-        snprintf(clipboardText, sizeof(clipboardText), "%s:%d", internet.getHostName(), internet.getPort());
+        SDL_snprintf(clipboardText, sizeof(clipboardText), "%s:%d", internet.getHostName(), internet.getPort());
         SDL_SetClipboardText(clipboardText);
         copiedInfoBox.reset();
         return true;

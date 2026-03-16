@@ -143,13 +143,19 @@ FieldSave::FieldSave(const char* _save, int _length) {
         switch (_save[pos]) {
         // Starting player config
         case 'w':
-        case 'W':
             state = GameState::CurrentPlay;
             break;
 
+        case 'W':
+            state = GameState::CurrentWin;
+            break;
+
         case 'b':
-        case 'B':
             state = GameState::OpponentPlay;
+            break;
+
+        case 'B':
+            state = GameState::OpponentWin;
             break;
 
         // Castling posoblity
@@ -313,20 +319,26 @@ const char* FieldSave::getSave() const {
         }
     }
     // Writing game state (white/black)
-    buffer[17+64] = ' ';
+    buffer[pos++] = ' ';
     switch (state) {
     case GameState::CurrentPlay:
+        buffer[pos++] = 'w';
+        break;
+
     case GameState::CurrentWin:
-        buffer[17+64+1] = 'w';
+        buffer[pos++] = 'W';
         break;
 
     case GameState::OpponentPlay:
+        buffer[pos++] = 'l';
+        break;
+
     case GameState::OpponentWin:
-        buffer[17+64+1] = 'l';
+        buffer[pos++] = 'L';
         break;
 
     default:
-        buffer[17+64+1] = 'w';
+        buffer[pos++] = 'w';
         break;
     }
     // Writing castlings
@@ -343,9 +355,6 @@ const char* FieldSave::getSave() const {
     if (castling & CASTLING_B_Q) {
         buffer[pos++] = 'q';
     }
-    // Adding end null
-    buffer[pos] = '\0';
-
     return buffer;
 }
 

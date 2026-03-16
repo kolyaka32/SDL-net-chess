@@ -15,10 +15,9 @@ class Board : public Field {
     cell activeCell;
     Position activePosition;
 
-    position endPosition;  // Postion, where end last move
     const SDL_FRect rect;  // Global position of board
 
-    Uint8 click(Position pos);       // Clicking with mouse on cell on field
+    void swapState();                // Swap state of turn to opponent
     void pickFigure(Position pos);   // Function for pick figure from field
     void placeFigure(Position pos);  // Function to try put figure back to field
 
