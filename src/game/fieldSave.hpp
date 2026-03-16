@@ -14,6 +14,10 @@ class FieldSave : public Field {
     // Data for save/load
     SDL_Time saveTime;
 
+ protected:
+    // Getting check sum
+    char getCheckSum() const;
+
  public:
     // Create from excisting field (current)
     FieldSave(const Field& field);
@@ -27,7 +31,8 @@ class FieldSave : public Field {
 
     // Save system
     const char* getSave() const;
-    char getCheckSum() const;
+    // Check correction of created field
+    bool isCorrect(char checksum) const;
 };
 
 // Basic start field

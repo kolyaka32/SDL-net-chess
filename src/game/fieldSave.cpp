@@ -7,7 +7,7 @@
 
 
 // Static objects
-const char* basicStartString = ">0000000000000000 rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq";
+const char* basicStartString = "Z00000000000 rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq";
 FieldSave basicStartField{basicStartString, (int)SDL_strlen(basicStartString)};
 
 FieldSave::FieldSave(const Field& _field)
@@ -20,7 +20,7 @@ FieldSave::FieldSave(const char* _save, int _length) {
     resetField();
 
     // Check if not enough length for first part
-    if (_length < 18) {
+    if (_length < 16) {
         return;
     }
 
@@ -32,8 +32,8 @@ FieldSave::FieldSave(const char* _save, int _length) {
 
     // Getting time
     saveTime = 0;
-    for (; pos < 17; ++pos) {
-        saveTime << 4;
+    for (; pos < 12; ++pos) {
+        saveTime = saveTime << 6;
         saveTime += (_save[pos] - '0');
     }
 
@@ -173,8 +173,6 @@ FieldSave::FieldSave(const char* _save, int _length) {
             break;
         }
     }
-    // Getting current time
-    SDL_GetCurrentTime(&saveTime);
 }
 
 const char* FieldSave::getSaveTime() const {
@@ -234,9 +232,9 @@ const char* FieldSave::getSave() const {
 
     // Writing time of creation
     Uint64 time = saveTime;
-    for (; pos < 17; ++pos) {
-        buffer[pos] = time & 0xFF + '0';
-        time = time >> 4;
+    for (; pos < 12; ++pos) {
+        buffer[12 - pos] = (time & 0b111111) + '0';
+        time = time >> 6;
     }
 
     // Setting separating symbol
@@ -310,7 +308,7 @@ const char* FieldSave::getSave() const {
             break;
         }
         // Adding line separator
-        if (i%8 == 7) {
+        if (i%8 == 7 && i < 60) {
             buffer[pos++] = '/';
         }
     }
@@ -353,14 +351,16 @@ const char* FieldSave::getSave() const {
 
 char FieldSave::getCheckSum() const {
     // Summing all numbers with arbitrary numbers
-    char sum = (char)saveTime + (char)state;
+    Uint8 sum = (Uint8)saveTime + (Uint8)state;
     for (int i=0; i < sqr(FIELD_WIDTH); ++i) {
-        sum += (char)figures[i];
+        sum += (Uint8)figures[i];
     }
     // Checking to be readable symbol
-    sum %= 64;
-    sum += 32;
-    return sum;
+    return (sum % 64) + 48;
+}
+
+bool FieldSave::isCorrect(char _checksum) const {
+    return getCheckSum() == _checksum;
 }
 
 void FieldSave::blit(const Window& _window) const {
