@@ -18,7 +18,7 @@ class FieldSave : public Field {
     // Create from excisting field (current)
     FieldSave(const Field& field);
     // Create from save file (straight)
-    FieldSave(const char* save);
+    FieldSave(const char* save, int length);
 
     // Functions for show create information
     const char* getSaveTime() const;  // Getting field create time
@@ -31,4 +31,5 @@ class FieldSave : public Field {
 };
 
 // Basic start field
-extern FieldSave basicStart;
+extern const char* basicStartString;
+extern FieldSave basicStartField;

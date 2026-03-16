@@ -7,7 +7,8 @@
 
 
 // Static objects
-FieldSave basicStart{">0000000000000000 rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq"};
+const char* basicStartString = ">0000000000000000 rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq";
+FieldSave basicStartField{basicStartString, (int)SDL_strlen(basicStartString)};
 
 FieldSave::FieldSave(const Field& _field)
 : Field(_field) {
@@ -15,8 +16,13 @@ FieldSave::FieldSave(const Field& _field)
     SDL_GetCurrentTime(&saveTime);
 }
 
-FieldSave::FieldSave(const char* _save) {
+FieldSave::FieldSave(const char* _save, int _length) {
     resetField();
+
+    // Check if not enough length for first part
+    if (_length < 18) {
+        return;
+    }
 
     // Text position counter
     unsigned pos=0;
@@ -50,7 +56,8 @@ FieldSave::FieldSave(const char* _save) {
     position c = 0;  // Counter of place on field
 
     // Parsing text for setting figures
-    for (; _save[pos] && (c < sqr(FIELD_WIDTH)); ++pos) {
+    for (; (pos < _length) && (c < sqr(FIELD_WIDTH)); ++pos) {
+        // Setting figure
         switch (_save[pos]) {
         // White figures
         case 'K':
@@ -132,7 +139,7 @@ FieldSave::FieldSave(const char* _save) {
         }
     }
     // Parsing last part of text for rest data
-    for (; _save[pos]; ++pos) {
+    for (; pos < _length; ++pos) {
         switch (_save[pos]) {
         // Starting player config
         case 'w':
@@ -291,9 +298,9 @@ const char* FieldSave::getSave() const {
         case FIG_NONE:
             // In case of empty cell
             // Check - if previous also empty
-            if (buffer[pos] < '9' && buffer[pos] >= '0') {
+            if (buffer[pos-1] < '9' && buffer[pos-1] >= '0') {
                 // Adding to it
-                buffer[pos]++;
+                buffer[pos-1]++;
             } else {
                 buffer[pos++] = '1';
             }
@@ -351,7 +358,7 @@ char FieldSave::getCheckSum() const {
         sum += (char)figures[i];
     }
     // Checking to be readable symbol
-    sum %= 100;
+    sum %= 64;
     sum += 32;
     return sum;
 }

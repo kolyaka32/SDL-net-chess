@@ -55,7 +55,7 @@ const Field* SelectingMenu::click(const Mouse _mouse) {
         }
         if (startNewButton.in(_mouse)) {
             // Starting new standart round
-            return &basicStart;
+            return &basicStartField;
         }
         if (loadButton.in(_mouse)) {
             // Starting selecting field from previous games

@@ -23,7 +23,7 @@ secondWinText(_window, 0.5, 0.05, {"Second win", "Второй победил", 
 nobodyWinText(_window, 0.5, 0.05, {"Nobody win", "Ничья", "Unentschieden", "Чые"}, 1) {
     if (!isRestarted()) {
         // Resetting field
-        board = (Field)basicStart;
+        board = (Field)basicStartField;
     }
     // Starting main song (if wasn't started)
     audio.music.startFading(Music::Main);

@@ -12,10 +12,8 @@ ServerGameCycle::ServerGameCycle(Window& _window)
 menu(_window) {
     if(!isRestarted()) {
         menu.reset();
-        // Creating save
-        const FieldSave fieldSave{basicStart};
         // Sending first field
-        internet.sendAllConfirmed({ConnectionCode::GameNew, fieldSave.getSave()});
+        internet.sendAllConfirmed({ConnectionCode::GameNew, basicStartString});
     }
     logAdditional("Start server game cycle");
 }

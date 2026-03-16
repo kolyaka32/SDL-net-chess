@@ -41,7 +41,7 @@ void ClientGameCycle::getInternetPacket(const GetPacket& packet) {
     case ConnectionCode::GameNew:
         if (packet.isBytesAvaliable(69)) {
             // Creating new field from get data
-            const FieldSave fieldSave{(char*)(packet.getPointer(2))};
+            const FieldSave fieldSave{(char*)(packet.getPointer(2)), packet.getLength()-2};
             // Setting it as current
             board = (Field)fieldSave;
 
