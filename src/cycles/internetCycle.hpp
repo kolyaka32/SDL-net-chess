@@ -20,7 +20,8 @@ class InternetCycle : public GameCycle {
     GUI::OneOptionBox termianatedBox;
 
     // Redefined current texts
-    GUI::StaticText playersTurnsTexts[2];
+    GUI::StaticText currentTurnText;
+    GUI::StaticText opponentTurnText;
     GUI::HighlightedStaticText winText;
     GUI::HighlightedStaticText looseText;
 

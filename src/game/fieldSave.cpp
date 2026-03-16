@@ -7,7 +7,7 @@
 
 
 // Static objects
-FieldSave basicStart{"0000000000000000 rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq"};
+FieldSave basicStart{">0000000000000000 rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq"};
 
 FieldSave::FieldSave(const Field& _field)
 : Field(_field) {
@@ -350,6 +350,9 @@ char FieldSave::getCheckSum() const {
     for (int i=0; i < sqr(FIELD_WIDTH); ++i) {
         sum += (char)figures[i];
     }
+    // Checking to be readable symbol
+    sum %= 100;
+    sum += 32;
     return sum;
 }
 

@@ -14,8 +14,7 @@ activeCell(FIG_NONE),
 activePosition(0, 0) {}
 
 Board& Board::operator=(const Field& _field) {
-    (Field)*this = _field;
-
+    *(Field*)this = _field;
     return *this;
 }
 

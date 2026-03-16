@@ -86,11 +86,11 @@ void ClientGameCycle::draw() const {
     // Draw game state
     switch (board.getState()) {
     case GameState::CurrentPlay:
-        playersTurnsTexts[1].blit();
+        opponentTurnText.blit();
         break;
 
     case GameState::OpponentPlay:
-        playersTurnsTexts[0].blit();
+        currentTurnText.blit();
         break;
 
     case GameState::CurrentWin:
