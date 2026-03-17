@@ -1,0 +1,411 @@
+/*
+ * Copyright (C) 2025-2026, Kazankov Nikolay 
+ * <nik.kazankov.05@mail.ru>
+ */
+
+#include "fieldSave.hpp"
+
+
+// Static objects
+const char* basicStartString = "Z00000000000 rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq";
+FieldSave basicStartField{basicStartString, (int)SDL_strlen(basicStartString)};
+
+FieldSave::FieldSave(const Field& _field)
+: Field(_field) {
+    // Getting current time
+    SDL_GetCurrentTime(&saveTime);
+}
+
+FieldSave::FieldSave(const char* _save, int _length) {
+    resetField();
+
+    // Check if not enough length for first part
+    if (_length < 16) {
+        return;
+    }
+
+    // Text position counter
+    unsigned pos=0;
+
+    // Skipping first check sum byte
+    pos++;
+
+    // Getting time
+    saveTime = 0;
+    for (; pos < 12; ++pos) {
+        saveTime = saveTime << 6;
+        saveTime += (_save[pos] - '0');
+    }
+
+    // Skipping separating symbol
+    pos++;
+
+    // Loading field from text
+    // Forsyth–Edwards Notation
+    // White figures: pawn = "P", knight = "N", bishop = "B", rook = "R", queen = "Q" and king = "K"
+    // Black figures - "pnbrqk"
+    // 1-8 - spaces between figures
+    // '\', '/' - lines separator
+    // 'w', 'l' - which command start
+    // KQkq - is castling on specified side and command is allowed
+
+    // Base notation:
+    // rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+
+    // Setting figures on them places by given text
+    position c = 0;  // Counter of place on field
+
+    // Parsing text for setting figures
+    for (; (pos < _length) && (c < sqr(FIELD_WIDTH)); ++pos) {
+        // Setting figure
+        switch (_save[pos]) {
+        // White figures
+        case 'K':
+            figures[c++] = FIG_WHITE_KING;
+            break;
+
+        case 'Q':
+            figures[c++] = FIG_WHITE_QUEEN;
+            break;
+
+        case 'R':
+            figures[c++] = FIG_WHITE_ROOK;
+            break;
+
+        case 'B':
+            figures[c++] = FIG_WHITE_BISHOP;
+            break;
+
+        case 'N':
+            figures[c++] = FIG_WHITE_KNIGHT;
+            break;
+
+        case 'P':
+            figures[c++] = FIG_WHITE_PAWN;
+            break;
+
+        // Black figures
+        case 'k':
+            figures[c++] = FIG_BLACK_KING;
+            break;
+
+        case 'q':
+            figures[c++] = FIG_BLACK_QUEEN;
+            break;
+
+        case 'r':
+            figures[c++] = FIG_BLACK_ROOK;
+            break;
+
+        case 'b':
+            figures[c++] = FIG_BLACK_BISHOP;
+            break;
+
+        case 'n':
+            figures[c++] = FIG_BLACK_KNIGHT;
+            break;
+
+        case 'p':
+            figures[c++] = FIG_BLACK_PAWN;
+            break;
+
+        // Spaces between
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+            c += _save[pos] - '0';
+            break;
+
+        // Line separator
+        case '\\':
+        case '/':
+            // Checking, if not on another line
+            if (c % FIELD_WIDTH) {
+                // Forced going to next line
+                c = ((c-1) / FIELD_WIDTH + 1) * FIELD_WIDTH;
+            }
+            break;
+
+        // Separator of second part
+        case ' ':
+            c = 64;
+            break;
+        }
+    }
+    // Parsing last part of text for rest data
+    for (; pos < _length; ++pos) {
+        switch (_save[pos]) {
+        // Starting player config
+        case 'w':
+            state = GameState::CurrentPlay;
+            break;
+
+        case 'W':
+            state = GameState::CurrentWin;
+            break;
+
+        case 'b':
+            state = GameState::OpponentPlay;
+            break;
+
+        case 'B':
+            state = GameState::OpponentWin;
+            break;
+
+        // Castling posoblity
+        case 'K':
+            castling |= CASTLING_W_K;
+            break;
+
+        case 'Q':
+            castling |= CASTLING_W_Q;
+            break;
+
+        case 'k':
+            castling |= CASTLING_B_K;
+            break;
+
+        case 'q':
+            castling |= CASTLING_B_Q;
+            break;
+
+        default:
+            break;
+        }
+    }
+}
+
+const char* FieldSave::getSaveTime() const {
+    // Get local time in date/time format
+    SDL_DateTime time;
+    SDL_TimeToDateTime(saveTime, &time, true);
+    // Get region specific format
+    SDL_DateFormat dateFormat;
+    SDL_TimeFormat timeFormat;
+    SDL_GetDateTimeLocalePreferences(&dateFormat, &timeFormat);
+    // Creating string with date-time
+    static char buffer[22];
+    // Writing date
+    switch (dateFormat) {
+    case SDL_DATE_FORMAT_YYYYMMDD:
+        SDL_snprintf(buffer, 11, "%04d.%02d.%02d",
+            time.year, time.month, time.day);
+        break;
+
+    case SDL_DATE_FORMAT_DDMMYYYY:
+        SDL_snprintf(buffer, 11, "%02d.%02d.%04d",
+            time.day, time.month, time.year);
+        break;
+
+    case SDL_DATE_FORMAT_MMDDYYYY:
+        SDL_snprintf(buffer, 11, "%02d.%02d.%04d",
+            time.year, time.month, time.day);
+        break;
+    }
+    // Writing time
+    switch (timeFormat) {
+    case SDL_TIME_FORMAT_24HR:
+        SDL_snprintf(buffer+10, sizeof(buffer)-10, " %02d:%02d:%02d",
+            time.hour, time.minute, time.second);
+        break;
+
+    case SDL_TIME_FORMAT_12HR:
+        if (time.hour < 12) {
+            SDL_snprintf(buffer+10, sizeof(buffer)-10, " %02dAM:%02d:%02d",
+                time.hour, time.minute, time.second);
+        } else {
+            SDL_snprintf(buffer+10, sizeof(buffer)-10, " %02dPM:%02d:%02d",
+                time.hour, time.minute, time.second);
+        }
+        break;
+    }
+    return buffer;
+}
+
+const char* FieldSave::getSave() const {
+    // Buffer with field and it additional information
+    static char buffer[100];
+    // Current writing position
+    unsigned pos = 0;
+    // Writing system data
+    buffer[pos++] = getCheckSum();  // Checksum for test of correction
+
+    // Writing time of creation
+    Uint64 time = saveTime;
+    for (; pos < 12; ++pos) {
+        buffer[12 - pos] = (time & 0b111111) + '0';
+        time = time >> 6;
+    }
+
+    // Setting separating symbol
+    buffer[pos++] = ' ';
+
+    // Writing all cells
+    // ! should be optimised to fit better (write straight bits)
+    for (int i=0; i < sqr(FIELD_WIDTH); ++i) {
+        switch (figures[i] & CELL_TYPE_MASK) {
+        case FIG_WHITE_KING:
+            buffer[pos++] = 'K';
+            break;
+
+        case FIG_WHITE_QUEEN:
+            buffer[pos++] = 'Q';
+            break;
+
+        case FIG_WHITE_ROOK:
+            buffer[pos++] = 'R';
+            break;
+
+        case FIG_WHITE_BISHOP:
+            buffer[pos++] = 'B';
+            break;
+
+        case FIG_WHITE_KNIGHT:
+            buffer[pos++] = 'N';
+            break;
+
+        case FIG_WHITE_PAWN:
+            buffer[pos++] = 'P';
+            break;
+
+        // Black figures
+        case FIG_BLACK_KING:
+            buffer[pos++] = 'k';
+            break;
+
+        case FIG_BLACK_QUEEN:
+            buffer[pos++] = 'q';
+            break;
+
+        case FIG_BLACK_ROOK:
+            buffer[pos++] = 'r';
+            break;
+
+        case FIG_BLACK_BISHOP:
+            buffer[pos++] = 'b';
+            break;
+
+        case FIG_BLACK_KNIGHT:
+            buffer[pos++] = 'n';
+            break;
+
+        case FIG_BLACK_PAWN:
+            buffer[pos++] = 'p';
+            break;
+
+        case FIG_NONE:
+            // In case of empty cell
+            // Check - if previous also empty
+            if (buffer[pos-1] < '9' && buffer[pos-1] >= '0') {
+                // Adding to it
+                buffer[pos-1]++;
+            } else {
+                buffer[pos++] = '1';
+            }
+            break;
+        
+        default:
+            break;
+        }
+        // Adding line separator
+        if (i%8 == 7 && i < 60) {
+            buffer[pos++] = '/';
+        }
+    }
+    // Writing game state (white/black)
+    buffer[pos++] = ' ';
+    switch (state) {
+    case GameState::CurrentPlay:
+        buffer[pos++] = 'w';
+        break;
+
+    case GameState::CurrentWin:
+        buffer[pos++] = 'W';
+        break;
+
+    case GameState::OpponentPlay:
+        buffer[pos++] = 'l';
+        break;
+
+    case GameState::OpponentWin:
+        buffer[pos++] = 'L';
+        break;
+
+    default:
+        buffer[pos++] = 'w';
+        break;
+    }
+    // Writing castlings
+    buffer[pos++] = ' ';
+    if (castling & CASTLING_W_K) {
+        buffer[pos++] = 'K';
+    }
+    if (castling & CASTLING_W_Q) {
+        buffer[pos++] = 'Q';
+    }
+    if (castling & CASTLING_B_K) {
+        buffer[pos++] = 'k';
+    }
+    if (castling & CASTLING_B_Q) {
+        buffer[pos++] = 'q';
+    }
+    return buffer;
+}
+
+char FieldSave::getCheckSum() const {
+    // Summing all numbers with arbitrary numbers
+    Uint8 sum = (Uint8)saveTime + (Uint8)state;
+    for (int i=0; i < sqr(FIELD_WIDTH); ++i) {
+        sum += (Uint8)figures[i];
+    }
+    // Checking to be readable symbol
+    return (sum % 64) + 48;
+}
+
+bool FieldSave::isCorrect(char _checksum) const {
+    return getCheckSum() == _checksum;
+}
+
+void FieldSave::blit(const Window& _window) const {
+    // Drawing global background
+    _window.setDrawColor(BLACK);
+    _window.clear();
+
+    // Drawing field light part
+    _window.setDrawColor(FIELD_LIGHT);
+    _window.clear();
+
+    // One cell fro rendering
+    SDL_FRect cellRect = {0, 0, CELL_SIDE, CELL_SIDE};
+
+    // Fill drawing dark part of background
+    _window.setDrawColor(FIELD_DARK);
+
+    // Drawing each figure
+    for (coord y = 0; y < FIELD_WIDTH; ++y) {
+        for (coord x = 0; x < FIELD_WIDTH; ++x) {
+            // Getting rect
+            cellRect.x = x*CELL_SIDE;
+            cellRect.y = y*CELL_SIDE;
+
+            // Draw dark part
+            if ((x + y) % 2) {
+                _window.drawRect(cellRect);
+            }
+
+            // Getting type of
+            cell type = figures[y * FIELD_WIDTH + x];
+
+            // Drawing figures
+            if (type) {
+                _window.blit(_window.getTexture(Textures::WhitePawn - 1 + type), cellRect);
+            }
+        }
+    }
+}

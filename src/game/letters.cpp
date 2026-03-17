@@ -1,19 +1,18 @@
 /*
- * Copyright (C) 2025, Kazankov Nikolay 
+ * Copyright (C) 2025-2026, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
 #include "letters.hpp"
 
 
-// Class with letters, placed in collumn
-LettersCollumn::LettersCollumn(const Window& _target, char _startLetter, Uint8 _length, Sint8 _xOffset, Sint8 _yOffset) {
+LettersCollumn::LettersCollumn(const Window& _window, char _startLetter, Uint8 _length, Sint8 _xOffset, Sint8 _yOffset)
+: TextureTemplate(_window) {
     // Creating font
-    font = _target.getFont(FNT_MAIN);
-    TTF_SetFontSize(font, 20);
+    TTF_Font* font = window.createFontCopy(Fonts::Main, Height::Medium);
 
     // Creating main texture
-    SDL_Surface* tempSurface = _target.createSurface(_xOffset ? _length * CELL_SIDE : LETTER_LINE, _yOffset ? _length * CELL_SIDE : LETTER_LINE);
+    SDL_Surface* tempSurface = window.createSurface(_xOffset ? _length * CELL_SIDE : LETTER_LINE, _yOffset ? _length * CELL_SIDE : LETTER_LINE);
 
     // Creating texture draw place
     SDL_Rect dest;
@@ -39,20 +38,21 @@ LettersCollumn::LettersCollumn(const Window& _target, char _startLetter, Uint8 _
         SDL_BlitSurface(letterSurface, nullptr, tempSurface, &dest);
 
         // Freeing temp data
-        _target.destroy(letterSurface);
+        window.destroy(letterSurface);
     }
     // Creating texture
-    texture = _target.createTextureAndFree(tempSurface);
+    texture = window.createTextureAndFree(tempSurface);
 
-    _target.destroy(tempSurface);
+    window.destroy(tempSurface);
 }
 
-// Savely clear all rest data
 LettersCollumn::~LettersCollumn() {
-    // Clearing texture
-    SDL_DestroyTexture(texture);
+    window.destroy(texture);
 }
 
+void LettersCollumn::blit(const SDL_FRect _dest) const {
+    window.blit(texture, _dest);
+}
 
 
 // Class of drawing board frame with letters for better UI
@@ -61,15 +61,13 @@ SurroundingLetters::SurroundingLetters(const Window& _target)
 letterCollumn{_target, 'A', 8, CELL_SIDE, 0} {}
 
 void SurroundingLetters::blit(const Window& _target) const {
-    // Drawing numbers
     // Left collumn
-    _target.blit(numberCollumn.texture, {0, UPPER_LINE - LETTER_LINE/2 + CELL_SIDE/2, LETTER_LINE, GAME_HEIGHT});
+    numberCollumn.blit({0, UPPER_LINE - LETTER_LINE/2 + CELL_SIDE/2, LETTER_LINE, GAME_HEIGHT});
     // Right column
-    _target.blit(numberCollumn.texture, {WINDOW_WIDTH - RIGHT_LINE, UPPER_LINE - LETTER_LINE/2 + CELL_SIDE/2, LETTER_LINE, GAME_HEIGHT});
+    numberCollumn.blit({WINDOW_WIDTH - RIGHT_LINE, UPPER_LINE - LETTER_LINE/2 + CELL_SIDE/2, LETTER_LINE, GAME_HEIGHT});
 
-    // Drawing letters
     // Upper collumn
-    _target.blit(letterCollumn.texture, {LEFT_LINE/2 + CELL_SIDE/2, UPPER_LINE - LETTER_LINE, GAME_WIDTH, LETTER_LINE});
+    letterCollumn.blit({LEFT_LINE/2 + CELL_SIDE/2, UPPER_LINE - LETTER_LINE, GAME_WIDTH, LETTER_LINE});
     // Bottom column
-    _target.blit(letterCollumn.texture, {LEFT_LINE/2 + CELL_SIDE/2, WINDOW_HEIGHT - LETTER_LINE, GAME_WIDTH, LETTER_LINE});
+    letterCollumn.blit({LEFT_LINE/2 + CELL_SIDE/2, WINDOW_HEIGHT - LETTER_LINE, GAME_WIDTH, LETTER_LINE});
 }

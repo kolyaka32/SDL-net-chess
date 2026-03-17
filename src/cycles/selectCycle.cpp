@@ -1,53 +1,57 @@
 /*
- * Copyright (C) 2025, Kazankov Nikolay 
+ * Copyright (C) 2025-2026, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
 #include "selectCycle.hpp"
-#include "singlePlayer.hpp"
-#include "twoPlayer.hpp"
+#include "singleplayerGame.hpp"
+#include "coopGame.hpp"
 #include "serverLobby.hpp"
 #include "clientLobby.hpp"
 
 
-// Starting basic template with main theme
-SelectCycle::SelectCycle(const App& _app)
-: BaseCycle(_app),
-titleText(_app.window, 0.5, 0.1, {"Chess", "Шахматы", "Schach", "Шахматы"}, 3, 64, WHITE),
-singleplayerButton(_app.window, 0.5, 0.3, {"Singleplayer", "Одиночная игра", "Einzelspiel", "Адзіночная гульня"}, 24, WHITE),
-twoPlayerButton(_app.window, 0.5, 0.5, {"Two players", "Два игрока", "Zwei Spieler", "Два гульца"}, 24, WHITE),
-serverButton(_app.window, 0.5, 0.7, {"Create server", "Создать сервер", "Server erstellen", "Стварыць сервер"}, 24, WHITE),
-connectButton(_app.window, 0.5, 0.9, {"Connect", "Присоединиться", "Beitreten", "Далучыцца"}, 24, WHITE) {
+SelectCycle::SelectCycle(Window& _window)
+: BaseCycle(_window),
+background(_window),
+titleText(_window, 0.5, 0.15, {"Tic-tac-toe", "Крестики нолики", "Tic-tac-toe", "Крыжыкі нулікі"}, 3, Height::Title),
+singleplayerButton(_window, 0.5, 0.3, {"Singleplayer", "Одиночная игра", "Einzelspiel", "Адзіночная гульня"}),
+twoPlayerButton(_window, 0.5, 0.5, {"Two players", "Два игрока", "Zwei Spieler", "Два гульца"}),
+serverButton(_window, 0.5, 0.7, {"Create server", "Создать сервер", "Server erstellen", "Стварыць сервер"}),
+connectButton(_window, 0.5, 0.9, {"Connect", "Присоединиться", "Beitreten", "Далучыцца"}) {
     // Resetting figures color
-    for (unsigned i=IMG_GAME_WHITE_PAWN; i <= IMG_GAME_BLACK_KING; ++i) {
-        _app.window.setColorMode(IMG_names(i));
+    for (Textures i=Textures::WhitePawn; i <= Textures::BlackKing; i=i+1) {
+        window.setColorMode(window.getTexture(i));
     }
 
     // Starting menu song (if wasn't started)
-    if(!isRestarted()) {
-        _app.music.start(MUS_MENU);
-    }
+    audio.music.startFading(Music::Menu);
+    logger.additional("Start select cycle");
 }
 
-// Getting selected button
-void SelectCycle::inputMouseDown(App& _app) {
+bool SelectCycle::inputMouseDown() {
     if (settings.click(mouse)) {
-        return;
+        return true;
     }
     if (singleplayerButton.in(mouse)) {
-        runCycle<SinglePlayerGameCycle>(_app);
-    } else if (twoPlayerButton.in(mouse)) {
-        runCycle<TwoPlayerGameCycle>(_app);
-    } else if (serverButton.in(mouse)) {
-        runCycle<ServerLobby>(_app);
-    } else if (connectButton.in(mouse)) {
-        runCycle<ClientLobby>(_app);
+        App::setNextCycle(Cycle::Singleplayer);
+        return true;
     }
-    return;
+    if (twoPlayerButton.in(mouse)) {
+        App::setNextCycle(Cycle::Coop);
+        return true;
+    }
+    if (serverButton.in(mouse)) {
+        App::setNextCycle(Cycle::ServerLobby);
+        return true;
+    }
+    if (connectButton.in(mouse)) {
+        App::setNextCycle(Cycle::ClientLobby);
+        return true;
+    }
+    return false;
 }
 
-// Example for getting keys input
-void SelectCycle::inputKeys(App& _app, SDL_Keycode _key) {
+void SelectCycle::inputKeys(SDL_Keycode _key) {
     switch (_key) {
     case SDLK_ESCAPE:
         settings.activate();
@@ -55,27 +59,27 @@ void SelectCycle::inputKeys(App& _app, SDL_Keycode _key) {
     }
 }
 
-void SelectCycle::update(App& _app) {
-    BaseCycle::update(_app);
+void SelectCycle::update() {
+    BaseCycle::update();
     background.update();
 }
 
-void SelectCycle::draw(const App& _app) const {
+void SelectCycle::draw() const {
     // Bliting background
-    background.blit(_app.window);
+    background.blit();
 
     // Bliting title
-    titleText.blit(_app.window);
+    titleText.blit();
 
     // Blitting start buttons
-    singleplayerButton.blit(_app.window);
-    twoPlayerButton.blit(_app.window);
-    serverButton.blit(_app.window);
-    connectButton.blit(_app.window);
+    singleplayerButton.blit();
+    twoPlayerButton.blit();
+    serverButton.blit();
+    connectButton.blit();
 
     // Settings menu
-    settings.blit(_app.window);
+    settings.blit();
 
     // Bliting all to screen
-    _app.window.render();
+    window.render();
 }

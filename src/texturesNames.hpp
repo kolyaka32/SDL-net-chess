@@ -1,56 +1,60 @@
 /*
- * Copyright (C) 2025, Kazankov Nikolay 
+ * Copyright (C) 2025-2026, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
 #pragma once
 
-#include "data/preloaded/textures.cpp"
+#include "define.hpp"
+
+#if (PRELOAD_TEXTURES)
 
 // Names of all images with related numbers
-enum IMG_names : unsigned {
+enum class Textures : unsigned {
     // Base part
     // Graphic interface sprites
-    IMG_GUI_PAUSE_BUTTON,
-    IMG_GUI_SLIDER_BUTTON,
-    IMG_GUI_SLIDER_LINE,
-    IMG_GUI_TYPE_BOX,
-    IMG_GUI_QUIT_BUTTON,
-    IMG_GUI_RESTART_BUTTON,
+    SliderButton,
+    SliderLine,
+    QuitButton,
+    MenuButton,
+    SaveButton,
+    SettingsButton,
 
     // Base flags in settings
-    IMG_GUI_FLAG_USA,
-    IMG_GUI_FLAG_RUS,
-    IMG_GUI_FLAG_GER,
-    IMG_GUI_FLAG_BEL,
+    FlagUSA,
+    FlagRUS,
+    FlagGER,
+    FlagBEL,
 
     // Main game part
     // White figures
-    IMG_GAME_WHITE_PAWN,
-    IMG_GAME_WHITE_BISHOP,
-    IMG_GAME_WHITE_ROOK,
-    IMG_GAME_WHITE_KNIGHT,
-    IMG_GAME_WHITE_QUEEN,
-    IMG_GAME_WHITE_KING,
+    WhitePawn,
+    WhiteBishop,
+    WhiteRook,
+    WhiteKnight,
+    WhiteQueen,
+    WhiteKing,
 
     // Black figures
-    IMG_GAME_BLACK_PAWN,
-    IMG_GAME_BLACK_BISHOP,
-    IMG_GAME_BLACK_ROOK,
-    IMG_GAME_BLACK_KNIGHT,
-    IMG_GAME_BLACK_QUEEN,
-    IMG_GAME_BLACK_KING,
+    BlackPawn,
+    BlackBishop,
+    BlackRook,
+    BlackKnight,
+    BlackQueen,
+    BlackKing,
 
     // Point, where figure can go
-    IMG_GAME_POINT_MOVE_TO,
+    PointToMove,
 
     // Global counter of all textures
-    IMG_count,
+    Count,
 };
 
-// Shortcut for sounds data class
-typedef TexturesData<IMG_count> Textures;
-
-
 // File names of the corresponding textures
-extern const char* texturesFilesNames[IMG_count];
+extern const char* texturesFilesNames[unsigned(Textures::Count)];
+
+// Operators for change textures depend on offset
+Textures operator+(const Textures index, int offset);
+Textures operator-(const Textures index, int offset);
+
+#endif  // (PRELOAD_TEXTURES)

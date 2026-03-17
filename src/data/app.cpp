@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025, Kazankov Nikolay 
+ * Copyright (C) 2024-2026, Kazankov Nikolay
  * <nik.kazankov.05@mail.ru>
  */
 
@@ -9,16 +9,6 @@
 
 bool App::running = true;
 
-App::App()
-: music{loader, musicFilesNames},
-sounds{loader, soundsFilesNames},
-initFile(music, sounds),
-window{loader} {
-    #if CHECK_CORRECTION
-    SDL_Log("All loaded and created corretly");
-    #endif
-}
-
 void App::stop() {
     running = false;
     CycleTemplate::stop();
@@ -26,4 +16,13 @@ void App::stop() {
 
 bool App::isRunning() {
     return running;
+}
+
+void App::setNextCycle(Cycle _nextCycle) {
+    nextCycle = _nextCycle;
+    CycleTemplate::stop();
+}
+
+Cycle App::getNextCycle() {
+    return nextCycle;
 }

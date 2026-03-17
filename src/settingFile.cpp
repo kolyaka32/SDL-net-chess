@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025, Kazankov Nikolay 
+ * Copyright (C) 2025-2026, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
@@ -7,10 +7,14 @@
 #include <string>
 #include "data/initFile.hpp"
 
+// Check if has initfile
+#if (USE_SETTING_FILE)
+
 // Files to setup
 #include "data/languages.hpp"
 #include "game/board.hpp"
-#include "cycles/clientLobby.hpp"
+#include "game/selectingMenu/savedFields.hpp"
+#include "menu/targetConnect.hpp"
 
 
 // Data, load from setting file
@@ -36,15 +40,15 @@ void InitFile::loadSettings() {
                 LanguagedText::setLanguage(Language::Bellarusian);
             }
         } else if (parameter == "music") {
-            music.setVolume(getValue(currentLine));
+            audio.music.setVolume(getValue(currentLine) / 100.0f);
         } else if (parameter == "sounds") {
-            sounds.setVolume(getValue(currentLine));
-        } else if (parameter == "startBoardConfig") {
-            strncpy(boardConfig, getText(currentLine).c_str(), sizeof(boardConfig));
+            audio.sounds.setVolume(getValue(currentLine) / 100.0f);
         } else if (parameter == "IP") {
-            strncpy(baseIP, getText(currentLine).c_str(), sizeof(baseIP));
+            TargetConnect::writeBaseIP(getText(currentLine).c_str());
         } else if (parameter == "port") {
-            strncpy(basePort, getText(currentLine).c_str(), sizeof(basePort));
+            TargetConnect::writeBasePort(getText(currentLine).c_str());
+        } else if (parameter == "save") {
+            SavedFields::addField(getText(currentLine));
         }
     }
 
@@ -80,15 +84,17 @@ void InitFile::saveSettings() {
     }
 
     // Writing music and sounds volumes
-    outSettings << "music = " << music.getVolume() << "\n";
-    outSettings << "sounds = " << sounds.getVolume() << "\n";
-
-    // Writing starting config (order of figures)
-    outSettings << "\nGame configuration:\n";
-    outSettings << "startBoardConfig = " << boardConfig << "\n";
+    outSettings << "music = " << int(audio.music.getVolume()*100) << "\n";
+    outSettings << "sounds = " << int(audio.sounds.getVolume()*100) << "\n";
 
     // Writing internet connection data
     outSettings << "\n# Internet base parameters:\n";
-    outSettings << "IP = " << baseIP << "\n";
-    outSettings << "port = " << basePort << "\n";
+    outSettings << "IP = " << TargetConnect::getBaseIP() << "\n";
+    outSettings << "port = " << TargetConnect::getBasePort() << "\n";
+
+    // Saving fields
+    outSettings << "\n# Saves:\n";
+    SavedFields::saveFields(outSettings);
 }
+
+#endif  // (USE_SETTING_FILE)

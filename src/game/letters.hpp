@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025, Kazankov Nikolay 
+ * Copyright (C) 2025-2026, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
@@ -9,15 +9,11 @@
 
 
 // Class with letters, placed in collumn
-class LettersCollumn {
- private:
-    TTF_Font* font = nullptr;  // Font for draw any letters
-
+class LettersCollumn : GUI::TextureTemplate {
  public:
     LettersCollumn(const Window& target, char startLetter, Uint8 length, Sint8 xOffset, Sint8 yOffset);
     ~LettersCollumn();
-
-    SDL_Texture* texture;
+    void blit(const SDL_FRect dest) const;
 };
 
 

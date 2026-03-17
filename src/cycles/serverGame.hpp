@@ -1,25 +1,29 @@
 /*
- * Copyright (C) 2025, Kazankov Nikolay 
+ * Copyright (C) 2025-2026, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
 #pragma once
 
 #include "internetCycle.hpp"
-#include "../internet/gameConnection.hpp"
+#include "../game/selectingMenu/selectingMenu.hpp"
 
 
 // Game cycle with game part of server
-class ServerGame : public InternetCycle {
+class ServerGameCycle : public InternetCycle {
  protected:
-    GameConnection connection;
+    SelectingMenu menu;
 
-    // Main run functions
-    void inputMouseDown(App& app) override;
-    void inputKeys(App& app, SDL_Keycode key);
-    void update(App& app) override;
-    void draw(const App& app) const override;
+ protected:
+    bool inputMouseDown() override;
+    void inputMouseUp() override;
+    void inputKeys(SDL_Keycode key) override;
+    void inputMouseWheel(float _wheelY) override;
+    void getInternetPacket(const GetPacket& packet) override;
+    void update() override;
+    void draw() const override;
 
  public:
-    ServerGame(App& app, Connection& server);
+    ServerGameCycle(Window& window);
+    ~ServerGameCycle();
 };

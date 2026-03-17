@@ -1,36 +1,34 @@
 /*
- * Copyright (C) 2025, Kazankov Nikolay 
+ * Copyright (C) 2025-2026, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
 #pragma once
 
-#include "baseCycle.hpp"
-#include "../internet/server.hpp"
+#include "internetCycle.hpp"
 
 
 // Cycle with waiting for client connect
-class ServerLobby : public BaseCycle {
- private:
-    // Internet connection part
-    Server server;
+class ServerLobbyCycle : public BaseCycle {
+ protected:
+    // Broadcast socket for server list
+    Socket broadcastRecieveSocket;
 
     // Title
-    GUI::StaticText titleText;
-
+    GUI::HighlightedStaticText titleText;
     // Text with current connection address
-    char currentAddress[24];          // String with current app address for connection
-    static bool showAddress;          // Flag of showing current address to screen
-    GUI::DynamicText addressText;     // Text for showing/copying current address
-    GUI::InfoBox copiedInfoBox;       // Message about copying to clipboard address
-    GUI::TextButton showAddressText;  // Buttons to change state of showing address at screen
-    GUI::TextButton hideAddressText;
+    static bool showAddress;            // Flag of showing current address to screen
+    GUI::StaticText showAddressText;    // Text for showing/copying current address
+    GUI::StaticText hideAddressText;    // Text for showing/copying current address
+    GUI::InfoBox copiedInfoBox;         // Message about copying to clipboard address
+    GUI::TextButton showAddressButton;  // Buttons to change state of showing address at screen
+    GUI::TextButton hideAddressButton;  // Button with illustration of address, hidden by stars
 
-    // Main run functions
-    void inputMouseDown(App& app) override;
-    void update(App& app) override;
-    void draw(const App& app) const override;
+ protected:
+    bool inputMouseDown() override;
+    void update() override;
+    void draw() const override;
 
  public:
-    ServerLobby(App& app);
+    ServerLobbyCycle(Window& window);
 };

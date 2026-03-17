@@ -139,7 +139,7 @@ cd SDL-net-chess; mkdir build
 cmake --build ./build --config Release --target all
 ```
 ### Готовые исходники
-Исходные файлы со всеми собранными библиотеками могут быть найден в [релизы](https://github.com/kolyaka32/Astroshuter-on-SDL/releases) (Development-kit-unix).
+Исходные файлы со всеми собранными библиотеками могут быть найден в [релизы](https://github.com/kolyaka32/tic-tak-toe-on-SDL-net/releases) (Development-kit-unix).
 
 
 ## Использованные внешние зависимости:

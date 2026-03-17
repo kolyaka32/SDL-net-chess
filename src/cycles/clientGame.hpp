@@ -1,25 +1,26 @@
 /*
- * Copyright (C) 2025, Kazankov Nikolay 
+ * Copyright (C) 2025-2026, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
 #pragma once
 
 #include "internetCycle.hpp"
-#include "../internet/gameConnection.hpp"
 
 
 // Game cycle (for single player (special animation))
-class ClientGame : public InternetCycle {
- private:
-    GameConnection connection;
+class ClientGameCycle : public InternetCycle {
+ protected:
+    // Additional text
+    GUI::StaticText waitText;
+    // ! Should add own menu
 
-    // Main run functions
-    void inputMouseDown(App& app) override;
-    void inputKeys(App& app, const SDL_Keycode key) override;
-    void update(App& app) override;
-    void draw(const App& app) const override;
+ protected:
+    bool inputMouseDown() override;
+    void getInternetPacket(const GetPacket& packet) override;
+    void draw() const override;
 
  public:
-    ClientGame(App& app, Connection& client);
+    ClientGameCycle(Window& window);
+    ~ClientGameCycle();
 };

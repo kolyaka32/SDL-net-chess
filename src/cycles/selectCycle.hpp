@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025, Kazankov Nikolay
+ * Copyright (C) 2025-2026, Kazankov Nikolay
  * <nik.kazankov.05@mail.ru>
  */
 
@@ -11,21 +11,21 @@
 
 // Cycle for select variants to start
 class SelectCycle : public BaseCycle {
- private:
+ protected:
     MovingBackground background;
-
+    // Texts
     GUI::HighlightedStaticText titleText;
     GUI::TextButton singleplayerButton;
     GUI::TextButton twoPlayerButton;
     GUI::TextButton serverButton;
     GUI::TextButton connectButton;
 
-    // New overrided cycle functions
-    void inputMouseDown(App& app) override;
-    void inputKeys(App& app, SDL_Keycode key) override;
-    void update(App& app) override;
-    void draw(const App& app) const override;
+ protected:
+    bool inputMouseDown() override;
+    void inputKeys(SDL_Keycode key) override;
+    void update() override;
+    void draw() const override;
 
  public:
-    SelectCycle(const App& app);
+    SelectCycle(Window& window);
 };

@@ -1,19 +1,22 @@
 /*
- * Copyright (C) 2025, Kazankov Nikolay 
+ * Copyright (C) 2025-2026, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
 #include "texturesNames.hpp"
 
+#if (PRELOAD_TEXTURES)
+
 // File names of the corresponding textures
-const char* texturesFilesNames[IMG_count] = {
+const char* texturesFilesNames[unsigned(Textures::Count)] = {
     // Graphic interface sprites
-    "img/GUI/esc_button.png",
     "img/GUI/slider_button.png",
     "img/GUI/slider_line.png",
-    "img/GUI/type_box.png",
     "img/GUI/quit_button.png",
-    "img/GUI/restart_button.png",
+    "img/GUI/menu_button.png",
+    "img/GUI/save_button.png",
+    //"img/GUI/restart_button.png",
+    "img/GUI/esc_button.png",
 
     // Base flags in settings
     "img/GUI/Flag_USA.png",
@@ -41,3 +44,13 @@ const char* texturesFilesNames[IMG_count] = {
     // Point, where figure can go
     "img/chess-pack-1/point.png",
 };
+
+Textures operator+(const Textures _color, int _offset) {
+    return Textures(unsigned(_color) + _offset);
+}
+
+Textures operator-(const Textures _color, int _offset) {
+    return Textures(unsigned(_color) - _offset);
+}
+
+#endif  // (PRELOAD_TEXTURES)

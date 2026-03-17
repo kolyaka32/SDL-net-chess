@@ -1,28 +1,36 @@
 /*
- * Copyright (C) 2025, Kazankov Nikolay 
+ * Copyright (C) 2025-2026, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
 #pragma once
 
 #include "gameCycle.hpp"
-#include "../game/connectionLostBox.hpp"
-#include "../game/terminatedBox.hpp"
+#include "../internet/internet.hpp"
 
 
 // Cycle with game part of internet connection
 class InternetCycle : public GameCycle {
-protected:
+ protected:
     // Flag of running of current cycle
     static bool currentTurn;
 
-    // Graphical part
-    GUI::StaticText playersTurnsTexts[2];
-    ConnectionLostBox disconnectedBox;
-    TerminatedBox termianatedBox;
+    // Messages with internet state
+    GUI::TwoOptionBox disconnectedBox;
+    GUI::OneOptionBox termianatedBox;
+
+    // Redefined current texts
+    GUI::StaticText currentTurnText;
+    GUI::StaticText opponentTurnText;
     GUI::StaticText winText;
     GUI::StaticText looseText;
 
-public:
-    InternetCycle(const App& app);
+    virtual void getInternetPacket(const GetPacket& packet);
+
+ protected:
+    bool inputMouseDown() override;
+    void update() override;
+
+ public:
+    InternetCycle(Window& window);
 };

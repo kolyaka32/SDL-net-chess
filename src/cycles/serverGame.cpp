@@ -1,173 +1,163 @@
 /*
- * Copyright (C) 2025, Kazankov Nikolay 
+ * Copyright (C) 2025-2026, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
 #include "serverGame.hpp"
+#include "../game/fieldSave.hpp"
 
 
-ServerGame::ServerGame(App& _app, Connection& _server)
-: InternetCycle(_app),
-connection(_server) {
+ServerGameCycle::ServerGameCycle(Window& _window)
+: InternetCycle(_window),
+menu(_window) {
     if(!isRestarted()) {
-        // Sending applying initialsiation message
-        connection.sendConfirmed(ConnectionCode::Init);
-        // Resetting game
-        endState = END_NONE;
-        currentTurn = true;
-        board.reset();
+        menu.reset();
+        // Sending first field
+        internet.sendAllConfirmed({ConnectionCode::GameNew, basicStartString});
+    }
+    logger.additional("Start server game cycle");
+}
+
+ServerGameCycle::~ServerGameCycle() {
+    // Check, if not launching game
+    if (!isRestarted()) {
+        // Sending message of disconect
+        internet.disconnect();
+        // Clear getting socket
+        internet.close();
     }
 }
 
-void ServerGame::inputMouseDown(App& _app) {
-    if (settings.click(mouse)) {
-        return;
+bool ServerGameCycle::inputMouseDown() {
+    if (InternetCycle::inputMouseDown()) {
+        return true;
     }
-    if (exitButton.in(mouse)) {
-        stop();
-        return;
+    if (gameSaveButton.in(mouse)) {
+        // Save current game field
+        menu.addField((Field)board);
+        // Showing message of sucsessful saving
+        savedInfo.reset();
+        logger.additional("Saving field");
     }
-    if (termianatedBox.click(mouse)) {
-        return;
+    if (gameMenuButton.in(mouse)) {
+        // Starting game menu
+        menu.activate();
+        return true;
     }
-    if (int code = disconnectedBox.click(mouse)) {
-        // Check, if try to reconnect
-        if (code == 2) {
-            connection;
+    // Check, if in menu
+    if (menu.isActive()) {
+        if (const Field* f = menu.click(mouse)) {
+            // Setting new field localy
+            board = *f;
+            // Create save for send
+            FieldSave fieldSave{*f};
+            // Sending it
+            internet.sendAllConfirmed({ConnectionCode::GameNew, fieldSave.getSave()});
+            menu.reset();
+            logger.additional("Selecting new field");
         }
+        return true;
     }
-    if (gameRestartButton.in(mouse)) {
-        #if CHECK_CORRECTION
-        SDL_Log("Game restart by current user");
-        #endif
-        // Sending message of game restart
-        connection.sendConfirmed(ConnectionCode::GameRestart);
-        // Restarting current game
-        endState = END_NONE;
-        currentTurn = true;
-        // Resetting field
-        board.reset();
-        // Making sound
-        _app.sounds.play(SND_RESET);
-        return;
-    }
-    // Checking, if game start
-    if (endState <= END_TURN) {
-        // Check, if turn of current player
-        if (currentTurn) {
-            // Clicking on field
-            endState = board.click(_app.sounds, mouse);
+    // Normal turn
+    board.clickServerCurrent(mouse);
+    return false;
+}
 
-            // Check, if change state
-            if (endState != END_NONE) {
-                currentTurn = false;
-                // Sending turn to opponent
-                connection.sendConfirmed(ConnectionCode::GameTurn, board.getLastTurnStart(), board.getLastTurnEnd());
-            }
+void ServerGameCycle::inputMouseUp() {
+    InternetCycle::inputMouseUp();
+    menu.unclick();
+}
+
+void ServerGameCycle::inputKeys(SDL_Keycode _key) {
+    if (_key == SDLK_ESCAPE) {
+        // Closing top open object
+        if (menu.isActive()) {
+            menu.escape();
+        } else {
+            settings.activate();
         }
         return;
     }
-    // Waiting menu
-    if (menuRestartButton.in(mouse)) {
-        #if CHECK_CORRECTION
-        SDL_Log("Game restart by current user");
-        #endif
-        // Restarting current game
-        endState = END_NONE;
-        currentTurn = true;
-        // Resetting field
-        board.reset();
-        // Making sound
-        _app.sounds.play(SND_RESET);
-        return;
-    }
-    if (menuExitButton.in(mouse)) {
-        // Going to menu
-        stop();
-        return;
-    }
+    InternetCycle::inputKeys(_key);
 }
 
-void ServerGame::inputKeys(App& _app, SDL_Keycode _key) {
-    if (_key == SDLK_R) {
-        // Sending message of game restart
-        connection.sendConfirmed(ConnectionCode::GameRestart);
-        // Restarting current game
-        endState = END_NONE;
-        currentTurn = true;
-        // Resetting field
-        board.reset();
-        // Making sound
-        _app.sounds.play(SND_RESET);
+void ServerGameCycle::inputMouseWheel(float _wheelY) {
+    if (settings.scroll(mouse, _wheelY)) {
         return;
-    } else {
-        GameCycle::inputKeys(_app, _key);
     }
+    menu.scroll(_wheelY);
 }
 
-void ServerGame::update(App& _app) {
-    BaseCycle::update(_app);
-
+void ServerGameCycle::getInternetPacket(const GetPacket& packet) {
     // Getting internet messages
-    switch (connection.updateMessages()) {
+    switch (ConnectionCode(packet.getData<Uint8>(0))) {
+    case ConnectionCode::Quit:
+        termianatedBox.activate();
+        break;
+
     case ConnectionCode::GameTurn:
-        // Check, if turn of another player (for security)
-        if (currentTurn == false) {
-            #if CHECK_CORRECTION
-            SDL_Log("Turn of opponent player: from %u to %u", connection.lastPacket->getData<Uint8>(2), connection.lastPacket->getData<Uint8>(3));
-            #endif
-            endState = board.move(_app.sounds, {connection.lastPacket->getData<Uint8>(2)}, {connection.lastPacket->getData<Uint8>(3)});
-            currentTurn = true;
+        if (packet.isBytesAvaliable(3)) {
+            board.clickServerOpponent(packet.getData<Uint8>(2), packet.getData<Uint8>(3));
+            logger.additional("Turn of opponent player from %u to %u",
+                packet.getData<Uint8>(2), packet.getData<Uint8>(3));
         }
-        return;
+        break;
+
+    default:
+        break;
     }
 }
 
-void ServerGame::draw(const App& _app) const {
-    // Bliting field
-    board.blit(_app.window);
+void ServerGameCycle::update() {
+    InternetCycle::update();
+    menu.update();
+}
 
-    // Draw surround letters
-    letters.blit(_app.window);
+void ServerGameCycle::draw() const {
+    // Blitting field
+    board.blit(window);
+    letters.blit(window);
 
-    // Drawing player state
-    playersTurnsTexts[currentTurn].blit(_app.window);
+    // Draw game state
+    switch (board.getState()) {
+    case GameState::CurrentPlay:
+        currentTurnText.blit();
+        break;
 
-    // Bliting game state, if need
-    if (endState > END_TURN) {
-        // Bliting end background
-        menuBackplate.blit(_app.window);
+    case GameState::OpponentPlay:
+        opponentTurnText.blit();
+        break;
 
-        // Bliting text with end state
-        switch (endState) {
-        case END_WIN:
-            winText.blit(_app.window);
-            break;
+    case GameState::CurrentWin:
+        winText.blit();
+        break;
 
-        case END_LOOSE:
-            looseText.blit(_app.window);
-            break;
+    case GameState::OpponentWin:
+        looseText.blit();
+        break;
 
-        case END_NOBODY:
-            nobodyWinText.blit(_app.window);
-            break;
-        }
+    case GameState::NobodyWin:
+        nobodyWinText.blit();
+        break;
 
-        // Blitting buttons
-        menuRestartButton.blit(_app.window);
-        menuExitButton.blit(_app.window);
+    default:
+        break;
     }
-    // Messages
-    disconnectedBox.blit(_app.window);
-    termianatedBox.blit(_app.window);
+
+    // Bliting waiting menu, if need
+    menu.blit();
 
     // Drawing buttons
-    exitButton.blit(_app.window);
-    gameRestartButton.blit(_app.window);
+    exitButton.blit();
+    gameSaveButton.blit();
+    gameMenuButton.blit();
+    settings.blit();
 
-    // Drawing setting menu
-    settings.blit(_app.window);
+    // Messages
+    savedInfo.blit();
+    disconnectedBox.blit();
+    termianatedBox.blit();
 
     // Bliting all to screen
-    _app.window.render();
+    window.render();
 }

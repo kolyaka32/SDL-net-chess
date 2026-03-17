@@ -1,173 +1,147 @@
 /*
- * Copyright (C) 2025, Kazankov Nikolay 
+ * Copyright (C) 2025-2026, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
 #include "clientLobby.hpp"
-#include "clientGame.hpp"
 
 
-// Base link connections realisations
-char baseIP[12] = "127.0.0.1";
-char basePort[6] = "8000";
+ClientLobbyCycle::ClientLobbyCycle(Window& _window)
+: BaseCycle(_window),
+broadcastSendSocket(),
+serverScroller(_window, 0.5, 0.4, 1.0, 0.6, 4,
+    {"No servers found", "Сервера не найдены", "Kein Server gefunden", "Сервера не знойдзены"}),
+updateButton(_window, 0.5, 0.85, {"Update", "Обновить", "Update", "Абнаўленне"}),
+targetConnectButton(_window, 0.5, 0.95,
+    {"Connect by IP", "Присоединиться по IP", "Über IP beitreten", "Далучыцца па IP"}),
+targetConnectMenu(_window) {
+    // Starting random getting socket
+    logger.additional("Start client lobby cycle");
 
+    // Setting to correct send broadcast
+    broadcastSendSocket.setSendBroadcast();
 
-ClientLobby::ClientLobby(App& _app)
-: BaseCycle(_app),
-enterIPText(_app.window, 0.5, 0.1, {"Enter IP:", "Введите IP:", "-", "Увядзіце IP:"}, 30, WHITE),
-enterIPField(_app.window, 0.5, 0.2, 20, baseIP),
-enterPortText(_app.window, 0.5, 0.4, {"Enter port:", "Введите порт:", "Port eingeben:", "Увядзіце порт:"}, 30, WHITE),
-enterPortField(_app.window, 0.5, 0.5, 20, basePort),
-connectButton(_app.window, 0.5, 0.7, {"Connect", "Присоединится", "Beitritt", "Далучыцца"}, 24, WHITE),
-pasteButton(_app.window, 0.5, 0.9, {"Paste the copied address", "Вставить скопированный адрес", "Kopierte Adresse einfügen", "Уставіць скапіяваны адрас"}, 24, WHITE) {
-    if (isAdditionalRestarted()) {
-        stop();
-        return;
+    // First auto searching
+    updateList();
+
+    if (!isRestarted()) {
+        targetConnectMenu.reset();
     }
 }
 
-void ClientLobby::inputMouseDown(App& _app) {
-    // Clicking in settings menu
-    if (settings.click(mouse)) {
-        return;
+bool ClientLobbyCycle::inputMouseDown() {
+    if (BaseCycle::inputMouseDown()) {
+        return true;
     }
-    // Checking on exit
-    if (exitButton.in(mouse)) {
-        stop();
-        return;
+    if (targetConnectMenu.click(mouse)) {
+        return true;
     }
-
-    // Connection part
-    enterIPField.press(mouse);
-    enterPortField.press(mouse);
-
-    // Check, if press paste data
-    if (pasteButton.in(mouse)) {
-        pasteFromClipboard();
-        return;
+    if (updateButton.in(mouse)) {
+        updateList();
+        return true;
     }
-
-    // Trying to connect at specified address
-    if (connectButton.in(mouse)) {
-        // Correcting port text
-        char portTextCorrected[7];
-        memcpy(portTextCorrected, enterPortField.getString(), 7);
-
-        for (char* c = portTextCorrected; *c; ++c) {
-            if (*c < '0' || *c > '9') {
-                #if CHECK_ALL
-                SDL_Log("Couldn't connect - wrong port");
-                #endif
-                return;
-            }
-        }
-
-        client.tryConnect(enterIPField.getString(), std::stoi(portTextCorrected));
-        return;
+    if (targetConnectButton.in(mouse)) {
+        targetConnectMenu.activate();
+        return true;
     }
+    if (int i = serverScroller.click(mouse)) {
+        // Connecting to selected server
+        internet.sendFirst(serverDatas[i-1].getAddress(), {ConnectionCode::Init, Uint8(BROADCAST_APP_INDEX)});
+        return true;
+    }
+    return false;
 }
 
-void ClientLobby::inputMouseUp(App& app) {
+void ClientLobbyCycle::inputMouseUp() {
     settings.unClick();
-    enterIPField.unpress();
-    enterPortField.unpress(); 
+    targetConnectMenu.unclick();
 }
 
-void ClientLobby::inputKeys(App& app, SDL_Keycode key) {
-    enterIPField.type(key);
-    enterPortField.type(key);
+void ClientLobbyCycle::inputKeys(SDL_Keycode _key) {
+    targetConnectMenu.press(_key);
 }
 
-void ClientLobby::update(App& _app) {
-    BaseCycle::update(_app);
+void ClientLobbyCycle::update() {
+    BaseCycle::update();
+    targetConnectMenu.update();
 
-    // Updating typeboxes
-    mouse.updatePos();
-    enterIPField.update(mouse.getX());
-    enterPortField.update(mouse.getX());
+    // Getting internet data from general socket
+    while (const GetPacket* packet = internet.getNewMessages()) {
+        switch (ConnectionCode(packet->getData<Uint8>(0))) {
+        case ConnectionCode::Init:
+            // Check if app type is match
+            if (packet->getData<Uint8>(1) == BROADCAST_APP_INDEX) {
+                // Connecting to getted address
+                internet.connectTo(Destination{packet->getSourceAddress()});
 
-    // Getting internet data
-    switch (client.getCode()) {
-    case ConnectionCode::Init:
-        // Settings options to this connection
-        client.connectToLastMessage();
-        // Starting game
-        runCycle<ClientGame, Connection&>(_app, client);
-        // Exiting to menu after game
-        stop();
-        return;
-    }
-}
+                // Starting game (as client)
+                App::setNextCycle(Cycle::ClientGame);
+            }
+            break;
 
-void ClientLobby::inputText(App& app, const char* text) {
-    // Inputing text
-    enterIPField.writeString(text);
-    enterPortField.writeString(text);
-}
-
-void ClientLobby::draw(const App& _app) const {
-    // Bliting background
-    _app.window.setDrawColor(BLACK);
-    _app.window.clear();
-
-    // Drawing buttons
-    exitButton.blit(_app.window);
-
-    // Draw main part
-    enterIPText.blit(_app.window);
-    enterPortText.blit(_app.window);
-    pasteButton.blit(_app.window);
-    connectButton.blit(_app.window);
-    enterIPField.blit();
-    enterPortField.blit();
-
-    // Drawing settings
-    settings.blit(_app.window);
-
-    // Bliting all to screen
-    _app.window.render();
-}
-
-void ClientLobby::pasteFromClipboard() {
-    // Getting data from clipboard
-    char* clipboard = SDL_GetClipboardText();
-
-    // Check text on correction
-    if (clipboard == nullptr) {
-        #if CHECK_ALL
-        SDL_Log("Couldn't get clipboard");
-        #endif
-        return;
-    }
-    // Find IP text (first part)
-    int i=0;
-    for (; clipboard[i]; ++i) {
-        // Finding : as port separator
-        if (clipboard[i] == ':') {
+        default:
             break;
         }
-        // Checking coorection of string
-        if (clipboard[i] != '.' && (clipboard[i] < '0' || clipboard[i] > '9')) {
-            #if CHECK_ALL
-            SDL_Log("Wrong clipboard: %s", clipboard);
-            #endif
-            SDL_free(clipboard);
+    }
+
+    // Getting data from broadcast socket
+    // Getting internet data
+    while (const GetPacket* packet = broadcastSendSocket.recieve()) {
+        switch (ConnectionCode(packet->getData<Uint8>(0))) {
+        case ConnectionCode::Server:
+            // Check if app type is match
+            if (packet->getData<Uint8>(1) == BROADCAST_APP_INDEX) {
+                // Get server information
+                // Adding to list
+                serverDatas.emplace_back(packet->getSourceAddress(), int(getTime()-startSearchTimer));
+                logger.additional("Added server: address: %s:%d, ping: %d",
+                    serverDatas[serverDatas.size()-1].getAddress().getName(),
+                    serverDatas[serverDatas.size()-1].getAddress().getPort(),
+                    serverDatas[serverDatas.size()-1].getPing());
+                // Adding variant to select menu
+                serverScroller.addItem(serverDatas[serverDatas.size()-1]);
+            }
+            break;
+
+        default:
             return;
         }
     }
-    clipboard[i] = '\0';
-    i++;
-    // Finding end of port text
-    for (int k=i; clipboard[k]; ++k) {
-        if (clipboard[k] < '0' || clipboard[k] > '9') {
-            clipboard[k] = '\0';
-            break;
-        }
-    }
-    #if CHECK_ALL
-    SDL_Log("From clipboard: IP: %s, port: %s", clipboard, clipboard+i);
-    #endif
-    enterIPField.setString(clipboard);
-    enterPortField.setString(clipboard+i);
-    SDL_free(clipboard);
+}
+
+void ClientLobbyCycle::inputText(const char* _text) {
+    targetConnectMenu.write(_text);
+}
+
+void ClientLobbyCycle::draw() const {
+    // Bliting background
+    window.setDrawColor(BLACK);
+    window.clear();
+
+    // Drawing buttons
+    exitButton.blit();
+
+    // Draw main part
+    serverScroller.blit();
+    updateButton.blit();
+    targetConnectButton.blit();
+    // Drawing target connect menu above all
+    targetConnectMenu.blit();
+
+    // Drawing settings
+    settings.blit();
+
+    // Bliting all to screen
+    window.render();
+}
+
+void ClientLobbyCycle::updateList() {
+    // Clearing previous data
+    serverScroller.clear();
+    serverDatas.clear();
+    // Sending searching message to broadcast
+    Destination dest{"255.255.255.255", BROADCAST_PORT};
+    broadcastSendSocket.send(dest, {ConnectionCode::Search, Uint8(BROADCAST_APP_INDEX)});
+    // Update timer
+    startSearchTimer = getTime();
 }

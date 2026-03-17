@@ -1,48 +1,42 @@
 /*
- * Copyright (C) 2025, Kazankov Nikolay 
+ * Copyright (C) 2024-2026, Kazankov Nikolay
  * <nik.kazankov.05@mail.ru>
  */
 
 #pragma once
 
-#include "libraries.hpp"
-#include "preloaded/music.hpp"
-#include "preloaded/sounds.hpp"
-#include "initFile.hpp"
+#include "preloaded/audio.hpp"
 #include "window.hpp"
-#include "languages.hpp"
-
-
-// Load needed loader, depend on teting
-#if ARCHIEVE_LOADING
-#include "preloaded/loader/archieveLoader.hpp"
-#else
-#include "preloaded/loader/straightLoader.hpp"
-#endif
+#include "mouse.hpp"
+#include "macroses.hpp"
+#include "../cyclesNames.hpp"
 
 
 // Class of whole current application
-class App : Libraries {
-private:
-    // Selecting loader for data, depend on testing
-    #if ARCHIEVE_LOADING
-    const ArchieveLoader loader;
-    #else
-    const StraightLoader loader;
-    #endif
-
+class App {
+ private:
     // Flags of work
     static bool running;
+    static Cycle nextCycle;
+    // Shortcut for easier cycle run
+    template <typename Cycle>
+    static void runCycle(Window& window);
 
-public:
-    App();
-
+ public:
     // Commands to operate with global running
     static void stop();
     static bool isRunning();
-
-    Music music;
-    Sounds sounds;
-    InitFile initFile;
-    const Window window;
+    static void setNextCycle(Cycle nextCycle);
+    static Cycle getNextCycle();
+    // Start current thread
+    static void run(Window& window);
 };
+
+template <typename Cycle>
+void App::runCycle(Window& _window) {
+   // Creating new cycle
+   Cycle cycle{_window};
+   // Starting it and waiting to finish
+   cycle.run();
+   // Destroying it
+}

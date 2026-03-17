@@ -1,16 +1,13 @@
 /*
- * Copyright (C) 2025, Kazankov Nikolay 
+ * Copyright (C) 2025-2026, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
 #pragma once
 
 #include "../data/app.hpp"
+#include "position.hpp"
 
-
-typedef Uint8 cell;
-typedef Uint8 position;
-typedef Uint8 coord;
 
 // Names of all figures in game
 enum FIG_names {
@@ -38,22 +35,15 @@ enum FIG_names {
     FIG_MOVE_TO,
 };
 
-// Macros for getting position from coordinats
-#define getPos(x, y) ((((x)) + ((y)) * FIELD_WIDTH))
+// Extra cell modifires
+#define FIG_RED_TYPE 0x10  // Code for making cell red (attackable)
+#define CELL_TYPE_MASK 0xFF  // Mask for get type of cell
 
-
-// Extra names modifires
-#define FIG_RED_TYPE 0x10   // Code of making cell red (attackable)
-
-
-// Type of cell
-struct Figure {
-    cell type;  // Type of current cell
-    position pos;   // Coordinats of current cell
-};
+// Type for storing one cell (from FIG_names)
+typedef Uint8 cell;
 
 // Array of king possible ways to go
-const Sint8 kingMoves[8][2] = {
+const Position kingMoves[8] = {
     {0, 1},
     {1, 1},
     {1, 0},
@@ -65,7 +55,7 @@ const Sint8 kingMoves[8][2] = {
 };
 
 // Array of possible knight ways to go
-const Sint8 knightMoves[8][2] = {
+const Position knightMoves[8] = {
     {-1, 2},
     {1, 2},
     {2, 1},

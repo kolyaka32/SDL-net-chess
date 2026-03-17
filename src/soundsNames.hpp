@@ -1,23 +1,28 @@
 /*
- * Copyright (C) 2025, Kazankov Nikolay 
+ * Copyright (C) 2025-2026, Kazankov Nikolay 
  * <nik.kazankov.05@mail.ru>
  */
 
 #pragma once
 
-#include "data/preloaded/sounds.cpp"
+#include "define.hpp"
+
+#if (PRELOAD_SOUNDS)
 
 // Names of sound effects
-enum SND_names{
-    SND_TURN,   // Sound of player's turn
-    SND_RESET,  // Sound of field reset
+enum class Sounds {
+    // Game part
+    Turn,
+    Reset,
 
     // Global counter of all loaded sounds
-    SND_count,
+    Count,
+
+    // Shortcut for changing slider sound in settings
+    SliderSound = Turn,
 };
 
-// Shortcut for sounds data class
-typedef SoundsData<SND_count> Sounds;
-
 // File names of the corresponding sounds
-extern const char* soundsFilesNames[SND_count];
+extern const char* soundsFilesNames[unsigned(Sounds::Count)];
+
+#endif  // (PRELOAD_SOUNDS)

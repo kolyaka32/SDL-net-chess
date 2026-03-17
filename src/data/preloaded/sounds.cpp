@@ -1,82 +1,92 @@
 /*
- * Copyright (C) 2025, Kazankov Nikolay 
+ * Copyright (C) 2024-2026, Kazankov Nikolay
  * <nik.kazankov.05@mail.ru>
  */
 
 #include "sounds.hpp"
 
+#if (PRELOAD_SOUNDS)
 
-template <unsigned count>
-SoundsData<count>::SoundsData(const DataLoader& _loader, const char* _names[count]) {
+#include "loader/loader.hpp"
+
+
+SoundsData::SoundsData(MIX_Mixer* _mixer) {
     // Resetting all sounds
-    #if CHECK_CORRECTION
-    for (unsigned i=0; i < count; ++i) {
+    #if (CHECK_CORRECTION)
+    for (unsigned i=0; i < unsigned(Sounds::Count); ++i) {
         sounds[i] = nullptr;
     }
     #endif
 
     // Loading all needed sounds
-    for (unsigned i=0; i < count; ++i) {
-        loadSound(_loader, i, _names[i]);
+    for (unsigned i=0; i < unsigned(Sounds::Count); ++i) {
+        loadSound(_mixer, i, soundsFilesNames[i]);
     }
+
+    // Resetting sounds volume
+    setVolume(0.5f);
 
     // Checking massive on loading correction
-    #if CHECK_CORRECTION
-    for (unsigned i=0; i < count; ++i) {
+    #if (CHECK_CORRECTION)
+    for (unsigned i=0; i < unsigned(Sounds::Count); ++i) {
         if (sounds[i] == NULL) {
-            throw DataLoadException("Not loaded: " + std::string(_names[i]));
+            logger.important("Don't load sound: %s", soundsFilesNames[i]);
         }
     }
+    logger.additional("Sounds loaded corretly");
     #endif
-    
-    // Resetting sounds volume
-    setVolume(MIX_MAX_VOLUME/2);
 }
 
-template <unsigned count>
-SoundsData<count>::~SoundsData() {
+SoundsData::~SoundsData() {
     // Closing all sounds
-    for (unsigned i=0; i < count; ++i) {
-        Mix_FreeChunk(sounds[i]);
+    for (unsigned i=0; i < unsigned(Sounds::Count); ++i) {
+        MIX_DestroyTrack(tracks[i]);
+        MIX_DestroyAudio(sounds[i]);
     }
 }
 
-template <unsigned count>
-void SoundsData<count>::loadSound(const DataLoader& _loader, unsigned _index, const char* _name) {
+void SoundsData::loadSound(MIX_Mixer* _mixer, unsigned _index, const char* _name) {
     // Load data of current sound
-    SDL_IOStream* iodata = _loader.load(_name);
+    SDL_IOStream* iodata = dataLoader.load(_name);
 
-    // Creating surface
-    sounds[_index] = Mix_LoadWAV_IO(iodata, true);
+    // Loading sound without encoding
+    sounds[_index] = MIX_LoadAudio_IO(_mixer, iodata, false, true);
 
-    // Checking correction of loaded sound
-    #if CHECK_CORRECTION
+    // Checking of correction of loaded sound
+    #if (CHECK_CORRECTION)
     if (sounds[_index] == nullptr) {
-        throw DataLoadException(_name);
+        logger.important("Can't create sound: %s", _name);
+        return;
     }
     #endif
-}
 
-template <unsigned count>
-void SoundsData<count>::play(unsigned _index) const {
-    Mix_PlayChannel(_index, sounds[_index], 0);
-}
+    // Creating own track
+    tracks[_index] = MIX_CreateTrack(_mixer);
 
-template <unsigned count>
-void SoundsData<count>::setVolume(unsigned _volume) {
-    // Checking correction given volume
-    #if CHECK_CORRECTION
-    if (_volume/2 > MIX_MAX_VOLUME) {
-        throw "Wrong volume";
+    // Checking of correction of created track
+    #if (CHECK_CORRECTION)
+    if (tracks[_index] == nullptr) {
+        logger.important("Can't create track: %s", _name);
+        return;
     }
     #endif
-    volume = _volume/2;
-    for (int i=0; i < count; ++i) {
-        Mix_VolumeChunk(sounds[i], volume);
+
+    // Setting separate track to play different sounds
+    MIX_SetTrackAudio(tracks[_index], sounds[_index]);
+}
+
+void SoundsData::play(Sounds _index) const {
+    MIX_PlayTrack(tracks[unsigned(_index)], 0);
+}
+
+void SoundsData::setVolume(float _volume) {
+    for (int i=0; i < unsigned(Sounds::Count); ++i) {
+        MIX_SetTrackGain(tracks[i], _volume);
     }
 }
 
-template <unsigned count>
-unsigned SoundsData<count>::getVolume() const {
-    return volume*2;
+float SoundsData::getVolume() const {
+    return MIX_GetTrackGain(tracks[0]);
 }
+
+#endif  // (PRELOAD_SOUNDS)

@@ -1,22 +1,31 @@
 /*
- * Copyright (C) 2025, Kazankov Nikolay 
+ * Copyright (C) 2024-2026, Kazankov Nikolay
  * <nik.kazankov.05@mail.ru>
  */
 
 #pragma once
 
+#include "../../fontsNames.hpp"
+
+#if (PRELOAD_FONTS)
+
+#if (USE_SDL_FONT)
 #include <SDL3_ttf/SDL_ttf.h>
-#include "loader/dataLoader.hpp"
+#else
+#error "Can't preload fonts without library"
+#endif
 
 
-// Class for draw any font with need height
-template <unsigned count>
+// Class for get font with need height
 class FontsData {
-private:
-    TTF_Font* fonts[count];
-    void loadFont(const DataLoader& loader, unsigned index, const char* name);
-public:
-    FontsData(const DataLoader& loader, const char* filesNames[]);
+ private:
+    TTF_Font* fonts[unsigned(Fonts::Count)];
+    void loadFont(Fonts index, const char* fileName);
+
+ public:
+    FontsData();
     ~FontsData();
-    TTF_Font* operator[](unsigned index) const;
+    TTF_Font* operator[](Fonts index) const;
 };
+
+#endif  // (PRELOAD_FONTS)

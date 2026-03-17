@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025, Kazankov Nikolay 
+ * Copyright (C) 2024-2026, Kazankov Nikolay
  * <nik.kazankov.05@mail.ru>
  */
 
@@ -7,16 +7,8 @@
 
 
 // Tempate function for resetting texture
-GUI::GUItemplate::GUItemplate() {
-    texture = nullptr;
-}
+GUI::Template::Template(const Window& _window)
+: window(_window) {}
 
 // Template function for draw
-void GUI::GUItemplate::blit(const Window& _target) const {
-    _target.blit(texture, rect);
-}
-
-// Template function for check, if mouse press in object
-bool GUI::GUItemplate::in(const Mouse mouse) const {
-    return mouse.in(rect);
-}
+void GUI::Template::blit() const {}

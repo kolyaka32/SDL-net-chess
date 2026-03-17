@@ -1,67 +1,65 @@
 /*
- * Copyright (C) 2025, Kazankov Nikolay 
+ * Copyright (C) 2024-2026, Kazankov Nikolay
  * <nik.kazankov.05@mail.ru>
  */
 
 #include "animations.hpp"
 
+#if (PRELOAD_ANIMATIONS)
 
-template <unsigned count>
-AnimationsData<count>::AnimationsData(const DataLoader& _loader, const char* _filesNames[count]) {
-    // Resetting texture masiive
-    #if CHECK_CORRECTION
-    for (unsigned i=0; i < count; ++i) {
+#include "loader/loader.hpp"
+
+
+AnimationsData::AnimationsData() {
+    // Resetting texture array
+    #if (CHECK_CORRECTION)
+    for (unsigned i=0; i < unsigned(Animations::Count); ++i) {
         animations[i] = nullptr;
     }
     #endif
 
     // Loading all needed textures
-    for (unsigned i=0; i < count; ++i) {
-        load(_loader, i, _filesNames[i]);
+    for (unsigned i=0; i < unsigned(Animations::Count); ++i) {
+        loadAnimation(Animations(i), animationsFilesNames[i]);
     }
 
     // Checking massive on loading correction
-    #if CHECK_CORRECTION
-    for (unsigned i=0; i < count; ++i) {
-        if (animations[i] == NULL) {
-            throw DataLoadException("Animation: " + std::string(_filesNames[i]));
+    #if (CHECK_CORRECTION)
+    for (unsigned i=0; i < unsigned(Animations::Count); ++i) {
+        if (animations[i] == nullptr) {
+            logger.important("Don't load animation: %s", animationsFilesNames[i]);
+            return;
         }
     }
+    logger.additional("Animations loaded corretly");
     #endif
 }
 
-template <unsigned count>
-AnimationsData<count>::~AnimationsData() {
-    // Closing all used textures
-    for (unsigned i=0; i < count; ++i) {
+AnimationsData::~AnimationsData() {
+    // Closing all animations
+    for (unsigned i=0; i < unsigned(Animations::Count); ++i) {
         IMG_FreeAnimation(animations[i]);
     }
 }
 
-template <unsigned count>
-void AnimationsData<count>::load(const DataLoader& _loader, unsigned _index, const char* _name) {
-    // Checking correction of trying to load
-    #if CHECK_CORRECTION
-    if (_name == nullptr) {
-        throw DataLoadException(_name);
-    }
-    #endif
+void AnimationsData::loadAnimation(Animations _index, const char* _fileName) {
+    // Load data of current texture
+    SDL_IOStream* data = dataLoader.load(_fileName);
 
-    // Load data
-    SDL_IOStream* iodata = _loader.load(_name);
+    // Creating texture
+    animations[unsigned(_index)] = IMG_LoadAnimation_IO(data, true);
 
-    // Loading animation
-    animations[_index] = IMG_LoadAnimation_IO(iodata, true);
-
-    // Checking correction of loaded animation
-    #if CHECK_CORRECTION
-    if (animations[_index] == nullptr) {
-        throw DataLoadException(_name);
+    // Checking correction of loaded texture
+    #if (CHECK_CORRECTION)
+    if (animations[unsigned(_index)] == nullptr) {
+        logger.important("Can't load animation: %s", _fileName);
+        return;
     }
     #endif
 }
 
-template <unsigned count>
-IMG_Animation* AnimationsData<count>::operator[] (unsigned _index) const {
-    return animations[_index];
+IMG_Animation* AnimationsData::operator[] (Animations _index) const {
+    return animations[unsigned(_index)];
 }
+
+#endif  // (PRELOAD_ANIMATIONS)
