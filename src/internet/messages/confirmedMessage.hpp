@@ -30,6 +30,7 @@ class ConfirmedMessage : public Message {
 template <typename ...Args>
 ConfirmedMessage::ConfirmedMessage(ConnectionCode _code, const Args ...args)
 : Message(Uint8(_code), globalMessageIndex, args...),
-messageIndex(globalMessageIndex) {
+messageIndex(globalMessageIndex),
+nextResend(getTime() + messageResendTimeout) {
     updateGlobalIndex();
 }

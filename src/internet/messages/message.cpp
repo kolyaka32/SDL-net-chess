@@ -26,7 +26,7 @@ void Message::write(const char* _str) {
     #endif
 
     // Copying data
-    memcpy(data, _str, length);
+    memcpy(data+size, _str, length);
 
     size += length;
 }

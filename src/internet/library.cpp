@@ -31,7 +31,7 @@ bool InternetLibrary::findHostName() {
             // Check if not loopback
             if (strcmp(ipStr, "127.0.0.1")) {
                 // Writing getted address
-                snprintf(hostName, sizeof(hostName), "%s", ipStr);
+                SDL_snprintf(hostName, sizeof(hostName), "%s", ipStr);
                 logger.additional("Hostname: %s", ipStr);
                 return false;
             }
@@ -70,7 +70,7 @@ bool InternetLibrary::findHostName() {
             // Check if not loopback
             if (strcmp(ipStr, "127.0.0.1")) {
                 // Writing getted address
-                snprintf(hostName, sizeof(hostName), "%s", ipStr);
+                SDL_snprintf(hostName, sizeof(hostName), "%s", ipStr);
                 logger.additional("Hostname: %s", ipStr);
                 return false;
             }
@@ -117,9 +117,9 @@ Uint8 writeNet(Uint8 _object) {
     return _object;
 }
 
-/*Sint8 writeNet(Sint8 _object) {
+Sint8 writeNet(Sint8 _object) {
     return _object;
-}*/
+}
 
 char writeNet(char _object) {
     return _object;
@@ -133,21 +133,21 @@ Uint16 writeNet(Uint16 _object) {
     return htons(_object);
 }
 
-/*Sint16 writeNet(Sint16 _object) {
-    return (Uint8)_object;
-}*/
+Sint16 writeNet(Sint16 _object) {
+    return (Sint16)htons(_object);
+}
 
 Uint32 writeNet(Uint32 _object) {
     return htonl(_object);
 }
 
 Sint32 writeNet(Sint32 _object) {
-    return htonl(_object);;
+    return (Sint32)htonl(_object);
 }
 
-/*float writeNet(float _object) {
-    return (Uint8)_object;
-}*/
+float writeNet(float _object) {
+    return (float)htonl(_object);
+}
 
 /*Uint64 writeNet(Uint64 _object) {
     return htonll(_object);
@@ -161,9 +161,9 @@ Uint8 readNet(Uint8 _object) {
     return _object;
 }
 
-/*Sint8 readNet(Sint8 _object) {
-    return ;
-}*/
+Sint8 readNet(Sint8 _object) {
+    return _object;
+}
 
 char readNet(char _object) {
     return _object;
@@ -177,21 +177,21 @@ Uint16 readNet(Uint16 _object) {
     return ntohs(_object);
 }
 
-/*Sint16 readNet(Sint16 _object) {
-    return ;
-}*/
-
-Uint32 readNet(Uint32 _object) {
-    return ntohl(ntohl(_object));
+Sint16 readNet(Sint16 _object) {
+    return (Sint16)ntohs(_object);
 }
 
-/*Sint32 readNet(Sint32 _object) {
-    return ;
-}*/
+Uint32 readNet(Uint32 _object) {
+    return ntohl(_object);
+}
 
-/*float readNet(float _object) {
-    return ;
-}*/
+Sint32 readNet(Sint32 _object) {
+    return (Sint32)ntohl(_object);
+}
+
+float readNet(float _object) {
+    return ntohl((Uint32)_object);
+}
 
 /*Uint64 readNet(Uint64 _object) {
     return ntohll(_object);

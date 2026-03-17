@@ -60,23 +60,6 @@ bool ServerGameCycle::inputMouseDown() {
     }
     // Normal turn
     board.clickServerCurrent(mouse);
-    /*
-    // Checking, if game start
-    if (endState <= END_TURN) {
-        // Check, if turn of current player
-        if (currentTurn) {
-            // Clicking on field
-            endState = board.click(_app.sounds, mouse);
-
-            // Check, if change state
-            if (endState != END_NONE) {
-                currentTurn = false;
-                // Sending turn to opponent
-                connection.sendConfirmed(ConnectionCode::GameTurn, board.getLastTurnStart(), board.getLastTurnEnd());
-            }
-        }
-        return;
-    }*/
     return false;
 }
 

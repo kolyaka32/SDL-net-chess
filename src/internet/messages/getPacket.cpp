@@ -11,7 +11,7 @@ GetPacket* GetPacket::tryGetData(const SocketType _socket) {
     srcAddressLength = sizeof(srcAddress);
     length = recvfrom(_socket, buffer, sizeof(buffer), 0, (sockaddr*)&srcAddress, &srcAddressLength);
     if (length > 0) {
-        logger.additional("Get data with length %d: %s\n", length, buffer);
+        logger.additional("Get data with length: %d, type: %d", length, buffer[0]);
         return this;
     }
     return nullptr;

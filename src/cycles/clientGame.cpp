@@ -39,16 +39,19 @@ void ClientGameCycle::getInternetPacket(const GetPacket& packet) {
         return;
 
     case ConnectionCode::GameNew:
-        if (packet.isBytesAvaliable(69)) {
-            // Creating new field from get data
+        {
+           // Creating new field from get data
             const FieldSave fieldSave{(char*)(packet.getPointer(2)), packet.getLength()-2};
-            // Setting it as current
-            board = (Field)fieldSave;
+            // Checking on correction
+            if (fieldSave.isCorrect(packet.getData<Uint8>(2))) {
+                // Setting it as current
+                board = (Field)fieldSave;
 
-            // Making sound
-            audio.sounds.play(Sounds::Reset);
-            audio.music.startFromCurrent(Music::Main);
-            logger.additional("Starting new game by connection");
+                // Making sound
+                audio.sounds.play(Sounds::Reset);
+                audio.music.startFromCurrent(Music::Main);
+                logger.additional("Starting new game by connection");
+            } 
         }
         return;
 

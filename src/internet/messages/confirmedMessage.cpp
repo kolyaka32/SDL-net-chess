@@ -20,6 +20,7 @@ void ConfirmedMessage::updateGlobalIndex() {
 bool ConfirmedMessage::isNeedResend() {
     // Check, if get over timer
     if (getTime() > nextResend) {
+        // Resending this message
         nextResend = getTime() + messageResendTimeout;
         logger.additional("Resending packet with code: %u, index: %u", getData()[0], messageIndex);
         return true;

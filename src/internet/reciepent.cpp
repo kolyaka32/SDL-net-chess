@@ -78,8 +78,8 @@ void Reciepient::updateGetTimeout() {
 }
 
 void Reciepient::applyMessage(Uint8 _index) {
-    // Appling getting message
-    logger.additional("Appling, that message with index %u was delivered", _index);
+    // Applying getting message
+    logger.additional("Applying, that message with index %u was delivered", _index);
 
     // Find that message
     for (int i=0; i < unconfirmedMessages.size(); ++i) {

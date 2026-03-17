@@ -10,7 +10,6 @@ Socket::Socket() {
     // Create a socket for listening for incoming connection requests.
     sck = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     #if (USE_WINSOCK)
-    sck = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if (sck == INVALID_SOCKET) {
         logger.additional("Can't create socket with error: %d", getError);
     }
@@ -152,7 +151,7 @@ void Socket::send(const Destination& _dest, const Message& _message) const {
     if (sendLength != _message.getLength()) {
         logger.important("Don't send data correct, error: %d", getError);
     } else {
-        logger.additional("Send sucsesfull: %d", _message.getLength());
+        logger.additional("Send sucsesfull length: %d, type: %d", _message.getLength(), _message.getData()[0]);
     }
     #endif
 }

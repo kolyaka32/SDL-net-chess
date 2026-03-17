@@ -5,7 +5,6 @@
 
 #pragma once
 
-#include <array>
 #include "../library.hpp"
 
 
@@ -72,6 +71,7 @@ void Message::write(const Array<T> _object) {
         write(_object[i]);
     }
 }
+
 template <typename T, typename ...Args>
 void Message::write(const T _object, const Args ...args) {
     // Writing current object

@@ -13,23 +13,6 @@ IndexesArray<length>::IndexesArray()
     lastPosition = 0;
 }
 
-/*template <unsigned length>
-IndexesArray<length>::IndexesArray(const IndexesArray& _object)
-: array(_object.array),
-lastPosition(_object.lastPosition) {}
-
-template <unsigned length>
-IndexesArray<length>& IndexesArray<length>::operator=(const IndexesArray& _object) {
-    array = _object.array;
-    lastPosition = _object.lastPosition;
-    return *this;
-}
-
-template <unsigned length>
-IndexesArray<length>::IndexesArray(IndexesArray&& _object) noexcept
-: array(std::move(_object.array)),
-lastPosition(_object.lastPosition) {}*/
-
 template <unsigned length>
 bool IndexesArray<length>::isUnique(Uint8 _index) {
     // Check, if index in array
