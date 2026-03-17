@@ -7,15 +7,19 @@
 
 
 Logger::Logger()
+#if (CHECK_ALL)
 : logFile(LOG_NAME) {
-    #if (CHECK_ALL)
     // Setting to write without buffering for correct work with errors
     logFile << std::unitbuf;
 
     additional("Started logging with file name: %s", LOG_NAME);
-    #endif
 }
+#else
+{}
+#endif
 
 Logger::~Logger() noexcept {
+    #if (CHECK_ALL)
     logFile.close();
+    #endif
 }

@@ -5,7 +5,9 @@
 
 #pragma once
 
+#include <array>
 #include "../library.hpp"
+#include "../../data/array.hpp"
 
 
 // Class with data for sending somewhere
