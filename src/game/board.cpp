@@ -35,21 +35,6 @@ void Board::resetSelection() {
     }
 }
 
-void Board::swapState() {
-    switch (state) {
-    case GameState::CurrentPlay:
-        state = GameState::OpponentPlay;
-        break;
-
-    case GameState::OpponentPlay:
-        state = GameState::CurrentPlay;
-        break;
-
-    default:
-        break;
-    }
-}
-
 void Board::pickFigure(Position _p) {
     // Finding clicked cell, it position
     activePosition = _p;
@@ -341,7 +326,7 @@ void Board::clickCooperative(const Mouse _mouse) {
             return;
         }
         // Checking, if click on old place
-        if (activePosition == pos.getPosition()) {
+        if (activePosition == pos) {
             // Clearing field for next turns
             resetSelection();
             return;
@@ -353,7 +338,18 @@ void Board::clickCooperative(const Mouse _mouse) {
             // Making sound
             audio.sounds.play(Sounds::Turn);
             // Changing moving player
-            swapState();
+            switch (state) {
+            case GameState::CurrentPlay:
+                state = GameState::OpponentPlay;
+                break;
+
+            case GameState::OpponentPlay:
+                state = GameState::CurrentPlay;
+                break;
+
+            default:
+                break;
+            }
             // Clearing field after turn
             resetSelection();
             return;
@@ -361,31 +357,138 @@ void Board::clickCooperative(const Mouse _mouse) {
     }
 }
 
-void Board::clickServerCurrent(const Mouse mouse) {
-    // Emulating first click on field
-    /*pickFigure(_p1);
-    
-    // Emulating second click on field
-    if (figures[_p2.getPosition()] >= FIG_MOVE_TO) {
-        Uint8 turn = placeFigure(_p2);
-        // Resetting field for correct next turns
-        resetSelection();
-        return turn;
+void Board::clickServerCurrent(const Mouse _mouse) {
+    // Check if action posible
+    if (isValid(_mouse) && (state == GameState::CurrentPlay)) {
+        Position pos = getPosition(_mouse);
+        // Check if try to pick up figure
+        if (activeCell == FIG_NONE) {
+            // Picking up figure from field - showing posible moves
+            pickFigure(pos);
+            return;
         }
-        return END_NONE;*/
+        // Checking, if click on old place
+        if (activePosition == pos) {
+            // Clearing field for next turns
+            resetSelection();
+            return;
+        }
+        // Checking, if click on avalible position
+        if (figures[pos.getPosition()] >= FIG_MOVE_TO) {
+            // Placing figure there
+            placeFigure(pos);
+            // Sending this turn
+            internet.sendAllConfirmed({ConnectionCode::GameTurn, activePosition.getPosition(), pos.getPosition()});
+            // Making sound
+            audio.sounds.play(Sounds::Turn);
+            // Changing moving player
+            switch (state) {
+            case GameState::CurrentPlay:
+                state = GameState::OpponentPlay;
+                break;
+
+            default:
+                break;
+            }
+            // Clearing field after turn
+            resetSelection();
+            return;
+        }
+    }
 }
 
-void Board::clickServerOpponent(Uint8 p1, Uint8 p2) {
-    // Set last position as current
-            //position endPosition = pos.getPosition();
+void Board::clickServerOpponent(Uint8 _p1, Uint8 _p2) {
+    // Check if action posible
+    if ((state == GameState::OpponentPlay) && (_p1 < 64) && (_p2 < 64)) {
+        // Picking up figure from field - showing posible moves
+        pickFigure(_p1);
+
+        // Checking, if click on avalible position
+        if (figures[_p2] >= FIG_MOVE_TO) {
+            // Placing figure there
+            placeFigure(_p2);
+            // Making sound
+            audio.sounds.play(Sounds::Turn);
+            // Changing moving player
+            switch (state) {
+            case GameState::OpponentPlay:
+                state = GameState::CurrentPlay;
+                break;
+
+            default:
+                break;
+            }
+        }
+        // Clearing field after turn (in any case)
+        resetSelection();
+    }
 }
 
-void Board::clickClientCurrent(const Mouse mouse) {
-    //internet.sendAllConfirmed({ConnectionCode::GameTurn, getLastTurn(mouse)});
+void Board::clickClientCurrent(const Mouse _mouse) {
+    // Check if action posible
+    if (isValid(_mouse) && (state == GameState::OpponentPlay)) {
+        Position pos = getPosition(_mouse);
+        // Check if try to pick up figure
+        if (activeCell == FIG_NONE) {
+            // Picking up figure from field - showing posible moves
+            pickFigure(pos);
+            return;
+        }
+        // Checking, if click on old place
+        if (activePosition == pos) {
+            // Clearing field for next turns
+            resetSelection();
+            return;
+        }
+        // Checking, if click on avalible position
+        if (figures[pos.getPosition()] >= FIG_MOVE_TO) {
+            // Placing figure there
+            placeFigure(pos);
+            // Sending this turn
+            internet.sendAllConfirmed({ConnectionCode::GameTurn, activePosition.getPosition(), pos.getPosition()});
+            // Making sound
+            audio.sounds.play(Sounds::Turn);
+            // Changing moving player
+            switch (state) {
+            case GameState::OpponentPlay:
+                state = GameState::CurrentPlay;
+                break;
+
+            default:
+                break;
+            }
+            // Clearing field after turn
+            resetSelection();
+            return;
+        }
+    }
 }
 
-void Board::clickClientOpponent(Uint8 p1, Uint8 p2) {
-    //
+void Board::clickClientOpponent(Uint8 _p1, Uint8 _p2) {
+    // Check if action posible
+    if ((state == GameState::CurrentPlay) && (_p1 < 64) && (_p2 < 64)) {
+        // Picking up figure from field - showing posible moves
+        pickFigure(_p1);
+
+        // Checking, if click on avalible position
+        if (figures[_p2] >= FIG_MOVE_TO) {
+            // Placing figure there
+            placeFigure(_p2);
+            // Making sound
+            audio.sounds.play(Sounds::Turn);
+            // Changing moving player
+            switch (state) {
+            case GameState::CurrentPlay:
+                state = GameState::OpponentPlay;
+                break;
+
+            default:
+                break;
+            }
+        }
+        // Clearing field after turn (in any case)
+        resetSelection();
+    }
 }
 
 GameState Board::getState() {

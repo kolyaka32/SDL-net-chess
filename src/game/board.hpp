@@ -17,7 +17,6 @@ class Board : public Field {
 
     const SDL_FRect rect;  // Global position of board
 
-    void swapState();                // Swap state of turn to opponent
     void pickFigure(Position pos);   // Function for pick figure from field
     void placeFigure(Position pos);  // Function to try put figure back to field
 
