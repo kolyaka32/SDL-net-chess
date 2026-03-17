@@ -16,7 +16,7 @@ targetConnectButton(_window, 0.5, 0.95,
     {"Connect by IP", "Присоединиться по IP", "Über IP beitreten", "Далучыцца па IP"}),
 targetConnectMenu(_window) {
     // Starting random getting socket
-    logAdditional("Start client lobby cycle");
+    logger.additional("Start client lobby cycle");
 
     // Setting to correct send broadcast
     broadcastSendSocket.setSendBroadcast();
@@ -46,7 +46,7 @@ bool ClientLobbyCycle::inputMouseDown() {
     }
     if (int i = serverScroller.click(mouse)) {
         // Connecting to selected server
-        internet.sendFirst(serverDatas[i-1].getAddress(), {ConnectionCode::Init, Uint8(1)});
+        internet.sendFirst(serverDatas[i-1].getAddress(), {ConnectionCode::Init, Uint8(BROADCAST_APP_INDEX)});
         return true;
     }
     return false;
@@ -69,11 +69,14 @@ void ClientLobbyCycle::update() {
     while (const GetPacket* packet = internet.getNewMessages()) {
         switch (ConnectionCode(packet->getData<Uint8>(0))) {
         case ConnectionCode::Init:
-            // Connecting to getted address
-            internet.connectTo(Destination{packet->getSourceAddress()});
+            // Check if app type is match
+            if (packet->getData<Uint8>(1) == BROADCAST_APP_INDEX) {
+                // Connecting to getted address
+                internet.connectTo(Destination{packet->getSourceAddress()});
 
-            // Starting game (as client)
-            App::setNextCycle(Cycle::ClientGame);
+                // Starting game (as client)
+                App::setNextCycle(Cycle::ClientGame);
+            }
             break;
 
         default:
@@ -86,15 +89,18 @@ void ClientLobbyCycle::update() {
     while (const GetPacket* packet = broadcastSendSocket.recieve()) {
         switch (ConnectionCode(packet->getData<Uint8>(0))) {
         case ConnectionCode::Server:
-            // Get server information
-            // Adding to list
-            serverDatas.emplace_back(packet->getSourceAddress(), int(getTime()-startSearchTimer));
-            logAdditional("Added server: address: %s:%d, ping: %d",
-                serverDatas[serverDatas.size()-1].getAddress().getName(),
-                serverDatas[serverDatas.size()-1].getAddress().getPort(),
-                serverDatas[serverDatas.size()-1].getPing());
-            // Adding variant to select menu
-            serverScroller.addItem(serverDatas[serverDatas.size()-1]);
+            // Check if app type is match
+            if (packet->getData<Uint8>(1) == BROADCAST_APP_INDEX) {
+                // Get server information
+                // Adding to list
+                serverDatas.emplace_back(packet->getSourceAddress(), int(getTime()-startSearchTimer));
+                logger.additional("Added server: address: %s:%d, ping: %d",
+                    serverDatas[serverDatas.size()-1].getAddress().getName(),
+                    serverDatas[serverDatas.size()-1].getAddress().getPort(),
+                    serverDatas[serverDatas.size()-1].getPing());
+                // Adding variant to select menu
+                serverScroller.addItem(serverDatas[serverDatas.size()-1]);
+            }
             break;
 
         default:
@@ -135,7 +141,7 @@ void ClientLobbyCycle::updateList() {
     serverDatas.clear();
     // Sending searching message to broadcast
     Destination dest{"255.255.255.255", BROADCAST_PORT};
-    broadcastSendSocket.send(dest, {ConnectionCode::Search, Uint8(1)});
+    broadcastSendSocket.send(dest, {ConnectionCode::Search, Uint8(BROADCAST_APP_INDEX)});
     // Update timer
     startSearchTimer = getTime();
 }

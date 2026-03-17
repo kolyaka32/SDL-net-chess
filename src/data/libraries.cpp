@@ -18,16 +18,16 @@
 Libraries::Libraries() {
     // Initialasing main library
     if (!SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO)) {
-        logImportant("Can't load main library: %s", SDL_GetError());
+        logger.important("Can't load main library: %s", SDL_GetError());
     }
 
     // Initialasing font library
     #if (USE_SDL_FONT)
     if (!TTF_Init()) {
-        logImportant("Can't load font library: %s", SDL_GetError());
+        logger.important("Can't load font library: %s", SDL_GetError());
     }
     #endif
-    logAdditional("Libraries load correctly");
+    logger.additional("Libraries load correctly");
 }
 
 Libraries::~Libraries() noexcept {

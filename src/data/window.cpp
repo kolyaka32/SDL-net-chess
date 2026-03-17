@@ -25,14 +25,14 @@ titleText(_title) {
     // Checking on correction of created objects
     #if (CHECK_CORRECTION)
     if (window == NULL) {
-        logImportant("Can't create window");
+        logger.important("Can't create window");
     }
     #endif
 
     // Creating renderer from window
     #if (CHECK_CORRECTION)
     if (renderer == NULL) {
-        logImportant("Can't create renderer");
+        logger.important("Can't create renderer");
     }
     #endif
 }

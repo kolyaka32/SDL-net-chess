@@ -46,6 +46,8 @@
 #define DOWN_LINE LETTER_LINE               // Place for field letters
 #define WINDOW_WIDTH (GAME_WIDTH + LEFT_LINE + RIGHT_LINE)    // Width of all screen
 #define WINDOW_HEIGHT (GAME_HEIGHT + UPPER_LINE + DOWN_LINE)  // Height of all screen
+#define FIELD_LIGHT {255, 206, 158, 255}
+#define FIELD_DARK {206, 139, 71, 255}
 
 // Base file names
 // File with all GFX
@@ -61,7 +63,7 @@
 // Number of active connections in internet part
 #if (USE_NET)
 #define MAX_CONNECTIONS 1
+#define BROADCAST_APP_INDEX 3
 #define BASE_PORT 8000
-#define BROADCAST_INDEX 3
 #define BROADCAST_PORT 5667
 #endif  // (USE_NET)

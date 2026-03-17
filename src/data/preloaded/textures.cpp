@@ -27,11 +27,11 @@ TexturesData::TexturesData(SDL_Renderer* _renderer) {
     #if (CHECK_CORRECTION)
     for (unsigned i=0; i < unsigned(Textures::Count); ++i) {
         if (textures[i] == NULL) {
-            logImportant("Don't load texture: %s", texturesFilesNames[i]);
+            logger.important("Don't load texture: %s", texturesFilesNames[i]);
             return;
         }
     }
-    logAdditional("Textures loaded corretly");
+    logger.additional("Textures loaded corretly");
     #endif
 }
 
@@ -52,7 +52,7 @@ void TexturesData::loadTexture(SDL_Renderer* _renderer, Textures _index, const c
     // Checking correction of created surface
     #if (CHECK_CORRECTION)
     if (surface == nullptr) {
-        logImportant("Can't create surface: %s", _fileName);
+        logger.important("Can't create surface: %s", _fileName);
         return;
     }
     #endif
@@ -63,7 +63,7 @@ void TexturesData::loadTexture(SDL_Renderer* _renderer, Textures _index, const c
     // Checking correction of loaded texture
     #if (CHECK_CORRECTION)
     if (textures[unsigned(_index)] == nullptr) {
-        logImportant("Can't create texture: %s", _fileName);
+        logger.important("Can't create texture: %s", _fileName);
         return;
     }
     #endif

@@ -21,7 +21,7 @@ bool ConfirmedMessage::isNeedResend() {
     // Check, if get over timer
     if (getTime() > nextResend) {
         nextResend = getTime() + messageResendTimeout;
-        logAdditional("Resending packet with code: %u, index: %u", getData()[0], messageIndex);
+        logger.additional("Resending packet with code: %u, index: %u", getData()[0], messageIndex);
         return true;
     }
     return false;

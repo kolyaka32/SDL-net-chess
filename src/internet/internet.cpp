@@ -10,13 +10,13 @@
 Internet::Internet()
 : socket() {
     socket.tryBindTo(BASE_PORT);
-    logAdditional("Internet created correctly");
+    logger.additional("Internet created correctly");
 }
 
 void Internet::connectTo(const Destination& _dest) {
     // Add new connection
     reciepients.emplace_back(_dest);
-    logAdditional("Connecting to %s:%u", _dest.getAddress(), _dest.getPort());
+    logger.additional("Connecting to %s:%u", _dest.getAddress(), _dest.getPort());
 }
 
 void Internet::detachOf(const sockaddr_in* _address) {
@@ -24,11 +24,11 @@ void Internet::detachOf(const sockaddr_in* _address) {
     for (int i=0; i < reciepients.size(); ++i) {
         if (reciepients[i].isAddress(_address)) {
             reciepients.erase(reciepients.begin()+i);
-            logAdditional("Deleting connection to %d", i);
+            logger.additional("Deleting connection to %d", i);
             return;
         }
     }
-    logAdditional("Can't detach connection");
+    logger.additional("Can't detach connection");
 }
 
 Uint16 Internet::getPort() const {
@@ -38,7 +38,7 @@ Uint16 Internet::getPort() const {
 void Internet::close() {
     // Closing all reciepients
     reciepients.clear();
-    logAdditional("Close all connections");
+    logger.additional("Close all connections");
 }
 
 void Internet::disconnect() {
@@ -46,7 +46,7 @@ void Internet::disconnect() {
     for (int i=0; i < reciepients.size(); ++i) {
         reciepients[i].sendUnconfirmed(socket, Message{ConnectionCode::Quit, Uint8(1)});
     }
-    logAdditional("Disconnecting from games");
+    logger.additional("Disconnecting from games");
 }
 
 void Internet::checkResendMessages() {
@@ -106,7 +106,7 @@ const GetPacket* Internet::getNewMessages() {
 
         if (source) {
             // Logging get message
-            logAdditional("Get message from %s, size %u, type: %u",
+            logger.additional("Get message from %s, size %u, type: %u",
                 source->getName(), packet->getLength(), packet->getData<Uint8>(0));
 
             // Update wait timer
@@ -143,7 +143,7 @@ const GetPacket* Internet::getNewMessages() {
             return nullptr;
         } else {
             // Logging get message
-            logAdditional("Get unknown message, type %u, size %u", packet->getData<Uint8>(0), packet->getLength());
+            logger.additional("Get unknown message, type %u, size %u", packet->getData<Uint8>(0), packet->getLength());
             // Special action, if address is unknown
             return packet;
         }

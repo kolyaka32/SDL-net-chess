@@ -12,12 +12,12 @@ Socket::Socket() {
     #if (USE_WINSOCK)
     sck = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if (sck == INVALID_SOCKET) {
-        logAdditional("Can't create socket with error: %d", getError);
+        logger.additional("Can't create socket with error: %d", getError);
     }
     #endif
     #if (USE_SOCKET)
     if (sck == -1) {
-        logAdditional("Can't create socket with error: %d", getError);
+        logger.additional("Can't create socket with error: %d", getError);
     }
     #endif
     // Setting local address
@@ -30,7 +30,7 @@ Socket::Socket() {
 Socket::~Socket() {
     #if (USE_WINSOCK)
     if (closesocket(sck) == SOCKET_ERROR) {
-        logImportant("Close socket function failed with error %d", getError);
+        logger.important("Close socket function failed with error %d", getError);
     }
     #endif
     #if (USE_SOCKET)
@@ -64,13 +64,13 @@ void Socket::setNonBlockingMode() {
     #if (USE_WINSOCK)
     DWORD nonBlocking = 1;
     if (ioctlsocket(sck, FIONBIO, &nonBlocking) != 0) {
-        logImportant("Can't set socket to non-blocking mode: %d", getError);
+        logger.important("Can't set socket to non-blocking mode: %d", getError);
     }
     #endif
     #if (USE_SOCKET)
     int value = 1;
     if (ioctl(sck, FIONBIO, &value) == -1) {
-        logImportant("Can't set socket to non-blocking mode: %d", getError);
+        logger.important("Can't set socket to non-blocking mode: %d", getError);
     }
     #endif
 }
@@ -83,7 +83,7 @@ void Socket::setReuseAddressMode() {
     int value = 1;
     #endif
     if (setsockopt(sck, SOL_SOCKET, SO_REUSEADDR, (char*)&value, sizeof(value))) {
-        logImportant("Can't set reusing socket, error: %d", getError);
+        logger.important("Can't set reusing socket, error: %d", getError);
     }
 }
 
@@ -95,7 +95,7 @@ void Socket::setBroadcastMode() {
     int value = 1;
     #endif
     if (setsockopt(sck, SOL_SOCKET, SO_BROADCAST, (char*)&value, sizeof(value))) {
-        logImportant("Can't set socket to broadcast: %d", getError);
+        logger.important("Can't set socket to broadcast: %d", getError);
     }
 }
 
@@ -112,11 +112,11 @@ void Socket::tryBindTo(Uint16 _port) {
             // Finding another port
             port = SDL_rand(40000) + 1500;
         } else {
-            logImportant("Bind function failed with error %d", getError);
+            logger.important("Bind function failed with error %d", getError);
             return;
         }
     }
-    logAdditional("Openned socket at port %d", port);
+    logger.additional("Openned socket at port %d", port);
 }
 
 void Socket::tryBindTo() {
@@ -132,9 +132,9 @@ void Socket::setRecieveBroadcast() {
     port = BROADCAST_PORT;
     // Tring to set this port to use
     if (tryBind()) {
-        logImportant("Brodcast bind function failed with error %d", getError);
+        logger.important("Brodcast bind function failed with error %d", getError);
     }
-    logAdditional("Openned broadcast socket at port %d", port);
+    logger.additional("Openned broadcast socket at port %d", port);
 }
 
 void Socket::setSendBroadcast() {
@@ -150,9 +150,9 @@ void Socket::send(const Destination& _dest, const Message& _message) const {
     int sendLength = sendto(sck, _message.getData(), _message.getLength(), 0, _dest.getAddress(), _dest.getSize());
     #if (CHECK_CORRECTION)
     if (sendLength != _message.getLength()) {
-        logImportant("Don't send data correct, error: %d", getError);
+        logger.important("Don't send data correct, error: %d", getError);
     } else {
-        logAdditional("Send sucsesfull: %d", _message.getLength());
+        logger.additional("Send sucsesfull: %d", _message.getLength());
     }
     #endif
 }

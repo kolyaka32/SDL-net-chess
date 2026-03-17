@@ -35,7 +35,7 @@ bool IndexesArray<length>::isUnique(Uint8 _index) {
     // Check, if index in array
     for (int i=0; i < length; ++i) {
         if (array[i] == _index) {
-            logAdditional("Index: %u was already get", _index);
+            logger.additional("Index: %u was already get", _index);
             return false;
         }
     }

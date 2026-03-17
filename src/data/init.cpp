@@ -14,7 +14,7 @@
 // Initialasing global objects in correct order
 // Logger
 #if (CHECK_ALL)
-std::ofstream logFile{LOG_NAME};
+Logger logger{};
 #endif
 
 // All side libries

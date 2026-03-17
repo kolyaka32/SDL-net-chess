@@ -13,12 +13,12 @@
 
 InitFile::InitFile() {
     loadSettings();
-    logAdditional("Settings loaded correcly");
+    logger.additional("Settings loaded correcly");
 }
 
 InitFile::~InitFile() {
     saveSettings();
-    logAdditional("Settings saved correctly");
+    logger.additional("Settings saved correctly");
 }
 
 const std::string InitFile::getText(const std::string _line) const {

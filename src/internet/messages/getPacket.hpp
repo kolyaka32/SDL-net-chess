@@ -41,7 +41,7 @@ template <typename T>
 T GetPacket::getData(int _offset) const {
     #if (CHECK_CORRECTION)
     if (_offset + sizeof(T) > length) {
-        logImportant("Can't read data - not enogh length");
+        logger.important("Can't read data - not enogh length");
     }
     #endif
     return readNet((T)(buffer[_offset]));

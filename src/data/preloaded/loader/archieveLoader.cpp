@@ -23,7 +23,7 @@ ArchieveLoader::ArchieveLoader() {
     // Checking openning correction
     #if (CHECK_CORRECTION)
     if (archive == nullptr) {
-        logImportant("Can't load archieve: %s", DATA_FILE);
+        logger.important("Can't load archieve: %s", DATA_FILE);
     }
     #endif
 }
@@ -39,7 +39,7 @@ SDL_IOStream* ArchieveLoader::load(const char* _file) const {
     // Checking correction of openned file
     #if (CHECK_CORRECTION)
     if (file == nullptr) {
-        logImportant("Can't load file from archieve: %s", _file);
+        logger.important("Can't load file from archieve: %s", _file);
     }
     #endif
 
@@ -50,7 +50,7 @@ SDL_IOStream* ArchieveLoader::load(const char* _file) const {
     // Checking correction of openned file
     #if (CHECK_CORRECTION)
     if (st.size == 0) {
-        logImportant("load file from archieve: ", _file);
+        logger.important("load file from archieve: ", _file);
     }
     #endif
 
@@ -69,7 +69,7 @@ SDL_IOStream* ArchieveLoader::load(const char* _file) const {
     // Checking correction of loaded object
     #if (CHECK_CORRECTION)
     if (!tempIO) {
-        logImportant("Can't load file from archieve: %s", _file);
+        logger.important("Can't load file from archieve: %s", _file);
         return nullptr;
     }
     #endif

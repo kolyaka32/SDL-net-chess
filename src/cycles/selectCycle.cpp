@@ -25,7 +25,7 @@ connectButton(_window, 0.5, 0.9, {"Connect", "Присоединиться", "Be
 
     // Starting menu song (if wasn't started)
     audio.music.startFading(Music::Menu);
-    logAdditional("Start select cycle");
+    logger.additional("Start select cycle");
 }
 
 bool SelectCycle::inputMouseDown() {

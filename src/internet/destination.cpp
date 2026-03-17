@@ -15,7 +15,7 @@ Destination::Destination(const sockaddr_in* _address) {
 Destination::Destination(const sockaddr* _address, int _size) {
     #if CHECK_CORRECTION
     if (_size != sizeof(address)) {
-        logImportant("Size doesn't fit - wrong address type");
+        logger.important("Size doesn't fit - wrong address type");
     }
     #endif
     memcpy(&address, _address, sizeof(address));

@@ -12,7 +12,7 @@ menu(_window) {
     if (!isRestarted()) {
         menu.reset();
     }
-    logAdditional("Start coop game cycle");
+    logger.additional("Start coop game cycle");
 }
 
 bool TwoPlayerGameCycle::inputMouseDown() {
@@ -24,7 +24,7 @@ bool TwoPlayerGameCycle::inputMouseDown() {
         menu.addField((Field)board);
         // Showing message of sucsessful saving
         savedInfo.reset();
-        logAdditional("Saving current field");
+        logger.additional("Saving current field");
         return true;
     }
     if (gameMenuButton.in(mouse)) {
@@ -39,7 +39,7 @@ bool TwoPlayerGameCycle::inputMouseDown() {
             menu.reset();
             // Making sound
             audio.sounds.play(Sounds::Reset);
-            logAdditional("Selecting new field");
+            logger.additional("Selecting new field");
         }
         return true;
     }

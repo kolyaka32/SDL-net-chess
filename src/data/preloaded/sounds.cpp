@@ -30,10 +30,10 @@ SoundsData::SoundsData(MIX_Mixer* _mixer) {
     #if (CHECK_CORRECTION)
     for (unsigned i=0; i < unsigned(Sounds::Count); ++i) {
         if (sounds[i] == NULL) {
-            logImportant("Don't load sound: %s", soundsFilesNames[i]);
+            logger.important("Don't load sound: %s", soundsFilesNames[i]);
         }
     }
-    logAdditional("Sounds loaded corretly");
+    logger.additional("Sounds loaded corretly");
     #endif
 }
 
@@ -55,7 +55,7 @@ void SoundsData::loadSound(MIX_Mixer* _mixer, unsigned _index, const char* _name
     // Checking of correction of loaded sound
     #if (CHECK_CORRECTION)
     if (sounds[_index] == nullptr) {
-        logImportant("Can't create sound: %s", _name);
+        logger.important("Can't create sound: %s", _name);
         return;
     }
     #endif
@@ -66,7 +66,7 @@ void SoundsData::loadSound(MIX_Mixer* _mixer, unsigned _index, const char* _name
     // Checking of correction of created track
     #if (CHECK_CORRECTION)
     if (tracks[_index] == nullptr) {
-        logImportant("Can't create track: %s", _name);
+        logger.important("Can't create track: %s", _name);
         return;
     }
     #endif

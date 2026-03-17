@@ -32,7 +32,7 @@ bool InternetLibrary::findHostName() {
             if (strcmp(ipStr, "127.0.0.1")) {
                 // Writing getted address
                 snprintf(hostName, sizeof(hostName), "%s", ipStr);
-                logAdditional("Hostname: %s", ipStr);
+                logger.additional("Hostname: %s", ipStr);
                 return false;
             }
             pUnicast = pUnicast->Next;
@@ -71,7 +71,7 @@ bool InternetLibrary::findHostName() {
             if (strcmp(ipStr, "127.0.0.1")) {
                 // Writing getted address
                 snprintf(hostName, sizeof(hostName), "%s", ipStr);
-                logAdditional("Hostname: %s", ipStr);
+                logger.additional("Hostname: %s", ipStr);
                 return false;
             }
         }
@@ -88,13 +88,13 @@ InternetLibrary::InternetLibrary() {
     // Initialize Winsock
     WSADATA wsaData;
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != NO_ERROR) {
-        logImportant("WSAStartup() failed: %d", getError);
+        logger.important("WSAStartup() failed: %d", getError);
         return;
     }
     #endif
 
     if (findHostName()) {
-        logImportant("Can't find hostname");
+        logger.important("Can't find hostname");
         return;
     }
 }
@@ -102,7 +102,7 @@ InternetLibrary::InternetLibrary() {
 InternetLibrary::~InternetLibrary() {
     #if (USE_WINSOCK)
     if (WSACleanup() < 0) {
-        logImportant("Can't cleanup");
+        logger.important("Can't cleanup");
         return;
     }
     #endif  // (USE_WINSOCK)

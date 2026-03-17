@@ -34,7 +34,7 @@ const T& Array<T>::operator[](unsigned _index) const {
     // Additional check on correction
     #if CHECK_CORRECTION
     if (_index >= size) {
-        logImportant("Wrong address");
+        logger.important("Wrong address");
     }
     #endif
     return data[_index];

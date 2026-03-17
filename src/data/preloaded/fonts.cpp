@@ -27,11 +27,11 @@ FontsData::FontsData() {
     #if (CHECK_CORRECTION)
     for (unsigned i=0; i < unsigned(Fonts::Count); ++i) {
         if (fonts[i] == NULL) {
-            logImportant("Don't load font: %s", fontsFilesNames[i]);
+            logger.important("Don't load font: %s", fontsFilesNames[i]);
             return;
         }
     }
-    logAdditional("Fonts loaded corretly");
+    logger.additional("Fonts loaded corretly");
     #endif
 }
 
@@ -51,7 +51,7 @@ void FontsData::loadFont(Fonts _index, const char* _fileName) {
     // Checking correction of loaded font
     #if (CHECK_CORRECTION)
     if (fonts[unsigned(_index)] == nullptr) {
-        logImportant("Can't create font: %s", _fileName);
+        logger.important("Can't create font: %s", _fileName);
         return;
     }
     #endif

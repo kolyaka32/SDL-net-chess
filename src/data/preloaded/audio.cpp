@@ -17,7 +17,7 @@ music(mixer),
 sounds(mixer),
 #endif
 mixer(openMixer()) {
-    logAdditional("Audio created correctly");
+    logger.additional("Audio created correctly");
 }
 
 Audio::~Audio() {
@@ -32,13 +32,13 @@ Audio::~Audio() {
 SDL_AudioDeviceID Audio::getAudioDeviceID() {
     // Initialising audio library
     if (!MIX_Init()) {
-        logImportant("Couldn't initialise mixer library: %s", SDL_GetError());
+        logger.important("Couldn't initialise mixer library: %s", SDL_GetError());
     }
 
     // Selecting audio device for audio output
     audioDeviceID = SDL_OpenAudioDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, NULL);
     if (audioDeviceID == 0) {
-        logImportant("Couldn't get audio device ID: %s", SDL_GetError());
+        logger.important("Couldn't get audio device ID: %s", SDL_GetError());
     }
     return audioDeviceID;
 }
@@ -47,7 +47,7 @@ MIX_Mixer* Audio::openMixer() {
     // Creating mixer
     mixer = MIX_CreateMixerDevice(audioDeviceID, nullptr);
     if (mixer == nullptr) {
-        logImportant("Couldn't create mixer: %s", SDL_GetError());
+        logger.important("Couldn't create mixer: %s", SDL_GetError());
     }
     return mixer;
 }

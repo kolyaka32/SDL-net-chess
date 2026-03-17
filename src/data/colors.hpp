@@ -18,5 +18,3 @@ typedef SDL_Color Color;
 #define GREEN {0, 255, 0, 255}
 #define BLUE {0, 0, 255, 255}
 #define GREY {175, 175, 175, 255}
-#define FIELD_LIGHT {255, 206, 158, 255}
-#define FIELD_DARK {206, 139, 71, 255}

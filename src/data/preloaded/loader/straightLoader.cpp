@@ -16,7 +16,7 @@ SDL_IOStream* StraightLoader::load(const char* _fileName) const {
     // Creating modified name
     size_t size = strlen(_fileName) + strlen("../") + 1;
     char* fileName = new char[size];
-    snprintf(fileName, size, "../%s", _fileName);
+    SDL_snprintf(fileName, size, "../%s", _fileName);
 
     // Openning file straight from system
     SDL_IOStream* data = SDL_IOFromFile(fileName, "r");
@@ -27,7 +27,7 @@ SDL_IOStream* StraightLoader::load(const char* _fileName) const {
     // Checking correction of loaded font
     #if (CHECK_CORRECTION)
     if (data == nullptr) {
-        logImportant("Can't load straight: %s", _fileName);
+        logger.important("Can't load straight: %s", _fileName);
         return nullptr;
     }
     #endif

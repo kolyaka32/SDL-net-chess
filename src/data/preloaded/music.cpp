@@ -38,11 +38,11 @@ MusicData::MusicData(MIX_Mixer* _mixer) {
     #if (CHECK_CORRECTION)
     for (unsigned i=0; i < unsigned(Music::Count); ++i) {
         if (musics[i] == NULL) {
-            logImportant("Don't load music: %s", musicFilesNames[i]);
+            logger.important("Don't load music: %s", musicFilesNames[i]);
             return;
         }
     }
-    logAdditional("Music loaded corretly");
+    logger.additional("Music loaded corretly");
     #endif
 }
 
@@ -69,7 +69,7 @@ void MusicData::loadMusic(MIX_Mixer* _mixer, Music _index, const char* _name) {
     // Checking correction of loaded music
     #if (CHECK_CORRECTION)
     if (musics[unsigned(_index)] == nullptr) {
-        logImportant("Can't create music: %s", _name);
+        logger.important("Can't create music: %s", _name);
         return;
     }
     #endif

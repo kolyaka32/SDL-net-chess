@@ -28,7 +28,7 @@ hideAddressButton(_window, 0.5, 0.5, {"Hide address", "Скрыть адресс
     // Openning socket for recieving broadcast
     broadcastRecieveSocket.setRecieveBroadcast();
 
-    logAdditional("Start server lobby cycle");
+    logger.additional("Start server lobby cycle");
 }
 
 bool ServerLobbyCycle::inputMouseDown() {
@@ -70,15 +70,17 @@ void ServerLobbyCycle::update() {
     while (const GetPacket* packet = internet.getNewMessages()) {
         switch (ConnectionCode(packet->getData<Uint8>(0))) {
         case ConnectionCode::Init:
-            // ! Fix that could connect to wrong type
-            // Connecting to getted address
-            internet.connectTo(Destination{packet->getSourceAddress()});
+            // Check if app type is match
+            if (packet->getData<Uint8>(1) == BROADCAST_APP_INDEX) {
+                // Connecting to getted address
+                internet.connectTo(Destination{packet->getSourceAddress()});
 
-            // Sending applying initialsiation message
-            internet.sendAllConfirmed({ConnectionCode::Init, Uint8(1)});
+                // Sending initialisation applying message
+                internet.sendAllConfirmed({ConnectionCode::Init, Uint8(BROADCAST_APP_INDEX)});
 
-            // Starting game (as server)
-            App::setNextCycle(Cycle::ServerGame);
+                // Starting game (as server)
+                App::setNextCycle(Cycle::ServerGame);
+            }
             return;
 
         default:
@@ -91,7 +93,7 @@ void ServerLobbyCycle::update() {
         switch (ConnectionCode(packet->getData<Uint8>(0))) {
         case ConnectionCode::Search:
             // Reporting about itself
-            internet.sendFirst(Destination{packet->getSourceAddress()}, {ConnectionCode::Server, Uint8(1)});
+            internet.sendFirst(Destination{packet->getSourceAddress()}, {ConnectionCode::Server, Uint8(BROADCAST_APP_INDEX)});
             return;
 
         default:

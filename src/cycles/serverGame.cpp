@@ -15,7 +15,7 @@ menu(_window) {
         // Sending first field
         internet.sendAllConfirmed({ConnectionCode::GameNew, basicStartString});
     }
-    logAdditional("Start server game cycle");
+    logger.additional("Start server game cycle");
 }
 
 ServerGameCycle::~ServerGameCycle() {
@@ -37,7 +37,7 @@ bool ServerGameCycle::inputMouseDown() {
         menu.addField((Field)board);
         // Showing message of sucsessful saving
         savedInfo.reset();
-        logAdditional("Saving field");
+        logger.additional("Saving field");
     }
     if (gameMenuButton.in(mouse)) {
         // Starting game menu
@@ -54,7 +54,7 @@ bool ServerGameCycle::inputMouseDown() {
             // Sending it
             internet.sendAllConfirmed({ConnectionCode::GameNew, fieldSave.getSave()});
             menu.reset();
-            logAdditional("Selecting new field");
+            logger.additional("Selecting new field");
         }
         return true;
     }
@@ -115,7 +115,7 @@ void ServerGameCycle::getInternetPacket(const GetPacket& packet) {
     case ConnectionCode::GameTurn:
         if (packet.isBytesAvaliable(3)) {
             board.clickServerOpponent(packet.getData<Uint8>(2), packet.getData<Uint8>(3));
-            logAdditional("Turn of opponent player from %u to %u",
+            logger.additional("Turn of opponent player from %u to %u",
                 packet.getData<Uint8>(2), packet.getData<Uint8>(3));
         }
         break;

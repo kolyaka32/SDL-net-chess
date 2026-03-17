@@ -27,11 +27,11 @@ AnimationsData::AnimationsData() {
     #if (CHECK_CORRECTION)
     for (unsigned i=0; i < unsigned(Animations::Count); ++i) {
         if (animations[i] == nullptr) {
-            logImportant("Don't load animation: %s", animationsFilesNames[i]);
+            logger.important("Don't load animation: %s", animationsFilesNames[i]);
             return;
         }
     }
-    logAdditional("Animations loaded corretly");
+    logger.additional("Animations loaded corretly");
     #endif
 }
 
@@ -52,7 +52,7 @@ void AnimationsData::loadAnimation(Animations _index, const char* _fileName) {
     // Checking correction of loaded texture
     #if (CHECK_CORRECTION)
     if (animations[unsigned(_index)] == nullptr) {
-        logImportant("Can't load animation: %s", _fileName);
+        logger.important("Can't load animation: %s", _fileName);
         return;
     }
     #endif

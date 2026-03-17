@@ -89,7 +89,7 @@ void TargetConnect::pasteFromClipboard() {
 
     // Check text on correction
     if (clipboard == nullptr) {
-        logAdditional("Couldn't get clipboard");
+        logger.additional("Couldn't get clipboard");
         return;
     }
     // Find IP text (first part)
@@ -101,7 +101,7 @@ void TargetConnect::pasteFromClipboard() {
         }
         // Checking coorection of string
         if (clipboard[i] != '.' && (clipboard[i] < '0' || clipboard[i] > '9')) {
-            logAdditional("Wrong clipboard: %s", clipboard);
+            logger.additional("Wrong clipboard: %s", clipboard);
             SDL_free(clipboard);
             return;
         }
@@ -115,7 +115,7 @@ void TargetConnect::pasteFromClipboard() {
             break;
         }
     }
-    logAdditional("From clipboard: IP: %s, port: %s", clipboard, clipboard+i);
+    logger.additional("From clipboard: IP: %s, port: %s", clipboard, clipboard+i);
     IPField.setString(clipboard);
     portField.setString(clipboard+i);
     SDL_free(clipboard);
@@ -127,7 +127,7 @@ void TargetConnect::tryConnect() {
     memcpy(portTextCorrected, portField.getString(), 7);
     for (char* c = portTextCorrected; *c; ++c) {
         if (*c < '0' || *c > '9') {
-            logAdditional("Couldn't connect - wrong port");
+            logger.additional("Couldn't connect - wrong port");
             return;
         }
     }
@@ -136,7 +136,7 @@ void TargetConnect::tryConnect() {
     memcpy(basePort, portTextCorrected, sizeof(basePort));
     // Trying connect at specified address
     Destination dest{IPField.getString(), (Uint16)SDL_atoi(portTextCorrected)};
-    internet.sendFirst(dest, {ConnectionCode::Init, Uint8(1)});
+    internet.sendFirst(dest, {ConnectionCode::Init, Uint8(BROADCAST_APP_INDEX)});
 }
 
 void TargetConnect::blit() const {

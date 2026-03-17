@@ -51,7 +51,7 @@ void Message::write(const T _object) {
     // Check on avaliable space
     #if (CHECK_CORRECTION)
     if (size + sizeof(T) > maxSize) {
-        logImportant("Can't write data - not enogh size");
+        logger.important("Can't write data - not enogh size");
         return;
     }
     #endif

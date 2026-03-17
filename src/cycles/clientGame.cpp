@@ -10,7 +10,7 @@
 ClientGameCycle::ClientGameCycle(Window& _window)
 : InternetCycle(_window),
 waitText(window, 0.5, 0.05, {"Wait start", "Ожидайте начала", "Warte auf Start", "Чаканне старту"}) {
-    logAdditional("Start client game cycle");
+    logger.additional("Start client game cycle");
 }
 
 ClientGameCycle::~ClientGameCycle() {
@@ -33,7 +33,7 @@ void ClientGameCycle::getInternetPacket(const GetPacket& packet) {
     case ConnectionCode::GameTurn:
         if (packet.isBytesAvaliable(3)) {
             board.clickClientOpponent(packet.getData<Uint8>(2), packet.getData<Uint8>(3));
-            logAdditional("Turn of opponent player from %u to %u",
+            logger.additional("Turn of opponent player from %u to %u",
                 packet.getData<Uint8>(2), packet.getData<Uint8>(3));
         }
         return;
@@ -48,7 +48,7 @@ void ClientGameCycle::getInternetPacket(const GetPacket& packet) {
             // Making sound
             audio.sounds.play(Sounds::Reset);
             audio.music.startFromCurrent(Music::Main);
-            logAdditional("Starting new game by connection");
+            logger.additional("Starting new game by connection");
         }
         return;
 
@@ -66,7 +66,7 @@ bool ClientGameCycle::inputMouseDown() {
         SavedFields::addField((Field)board);
         // Showing message of sucsessful saving
         savedInfo.reset();
-        logAdditional("Saving field");
+        logger.additional("Saving field");
         return true;
     }
     // Normal turn

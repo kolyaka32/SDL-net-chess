@@ -20,7 +20,7 @@ void Message::write(const char* _str) {
 
     #if (CHECK_CORRECTION)
     if (size + length > maxSize) {
-        logImportant("Can't write data - not enogh size");
+        logger.important("Can't write data - not enogh size");
         return;
     }
     #endif

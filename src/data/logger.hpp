@@ -8,35 +8,62 @@
 #include <SDL3/SDL_log.h>
 #include "../define.hpp"
 
-
 // Additional logging to file system
 #if (CHECK_ALL)
 #include <fstream>
-extern std::ofstream logFile;
 #endif
 
-// Function for log important information
+
+// Object for correct logging of main actions
+class Logger {
+ protected:
+    #if (CHECK_ALL)
+    std::ofstream logFile;
+    #endif
+
+ public:
+    Logger();
+    ~Logger() noexcept;
+
+    // Function for log important information (errors)
+    template <typename ...Args>
+    void important(const char* text, const Args& ...args);
+
+    // Function for log additional information
+    template <typename ...Args>
+    void additional(const char* text, const Args& ...args);
+};
+
+// Global object for logging
+extern Logger logger;
+
+
 template <typename ...Args>
-void logImportant(const char* text, const Args& ...args) {
+void Logger::important(const char* _text, const Args& ..._args) {
     #if (CHECK_CORRECTION)
+    // Creating text
+    char* buffer;
+    SDL_asprintf(&buffer, _text, _args...);
     // Writing to stdout
-    SDL_Log(text, args...);
+    SDL_Log(buffer);
     // Writing to file
-    char buffer[100];
-    SDL_snprintf(buffer, sizeof(buffer), text, args...);
     logFile << buffer << '\n';
+    // Clearing text
+    SDL_free(buffer);
     #endif
 }
 
-// Function for log additional information
 template <typename ...Args>
-void logAdditional(const char* text, const Args& ...args) {
-    #if (CHECK_ALL)
+void Logger::additional(const char* _text, const Args& ..._args) {
+    #if (CHECK_CORRECTION)
+    // Creating text
+    char* buffer;
+    SDL_asprintf(&buffer, _text, _args...);
     // Writing to stdout
-    SDL_Log(text, args...);
+    SDL_Log(buffer);
     // Writing to file
-    char buffer[100];
-    SDL_snprintf(buffer, sizeof(buffer), text, args...);
     logFile << buffer << '\n';
+    // Clearing text
+    SDL_free(buffer);
     #endif
 }
