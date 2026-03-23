@@ -60,6 +60,6 @@ cmake ..; make; sudo make install
 cd ../..
 
 # Building game itself
-git clone https://github.com/kolyaka32/tic-tak-toe-on-SDL-net.git
-cd tic-tak-toe-on-SDL-net
+git clone https://github.com/kolyaka32/SDL-net-chess.git
+cd SDL-net-chess
 cmake --build ./build --config Release --target all

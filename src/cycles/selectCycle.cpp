@@ -13,7 +13,7 @@
 SelectCycle::SelectCycle(Window& _window)
 : BaseCycle(_window),
 background(_window),
-titleText(_window, 0.5, 0.15, {"Tic-tac-toe", "Крестики нолики", "Tic-tac-toe", "Крыжыкі нулікі"}, 3, Height::Title),
+titleText(_window, 0.5, 0.15, {"Chess", "Шахматы", "Schachspiel", "Шахматы"}, 3, Height::Title),
 singleplayerButton(_window, 0.5, 0.3, {"Singleplayer", "Одиночная игра", "Einzelspiel", "Адзіночная гульня"}),
 twoPlayerButton(_window, 0.5, 0.5, {"Two players", "Два игрока", "Zwei Spieler", "Два гульца"}),
 serverButton(_window, 0.5, 0.7, {"Create server", "Создать сервер", "Server erstellen", "Стварыць сервер"}),
