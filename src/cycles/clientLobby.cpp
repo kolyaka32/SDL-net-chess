@@ -9,9 +9,9 @@
 ClientLobbyCycle::ClientLobbyCycle(Window& _window)
 : BaseCycle(_window),
 broadcastSendSocket(),
-serverScroller(_window, 0.5, 0.4, 1.0, 0.6, 4,
+serverScroller(_window, 0.5, 0.48, 1.0, 0.76, 4,
     {"No servers found", "Сервера не найдены", "Kein Server gefunden", "Сервера не знойдзены"}),
-updateButton(_window, 0.5, 0.85, {"Update", "Обновить", "Update", "Абнаўленне"}),
+updateButton(_window, 0.5, 0.9, {"Update", "Обновить", "Update", "Абнаўленне"}),
 targetConnectButton(_window, 0.5, 0.95,
     {"Connect by IP", "Присоединиться по IP", "Über IP beitreten", "Далучыцца па IP"}),
 targetConnectMenu(_window) {

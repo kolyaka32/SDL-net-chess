@@ -12,6 +12,7 @@
 // Information of one concrete save (date and picture for load)
 class SaveInfo : public GUI::TextureTemplate {
  private:
+    const float height;  // Full height of that unit
     // Backplate
     GUI::RoundedBackplate backplate;
     // Save parameters
@@ -19,7 +20,7 @@ class SaveInfo : public GUI::TextureTemplate {
     GUI::HighlightedStaticText lastModifiedText;
 
  public:
-    explicit SaveInfo(const Window& window, int position, const FieldSave& field);
+    explicit SaveInfo(const Window& window, int position, float height, const FieldSave& field);
     SaveInfo(SaveInfo&& info) noexcept;
     ~SaveInfo() noexcept;
     void moveUp();

@@ -334,11 +334,12 @@ namespace GUI {
     template <class Item, class SourceItem>
     class ScrollBox : public Template {
      protected:
-        // Items, for draw
-        int startField = 0;
-        int endField = 0;
-        const int maxItems;
-        // Items in reverce order for easier appending
+        // Parameters of showed list
+        const int maxItems;  // Total number of elements, showing max at one screen
+        int startField = 0;  // Position, from which show
+        int endField = 0;    // Position, up to showing
+        const float unitHeight;  // Height of one block (relative)
+        // Items itself in reverse order for easier appending
         std::vector<Item> items;
         // Adding text of absence of objects
         #if (USE_SDL_FONT) && (PRELOAD_FONTS)

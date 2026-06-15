@@ -12,7 +12,8 @@ bool SavedFields::active = false;
 SavedFields::SavedFields(const Window& _window)
 : Template(_window),
 backplate(_window, 0.5, 0.51, 0.94, 0.8, 20.0, 4.0),
-scroller(_window, 0.5, 0.51, 0.94, 0.8, 3, startOptions, {"No saves", "Нет сохранений", "Keine Speicherung", "Няма захаванняў"}),
+scroller(_window, 0.5, 0.51, 0.94, 0.8, 3, startOptions,
+    {"No saves", "Нет сохранений", "Keine Speicherung", "Няма захаванняў"}),
 exitButton(_window, 0.5, 0.81, {"Close", "Закрыть", "Schließen", "Зачыніць"}) {}
 
 void SavedFields::activate() {
