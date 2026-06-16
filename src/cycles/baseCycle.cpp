@@ -30,6 +30,14 @@ void BaseCycle::inputMouseUp() {
     settings.unClick();
 }
 
-void BaseCycle::inputMouseWheel(float _wheelY) {
-    settings.scroll(mouse, _wheelY);
+bool BaseCycle::inputKeys(const SDL_Keycode _key) {
+    if (_key == SDLK_ESCAPE) {
+        settings.activate();
+        return true;
+    }
+    return false;
+}
+
+bool BaseCycle::inputMouseWheel(float _wheelY) {
+    return settings.scroll(mouse, _wheelY);
 }

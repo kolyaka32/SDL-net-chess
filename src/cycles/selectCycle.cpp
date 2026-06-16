@@ -51,14 +51,6 @@ bool SelectCycle::inputMouseDown() {
     return false;
 }
 
-void SelectCycle::inputKeys(SDL_Keycode _key) {
-    switch (_key) {
-    case SDLK_ESCAPE:
-        settings.activate();
-        return;
-    }
-}
-
 void SelectCycle::update() {
     BaseCycle::update();
     background.update();

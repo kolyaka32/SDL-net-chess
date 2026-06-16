@@ -372,7 +372,7 @@ namespace GUI {
         int click(const Mouse mouse);
         void unclick();
         void update(const Mouse mouse);
-        void scroll(const Mouse mouse, float wheelY);
+        bool scroll(const Mouse mouse, float wheelY);
         void blit() const override;
     };
 

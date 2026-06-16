@@ -17,8 +17,8 @@ class ServerGameCycle : public InternetCycle {
  protected:
     bool inputMouseDown() override;
     void inputMouseUp() override;
-    void inputKeys(SDL_Keycode key) override;
-    void inputMouseWheel(float _wheelY) override;
+    bool inputKeys(SDL_Keycode key) override;
+    bool inputMouseWheel(float _wheelY) override;
     void getInternetPacket(const GetPacket& packet) override;
     void update() override;
     void draw() const override;

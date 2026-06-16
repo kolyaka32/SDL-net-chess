@@ -59,18 +59,22 @@ void TargetConnect::unclick() {
     portField.unclick();
 }
 
-void TargetConnect::press(SDL_Keycode _key) {
+bool TargetConnect::press(SDL_Keycode _key) {
     if (active) {
         IPField.type(_key);
         portField.type(_key);
+        return true;
     }
+    return false;
 }
 
-void TargetConnect::write(const char* _text) {
+bool TargetConnect::write(const char* _text) {
     if (active) {
         IPField.writeString(_text);
         portField.writeString(_text);
+        return true;
     }
+    return false;
 }
 
 void TargetConnect::update() {

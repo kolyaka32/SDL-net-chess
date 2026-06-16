@@ -33,7 +33,7 @@ class SelectingMenu {
     const Field* click(const Mouse mouse);
     void unclick();
     void update();
-    void scroll(float wheelY);
-    void escape();
+    bool scroll(float wheelY);
+    bool escape();
     void blit() const;
 };

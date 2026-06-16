@@ -54,24 +54,24 @@ void TwoPlayerGameCycle::inputMouseUp() {
     menu.unclick();
 }
 
-void TwoPlayerGameCycle::inputMouseWheel(float _wheelY) {
-    if (settings.scroll(mouse, _wheelY)) {
-        return;
+bool TwoPlayerGameCycle::inputMouseWheel(float _wheelY) {
+    if (BaseCycle::inputMouseWheel(_wheelY)) {
+        return true;
     }
-    menu.scroll(_wheelY);
+    if (menu.scroll(_wheelY)) {
+        return true;
+    }
+    return false;
 }
 
-void TwoPlayerGameCycle::inputKeys(SDL_Keycode _key) {
+bool TwoPlayerGameCycle::inputKeys(SDL_Keycode _key) {
     if (_key == SDLK_ESCAPE) {
         // Closing top open object
-        if (menu.isActive()) {
-            menu.escape();
-        } else {
-            settings.activate();
+        if (menu.escape()) {
+            return true;
         }
-        return;
     }
-    GameCycle::inputKeys(_key);
+    return GameCycle::inputKeys(_key);
 }
 
 void TwoPlayerGameCycle::update() {

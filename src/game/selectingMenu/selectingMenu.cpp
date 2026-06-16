@@ -81,19 +81,26 @@ void SelectingMenu::update() {
     }
 }
 
-void SelectingMenu::scroll(float _wheelY) {
+bool SelectingMenu::scroll(float _wheelY) {
     if (active) {
         savedFields.scroll(_wheelY);
+        return true;
     }
+    return false;
 }
 
-void SelectingMenu::escape() {
-    // Closing top object
-    if (savedFields.isActive()) {
-        savedFields.reset();
-        return;
+bool SelectingMenu::escape() {
+    // Closing current object
+    if (active) {
+        // Closing top object
+        if (savedFields.isActive()) {
+            savedFields.reset();
+            return true;
+        }
+        active = false;
+        return true;
     }
-    active = false;
+    return false;
 }
 
 void SelectingMenu::blit() const {

@@ -178,7 +178,7 @@ void GUI::ScrollBox<Item, SourceItem>::update(const Mouse _mouse) {
 }
 
 template <class Item, class SourceItem>
-void GUI::ScrollBox<Item, SourceItem>::scroll(const Mouse _mouse, float _wheelY) {
+bool GUI::ScrollBox<Item, SourceItem>::scroll(const Mouse _mouse, float _wheelY) {
     // Check, if scroll in this menu
     if (!holding) {
         if (_wheelY > 0) {
@@ -187,7 +187,7 @@ void GUI::ScrollBox<Item, SourceItem>::scroll(const Mouse _mouse, float _wheelY)
                 if (endField < items.size()) {
                     moveDown();
                 } else {
-                    return;
+                    return true;
                 }
             }
         } else {
@@ -196,11 +196,13 @@ void GUI::ScrollBox<Item, SourceItem>::scroll(const Mouse _mouse, float _wheelY)
                 if (startField > 0) {
                     moveUp();
                 } else {
-                    return;
+                    return true;
                 }
             }
         }
+        return true;
     }
+    return false;
 }
 
 template <class Item, class SourceItem>

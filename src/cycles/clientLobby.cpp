@@ -58,15 +58,21 @@ void ClientLobbyCycle::inputMouseUp() {
     targetConnectMenu.unclick();
 }
 
-void ClientLobbyCycle::inputKeys(SDL_Keycode _key) {
-    targetConnectMenu.press(_key);
+bool ClientLobbyCycle::inputKeys(SDL_Keycode _key) {
+    if (targetConnectMenu.press(_key)) {
+        return true;
+    }
+    return BaseCycle::inputKeys(_key);
 }
 
-void ClientLobbyCycle::inputMouseWheel(float _wheelY) {
-    if (settings.scroll(mouse, _wheelY)) {
-        return;
+bool ClientLobbyCycle::inputMouseWheel(float _wheelY) {
+    if (BaseCycle::inputMouseWheel(_wheelY)) {
+        return true;
     }
-    serverScroller.scroll(mouse, _wheelY);
+    if (serverScroller.scroll(mouse, _wheelY)) {
+        return true;
+    }
+    return false;
 }
 
 void ClientLobbyCycle::update() {
@@ -118,8 +124,8 @@ void ClientLobbyCycle::update() {
     }
 }
 
-void ClientLobbyCycle::inputText(const char* _text) {
-    targetConnectMenu.write(_text);
+bool ClientLobbyCycle::inputText(const char* _text) {
+    return targetConnectMenu.write(_text);
 }
 
 void ClientLobbyCycle::draw() const {

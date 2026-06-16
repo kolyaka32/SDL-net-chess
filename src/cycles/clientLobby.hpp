@@ -31,9 +31,9 @@ class ClientLobbyCycle : public BaseCycle {
  protected:
     bool inputMouseDown() override;
     void inputMouseUp() override;
-    void inputKeys(SDL_Keycode key) override;
-    void inputText(const char* text) override;
-    void inputMouseWheel(float wheelY) override;
+    bool inputKeys(SDL_Keycode key) override;
+    bool inputText(const char* text) override;
+    bool inputMouseWheel(float wheelY) override;
     void update() override;
     void draw() const override;
 
