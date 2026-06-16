@@ -338,13 +338,15 @@ namespace GUI {
         const int maxItems;  // Total number of elements, showing max at one screen
         int startField = 0;  // Position, from which show
         int endField = 0;    // Position, up to showing
-        const float unitHeight;  // Height of one block (relative)
+        const float blockPos;     // Start Y position of blocks (relative)
+        const float blockHeight;  // Height of one block (relative)
         // Items itself in reverse order for easier appending
         std::vector<Item> items;
         // Adding text of absence of objects
         #if (USE_SDL_FONT) && (PRELOAD_FONTS)
         GUI::HighlightedStaticText emptySavesText;
         #endif
+
         // Slider for showing position
         SDL_FRect sliderRect;
         const SDL_FRect sliderBackRect;
@@ -353,6 +355,7 @@ namespace GUI {
 
         void moveUp();
         void moveDown();
+        void placeItem(int pos, const SourceItem& item);
 
      public:
         // Create menu for scrolling objects, placed at center with (posX, posY) and size.

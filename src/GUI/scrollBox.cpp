@@ -16,12 +16,13 @@ emptySavesText(_window, _posX, _posY - _height/4, std::move(_emptyItemsText), 1)
 maxItems(_maxItems),
 startField(0),
 endField(0),
-unitHeight(_height/_maxItems),
+blockPos(_posY - _height/2),
+blockHeight(_height/_maxItems),
 sliderBackRect({(_posX+_width/2-0.04f)*_window.getWidth(), (_posY - _height/2)*_window.getHeight(),
     0.03f * _window.getWidth(), _height*_window.getHeight()}) {
     // Side slider
-    sliderRect.x = sliderBackRect.x + sliderBackRect.w * 0.1f;
-    sliderRect.w = sliderBackRect.w * 0.8f;
+    sliderRect.x = sliderBackRect.x + sliderBackRect.w * 0.15f;
+    sliderRect.w = sliderBackRect.w * 0.7f;
     // Base full version
     sliderRect.h = sliderBackRect.h;
     sliderRect.y = sliderBackRect.y;
@@ -34,7 +35,7 @@ GUI::ScrollBox<Item, SourceItem>::ScrollBox(const Window& _window, float _posX, 
     // Creating options to start
     items.reserve(_startItems.size());
     for (int i=0; i < _startItems.size(); ++i) {
-        items.emplace_back(_window, _startItems.size()-i-1, unitHeight, _startItems[i]);
+        placeItem(_startItems.size()-i-1, _startItems[i]);
     }
     endField = items.size();
     // If has more items, than can show
@@ -51,7 +52,8 @@ GUI::ScrollBox<Item, SourceItem>::ScrollBox(ScrollBox&& _object) noexcept
 maxItems(_object.maxItems),
 startField(_object.startField),
 endField(_object.endField),
-unitHeight(_object.maxItems),
+blockPos(_object.blockPos),
+blockHeight(_object.maxItems),
 #if (USE_SDL_FONT) && (PRELOAD_FONTS)
 emptySavesText(std::move(_object.emptySavesText)),
 #endif
@@ -73,7 +75,7 @@ void GUI::ScrollBox<Item, SourceItem>::addItem(const SourceItem& _sourceItem) {
         for (int i=0; i < items.size(); ++i) {
             items[i].moveDown();
         }
-        items.emplace_back(window, 0, unitHeight, _sourceItem);
+        placeItem(0, _sourceItem);
         endField++;
         // Not changing slider
         return;
@@ -84,7 +86,7 @@ void GUI::ScrollBox<Item, SourceItem>::addItem(const SourceItem& _sourceItem) {
         for (int i=0; i < items.size(); ++i) {
             items[i].moveDown();
         }
-        items.emplace_back(window, 0, unitHeight, _sourceItem);
+        placeItem(0, _sourceItem);
         endField++;
         startField++;
         // Changing slider
@@ -93,7 +95,7 @@ void GUI::ScrollBox<Item, SourceItem>::addItem(const SourceItem& _sourceItem) {
         return;
     }
     // Placing and not showing
-    items.emplace_back(window, startField - endField, unitHeight, _sourceItem);
+    placeItem(startField - endField, _sourceItem);
     // Changing slider
     sliderRect.h = float(maxItems) / items.size() * sliderBackRect.h;
     sliderRect.y = (1 - float(endField) / items.size()) * sliderBackRect.h + sliderBackRect.y;
@@ -126,6 +128,11 @@ void GUI::ScrollBox<Item, SourceItem>::moveDown() {
         items[i].moveDown();
     }
     sliderRect.y -= sliderRect.h / maxItems;
+}
+
+template <class Item, class SourceItem>
+void GUI::ScrollBox<Item, SourceItem>::placeItem(int _pos, const SourceItem& _item) {
+    items.emplace_back(window, blockHeight, _pos*blockHeight + blockPos, _item);
 }
 
 template <class Item, class SourceItem>

@@ -20,7 +20,7 @@ class SaveInfo : public GUI::TextureTemplate {
     GUI::HighlightedStaticText lastModifiedText;
 
  public:
-    explicit SaveInfo(const Window& window, int position, float height, const FieldSave& field);
+    explicit SaveInfo(const Window& window, float height, float Y, const FieldSave& field);
     SaveInfo(SaveInfo&& info) noexcept;
     ~SaveInfo() noexcept;
     void moveUp();

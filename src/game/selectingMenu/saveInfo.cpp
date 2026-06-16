@@ -6,14 +6,14 @@
 #include "saveInfo.hpp"
 
 
-SaveInfo::SaveInfo(const Window& _window, int _position, float _height, const FieldSave& _field)
+SaveInfo::SaveInfo(const Window& _window, float _height, float _Y, const FieldSave& _field)
 : height(_height),
-TextureTemplate(_window, {0.06f * _window.getWidth(), (_position + 0.7f) * _height * _window.getHeight(),
-    height * 0.9f * _window.getHeight(), height * 0.9f * _window.getHeight()},
+TextureTemplate(_window, {0.06f * _window.getWidth(), (0.05f * _height + _Y) * _window.getHeight(),
+    _height * 0.9f * _window.getHeight(), _height * 0.9f * _window.getHeight()},
     _window.createTexture(GAME_WIDTH, GAME_HEIGHT)),
-backplate(_window, 0.48, (_position + 1.15f)*_height, 0.9, _height, 15, 2),
+backplate(_window, 0.48, 0.5f*_height+_Y, 0.88, _height*0.98f, 20, 3),
 //saveNameText(_window, 0.75, (position + 0.8f)*_height, {field.getSaveName()}),
-lastModifiedText(_window, 0.25, (_position + 1.1f)*_height, {_field.getSaveTime()}, 1, Height::Main, WHITE, GUI::Aligment::Left) {
+lastModifiedText(_window, 0.35, 0.5f*_height+_Y, {_field.getSaveTime()}, 1, Height::Main, WHITE, GUI::Aligment::Left) {
     // Creating texture
     _window.setRenderTarget(texture);
     // Render full field at it

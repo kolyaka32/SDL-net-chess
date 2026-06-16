@@ -19,7 +19,7 @@ class ServerInfo {
     GUI::StaticText pingText;
 
  public:
-    ServerInfo(const Window& window, int position, float height, const ServerData& data);
+    ServerInfo(const Window& window, float height, float Y, const ServerData& data);
     ServerInfo(ServerInfo&& info) noexcept;
     void moveUp();
     void moveDown();

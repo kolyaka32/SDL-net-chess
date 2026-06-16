@@ -9,9 +9,9 @@
 ClientLobbyCycle::ClientLobbyCycle(Window& _window)
 : BaseCycle(_window),
 broadcastSendSocket(),
-serverScroller(_window, 0.5, 0.48, 1.0, 0.76, 4,
+serverScroller(_window, 0.5, 0.46, 1.0, 0.72, 3,
     {"No servers found", "Сервера не найдены", "Kein Server gefunden", "Сервера не знойдзены"}),
-updateButton(_window, 0.5, 0.9, {"Update", "Обновить", "Update", "Абнаўленне"}),
+updateButton(_window, 0.5, 0.88, {"Update", "Обновить", "Update", "Абнаўленне"}),
 targetConnectButton(_window, 0.5, 0.95,
     {"Connect by IP", "Присоединиться по IP", "Über IP beitreten", "Далучыцца па IP"}),
 targetConnectMenu(_window) {
@@ -54,6 +54,7 @@ bool ClientLobbyCycle::inputMouseDown() {
 
 void ClientLobbyCycle::inputMouseUp() {
     settings.unClick();
+    serverScroller.unclick();
     targetConnectMenu.unclick();
 }
 
@@ -61,8 +62,16 @@ void ClientLobbyCycle::inputKeys(SDL_Keycode _key) {
     targetConnectMenu.press(_key);
 }
 
+void ClientLobbyCycle::inputMouseWheel(float _wheelY) {
+    if (settings.scroll(mouse, _wheelY)) {
+        return;
+    }
+    serverScroller.scroll(mouse, _wheelY);
+}
+
 void ClientLobbyCycle::update() {
     BaseCycle::update();
+    serverScroller.update(mouse);
     targetConnectMenu.update();
 
     // Getting internet data from general socket
