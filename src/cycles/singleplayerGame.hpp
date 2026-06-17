@@ -11,9 +11,6 @@
 // Game cycle (for single player (special animation))
 class SinglePlayerGameCycle : public BaseCycle {
  protected:
-    // Volume from start of cycle to reset later
-    float startVolume;
-
     // Data for transition to animation
     Uint16 currentWidth = 8;
     Uint16 currentHeight = 8;

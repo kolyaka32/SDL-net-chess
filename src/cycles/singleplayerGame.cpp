@@ -8,16 +8,15 @@
 
 SinglePlayerGameCycle::SinglePlayerGameCycle(Window& _window)
 : BaseCycle(_window),
-startVolume(audio.music.getVolume()),
 animation(_window.getAnimation(Animations::SinglePlayer)),
 width(animation->w),
-height(animation->h) {
-    prevFrameUpdate = getTime() + 400;
-
+height(animation->h),
+prevFrameUpdate(getTime() + 400) {
     // Starting main song (if wasn't started)
     if(!isRestarted()) {
         audio.music.start(Music::Main);
     }
+    logger.additional("Start singleplayer cycle");
 }
 
 SinglePlayerGameCycle::~SinglePlayerGameCycle() {
@@ -25,7 +24,7 @@ SinglePlayerGameCycle::~SinglePlayerGameCycle() {
     window.updateTitle();
 
     // Resetting volume
-    audio.music.setVolume(startVolume);
+    audio.setVolume(1.0f);
 
     // Resetting color for figures
     for (Textures i = Textures::WhitePawn; i <= Textures::BlackKing; i=i+1) {
@@ -36,10 +35,9 @@ SinglePlayerGameCycle::~SinglePlayerGameCycle() {
 bool SinglePlayerGameCycle::inputMouseDown() {
     if (BaseCycle::inputMouseDown()) {
         // Correcting volume (if have any changes)
-        if (currentWidth != width) {
-            startVolume = audio.music.getVolume();
-            audio.music.setVolume(startVolume * (width-currentWidth)/width);
-        }
+        /*if (currentWidth != width) {
+            audio.setVolume((width-currentWidth)/width);
+        }*/
         return true;
     }
     return false;
@@ -59,19 +57,18 @@ void SinglePlayerGameCycle::update() {
             if (currentWidth == width) {
                 // Setting updated window title
                 window.setTitle({"You been rickrolled!","Ты зарикролен!","Schach на SDL","Шахматы на SDL"});
-
-                // Setting new music and volume back
-                audio.music.setVolume(startVolume);
+                // Setting own music track
                 audio.music.start(Music::Singleplayer);
-                return;
+                // Resetting volume to base
+                audio.setVolume(1.0f);
+            } else {
+                // Correcting height
+                currentHeight = height * currentWidth / width;
+                // Correcting music volume
+                audio.setVolume(float(width-currentWidth)/width);
+                // Setting timer to update
+                prevFrameUpdate = getTime() + (width - currentWidth)*5;
             }
-            // Correcting height
-            currentHeight = height * currentWidth / width;
-            // Correcting music volume
-            audio.music.setVolume(startVolume * (width-currentWidth)/width);
-
-            // Setting timer to update
-            prevFrameUpdate = getTime() + (width - currentWidth)*5;
         } else {
             // Updating frame counter
             frame = (frame + 1) % animation->count;
@@ -98,10 +95,10 @@ void SinglePlayerGameCycle::draw() const {
     for (Uint16 y=0; y < currentHeight; ++y) {
         for (Uint16 x=0; x < currentWidth; ++x) {
             // Drawing need figure
-            SDL_FRect dest = {x * cellLength + LETTER_LINE, y * cellLength  + 182, cellLength, cellLength};
+            SDL_FRect dest = {x * cellLength + LETTER_LINE, y * cellLength + 182, cellLength, cellLength};
 
             // Drawing rect for field
-            if ((x+y)%2) {
+            if ((x+y) % 2) {
                 window.setDrawColor(FIELD_LIGHT);
             } else {
                 window.setDrawColor(FIELD_DARK);
@@ -111,12 +108,10 @@ void SinglePlayerGameCycle::draw() const {
 
             // Checkig, if need to make free cell
             if (currentWidth == width || (rand() % width < currentWidth)) {
+                // Draw animation cell
                 SDL_Texture* curTexture = window.getTexture(Textures::BlackPawn + rand() % 6);
-
                 Uint16 caret = (x + y * width) * 4;
-
-                window.setColorMode(curTexture, {frameData[caret+2], frameData[caret+1], frameData[caret]});
-
+                window.setColorMode(curTexture, {frameData[caret], frameData[caret+1], frameData[caret+2]});
                 window.blit(curTexture, dest);
             }
         }

@@ -34,7 +34,7 @@ class Audio {
     SoundsData sounds;
     #endif
 
-    // Get/set master volume: 1.0f - is normal
+    // Set/get master volume: 1.0f - is normal
     void setVolume(float volume);
     float getVolume() const;
 };

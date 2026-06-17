@@ -15,11 +15,8 @@ updateButton(_window, 0.5, 0.88, {"Update", "Обновить", "Update", "Аб�
 targetConnectButton(_window, 0.5, 0.95,
     {"Connect by IP", "Присоединиться по IP", "Über IP beitreten", "Далучыцца па IP"}),
 targetConnectMenu(_window) {
-    // Starting random getting socket
-    logger.additional("Start client lobby cycle");
-
     // Setting to correct send broadcast
-    broadcastSendSocket.setSendBroadcast();
+    broadcastSendSocket.setSendBroadcast();  // ! Check correction
 
     // First auto searching
     updateList();
@@ -27,6 +24,7 @@ targetConnectMenu(_window) {
     if (!isRestarted()) {
         targetConnectMenu.reset();
     }
+    logger.additional("Start client lobby cycle");
 }
 
 bool ClientLobbyCycle::inputMouseDown() {
