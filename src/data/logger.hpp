@@ -5,12 +5,12 @@
 
 #pragma once
 
-#include <SDL3/SDL_log.h>
 #include "../define.hpp"
 
 // Additional logging to file system
 #if (CHECK_ALL)
-#include <fstream>
+#include <SDL3/SDL_log.h>
+#include <SDL3/SDL_iostream.h>
 #endif
 
 
@@ -18,7 +18,7 @@
 class Logger {
  protected:
     #if (CHECK_ALL)
-    std::ofstream logFile;
+    SDL_IOStream* logFile = nullptr;
     #endif
 
  public:
@@ -41,29 +41,23 @@ extern Logger logger;
 template <typename ...Args>
 void Logger::important(const char* _text, const Args& ..._args) {
     #if (CHECK_CORRECTION)
-    // Creating text
-    char* buffer;
-    SDL_asprintf(&buffer, _text, _args...);
     // Writing to stdout
-    SDL_Log(buffer);
+    SDL_Log(_text, _args...);
     // Writing to file
-    logFile << buffer << '\n';
-    // Clearing text
-    SDL_free(buffer);
+    SDL_IOprintf(logFile, _text, _args...);
+    SDL_IOprintf(logFile, "\n");
+    SDL_FlushIO(logFile);
     #endif
 }
 
 template <typename ...Args>
 void Logger::additional(const char* _text, const Args& ..._args) {
     #if (CHECK_CORRECTION)
-    // Creating text
-    char* buffer;
-    SDL_asprintf(&buffer, _text, _args...);
     // Writing to stdout
-    SDL_Log(buffer);
+    SDL_Log(_text, _args...);
     // Writing to file
-    logFile << buffer << '\n';
-    // Clearing text
-    SDL_free(buffer);
+    SDL_IOprintf(logFile, _text, _args...);
+    SDL_IOprintf(logFile, "\n");
+    SDL_FlushIO(logFile);
     #endif
 }
