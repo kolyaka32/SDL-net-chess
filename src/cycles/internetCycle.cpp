@@ -10,15 +10,22 @@ bool InternetCycle::currentTurn = false;
 
 InternetCycle::InternetCycle(Window& _window)
 : GameCycle(_window),
-currentTurnText(_window, 0.5, 0.05, {"Your turn", "Ваш ход", "Sie spielen aus", "Ваш ход"}),
-opponentTurnText(_window, 0.5, 0.05, {"Wait", "Ожидайте", "Erwartet", "Чакаць"}),
-disconnectedBox(_window, {"Connection lost", "Соединение потярено", "Verbindung verloren", "Злучэнне страчана"},
+currentTurnText(_window, 0.5, 0.05,
+    {"Your turn", "Ваш ход", "Sie spielen aus", "Ваш ход"}),
+opponentTurnText(_window, 0.5, 0.05,
+    {"Wait", "Ожидайте", "Erwartet", "Чакаць"}),
+disconnectedBox(_window, 0.5, 0.5, 0.7, 0.4,
+    {"Connection lost", "Соединение потярено", "Verbindung verloren", "Злучэнне страчана"},
     {"Reconnect", "Переприсоединится", "Wiederverbinden", "Паўторна падлучыцца"},
     {"Close", "Закрыть", "Schließen", "Зачыніць"}),
-termianatedBox(_window, {"Connection terminated", "Соединение разорвано", "Verbindung unterbrochen", "Злучэнне разарвана"},
+termianatedBox(_window, 0.5, 0.5, 0.7, 0.2,
+    {"Connection terminated", "Соединение разорвано", "Verbindung unterbrochen", "Злучэнне разарвана"},
     {"Close", "Закрыть", "Schließen", "Зачыніць"}),
-looseText(_window, 0.5, 0.05, {"You loose", "Вы проиграли", "Sie haben verloren", "Вы прайгралі"}),
-winText(_window, 0.5, 0.05, {"Win", "Победа", "Sieg", "Перамога"}) {
+looseText(_window, 0.5, 0.05,
+    {"You loose", "Вы проиграли", "Sie haben verloren", "Вы прайгралі"}),
+winText(_window, 0.5, 0.05,
+    {"Win", "Победа", "Sieg", "Перамога"})
+{
     // Resetting flag
     if (!isRestarted()) {
         disconnectedBox.reset();

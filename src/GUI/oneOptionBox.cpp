@@ -8,19 +8,20 @@
 #if (USE_SDL_FONT) && (PRELOAD_FONTS)
 
 
-GUI::OneOptionBox::OneOptionBox(const Window& _window, const LanguagedText&& _title,
-    const LanguagedText&& _buttonText)
+GUI::OneOptionBox::OneOptionBox(const Window& _window, float _X, float _Y, float _W, float _H,
+    const LanguagedText&& _title, const LanguagedText&& _button)
 : Template(_window),
-mainText(_window, 0.5, 0.45, std::move(_title), 1, Height::SubTitle),
-button(_window, 0.5, 0.55, std::move(_buttonText)),
-background(_window, 0.5, 0.5, 0.9, 0.2, 5.0, 1.0) {}
+active(false),
+background(_window, _X, _Y, _W, _H, _H*_window.getHeight()/4, 2.0),
+title(_window, _X, _Y - _H/4, std::move(_title), 1, Height::SubTitle),
+button(_window, _X, _Y + _H/4, std::move(_button)) {}
 
 GUI::OneOptionBox::OneOptionBox(OneOptionBox&& _object) noexcept
 : Template(_object.window),
 active(_object.active),
-mainText(std::move(_object.mainText)),
-button(std::move(_object.button)),
-background(std::move(_object.background)) {}
+background(std::move(_object.background)),
+title(std::move(_object.title)),
+button(std::move(_object.button)) {}
 
 int GUI::OneOptionBox::click(const Mouse _mouse) {
     if (active) {
@@ -48,8 +49,8 @@ bool GUI::OneOptionBox::isActive() const {
 void GUI::OneOptionBox::blit() const {
     if (active) {
         background.blit();
+        title.blit();
         button.blit();
-        mainText.blit();
     }
 }
 

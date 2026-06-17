@@ -280,23 +280,21 @@ namespace GUI {
 
 
     // Class for box with message and actions with it
-    class TwoOptionBox : public Template {
+    class OneOptionBox : public Template {
      private:
         // Flag of showing
         bool active = false;
 
-        // Background plate for better visability
+        // Graphical part
         GUI::RoundedBackplate background;
-        // Main text - title
-        GUI::HighlightedStaticText mainText;
-        // Select variants
-        GUI::TextButton button1, button2;
+        GUI::HighlightedStaticText title;
+        GUI::TextButton button;
 
      public:
-        TwoOptionBox(const Window& window, const LanguagedText&& title,
-            const LanguagedText&& button1Text, const LanguagedText&& button2Text);
-        TwoOptionBox(TwoOptionBox&& object) noexcept;
-        int click(const Mouse mouse);  // Return 1, if active; 2 if 1 button pressed; 3 if 2 button pressed
+        OneOptionBox(const Window& window, float X, float Y, float W, float H,
+            const LanguagedText&& titleText, const LanguagedText&& buttonText);
+        OneOptionBox(OneOptionBox&& object) noexcept;
+        int click(const Mouse mouse);  // Return 1, if active; 2 if button pressed button
         void activate();
         void reset();
         bool isActive() const;
@@ -305,23 +303,22 @@ namespace GUI {
 
 
     // Class for box with message and actions with it
-    class OneOptionBox : public Template {
+    class TwoOptionBox : public Template {
      private:
         // Flag of showing
         bool active = false;
 
-        // Background plate for better visability
+        // Graphic part
         GUI::RoundedBackplate background;
-        // Main text - title
-        GUI::HighlightedStaticText mainText;
-        // Select variants
-        GUI::TextButton button;
+        GUI::HighlightedStaticText title;
+        GUI::TextButton button1, button2;
 
      public:
-        OneOptionBox(const Window& window, const LanguagedText&& title,
-            const LanguagedText&& buttonText);
-        OneOptionBox(OneOptionBox&& object) noexcept;
-        int click(const Mouse mouse);  // Return 1, if active; 2 if button pressed
+        TwoOptionBox(const Window& window, float X, float Y, float W, float H,
+            const LanguagedText&& titleText,
+            const LanguagedText&& button1Text, const LanguagedText&& button2Text);
+        TwoOptionBox(TwoOptionBox&& object) noexcept;
+        int click(const Mouse mouse);  // Return 1, if active; 2 if 1 button pressed; 3 if 2 button pressed
         void activate();
         void reset();
         bool isActive() const;
