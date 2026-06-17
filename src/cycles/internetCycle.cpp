@@ -33,7 +33,7 @@ bool InternetCycle::inputMouseDown() {
     }
     if (int code = termianatedBox.click(mouse)) {
         if (code == 2) {
-            // Quiting to menu
+            // Quiting button
             App::setNextCycle(Cycle::Menu);
         }
         // Not allowing to any another actions
@@ -41,10 +41,10 @@ bool InternetCycle::inputMouseDown() {
     }
     if (int code = disconnectedBox.click(mouse)) {
         if (code == 2) {
-            // Trying to reconnect
+            // Reconnect button
             internet.sendAll({ConnectionCode::ApplyConnection});
         } else if (code == 3) {
-            // Going to menu
+            // Exit button
             App::setNextCycle(Cycle::Menu);
         }
         // Not allowing to any another actions
