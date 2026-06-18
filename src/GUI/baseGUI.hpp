@@ -51,8 +51,8 @@ namespace GUI {
     class RoundedBackplate : public TextureTemplate {
      public:
         RoundedBackplate(const Window& window, float centerX, float centerY, float width, float height,
-            float radius, float border, Color frontColor = GREY, Color backColor = BLACK);
-        RoundedBackplate(const Window& window, const SDL_FRect& rect, float radius, float border,
+            int radius, int border, Color frontColor = GREY, Color backColor = BLACK);
+        RoundedBackplate(const Window& window, const SDL_FRect& rect, int radius, int border,
             Color frontColor = GREY, Color backColor = BLACK);
         RoundedBackplate(RoundedBackplate&& object) noexcept;
         ~RoundedBackplate() noexcept;
