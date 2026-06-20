@@ -16,11 +16,11 @@ exitButton(_window, 0.5, 0.85, {"Close", "Закрыть", "Schließen", "Зач
 
 const Field* SavedFields::click(const Mouse _mouse) {
     if (exitButton.in(_mouse)) {
-        active = false;
+        close();
         return nullptr;
     }
     if (int i = scroller.click(_mouse)) {
-        active = false;
+        close();
         return &startOptions[i-1];
     }
     return nullptr;

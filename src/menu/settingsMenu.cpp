@@ -7,12 +7,9 @@
 #include "../data/cycleTemplate.hpp"
 
 
-bool SettingsMenu::active = false;
-
 SettingsMenu::SettingsMenu(const Window& _window)
-: Template(_window),
+: SubWindow(_window, 0.5, 0.5, 0.65, 0.85),
 settingButton{window, 0.96, 0.05, 0.08, Textures::SettingsButton},
-background{window, 0.5, 0.5, 0.65, 0.85, 20, 4},
 titleText{window, 0.5, 0.13, {"Pause", "Пауза", "Pause", "Паўза"}, 2, Height::Info},
 flags {
     {window, 0.35, 0.27, 0.25, Textures::FlagUSA},
@@ -33,8 +30,8 @@ exitButton{window, 0.5, 0.85, {"Exit", "Выход", "Ausfahrt", "Выхад"}} 
 bool SettingsMenu::click(const Mouse _mouse) {
     // Check, if click on setting butoon
     if (settingButton.in(_mouse)) {
-        active ^= true;  // Changing state
-        return false;
+        toggle();
+        return true;
     }
     // Clicking in menu
     if (active) {
@@ -66,8 +63,7 @@ bool SettingsMenu::click(const Mouse _mouse) {
         }
         #endif
         if (exitButton.in(_mouse)) {
-            // Checking on exit
-            active = false;
+            close();
             return true;
         }
         return true;
@@ -163,9 +159,4 @@ void SettingsMenu::blit() const {
         // Quit
         exitButton.blit();
     }
-}
-
-void SettingsMenu::activate() {
-    // Changing state to opposite
-    active ^= true;
 }

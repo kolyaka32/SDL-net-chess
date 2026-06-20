@@ -32,9 +32,9 @@ void ClientGameCycle::getInternetPacket(const GetPacket& packet) {
 
     case ConnectionCode::GameTurn:
         if (packet.isBytesAvaliable(3)) {
-            board.clickClientOpponent(packet.getData<Uint8>(2), packet.getData<Uint8>(3));
             logger.additional("Turn of opponent player from %u to %u",
                 packet.getData<Uint8>(2), packet.getData<Uint8>(3));
+            board.clickClientOpponent(packet.getData<Uint8>(2), packet.getData<Uint8>(3));
         }
         return;
 

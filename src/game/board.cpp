@@ -5,7 +5,6 @@
 
 #include "board.hpp"
 #include "../internet/internet.hpp"
-#include "selectingMenu/selectingMenu.hpp"
 
 
 Board::Board()
@@ -163,23 +162,21 @@ void Board::pickFigure(Position _p) {
     return;
 }
 
-void Board::placeFigure(Position _p) {
+bool Board::placeFigure(Position _p) {
     // Check on game end
     if (state == GameState::CurrentPlay) {
         // Checking on game end (if there king of another command)
         if (figures[_p.getPosition()] == FIG_RED_TYPE + FIG_BLACK_KING) {
             state = GameState::CurrentWin;
             // Opponening menu
-            SelectingMenu::open();
-            return;
+            return true;
         }
     } else {
         // Checking on game end (if there king of another command)
         if (figures[_p.getPosition()] == FIG_RED_TYPE + FIG_WHITE_KING) {
             state = GameState::OpponentWin;
             // Opponening menu
-            SelectingMenu::open();
-            return;
+            return true;
         }
     }
 
@@ -210,7 +207,7 @@ void Board::placeFigure(Position _p) {
                 figures[61] = FIG_WHITE_ROOK;
                 figures[62] = FIG_WHITE_KING;
             }
-            return;
+            return false;
         }
         break;
 
@@ -232,7 +229,7 @@ void Board::placeFigure(Position _p) {
                 figures[62] = FIG_WHITE_KING;
                 figures[61] = FIG_WHITE_ROOK;
             }
-            return;
+            return false;
         }
         break;
 
@@ -261,7 +258,7 @@ void Board::placeFigure(Position _p) {
                 figures[5] = FIG_BLACK_ROOK;
                 figures[6] = FIG_BLACK_KING;
             }
-            return;
+            return false;
         }
         break;
 
@@ -283,7 +280,7 @@ void Board::placeFigure(Position _p) {
                 figures[6] = FIG_BLACK_KING;
                 figures[5] = FIG_BLACK_ROOK;
             }
-            return;
+            return false;
         }
         break;
 
@@ -304,6 +301,7 @@ void Board::placeFigure(Position _p) {
     // Setting new position to cell
     figures[_p.getPosition()] = activeCell;
     figures[activePosition.getPosition()] = FIG_NONE;
+    return false;
 }
 
 bool Board::isValid(const Mouse _mouse) {
@@ -315,7 +313,7 @@ Position Board::getPosition(const Mouse _mouse) {
         (_mouse.getY()-rect.y)/CELL_SIDE);
 }
 
-void Board::clickCooperative(const Mouse _mouse) {
+bool Board::clickCooperative(const Mouse _mouse) {
     // Check if action posible
     if (isValid(_mouse) && (state == GameState::CurrentPlay || state == GameState::OpponentPlay)) {
         Position pos = getPosition(_mouse);
@@ -323,41 +321,45 @@ void Board::clickCooperative(const Mouse _mouse) {
         if (activeCell == FIG_NONE) {
             // Picking up figure from field - showing posible moves
             pickFigure(pos);
-            return;
+            return false;
         }
         // Checking, if click on old place
         if (activePosition == pos) {
             // Clearing field for next turns
             resetSelection();
-            return;
+            return false;
         }
         // Checking, if click on avalible position
         if (figures[pos.getPosition()] >= FIG_MOVE_TO) {
             // Placing figure there
-            placeFigure(pos);
-            // Making sound
-            audio.sounds.play(Sounds::Turn);
-            // Changing moving player
-            switch (state) {
-            case GameState::CurrentPlay:
-                state = GameState::OpponentPlay;
-                break;
-
-            case GameState::OpponentPlay:
-                state = GameState::CurrentPlay;
-                break;
-
-            default:
-                break;
+            if (placeFigure(pos)) {
+                resetSelection();
+                return true;
+            } else {
+                // Making sound
+                audio.sounds.play(Sounds::Turn);
+                // Changing moving player
+                switch (state) {
+                case GameState::CurrentPlay:
+                    state = GameState::OpponentPlay;
+                    break;
+    
+                case GameState::OpponentPlay:
+                    state = GameState::CurrentPlay;
+                    break;
+    
+                default:
+                    break;
+                }
+                // Clearing field after turn
+                resetSelection();
             }
-            // Clearing field after turn
-            resetSelection();
-            return;
         }
     }
+    return false;
 }
 
-void Board::clickServerCurrent(const Mouse _mouse) {
+bool Board::clickServerCurrent(const Mouse _mouse) {
     // Check if action posible
     if (isValid(_mouse) && (state == GameState::CurrentPlay)) {
         Position pos = getPosition(_mouse);
@@ -365,39 +367,43 @@ void Board::clickServerCurrent(const Mouse _mouse) {
         if (activeCell == FIG_NONE) {
             // Picking up figure from field - showing posible moves
             pickFigure(pos);
-            return;
+            return false;
         }
         // Checking, if click on old place
         if (activePosition == pos) {
             // Clearing field for next turns
             resetSelection();
-            return;
+            return false;
         }
         // Checking, if click on avalible position
         if (figures[pos.getPosition()] >= FIG_MOVE_TO) {
             // Placing figure there
-            placeFigure(pos);
-            // Sending this turn
-            internet.sendAllConfirmed({ConnectionCode::GameTurn, activePosition.getPosition(), pos.getPosition()});
-            // Making sound
-            audio.sounds.play(Sounds::Turn);
-            // Changing moving player
-            switch (state) {
-            case GameState::CurrentPlay:
-                state = GameState::OpponentPlay;
-                break;
-
-            default:
-                break;
+            if (placeFigure(pos)) {
+                resetSelection();
+                return true;
+            } else {
+                // Sending this turn
+                internet.sendAllConfirmed({ConnectionCode::GameTurn, activePosition.getPosition(), pos.getPosition()});
+                // Making sound
+                audio.sounds.play(Sounds::Turn);
+                // Changing moving player
+                switch (state) {
+                case GameState::CurrentPlay:
+                    state = GameState::OpponentPlay;
+                    break;
+    
+                default:
+                    break;
+                }
+                // Clearing field after turn
+                resetSelection();
             }
-            // Clearing field after turn
-            resetSelection();
-            return;
         }
     }
+    return false;
 }
 
-void Board::clickServerOpponent(Uint8 _p1, Uint8 _p2) {
+bool Board::clickServerOpponent(Uint8 _p1, Uint8 _p2) {
     // Check if action posible
     if ((state == GameState::OpponentPlay) && (_p1 < 64) && (_p2 < 64)) {
         // Picking up figure from field - showing posible moves
@@ -406,25 +412,30 @@ void Board::clickServerOpponent(Uint8 _p1, Uint8 _p2) {
         // Checking, if click on avalible position
         if (figures[_p2] >= FIG_MOVE_TO) {
             // Placing figure there
-            placeFigure(_p2);
-            // Making sound
-            audio.sounds.play(Sounds::Turn);
-            // Changing moving player
-            switch (state) {
-            case GameState::OpponentPlay:
-                state = GameState::CurrentPlay;
-                break;
+            if (placeFigure(_p2)) {
+                resetSelection();
+                return true;
+            } else {
+                // Making sound
+                audio.sounds.play(Sounds::Turn);
+                // Changing moving player
+                switch (state) {
+                case GameState::OpponentPlay:
+                    state = GameState::CurrentPlay;
+                    break;
 
-            default:
-                break;
+                default:
+                    break;
+                }
             }
         }
         // Clearing field after turn (in any case)
         resetSelection();
     }
+    return false;
 }
 
-void Board::clickClientCurrent(const Mouse _mouse) {
+bool Board::clickClientCurrent(const Mouse _mouse) {
     // Check if action posible
     if (isValid(_mouse) && (state == GameState::OpponentPlay)) {
         Position pos = getPosition(_mouse);
@@ -432,39 +443,44 @@ void Board::clickClientCurrent(const Mouse _mouse) {
         if (activeCell == FIG_NONE) {
             // Picking up figure from field - showing posible moves
             pickFigure(pos);
-            return;
+            return false;
         }
         // Checking, if click on old place
         if (activePosition == pos) {
             // Clearing field for next turns
             resetSelection();
-            return;
+            return false;
         }
         // Checking, if click on avalible position
         if (figures[pos.getPosition()] >= FIG_MOVE_TO) {
             // Placing figure there
-            placeFigure(pos);
-            // Sending this turn
-            internet.sendAllConfirmed({ConnectionCode::GameTurn, activePosition.getPosition(), pos.getPosition()});
-            // Making sound
-            audio.sounds.play(Sounds::Turn);
-            // Changing moving player
-            switch (state) {
-            case GameState::OpponentPlay:
-                state = GameState::CurrentPlay;
-                break;
+            if (placeFigure(pos)) {
+                resetSelection();
+                return true;
+            } else {
+                // Sending this turn
+                internet.sendAllConfirmed({ConnectionCode::GameTurn, activePosition.getPosition(), pos.getPosition()});
+                // Making sound
+                audio.sounds.play(Sounds::Turn);
+                // Changing moving player
+                switch (state) {
+                case GameState::OpponentPlay:
+                    state = GameState::CurrentPlay;
+                    break;
 
-            default:
-                break;
+                default:
+                    break;
+                }
+                // Clearing field after turn
+                resetSelection();
             }
-            // Clearing field after turn
-            resetSelection();
-            return;
+            return false;
         }
     }
+    return false;
 }
 
-void Board::clickClientOpponent(Uint8 _p1, Uint8 _p2) {
+bool Board::clickClientOpponent(Uint8 _p1, Uint8 _p2) {
     // Check if action posible
     if ((state == GameState::CurrentPlay) && (_p1 < 64) && (_p2 < 64)) {
         // Picking up figure from field - showing posible moves
@@ -473,22 +489,27 @@ void Board::clickClientOpponent(Uint8 _p1, Uint8 _p2) {
         // Checking, if click on avalible position
         if (figures[_p2] >= FIG_MOVE_TO) {
             // Placing figure there
-            placeFigure(_p2);
-            // Making sound
-            audio.sounds.play(Sounds::Turn);
-            // Changing moving player
-            switch (state) {
-            case GameState::CurrentPlay:
-                state = GameState::OpponentPlay;
-                break;
+            if (placeFigure(_p2)) {
+                resetSelection();
+                return true;
+            } else {
+                // Making sound
+                audio.sounds.play(Sounds::Turn);
+                // Changing moving player
+                switch (state) {
+                case GameState::CurrentPlay:
+                    state = GameState::OpponentPlay;
+                    break;
 
-            default:
-                break;
+                default:
+                    break;
+                }
             }
         }
         // Clearing field after turn (in any case)
         resetSelection();
     }
+    return false;
 }
 
 GameState Board::getState() {

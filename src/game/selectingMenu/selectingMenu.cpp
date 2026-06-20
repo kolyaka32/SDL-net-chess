@@ -30,8 +30,7 @@ const Field* SelectingMenu::click(const Mouse _mouse) {
         // In menu checks
         // Check for game start
         if (continueButton.in(_mouse)) {
-            // Closing that menu
-            active = false;
+            close();
             return nullptr;
         }
         if (startNewButton.in(_mouse)) {
@@ -77,8 +76,7 @@ bool SelectingMenu::escape() {
         if (savedFields.escape()) {
             return true;
         }
-        active = false;
-        return true;
+        return SubWindow::escape();
     }
     return false;
 }

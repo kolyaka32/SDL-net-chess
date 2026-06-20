@@ -85,6 +85,7 @@ namespace GUI {
         SubWindow(SubWindow&& object) noexcept;
         void reset();
         void open();
+        void close();
         bool isOpen() const;
         virtual bool escape();
         void toggle();

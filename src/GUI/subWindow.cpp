@@ -9,7 +9,7 @@
 GUI::SubWindow::SubWindow(const Window& _window, float _X, float _Y, float _W, float _H)
 : Template(_window),
 active(false),
-background(_window, _X, _Y, _W, _H, _H*_window.getHeight()/4, 2.0) {}
+background(_window, _X, _Y, _W, _H, (_H+_W)*_window.getHeight()/16, 2.0) {}
 
 GUI::SubWindow::SubWindow(SubWindow&& _object) noexcept
 : Template(_object.window),
@@ -22,6 +22,10 @@ void GUI::SubWindow::reset() {
 
 void GUI::SubWindow::open() {
     active = true;
+}
+
+void GUI::SubWindow::close() {
+    active = false;
 }
 
 bool GUI::SubWindow::isOpen() const {

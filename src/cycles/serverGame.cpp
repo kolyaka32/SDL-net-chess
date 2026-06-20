@@ -59,7 +59,9 @@ bool ServerGameCycle::inputMouseDown() {
         return true;
     }
     // Normal turn
-    board.clickServerCurrent(mouse);
+    if (board.clickServerCurrent(mouse)) {
+        menu.open();
+    }
     return false;
 }
 
@@ -97,9 +99,11 @@ void ServerGameCycle::getInternetPacket(const GetPacket& packet) {
 
     case ConnectionCode::GameTurn:
         if (packet.isBytesAvaliable(3)) {
-            board.clickServerOpponent(packet.getData<Uint8>(2), packet.getData<Uint8>(3));
             logger.additional("Turn of opponent player from %u to %u",
                 packet.getData<Uint8>(2), packet.getData<Uint8>(3));
+            if (board.clickServerOpponent(packet.getData<Uint8>(2), packet.getData<Uint8>(3))) {
+                menu.open();
+            }
         }
         break;
 

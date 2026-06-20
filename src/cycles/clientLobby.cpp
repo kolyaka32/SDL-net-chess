@@ -39,7 +39,7 @@ bool ClientLobbyCycle::inputMouseDown() {
         return true;
     }
     if (targetConnectButton.in(mouse)) {
-        targetConnectMenu.activate();
+        targetConnectMenu.open();
         return true;
     }
     if (int i = serverScroller.click(mouse)) {

@@ -9,14 +9,12 @@
 
 
 // Menu for target connect at specified address
-class TargetConnect {
+class TargetConnect : public GUI::SubWindow {
  protected:
-    static bool active;
     static char baseIP[15];
     static char basePort[6];
 
     // Input fields
-    GUI::RoundedBackplate backplate;
     GUI::StaticText IPText;
     GUI::TypeBox<15> IPField;
     GUI::StaticText portText;
@@ -30,14 +28,12 @@ class TargetConnect {
 
  public:
     TargetConnect(Window& window);
-    void activate();
-    void reset();
     bool click(const Mouse mouse);
     void unclick();
     bool press(SDL_Keycode key);
     bool write(const char* text);
     void update();
-    void blit() const;
+    void blit() const override;
 
     // Static functions
     static void writeBaseIP(const char* text);

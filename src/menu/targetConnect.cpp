@@ -8,12 +8,11 @@
 
 
 // Static objects for save inputted parameters
-bool TargetConnect::active = false;
 char TargetConnect::baseIP[15] = "127.0.0.1";
 char TargetConnect::basePort[6] = "8000";
 
 TargetConnect::TargetConnect(Window& _window)
-: backplate(_window, 0.5, 0.5, 0.8, 0.8, 20, 4),
+: SubWindow(_window, 0.5, 0.5, 0.8, 0.8),
 IPText(_window, 0.5, 0.2, {"Enter IP:", "Введите IP:", "Geben Sie die IP ein:", "Увядзіце IP:"}, Height::SubTitle),
 IPField(_window, 0.5, 0.3, baseIP),
 portText(_window, 0.5, 0.4, {"Enter port:", "Введите порт:", "Port eingeben:", "Увядзіце порт:"}, Height::SubTitle),
@@ -21,14 +20,6 @@ portField(_window, 0.5, 0.5, basePort),
 pasteButton(_window, 0.5, 0.61, {"Paste the address", "Вставить адрес", "Kopierte Adresse", "Уставіць адрас"}),
 connectButton(_window, 0.5, 0.72, {"Connect", "Присоединится", "Beitritt", "Далучыцца"}),
 closeButton(_window, 0.5, 0.83, {"Close", "Закрыть", "Schließen", "Зачыніць"}) {}
-
-void TargetConnect::activate() {
-    active = true;
-}
-
-void TargetConnect::reset() {
-    active = false;
-}
 
 bool TargetConnect::click(const Mouse _mouse) {
     if (active) {
@@ -47,7 +38,7 @@ bool TargetConnect::click(const Mouse _mouse) {
             return true;
         }
         if (closeButton.in(_mouse)) {
-            active = false;
+            close();
             return true;
         }
     }
@@ -146,7 +137,7 @@ void TargetConnect::tryConnect() {
 void TargetConnect::blit() const {
     // Draw main part
     if (active) {
-        backplate.blit();
+        background.blit();
         IPText.blit();
         IPField.blit();
         portText.blit();

@@ -44,8 +44,10 @@ bool TwoPlayerGameCycle::inputMouseDown() {
         return true;
     }
     // Normal turn
-    board.clickCooperative(mouse);
-
+    if (board.clickCooperative(mouse)) {
+        menu.open();
+        return true;
+    }
     return false;
 }
 
