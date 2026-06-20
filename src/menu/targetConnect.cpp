@@ -23,6 +23,11 @@ closeButton(_window, 0.5, 0.83, {"Close", "Закрыть", "Schließen", "За�
 
 bool TargetConnect::click(const Mouse _mouse) {
     if (active) {
+        // Check, if end typing
+        IPField.checkOff(_mouse);
+        portField.checkOff(_mouse);
+
+        // Check, if start typing
         if (IPField.click(_mouse)) {
             return true;
         }

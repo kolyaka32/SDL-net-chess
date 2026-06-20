@@ -83,12 +83,12 @@ namespace GUI {
      public:
         SubWindow(const Window& window, float X, float Y, float W, float H);
         SubWindow(SubWindow&& object) noexcept;
-        void reset();
         void open();
         void close();
-        bool isOpen() const;
-        virtual bool escape();
         void toggle();
+        bool isOpen() const;
+        virtual void reset();
+        virtual bool escape();
         void blit() const override;
     };
 
@@ -250,9 +250,10 @@ namespace GUI {
         TypeField(TypeField<bufferSize>&& object) noexcept;
         ~TypeField() noexcept;
         void writeString(const char* str);   // Write string to buffer at caret position
-        void type(SDL_Keycode code);         // Processing special keycodes (like arrows, home, CTRL-C...)
+        bool type(SDL_Keycode code);         // Processing special keycodes (like arrows, home, CTRL-C...)
         void update(float mouseX);           // Highlated area of typing
-        bool click(const Mouse mouse);       // Set caret for typing at specified place
+        bool checkOff(const Mouse mouse);    // Check if click in other place, true if end entering
+        bool click(const Mouse mouse);       // Set caret for typing at specified place, true if select current
         void unclick();                      // Reset pressing
         const char* getString();             // Return typed string
         void setString(const char* string);  // Replace text with new string
