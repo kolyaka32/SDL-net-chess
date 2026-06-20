@@ -20,6 +20,22 @@ namespace GUI {
     };
 
 
+    // Codes of actions, returning from functions
+    enum {
+        None,      // Noting happen
+        Some,      // Action with current object
+        Finished,  // Finished interacting with current object (ESCAPE button)
+        Activate,  // Finished interaction and activate next action (ENTER button)
+        Button1,   // Pressed 1 button
+        Button2,   // Pressed 2 button
+        Button3,   // Pressed 3 button
+        // Etc..
+    } Action;
+
+    // Type for returning code of action
+    typedef int Code;
+
+
     // Object, that will be drawn at screen
     class Template {
      protected:
@@ -108,7 +124,7 @@ namespace GUI {
         Slider(Slider&& object) noexcept;
         float setValue(float mouseX);  // Setting new state from mouse position
         float scroll(float wheelY);    // Checking mouse wheel action
-        void blit() const override;       // Drawing slider with need button position
+        void blit() const override;    // Drawing slider with need button position
     };
 
 
@@ -252,16 +268,13 @@ namespace GUI {
         const char* getString();             // Return typed string
         void setString(const char* string);  // Replace text with new string
         // Main cycle
-        // Write string to buffer at caret position
-        void writeString(const char* str);
-        // Processing special keycodes (like arrows, home, CTRL-C...)
-        // Return 1 if code useful, 2 if end entering, 3 if pressed enter to start action
-        int  type(SDL_Keycode code);         
-        void update(float mouseX);           // Highlated area of typing
-        bool checkOff(const Mouse mouse);    // Check if click in other place, true if end entering
-        bool click(const Mouse mouse);       // Set caret for typing at specified place, true if select current
-        void unclick();                      // Reset pressing
-        void blit() const override;          // Draw current text with selection at screen
+        void writeString(const char* str);  // Write string to buffer at caret position
+        Code type(SDL_Keycode code);        // Processing special keycodes (like arrows, home, CTRL-C...)   
+        void update(float mouseX);          // Highlated area of typing
+        bool checkOff(const Mouse mouse);   // Check if click in other place, true if end entering
+        Code click(const Mouse mouse);      // Set caret for typing at specified place
+        void unclick();                     // Reset pressing
+        void blit() const override;         // Draw current text with selection at screen
     };
 
 
@@ -314,8 +327,7 @@ namespace GUI {
         // Getter/setter
         void set(unsigned value);
         unsigned getValue() const;
-
-        bool click(const Mouse mouse);  // return true, when entered new value
+        Code click(const Mouse mouse);
         void blit() const override;
     };
 
@@ -345,7 +357,7 @@ namespace GUI {
         OneOptionBox(const Window& window, float X, float Y, float W, float H,
             const LanguagedText&& titleText, const LanguagedText&& buttonText);
         OneOptionBox(OneOptionBox&& object) noexcept;
-        int click(const Mouse mouse);  // Return 1, if active; 2 if button pressed button
+        Code click(const Mouse mouse);
         void blit() const override;
     };
 
@@ -361,7 +373,7 @@ namespace GUI {
             const LanguagedText&& titleText,
             const LanguagedText&& button1Text, const LanguagedText&& button2Text);
         TwoOptionBox(TwoOptionBox&& object) noexcept;
-        int click(const Mouse mouse);  // Return 1, if active; 2 if 1 button pressed; 3 if 2 button pressed
+        Code click(const Mouse mouse);
         void blit() const override;
     };
 
@@ -405,8 +417,7 @@ namespace GUI {
         ~ScrollBox() noexcept;
         void addItem(const SourceItem& field);
         void clear();
-        // Return index of selected+1 and 0, if don't
-        int click(const Mouse mouse);
+        Code click(const Mouse mouse);
         void unclick();
         void update(const Mouse mouse);
         bool scroll(const Mouse mouse, float wheelY);

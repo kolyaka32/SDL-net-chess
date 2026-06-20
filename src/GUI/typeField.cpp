@@ -221,10 +221,10 @@ void GUI::TypeField<bufferSize>::deleteSelected() {
 }
 
 template <unsigned bufferSize>
-int GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
+GUI::Code GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
     // Checking, if box selected
     if (!selected) {
-        return 0;
+        return None;
     }
 
     // Getting current shft and control state
@@ -237,7 +237,7 @@ int GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
         // Coping after caret
         if (selectLength == 0) {
             if (caret == 0) {
-                return 1;
+                return Some;
             }
             selectLength = -1;
         }
@@ -248,7 +248,7 @@ int GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
         // Coping after caret
         if (selectLength == 0) {
             if (caret == length) {
-                return 1;
+                return Some;
             }
             selectLength = 1;
         }
@@ -273,7 +273,7 @@ int GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
             selectLength = 0;
         }
         updateSelected();
-        return 1;
+        return Some;
 
     case SDLK_RIGHT:
         if (keyMods & SDL_KMOD_SHIFT) {
@@ -292,7 +292,7 @@ int GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
             selectLength = 0;
         }
         updateSelected();
-        return 1;
+        return Some;
 
     // Special keys for faster caret move
     case SDLK_END:
@@ -304,7 +304,7 @@ int GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
         }
         caret = length;
         updateSelected();
-        return 1;
+        return Some;
 
     case SDLK_HOME:
     case SDLK_PAGEUP:
@@ -315,7 +315,7 @@ int GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
         }
         caret = 0;
         updateSelected();
-        return 1;
+        return Some;
 
     // Clipboard
     case SDLK_PASTE:
@@ -335,7 +335,7 @@ int GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
         if (keyMods & SDL_KMOD_CTRL) {
             writeClipboard();
         } else {
-            return 0;
+            return None;
         }
         break;
 
@@ -343,7 +343,7 @@ int GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
         if (keyMods & SDL_KMOD_CTRL) {
             copyToClipboard();
         } else {
-            return 0;
+            return None;
         }
         break;
 
@@ -352,7 +352,7 @@ int GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
             copyToClipboard();
             deleteSelected();
         } else {
-            return 0;
+            return None;
         }
         break;
 
@@ -362,7 +362,7 @@ int GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
             caret = length;
             selectLength = -length;
         } else {
-            return 0;
+            return None;
         }
         break;
 
@@ -378,7 +378,7 @@ int GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
             showCaret = false;
             // Stoping entering any letters
             window.stopTextInput();
-            return 2;
+            return Finished;
         }
         break;
 
@@ -394,14 +394,14 @@ int GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
         // Stoping entering any letters
         window.stopTextInput();
         // Return action
-        return 3;
+        return Action;
 
     default:
-        return 0;
+        return None;
     }
     // Updating texture after modifiying text
     updateTexture();
-    return 1;
+    return Some;
 }
 
 template <unsigned bufferSize>
@@ -427,7 +427,7 @@ bool GUI::TypeField<bufferSize>::checkOff(const Mouse _mouse) {
 }
 
 template <unsigned bufferSize>
-bool GUI::TypeField<bufferSize>::click(const Mouse _mouse) {
+GUI::Code GUI::TypeField<bufferSize>::click(const Mouse _mouse) {
     if (in(_mouse)) {
         // Resetting values
         pressed = true;
@@ -447,9 +447,9 @@ bool GUI::TypeField<bufferSize>::click(const Mouse _mouse) {
         }
         // Showing caret
         updateSelected();
-        return true;
+        return Some;
     }
-    return false;
+    return None;
 }
 
 template <unsigned bufferSize>

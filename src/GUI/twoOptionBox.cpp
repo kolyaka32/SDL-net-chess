@@ -22,18 +22,18 @@ title(std::move(_object.title)),
 button1(std::move(_object.button1)),
 button2(std::move(_object.button2)) {}
 
-int GUI::TwoOptionBox::click(const Mouse _mouse) {
+GUI::Code GUI::TwoOptionBox::click(const Mouse _mouse) {
     if (active) {
         // Returning to menu
         if (button1.in(_mouse)) {
-            return 2;
+            return Button1;
         }
         if (button2.in(_mouse)) {
-            return 3;
+            return Button2;
         }
-        return 1;
+        return Some;
     }
-    return 0;
+    return None;
 }
 
 void GUI::TwoOptionBox::blit() const {

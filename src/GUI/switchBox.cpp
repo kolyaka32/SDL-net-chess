@@ -71,7 +71,7 @@ unsigned GUI::SwitchBox::getValue() const {
     return selected;
 }
 
-bool GUI::SwitchBox::click(const Mouse _mouse) {
+GUI::Code GUI::SwitchBox::click(const Mouse _mouse) {
     if (opened) {
         // Closing
         opened = false;
@@ -81,12 +81,12 @@ bool GUI::SwitchBox::click(const Mouse _mouse) {
             selected = (_mouse.getY() - background.y) / (height * window.getHeight());
             drawnTexts[selected].move(0.0, -height*selected);
             background.h = height * window.getHeight();
-            return true;
+            return Finished;
         }
         // Resetting to previous
         drawnTexts[selected].move(0.0, -height*selected);
         background.h = height * window.getHeight();
-        return false;
+        return None;
     } else {
         if (_mouse.in(background)) {
             // Selecting variant
@@ -96,7 +96,7 @@ bool GUI::SwitchBox::click(const Mouse _mouse) {
             drawnTexts[selected].move(0.0, height*selected);
         }
     }
-    return false;
+    return None;
 }
 
 void GUI::SwitchBox::blit() const {

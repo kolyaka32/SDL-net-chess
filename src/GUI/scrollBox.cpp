@@ -136,20 +136,20 @@ void GUI::ScrollBox<Item, SourceItem>::placeItem(int _pos, const SourceItem& _it
 }
 
 template <class Item, class SourceItem>
-int GUI::ScrollBox<Item, SourceItem>::click(const Mouse _mouse) {
+GUI::Code GUI::ScrollBox<Item, SourceItem>::click(const Mouse _mouse) {
     if (_mouse.in(sliderBackRect)) {
         if (_mouse.in(sliderRect)) {
             holding = true;
             holdPosition = _mouse.getY();
         }
-        return 0;
+        return None;
     }
     for (int i=startField; i < endField; ++i) {
         if (items[i].in(_mouse)) {
-            return i+1;
+            return Button1 + i;
         }
     }
-    return 0;
+    return None;
 }
 
 template <class Item, class SourceItem>

@@ -19,15 +19,15 @@ GUI::OneOptionBox::OneOptionBox(OneOptionBox&& _object) noexcept
 title(std::move(_object.title)),
 button(std::move(_object.button)) {}
 
-int GUI::OneOptionBox::click(const Mouse _mouse) {
+GUI::Code GUI::OneOptionBox::click(const Mouse _mouse) {
     if (active) {
         // Returning to menu
         if (button.in(_mouse)) {
-            return 2;
+            return Button1;
         }
-        return 1;
+        return Some;
     }
-    return 0;
+    return None;
 }
 
 void GUI::OneOptionBox::blit() const {
