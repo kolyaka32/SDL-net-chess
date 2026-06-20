@@ -56,7 +56,7 @@ void GUI::SwitchBox::set(unsigned _value) {
         selected = _value;
         opened = false;
         drawnTexts[selected].move(0.0, -height*selected);
-        background.h = height;
+        background.h = height * window.getHeight();
     } else {
         // Resetting old option
         drawnTexts[selected].move(0.0, height*selected);
@@ -78,20 +78,20 @@ bool GUI::SwitchBox::click(const Mouse _mouse) {
         // Selecting variant
         if (_mouse.in(background)) {
             // Finding new option
-            selected = (_mouse.getY() - background.y) / height;
+            selected = (_mouse.getY() - background.y) / (height * window.getHeight());
             drawnTexts[selected].move(0.0, -height*selected);
-            background.h = height;
+            background.h = height * window.getHeight();
             return true;
         }
         // Resetting to previous
         drawnTexts[selected].move(0.0, -height*selected);
-        background.h = height;
+        background.h = height * window.getHeight();
         return false;
     } else {
         if (_mouse.in(background)) {
             // Selecting variant
             opened = true;
-            background.h = height * drawnTexts.size();
+            background.h = height * drawnTexts.size() * window.getHeight();
             // Resetting selected postion
             drawnTexts[selected].move(0.0, height*selected);
         }
