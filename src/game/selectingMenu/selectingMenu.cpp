@@ -7,32 +7,13 @@
 #include "../../data/cycleTemplate.hpp"
 
 
-bool SelectingMenu::active = false;
-
 SelectingMenu::SelectingMenu(const Window& _window)
-: savedFields(_window),
-backplate(_window, 0.5, 0.5, 0.7, 0.6, 40, 4),
+: SubWindow(_window, 0.5, 0.5, 0.7, 0.6),
+savedFields(_window),
 continueButton(_window, 0.5, 0.29, {"Continue", "Продолжить", "Fortfahren", "Прадоўжыць"}),
 startNewButton(_window, 0.5, 0.43, {"Create new", "Создать новую", "Schaffen", "Стварыць"}),
 loadButton(_window, 0.5, 0.57, {"Load", "Загрузить", "Hochladen", "Загрузіць"}),
 exitButton(_window, 0.5, 0.71, {"Exit to menu", "Выйти в меню", "Menü verlassen", "Выйсці ў меню"}) {}
-
-void SelectingMenu::activate() {
-    active ^= true;
-    savedFields.reset();
-}
-
-void SelectingMenu::reset() {
-    active = false;
-}
-
-void SelectingMenu::open() {
-    active = true;
-}
-
-bool SelectingMenu::isActive() {
-    return active;
-}
 
 void SelectingMenu::addField(const Field& _field) {
     savedFields.addFieldRuntime(_field);
@@ -42,7 +23,7 @@ const Field* SelectingMenu::click(const Mouse _mouse) {
     // If in menu
     if (active) {
         // Check, if loading fields
-        if (savedFields.isActive()) {
+        if (savedFields.isOpen()) {
             // Check, if select
             return savedFields.click(_mouse);
         }
@@ -59,7 +40,7 @@ const Field* SelectingMenu::click(const Mouse _mouse) {
         }
         if (loadButton.in(_mouse)) {
             // Starting selecting field from previous games
-            savedFields.activate();
+            savedFields.open();
             return nullptr;
         }
         if (exitButton.in(_mouse)) {
@@ -93,8 +74,7 @@ bool SelectingMenu::escape() {
     // Closing current object
     if (active) {
         // Closing top object
-        if (savedFields.isActive()) {
-            savedFields.reset();
+        if (savedFields.escape()) {
             return true;
         }
         active = false;
@@ -107,7 +87,7 @@ void SelectingMenu::blit() const {
     // Bliting waiting menu
     if (active) {
         // Bliting end background
-        backplate.blit();
+        background.blit();
 
         // Blitting buttons
         continueButton.blit();

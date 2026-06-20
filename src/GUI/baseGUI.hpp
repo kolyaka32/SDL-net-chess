@@ -72,6 +72,26 @@ namespace GUI {
     };
 
 
+    // Class for sub menu with flag of openning
+    class SubWindow : public Template {
+     protected:
+        // Flag of showing
+        bool active;
+        // Graphical part
+        GUI::RoundedBackplate background;
+
+     public:
+        SubWindow(const Window& window, float X, float Y, float W, float H);
+        SubWindow(SubWindow&& object) noexcept;
+        void reset();
+        void open();
+        bool isOpen() const;
+        virtual bool escape();
+        void toggle();
+        void blit() const override;
+    };
+
+
     // Textures
     #if (USE_SDL_IMAGE) && (PRELOAD_TEXTURES)
     // Class of slider bar with point on it to control need parameter
@@ -310,13 +330,8 @@ namespace GUI {
 
 
     // Class for box with message and actions with it
-    class OneOptionBox : public Template {
+    class OneOptionBox : public SubWindow {
      private:
-        // Flag of showing
-        bool active = false;
-
-        // Graphical part
-        GUI::RoundedBackplate background;
         GUI::HighlightedStaticText title;
         GUI::TextButton button;
 
@@ -325,21 +340,13 @@ namespace GUI {
             const LanguagedText&& titleText, const LanguagedText&& buttonText);
         OneOptionBox(OneOptionBox&& object) noexcept;
         int click(const Mouse mouse);  // Return 1, if active; 2 if button pressed button
-        void activate();
-        void reset();
-        bool isActive() const;
         void blit() const override;
     };
 
 
     // Class for box with message and actions with it
-    class TwoOptionBox : public Template {
+    class TwoOptionBox : public SubWindow {
      private:
-        // Flag of showing
-        bool active = false;
-
-        // Graphic part
-        GUI::RoundedBackplate background;
         GUI::HighlightedStaticText title;
         GUI::TextButton button1, button2;
 
@@ -349,9 +356,6 @@ namespace GUI {
             const LanguagedText&& button1Text, const LanguagedText&& button2Text);
         TwoOptionBox(TwoOptionBox&& object) noexcept;
         int click(const Mouse mouse);  // Return 1, if active; 2 if 1 button pressed; 3 if 2 button pressed
-        void activate();
-        void reset();
-        bool isActive() const;
         void blit() const override;
     };
 

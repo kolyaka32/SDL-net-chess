@@ -10,16 +10,12 @@
 
 GUI::OneOptionBox::OneOptionBox(const Window& _window, float _X, float _Y, float _W, float _H,
     const LanguagedText&& _title, const LanguagedText&& _button)
-: Template(_window),
-active(false),
-background(_window, _X, _Y, _W, _H, _H*_window.getHeight()/4, 2.0),
+: SubWindow(_window, _X, _Y, _W, _H),
 title(_window, _X, _Y - _H/4, std::move(_title), 1, Height::SubTitle),
 button(_window, _X, _Y + _H/4, std::move(_button)) {}
 
 GUI::OneOptionBox::OneOptionBox(OneOptionBox&& _object) noexcept
-: Template(_object.window),
-active(_object.active),
-background(std::move(_object.background)),
+: SubWindow(std::move(_object)),
 title(std::move(_object.title)),
 button(std::move(_object.button)) {}
 
@@ -32,18 +28,6 @@ int GUI::OneOptionBox::click(const Mouse _mouse) {
         return 1;
     }
     return 0;
-}
-
-void GUI::OneOptionBox::activate() {
-    active = true;
-}
-
-void GUI::OneOptionBox::reset() {
-    active = false;
-}
-
-bool GUI::OneOptionBox::isActive() const {
-    return active;
 }
 
 void GUI::OneOptionBox::blit() const {

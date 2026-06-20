@@ -75,7 +75,7 @@ void InternetCycle::update() {
 
     // Checking status
     if (internet.checkStatus()) {
-        disconnectedBox.activate();
+        disconnectedBox.open();
     } else {
         disconnectedBox.reset();
     }
@@ -84,7 +84,7 @@ void InternetCycle::update() {
 void InternetCycle::getInternetPacket(const GetPacket& packet) {
     switch (ConnectionCode(packet.getData<Uint8>(0))) {
     case ConnectionCode::Quit:
-        termianatedBox.activate();
+        termianatedBox.open();
         break;
 
     default:

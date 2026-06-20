@@ -32,7 +32,7 @@ void BaseCycle::inputMouseUp() {
 
 bool BaseCycle::inputKeys(const SDL_Keycode _key) {
     if (_key == SDLK_ESCAPE) {
-        settings.activate();
+        settings.toggle();
         return true;
     }
     return false;

@@ -7,26 +7,12 @@
 
 
 std::vector<FieldSave> SavedFields::startOptions{};
-bool SavedFields::active = false;
 
 SavedFields::SavedFields(const Window& _window)
-: Template(_window),
-backplate(_window, 0.5, 0.5, 0.94, 0.8, 20.0, 4.0),
+: SubWindow(_window, 0.5, 0.5, 0.94, 0.8),
 scroller(_window, 0.52, 0.46, 0.9, 0.7, 3, startOptions,
     {"No saves", "Нет сохранений", "Keine Speicherung", "Няма захаванняў"}),
 exitButton(_window, 0.5, 0.85, {"Close", "Закрыть", "Schließen", "Зачыніць"}) {}
-
-void SavedFields::activate() {
-    active = true;
-}
-
-bool SavedFields::isActive() {
-    return active;
-}
-
-void SavedFields::reset() {
-    active = false;
-}
 
 const Field* SavedFields::click(const Mouse _mouse) {
     if (exitButton.in(_mouse)) {
@@ -55,14 +41,14 @@ void SavedFields::update() {
 void SavedFields::scroll(float _wheelY) {
     Mouse mouse{};
     mouse.updatePos();
-    if (active && backplate.in(mouse)) {
+    if (active && background.in(mouse)) {
         scroller.scroll(mouse, _wheelY);
     }
 }
 
 void SavedFields::blit() const {
     if (active) {
-        backplate.blit();
+        background.blit();
         scroller.blit();
         exitButton.blit();
     }

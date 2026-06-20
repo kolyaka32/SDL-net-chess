@@ -9,15 +9,12 @@
 
 
 // Options for start new game (new or saved)
-class SelectingMenu {
+class SelectingMenu : public GUI::SubWindow {
  private:
-    static bool active;
-
     // Start options
     SavedFields savedFields;
 
     // Menu after game end
-    GUI::RoundedBackplate backplate;
     GUI::TextButton continueButton;
     GUI::TextButton startNewButton;
     GUI::TextButton loadButton;
@@ -25,15 +22,11 @@ class SelectingMenu {
 
  public:
     explicit SelectingMenu(const Window& window);
-    void activate();
-    static void reset();
-    static void open();
-    static bool isActive();
     void addField(const Field& field);
+    bool escape() override;
     const Field* click(const Mouse mouse);
     void unclick();
     void update();
     bool scroll(float wheelY);
-    bool escape();
     void blit() const;
 };

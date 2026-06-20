@@ -41,11 +41,11 @@ bool ServerGameCycle::inputMouseDown() {
     }
     if (gameMenuButton.in(mouse)) {
         // Starting game menu
-        menu.activate();
+        menu.open();
         return true;
     }
     // Check, if in menu
-    if (menu.isActive()) {
+    if (menu.isOpen()) {
         if (const Field* f = menu.click(mouse)) {
             // Setting new field localy
             board = *f;
@@ -92,7 +92,7 @@ void ServerGameCycle::getInternetPacket(const GetPacket& packet) {
     // Getting internet messages
     switch (ConnectionCode(packet.getData<Uint8>(0))) {
     case ConnectionCode::Quit:
-        termianatedBox.activate();
+        termianatedBox.open();
         break;
 
     case ConnectionCode::GameTurn:

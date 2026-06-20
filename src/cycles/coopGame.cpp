@@ -29,11 +29,11 @@ bool TwoPlayerGameCycle::inputMouseDown() {
     }
     if (gameMenuButton.in(mouse)) {
         // Starting game menu
-        menu.activate();
+        menu.open();
         return true;
     }
     // Check if in menu
-    if (menu.isActive()) {
+    if (menu.isOpen()) {
         if (const Field* f = menu.click(mouse)) {
             board = *f;
             menu.reset();
