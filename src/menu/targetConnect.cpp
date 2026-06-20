@@ -57,9 +57,22 @@ void TargetConnect::unclick() {
 
 bool TargetConnect::press(SDL_Keycode _key) {
     if (active) {
-        IPField.type(_key);
-        portField.type(_key);
-        return true;
+        if (int code = IPField.type(_key)) {
+            if (code == 3) {
+                tryConnect();
+            }
+            return true;
+        }
+        if (int code = portField.type(_key)) {
+            if (code == 3) {
+                tryConnect();
+            }
+            return true;
+        }
+        if (_key == SDLK_ESCAPE) {
+            close();
+            return true;
+        }
     }
     return false;
 }

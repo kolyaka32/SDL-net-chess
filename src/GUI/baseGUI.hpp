@@ -249,14 +249,18 @@ namespace GUI {
             Color textColor = BLACK, Color backColor = WHITE);
         TypeField(TypeField<bufferSize>&& object) noexcept;
         ~TypeField() noexcept;
-        void writeString(const char* str);   // Write string to buffer at caret position
-        bool type(SDL_Keycode code);         // Processing special keycodes (like arrows, home, CTRL-C...)
+        const char* getString();             // Return typed string
+        void setString(const char* string);  // Replace text with new string
+        // Main cycle
+        // Write string to buffer at caret position
+        void writeString(const char* str);
+        // Processing special keycodes (like arrows, home, CTRL-C...)
+        // Return 1 if code useful, 2 if end entering, 3 if pressed enter to start action
+        int  type(SDL_Keycode code);         
         void update(float mouseX);           // Highlated area of typing
         bool checkOff(const Mouse mouse);    // Check if click in other place, true if end entering
         bool click(const Mouse mouse);       // Set caret for typing at specified place, true if select current
         void unclick();                      // Reset pressing
-        const char* getString();             // Return typed string
-        void setString(const char* string);  // Replace text with new string
         void blit() const override;          // Draw current text with selection at screen
     };
 

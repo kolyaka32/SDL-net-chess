@@ -221,10 +221,10 @@ void GUI::TypeField<bufferSize>::deleteSelected() {
 }
 
 template <unsigned bufferSize>
-bool GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
+int GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
     // Checking, if box selected
     if (!selected) {
-        return false;
+        return 0;
     }
 
     // Getting current shft and control state
@@ -237,7 +237,7 @@ bool GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
         // Coping after caret
         if (selectLength == 0) {
             if (caret == 0) {
-                return false;
+                return 1;
             }
             selectLength = -1;
         }
@@ -248,7 +248,7 @@ bool GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
         // Coping after caret
         if (selectLength == 0) {
             if (caret == length) {
-                return false;
+                return 1;
             }
             selectLength = 1;
         }
@@ -273,7 +273,7 @@ bool GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
             selectLength = 0;
         }
         updateSelected();
-        return false;
+        return 1;
 
     case SDLK_RIGHT:
         if (keyMods & SDL_KMOD_SHIFT) {
@@ -292,7 +292,7 @@ bool GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
             selectLength = 0;
         }
         updateSelected();
-        return false;
+        return 1;
 
     // Special keys for faster caret move
     case SDLK_END:
@@ -304,7 +304,7 @@ bool GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
         }
         caret = length;
         updateSelected();
-        return false;
+        return 1;
 
     case SDLK_HOME:
     case SDLK_PAGEUP:
@@ -315,7 +315,7 @@ bool GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
         }
         caret = 0;
         updateSelected();
-        return false;
+        return 1;
 
     // Clipboard
     case SDLK_PASTE:
@@ -335,7 +335,7 @@ bool GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
         if (keyMods & SDL_KMOD_CTRL) {
             writeClipboard();
         } else {
-            return false;
+            return 0;
         }
         break;
 
@@ -343,7 +343,7 @@ bool GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
         if (keyMods & SDL_KMOD_CTRL) {
             copyToClipboard();
         } else {
-            return false;
+            return 0;
         }
         break;
 
@@ -352,7 +352,7 @@ bool GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
             copyToClipboard();
             deleteSelected();
         } else {
-            return false;
+            return 0;
         }
         break;
 
@@ -361,6 +361,8 @@ bool GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
             // Selecing all text
             caret = length;
             selectLength = -length;
+        } else {
+            return 0;
         }
         break;
 
@@ -376,16 +378,30 @@ bool GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
             showCaret = false;
             // Stoping entering any letters
             window.stopTextInput();
-            return true;
+            return 2;
         }
         break;
 
+    case SDLK_RETURN:
+    case SDLK_RETURN2:
+        // Stop entering
+        updateSelected();
+        // Resetting selection
+        selected = false;
+        pressed = false;
+        selectLength = 0;
+        showCaret = false;
+        // Stoping entering any letters
+        window.stopTextInput();
+        // Return action
+        return 3;
+
     default:
-        return false;
+        return 0;
     }
     // Updating texture after modifiying text
     updateTexture();
-    return false;
+    return 1;
 }
 
 template <unsigned bufferSize>
