@@ -10,9 +10,9 @@ std::vector<FieldSave> SavedFields::startOptions{};
 
 SavedFields::SavedFields(const Window& _window)
 : SubWindow(_window, 0.5, 0.5, 0.94, 0.8),
-scroller(_window, 0.52, 0.46, 0.9, 0.7, 3, startOptions,
+scroller(_window, 0.52, 0.49, 0.9, 0.68, 3, startOptions,
     {"No saves", "Нет сохранений", "Keine Speicherung", "Няма захаванняў"}),
-exitButton(_window, 0.5, 0.85, {"Close", "Закрыть", "Schließen", "Зачыніць"}) {}
+exitButton(_window, 0.5, 0.86, {"Close", "Закрыть", "Schließen", "Зачыніць"}) {}
 
 const Field* SavedFields::click(const Mouse _mouse) {
     if (exitButton.in(_mouse)) {
