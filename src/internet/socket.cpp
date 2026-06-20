@@ -5,6 +5,8 @@
 
 #include "socket.hpp"
 
+#if (USE_NET)
+
 
 Socket::Socket() {
     // Create a socket for listening for incoming connection requests.
@@ -163,3 +165,5 @@ Uint16 Socket::getPort() const {
 GetPacket* Socket::recieve() {
     return packet.tryGetData(sck);
 }
+
+#endif  // (USE_NET)

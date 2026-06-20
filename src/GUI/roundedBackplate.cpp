@@ -49,7 +49,7 @@ GUI::RoundedBackplate::RoundedBackplate(const Window& _window, const SDL_FRect& 
             window.drawPoint(rect.w - xx, rect.h - r1 + x);
         }
 
-        if (m2 > 0 && x <= y2) {
+        if (m2 > 0 && x < y2) {
             window.setDrawColor(_backColor);
             for (int xx = 0; xx < r1 - x; xx++) {
                 window.drawPoint(xx,          r1 - y2);

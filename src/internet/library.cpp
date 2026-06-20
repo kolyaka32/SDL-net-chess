@@ -6,6 +6,8 @@
 #include "library.hpp"
 #include <stdio.h>
 
+#if (USE_NET)
+
 
 // Winsocket realisation
 #if (USE_WINSOCK)
@@ -200,3 +202,5 @@ float readNet(float _object) {
 /*Sint64 readNet(Sint64 _object) {
     return ;
 }*/
+
+#endif  // (USE_NET)

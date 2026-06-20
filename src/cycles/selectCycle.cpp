@@ -29,7 +29,7 @@ connectButton(_window, 0.5, 0.9, {"Connect", "Присоединиться", "Be
 }
 
 bool SelectCycle::inputMouseDown() {
-    if (settings.click(mouse)) {
+    if (BaseCycle::inputMouseDown()) {
         return true;
     }
     if (singleplayerButton.in(mouse)) {

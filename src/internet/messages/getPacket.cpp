@@ -5,6 +5,8 @@
 
 #include "getPacket.hpp"
 
+#if (USE_NET)
+
 
 GetPacket* GetPacket::tryGetData(const SocketType _socket) {
     // Try recieve data
@@ -36,3 +38,5 @@ int GetPacket::getLength() const {
 const void* GetPacket::getPointer(int _offset) const {
     return buffer + _offset;
 }
+
+#endif  // (USE_NET)

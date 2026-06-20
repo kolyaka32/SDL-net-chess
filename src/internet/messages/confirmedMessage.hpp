@@ -9,6 +9,8 @@
 #include "../../data/time.hpp"
 #include "indexesArray.cpp"
 
+#if (USE_NET)
+
 
 // Message, waiting for applying of getting
 class ConfirmedMessage : public Message {
@@ -34,3 +36,5 @@ messageIndex(globalMessageIndex),
 nextResend(getTime() + messageResendTimeout) {
     updateGlobalIndex();
 }
+
+#endif  // (USE_NET)

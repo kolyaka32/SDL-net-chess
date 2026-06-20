@@ -64,8 +64,8 @@ bool ServerGameCycle::inputMouseDown() {
 }
 
 void ServerGameCycle::inputMouseUp() {
-    InternetCycle::inputMouseUp();
     menu.unclick();
+    InternetCycle::inputMouseUp();
 }
 
 bool ServerGameCycle::inputKeys(SDL_Keycode _key) {
@@ -79,7 +79,7 @@ bool ServerGameCycle::inputKeys(SDL_Keycode _key) {
 }
 
 bool ServerGameCycle::inputMouseWheel(float _wheelY) {
-    if (BaseCycle::inputMouseWheel(_wheelY)) {
+    if (InternetCycle::inputMouseWheel(_wheelY)) {
         return true;
     }
     if (menu.scroll(_wheelY)) {

@@ -16,7 +16,7 @@ targetConnectButton(_window, 0.5, 0.95,
     {"Connect by IP", "Присоединиться по IP", "Über IP beitreten", "Далучыцца па IP"}),
 targetConnectMenu(_window) {
     // Setting to correct send broadcast
-    broadcastSendSocket.setSendBroadcast();  // ! Check correction
+    broadcastSendSocket.setSendBroadcast();
 
     // First auto searching
     updateList();
@@ -51,9 +51,9 @@ bool ClientLobbyCycle::inputMouseDown() {
 }
 
 void ClientLobbyCycle::inputMouseUp() {
-    settings.unClick();
     serverScroller.unclick();
     targetConnectMenu.unclick();
+    BaseCycle::inputMouseUp();
 }
 
 bool ClientLobbyCycle::inputKeys(SDL_Keycode _key) {

@@ -50,8 +50,8 @@ bool TwoPlayerGameCycle::inputMouseDown() {
 }
 
 void TwoPlayerGameCycle::inputMouseUp() {
-    GameCycle::inputMouseUp();
     menu.unclick();
+    GameCycle::inputMouseUp();
 }
 
 bool TwoPlayerGameCycle::inputMouseWheel(float _wheelY) {

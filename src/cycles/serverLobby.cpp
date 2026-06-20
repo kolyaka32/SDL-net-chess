@@ -25,7 +25,7 @@ hideAddressButton(_window, 0.5, 0.5, {"Hide address", "Скрыть адресс
         showAddress = false;
     }
     // Openning socket for recieving broadcast
-    broadcastRecieveSocket.setRecieveBroadcast();  // ! Check correction
+    broadcastRecieveSocket.setRecieveBroadcast();
 
     logger.additional("Start server lobby cycle");
 }

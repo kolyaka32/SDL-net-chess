@@ -16,9 +16,9 @@ GUI::RectBackplate::RectBackplate(const Window& _window, const SDL_FRect& _rect,
 : TextureTemplate(_window, _rect, _window.createTexture(_rect.w, _rect.h)) {
     // Rendering backplate
     window.setRenderTarget(texture);
-    window.setDrawColor(GREY);
+    window.setDrawColor(_backColor);
     window.clear();
-    window.setDrawColor(WHITE);
+    window.setDrawColor(_frontColor);
     window.drawRect({_border, _border, rect.w-2*_border, rect.h-2*_border});
     window.resetRenderTarget();
 }

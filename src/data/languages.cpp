@@ -9,9 +9,9 @@
 // Initialasing static members
 Language LanguagedText::currentLanguage = Language::Default;
 
-LanguagedText::LanguagedText(const std::string englishVariant, const std::string russianVariant,
-    const std::string germanVariant, const std::string bellarussianVariant)
-: textVariants{englishVariant, russianVariant, germanVariant, bellarussianVariant} {}
+LanguagedText::LanguagedText(const std::string _englishVariant, const std::string _russianVariant,
+    const std::string _germanVariant, const std::string _bellarussianVariant)
+: textVariants{_englishVariant, _russianVariant, _germanVariant, _bellarussianVariant} {}
 
 LanguagedText::LanguagedText(const std::string singleVariant)
 : textVariants{singleVariant, singleVariant, singleVariant, singleVariant} {}

@@ -106,7 +106,7 @@ namespace GUI {
      private:
         const Animations type;
         const IMG_Animation* animation;
-        unsigned frame;
+        unsigned frame = 0;
         timer prevTick;
 
      public:
@@ -175,6 +175,9 @@ namespace GUI {
             // Checking for all chars
             char buffer[100];
             std::snprintf(buffer, sizeof(buffer), texts.getString().c_str(), args...);
+
+            // Clearing previous
+            window.destroy(texture);
 
             // Creating surface with text
             texture = window.createTexture(Fonts::Main, height, buffer, 0, color);
@@ -260,6 +263,33 @@ namespace GUI {
         TextButton(const Window& window, float X, float Y, const LanguagedText&& texts, float size = Height::Main,
             Color color = WHITE, Aligment aligment = Aligment::Midle);
         TextButton(TextButton&& object) noexcept;
+        void blit() const override;
+    };
+
+
+    // Object for selecting variants from list
+    class SwitchBox : GUI::Template {
+     private:
+        unsigned selected = 0;
+        bool opened = false;
+        // Draw options
+        const float height;
+        SDL_FRect background;
+        const SDL_Color backColor;
+        std::vector<StaticText> drawnTexts;
+
+        // Static options
+        SDL_Texture* arrowTexture;
+        SDL_FRect arrowRect;
+
+     public:
+        SwitchBox(const Window& window, float X, float Y, float W, std::initializer_list<LanguagedText> texts,
+            unsigned startOption = 0, float size = Height::Main, Color backColor = WHITE, Color frontColor = BLACK);
+        // Getter/setter
+        void set(unsigned value);
+        unsigned getValue() const;
+
+        bool click(const Mouse mouse);  // return true, when entered new value
         void blit() const override;
     };
 

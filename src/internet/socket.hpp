@@ -8,6 +8,8 @@
 #include "messages/getPacket.hpp"
 #include "destination.hpp"
 
+#if (USE_NET)
+
 
 // Class for socket - object, from which send data and on which recieve it
 // Also contains local address for it
@@ -46,3 +48,5 @@ class Socket {
     void send(const Destination& dest, const Message& message) const;
     GetPacket* recieve();
 };
+
+#endif  // (USE_NET)
