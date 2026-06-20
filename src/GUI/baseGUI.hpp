@@ -297,11 +297,11 @@ namespace GUI {
     // Class of appearing for time and hidden by time text
     class InfoBox : public HighlightedStaticText {
      private:
-        unsigned counter = 0;
-        static const unsigned maxCounter = 100;
+        timer endTime = 0;  // Time, when stop showing
+        const timer decayTime;  // Time of full decay
 
      public:
-        InfoBox(const Window& window, float X, float Y, const LanguagedText&& texts,
+        InfoBox(const Window& window, float X, float Y, const LanguagedText&& texts, unsigned decayTime = 500,
             float height = Height::Main, Color color = WHITE, Aligment aligment = Aligment::Midle);
         InfoBox(InfoBox&& object) noexcept;
         void update();
