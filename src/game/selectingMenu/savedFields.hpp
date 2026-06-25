@@ -24,7 +24,7 @@ class SavedFields : public GUI::SubWindow {
     const Field* click(const Mouse mouse);
     void unclick();
     void update();
-    void scroll(float wheelY);
+    void scroll(const Mouse mouse, float wheelY);
     void blit() const override;
 
     // Work with global saves

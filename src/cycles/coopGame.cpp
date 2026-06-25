@@ -60,7 +60,7 @@ bool TwoPlayerGameCycle::inputMouseWheel(float _wheelY) {
     if (BaseCycle::inputMouseWheel(_wheelY)) {
         return true;
     }
-    if (menu.scroll(_wheelY)) {
+    if (menu.scroll(mouse, _wheelY)) {
         return true;
     }
     return false;

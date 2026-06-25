@@ -88,25 +88,22 @@ void CycleTemplate::inputMouseUp() {}
 
 // Example for getting keys input
 bool CycleTemplate::inputKeys(SDL_Keycode _key) {
-    /*switch (_key) {
-    case SDLK_ESCAPE:
-        // Stopping ruuning by escape
-        stop();
+    /*if (_key == SDLK_ESCAPE) {
         return true;
     }*/
-   return false;
+    return false;
 }
 
 // Example for getting mouse wheel input
 bool CycleTemplate::inputMouseWheel(float _wheelY) {
-    // if (MusicSlider.scroll(event.wheel.y, mouse));
-    // else if (SoundSlider.scroll(event.wheel.y, mouse));
+    // if (MusicSlider.scroll(mouse, _wheelY));
+    // else if (SoundSlider.scroll(mouse, _wheelY));
     return false;
 }
 
 // Example for getting text input
-bool CycleTemplate::inputText(const char* text) {
-    // typeBox.writeString(event.text.text);
+bool CycleTemplate::inputText(const char* _text) {
+    // typeBox.writeString(_text);
     return false;
 }
 

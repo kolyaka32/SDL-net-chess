@@ -61,9 +61,9 @@ void SelectingMenu::update() {
     }
 }
 
-bool SelectingMenu::scroll(float _wheelY) {
+bool SelectingMenu::scroll(const Mouse _mouse, float _wheelY) {
     if (active) {
-        savedFields.scroll(_wheelY);
+        savedFields.scroll(_mouse, _wheelY);
         return true;
     }
     return false;

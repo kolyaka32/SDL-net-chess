@@ -78,17 +78,17 @@ void SettingsMenu::unClick() {
     }
 }
 
-bool SettingsMenu::scroll(const Mouse mouse, float _wheelY) {
+bool SettingsMenu::scroll(const Mouse _mouse, float _wheelY) {
     if (active) {
         // Checking scroll on sliders
         #if (PRELOAD_MUSIC)
-        if (musicSlider.in(mouse)) {
+        if (musicSlider.in(_mouse)) {
             audio.music.setVolume(musicSlider.scroll(_wheelY));
             return true;
         }
         #endif
         #if (PRELOAD_SOUNDS)
-        if (soundSlider.in(mouse)) {
+        if (soundSlider.in(_mouse)) {
             audio.sounds.setVolume(soundSlider.scroll(_wheelY));
             return true;
         }

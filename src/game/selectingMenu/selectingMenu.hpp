@@ -27,6 +27,6 @@ class SelectingMenu : public GUI::SubWindow {
     const Field* click(const Mouse mouse);
     void unclick();
     void update();
-    bool scroll(float wheelY);
+    bool scroll(const Mouse mouse, float wheelY);
     void blit() const;
 };

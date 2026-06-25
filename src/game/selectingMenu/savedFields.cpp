@@ -40,11 +40,9 @@ void SavedFields::update() {
     }
 }
 
-void SavedFields::scroll(float _wheelY) {
-    Mouse mouse{};
-    mouse.updatePos();
-    if (active && background.in(mouse)) {
-        scroller.scroll(mouse, _wheelY);
+void SavedFields::scroll(const Mouse _mouse, float _wheelY) {
+    if (active && background.in(_mouse)) {
+        scroller.scroll(_mouse, _wheelY);
     }
 }
 

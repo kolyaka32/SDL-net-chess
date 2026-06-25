@@ -84,7 +84,7 @@ bool ServerGameCycle::inputMouseWheel(float _wheelY) {
     if (InternetCycle::inputMouseWheel(_wheelY)) {
         return true;
     }
-    if (menu.scroll(_wheelY)) {
+    if (menu.scroll(mouse, _wheelY)) {
         return true;
     }
     return false;
