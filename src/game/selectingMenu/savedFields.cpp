@@ -19,10 +19,10 @@ const Field* SavedFields::click(const Mouse _mouse) {
         close();
         return nullptr;
     }
-    if (int i = scroller.click(_mouse)) {
-        if (i >= GUI::Button1) {
+    if (GUI::Code code = scroller.click(_mouse)) {
+        if (code >= GUI::Button1) {
             close();
-            return &startOptions[i-GUI::Button1];
+            return &startOptions[code-GUI::Button1];
         }
     }
     return nullptr;

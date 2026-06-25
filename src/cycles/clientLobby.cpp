@@ -42,9 +42,9 @@ bool ClientLobbyCycle::inputMouseDown() {
         targetConnectMenu.open();
         return true;
     }
-    if (int i = serverScroller.click(mouse)) {
+    if (GUI::Code code = serverScroller.click(mouse)) {
         // Connecting to selected server
-        internet.sendFirst(serverDatas[i-1].getAddress(), {ConnectionCode::Init, Uint8(BROADCAST_APP_INDEX)});
+        internet.sendFirst(serverDatas[code-GUI::Button1].getAddress(), {ConnectionCode::Init, Uint8(BROADCAST_APP_INDEX)});
         return true;
     }
     return false;

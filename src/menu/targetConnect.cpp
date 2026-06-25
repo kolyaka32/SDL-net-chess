@@ -57,13 +57,13 @@ void TargetConnect::unclick() {
 
 bool TargetConnect::press(SDL_Keycode _key) {
     if (active) {
-        if (int code = IPField.type(_key)) {
+        if (GUI::Code code = IPField.type(_key)) {
             if (code == GUI::Activate) {
                 tryConnect();
             }
             return true;
         }
-        if (int code = portField.type(_key)) {
+        if (GUI::Code code = portField.type(_key)) {
             if (code == GUI::Activate) {
                 tryConnect();
             }

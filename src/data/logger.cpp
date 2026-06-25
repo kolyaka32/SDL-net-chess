@@ -13,14 +13,13 @@ Logger::Logger()
     // File name
     char fileName[20];
     // Index of name
-    int i = 0;
+    int index = 0;
 
     // Finding avaliable file name
     while (logFile == nullptr) {
         // Creating file name
-        SDL_snprintf(fileName, sizeof(fileName), LOG_NAME, i);
-        // Updating index
-        i++;
+        SDL_snprintf(fileName, sizeof(fileName), LOG_NAME, index);
+        index++;
 
         // Trying open file, blocking by app
         logFile = SDL_IOFromFile(fileName, "w");

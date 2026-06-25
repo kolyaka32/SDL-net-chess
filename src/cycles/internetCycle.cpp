@@ -38,7 +38,7 @@ bool InternetCycle::inputMouseDown() {
     if (GameCycle::inputMouseDown()) {
         return true;
     }
-    if (int code = termianatedBox.click(mouse)) {
+    if (GUI::Code code = termianatedBox.click(mouse)) {
         if (code == GUI::Button1) {
             // Quiting button
             App::setNextCycle(Cycle::Menu);
@@ -46,7 +46,7 @@ bool InternetCycle::inputMouseDown() {
         // Not allowing to any another actions
         return true;
     }
-    if (int code = disconnectedBox.click(mouse)) {
+    if (GUI::Code code = disconnectedBox.click(mouse)) {
         if (code == GUI::Button1) {
             // Reconnect button
             internet.sendAll({ConnectionCode::ApplyConnection});
