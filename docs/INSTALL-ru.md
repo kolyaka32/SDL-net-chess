@@ -1,5 +1,5 @@
 # Руководствво по установку
-[![en](https://img.shields.io/badge/lang-en-green.svg)](https://github.com/kolyaka32/tic-tak-toe-on-SDL-net/blob/master/docs/INSTALL.md)  [![ru](https://img.shields.io/badge/lang-ru-green.svg)](https://github.com/kolyaka32/tic-tak-toe-on-SDL-net/blob/master/docs/INSTALL-ru.md)
+[![en](https://img.shields.io/badge/lang-en-green.svg)](https://github.com/kolyaka32/SDL-net-chess/blob/master/docs/INSTALL.md)  [![ru](https://img.shields.io/badge/lang-ru-green.svg)](https://github.com/kolyaka32/SDL-net-chess/blob/master/docs/INSTALL-ru.md)
 
 ## Сборка самой игры
 Данный проект создан для компиляции под CMake с внешними сторонними зависимостями. Есть два варианта сборки:
@@ -7,7 +7,7 @@
 - Собственная компиляция (Более сложная, требует больше времени. **Рекомендуется**)
 
 ## Заранее собранные библиотеки
-Прекомпилированных версии библиотек лежат в [релизах](https://github.com/kolyaka32/tic-tak-toe-on-SDL-net/releases). Там будет полный комплект файлов для компиляции игры с необходимыми библиотеками. Для корректной сборки скопируйте папку с библиотеками ('Program Files (x86)'/'usr') в указанное место.
+Прекомпилированных версии библиотек лежат в [релизах](https://github.com/kolyaka32/SDL-net-chess/releases). Там будет полный комплект файлов для компиляции игры с необходимыми библиотеками. Для корректной сборки скопируйте папку с библиотеками ('Program Files (x86)'/'usr') в указанное место.
 Используйте эту версию на свой страх и риск. Не верьте кому-либо на слово.
 
 ## Самостоятельная сборка библиотек

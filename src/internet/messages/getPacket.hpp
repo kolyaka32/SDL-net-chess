@@ -7,6 +7,8 @@
 
 #include "../library.hpp"
 
+#if (USE_NET)
+
 
 // Class with getted data from somewhere
 class GetPacket {
@@ -46,3 +48,5 @@ T GetPacket::getData(int _offset) const {
     #endif
     return readNet((T)(buffer[_offset]));
 }
+
+#endif  // (USE_NET)

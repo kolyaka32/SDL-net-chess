@@ -23,9 +23,9 @@ rect(_object.rect) {
     _object.texture = nullptr;
 }
 
-void GUI::TextureTemplate::move(float X, float Y) {
-    rect.x += X*window.getWidth();
-    rect.y += Y*window.getHeight();
+void GUI::TextureTemplate::move(float _X, float _Y) {
+    rect.x += _X*window.getWidth();
+    rect.y += _Y*window.getHeight();
 }
 
 // Template function for draw

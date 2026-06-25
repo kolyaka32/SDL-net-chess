@@ -6,6 +6,8 @@
 #include <cstdio>
 #include "internet.hpp"
 
+#if (USE_NET)
+
 
 Internet::Internet()
 : socket() {
@@ -97,6 +99,7 @@ const GetPacket* Internet::getNewMessages() {
     if (packet && packet->isBytesAvaliable(2)) {
         // Get message source
         Reciepient* source = nullptr;
+        // Find source
         for (int i=0; i < reciepients.size(); ++i) {
             if (reciepients[i].isAddress(packet->getSourceAddress())) {
                 source = &reciepients[i];
@@ -146,3 +149,5 @@ const GetPacket* Internet::getNewMessages() {
     }
     return nullptr;
 }
+
+#endif  // (USE_NET)

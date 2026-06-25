@@ -33,7 +33,7 @@ class GameCycle : public BaseCycle {
     GUI::StaticText nobodyWinText;
 
  protected:
-    void inputKeys(const SDL_Keycode key) override;
+    bool inputKeys(const SDL_Keycode key) override;
     void update() override;
 
  public:

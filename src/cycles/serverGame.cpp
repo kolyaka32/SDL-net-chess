@@ -41,11 +41,11 @@ bool ServerGameCycle::inputMouseDown() {
     }
     if (gameMenuButton.in(mouse)) {
         // Starting game menu
-        menu.activate();
+        menu.open();
         return true;
     }
     // Check, if in menu
-    if (menu.isActive()) {
+    if (menu.isOpen()) {
         if (const Field* f = menu.click(mouse)) {
             // Setting new field localy
             board = *f;
@@ -59,47 +59,51 @@ bool ServerGameCycle::inputMouseDown() {
         return true;
     }
     // Normal turn
-    board.clickServerCurrent(mouse);
+    if (board.clickServerCurrent(mouse)) {
+        menu.open();
+    }
     return false;
 }
 
 void ServerGameCycle::inputMouseUp() {
-    InternetCycle::inputMouseUp();
     menu.unclick();
+    InternetCycle::inputMouseUp();
 }
 
-void ServerGameCycle::inputKeys(SDL_Keycode _key) {
+bool ServerGameCycle::inputKeys(SDL_Keycode _key) {
     if (_key == SDLK_ESCAPE) {
         // Closing top open object
-        if (menu.isActive()) {
-            menu.escape();
-        } else {
-            settings.activate();
+        if (menu.escape()) {
+            return true;
         }
-        return;
     }
-    InternetCycle::inputKeys(_key);
+    return InternetCycle::inputKeys(_key);
 }
 
-void ServerGameCycle::inputMouseWheel(float _wheelY) {
-    if (settings.scroll(mouse, _wheelY)) {
-        return;
+bool ServerGameCycle::inputMouseWheel(float _wheelY) {
+    if (InternetCycle::inputMouseWheel(_wheelY)) {
+        return true;
     }
-    menu.scroll(_wheelY);
+    if (menu.scroll(mouse, _wheelY)) {
+        return true;
+    }
+    return false;
 }
 
 void ServerGameCycle::getInternetPacket(const GetPacket& packet) {
     // Getting internet messages
     switch (ConnectionCode(packet.getData<Uint8>(0))) {
     case ConnectionCode::Quit:
-        termianatedBox.activate();
+        termianatedBox.open();
         break;
 
     case ConnectionCode::GameTurn:
         if (packet.isBytesAvaliable(3)) {
-            board.clickServerOpponent(packet.getData<Uint8>(2), packet.getData<Uint8>(3));
             logger.additional("Turn of opponent player from %u to %u",
                 packet.getData<Uint8>(2), packet.getData<Uint8>(3));
+            if (board.clickServerOpponent(packet.getData<Uint8>(2), packet.getData<Uint8>(3))) {
+                menu.open();
+            }
         }
         break;
 

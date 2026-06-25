@@ -20,6 +20,22 @@ namespace GUI {
     };
 
 
+    // Codes of actions, returning from functions
+    enum {
+        None,      // Noting happen
+        Some,      // Action with current object
+        Finished,  // Finished interacting with current object (ESCAPE button)
+        Activate,  // Finished interaction and activate next action (ENTER button)
+        Button1,   // Pressed 1 button
+        Button2,   // Pressed 2 button
+        Button3,   // Pressed 3 button
+        // Etc..
+    } Action;
+
+    // Type for returning code of action
+    typedef int Code;
+
+
     // Object, that will be drawn at screen
     class Template {
      protected:
@@ -51,8 +67,8 @@ namespace GUI {
     class RoundedBackplate : public TextureTemplate {
      public:
         RoundedBackplate(const Window& window, float centerX, float centerY, float width, float height,
-            float radius, float border, Color frontColor = GREY, Color backColor = BLACK);
-        RoundedBackplate(const Window& window, const SDL_FRect& rect, float radius, float border,
+            int radius, int border, Color frontColor = GREY, Color backColor = BLACK);
+        RoundedBackplate(const Window& window, const SDL_FRect& rect, int radius, int border,
             Color frontColor = GREY, Color backColor = BLACK);
         RoundedBackplate(RoundedBackplate&& object) noexcept;
         ~RoundedBackplate() noexcept;
@@ -72,6 +88,27 @@ namespace GUI {
     };
 
 
+    // Class for sub menu with flag of openning
+    class SubWindow : public Template {
+     protected:
+        // Flag of showing
+        bool active;
+        // Graphical part
+        GUI::RoundedBackplate background;
+
+     public:
+        SubWindow(const Window& window, float X, float Y, float W, float H);
+        SubWindow(SubWindow&& object) noexcept;
+        void open();
+        void close();
+        void toggle();
+        bool isOpen() const;
+        virtual void reset();
+        virtual bool escape();
+        void blit() const override;
+    };
+
+
     // Textures
     #if (USE_SDL_IMAGE) && (PRELOAD_TEXTURES)
     // Class of slider bar with point on it to control need parameter
@@ -87,7 +124,7 @@ namespace GUI {
         Slider(Slider&& object) noexcept;
         float setValue(float mouseX);  // Setting new state from mouse position
         float scroll(float wheelY);    // Checking mouse wheel action
-        void blit() const override;       // Drawing slider with need button position
+        void blit() const override;    // Drawing slider with need button position
     };
 
 
@@ -106,7 +143,7 @@ namespace GUI {
      private:
         const Animations type;
         const IMG_Animation* animation;
-        unsigned frame;
+        unsigned frame = 0;
         timer prevTick;
 
      public:
@@ -176,6 +213,9 @@ namespace GUI {
             char buffer[100];
             std::snprintf(buffer, sizeof(buffer), texts.getString().c_str(), args...);
 
+            // Clearing previous
+            window.destroy(texture);
+
             // Creating surface with text
             texture = window.createTexture(Fonts::Main, height, buffer, 0, color);
 
@@ -225,14 +265,16 @@ namespace GUI {
             Color textColor = BLACK, Color backColor = WHITE);
         TypeField(TypeField<bufferSize>&& object) noexcept;
         ~TypeField() noexcept;
-        void writeString(const char* str);   // Write string to buffer at caret position
-        void type(SDL_Keycode code);         // Processing special keycodes (like arrows, home, CTRL-C...)
-        void update(float mouseX);           // Highlated area of typing
-        bool click(const Mouse mouse);       // Set caret for typing at specified place
-        void unclick();                      // Reset pressing
         const char* getString();             // Return typed string
         void setString(const char* string);  // Replace text with new string
-        void blit() const override;          // Draw current text with selection at screen
+        // Main cycle
+        void writeString(const char* str);  // Write string to buffer at caret position
+        Code type(SDL_Keycode code);        // Processing special keycodes (like arrows, home, CTRL-C...)   
+        void update(float mouseX);          // Highlated area of typing
+        bool checkOff(const Mouse mouse);   // Check if click in other place, true if end entering
+        Code click(const Mouse mouse);      // Set caret for typing at specified place
+        void unclick();                     // Reset pressing
+        void blit() const override;         // Draw current text with selection at screen
     };
 
 
@@ -264,14 +306,40 @@ namespace GUI {
     };
 
 
+    // Object for selecting variants from list
+    class SwitchBox : GUI::Template {
+     private:
+        unsigned selected = 0;
+        bool opened = false;
+        // Draw options
+        const float height;
+        SDL_FRect background;
+        const SDL_Color backColor;
+        std::vector<StaticText> drawnTexts;
+
+        // Static options
+        SDL_Texture* arrowTexture;
+        SDL_FRect arrowRect;
+
+     public:
+        SwitchBox(const Window& window, float X, float Y, float W, std::initializer_list<LanguagedText> texts,
+            unsigned startOption = 0, float size = Height::Main, Color backColor = WHITE, Color frontColor = BLACK);
+        // Getter/setter
+        void set(unsigned value);
+        unsigned getValue() const;
+        Code click(const Mouse mouse);
+        void blit() const override;
+    };
+
+
     // Class of appearing for time and hidden by time text
     class InfoBox : public HighlightedStaticText {
      private:
-        unsigned counter = 0;
-        static const unsigned maxCounter = 100;
+        timer endTime = 0;  // Time, when stop showing
+        const timer decayTime;  // Time of full decay
 
      public:
-        InfoBox(const Window& window, float X, float Y, const LanguagedText&& texts,
+        InfoBox(const Window& window, float X, float Y, const LanguagedText&& texts, unsigned decayTime = 500,
             float height = Height::Main, Color color = WHITE, Aligment aligment = Aligment::Midle);
         InfoBox(InfoBox&& object) noexcept;
         void update();
@@ -280,51 +348,32 @@ namespace GUI {
 
 
     // Class for box with message and actions with it
-    class TwoOptionBox : public Template {
+    class OneOptionBox : public SubWindow {
      private:
-        // Flag of showing
-        bool active = false;
-
-        // Background plate for better visability
-        GUI::RoundedBackplate background;
-        // Main text - title
-        GUI::HighlightedStaticText mainText;
-        // Select variants
-        GUI::TextButton button1, button2;
+        GUI::HighlightedStaticText title;
+        GUI::TextButton button;
 
      public:
-        TwoOptionBox(const Window& window, const LanguagedText&& title,
-            const LanguagedText&& button1Text, const LanguagedText&& button2Text);
-        TwoOptionBox(TwoOptionBox&& object) noexcept;
-        int click(const Mouse mouse);  // Return 1, if active; 2 if 1 button pressed; 3 if 2 button pressed
-        void activate();
-        void reset();
-        bool isActive() const;
+        OneOptionBox(const Window& window, float X, float Y, float W, float H,
+            const LanguagedText&& titleText, const LanguagedText&& buttonText);
+        OneOptionBox(OneOptionBox&& object) noexcept;
+        Code click(const Mouse mouse);
         void blit() const override;
     };
 
 
     // Class for box with message and actions with it
-    class OneOptionBox : public Template {
+    class TwoOptionBox : public SubWindow {
      private:
-        // Flag of showing
-        bool active = false;
-
-        // Background plate for better visability
-        GUI::RoundedBackplate background;
-        // Main text - title
-        GUI::HighlightedStaticText mainText;
-        // Select variants
-        GUI::TextButton button;
+        GUI::HighlightedStaticText title;
+        GUI::TextButton button1, button2;
 
      public:
-        OneOptionBox(const Window& window, const LanguagedText&& title,
-            const LanguagedText&& buttonText);
-        OneOptionBox(OneOptionBox&& object) noexcept;
-        int click(const Mouse mouse);  // Return 1, if active; 2 if button pressed
-        void activate();
-        void reset();
-        bool isActive() const;
+        TwoOptionBox(const Window& window, float X, float Y, float W, float H,
+            const LanguagedText&& titleText,
+            const LanguagedText&& button1Text, const LanguagedText&& button2Text);
+        TwoOptionBox(TwoOptionBox&& object) noexcept;
+        Code click(const Mouse mouse);
         void blit() const override;
     };
 
@@ -334,16 +383,19 @@ namespace GUI {
     template <class Item, class SourceItem>
     class ScrollBox : public Template {
      protected:
-        // Items, for draw
-        int startField = 0;
-        int endField = 0;
-        const int maxItems;
-        // Items in reverce order for easier appending
+        // Parameters of showed list
+        const int maxItems;  // Total number of elements, showing max at one screen
+        int startField = 0;  // Position, from which show
+        int endField = 0;    // Position, up to showing
+        const float blockPos;     // Start Y position of blocks (relative)
+        const float blockHeight;  // Height of one block (relative)
+        // Items itself in reverse order for easier appending
         std::vector<Item> items;
         // Adding text of absence of objects
         #if (USE_SDL_FONT) && (PRELOAD_FONTS)
         GUI::HighlightedStaticText emptySavesText;
         #endif
+
         // Slider for showing position
         SDL_FRect sliderRect;
         const SDL_FRect sliderBackRect;
@@ -352,6 +404,7 @@ namespace GUI {
 
         void moveUp();
         void moveDown();
+        void placeItem(int pos, const SourceItem& item);
 
      public:
         // Create menu for scrolling objects, placed at center with (posX, posY) and size.
@@ -364,11 +417,10 @@ namespace GUI {
         ~ScrollBox() noexcept;
         void addItem(const SourceItem& field);
         void clear();
-        // Return index of selected+1 and 0, if don't
-        int click(const Mouse mouse);
+        Code click(const Mouse mouse);
         void unclick();
         void update(const Mouse mouse);
-        void scroll(const Mouse mouse, float wheelY);
+        bool scroll(const Mouse mouse, float wheelY);
         void blit() const override;
     };
 

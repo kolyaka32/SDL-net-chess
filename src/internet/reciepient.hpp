@@ -8,6 +8,8 @@
 #include <vector>
 #include "socket.hpp"
 
+#if (USE_NET)
+
 
 // Basic class for internet connection
 class Reciepient {
@@ -44,3 +46,5 @@ class Reciepient {
     bool checkIndexUniqness(Uint8 index);
     const char* getName() const;
 };
+
+#endif  // (USE_NET)

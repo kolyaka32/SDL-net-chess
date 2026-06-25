@@ -8,12 +8,11 @@
 
 
 // Static objects for save inputted parameters
-bool TargetConnect::active = false;
 char TargetConnect::baseIP[15] = "127.0.0.1";
 char TargetConnect::basePort[6] = "8000";
 
 TargetConnect::TargetConnect(Window& _window)
-: backplate(_window, 0.5, 0.5, 0.8, 0.8, 20, 4),
+: SubWindow(_window, 0.5, 0.5, 0.8, 0.8),
 IPText(_window, 0.5, 0.2, {"Enter IP:", "Введите IP:", "Geben Sie die IP ein:", "Увядзіце IP:"}, Height::SubTitle),
 IPField(_window, 0.5, 0.3, baseIP),
 portText(_window, 0.5, 0.4, {"Enter port:", "Введите порт:", "Port eingeben:", "Увядзіце порт:"}, Height::SubTitle),
@@ -22,16 +21,13 @@ pasteButton(_window, 0.5, 0.61, {"Paste the address", "Вставить адре
 connectButton(_window, 0.5, 0.72, {"Connect", "Присоединится", "Beitritt", "Далучыцца"}),
 closeButton(_window, 0.5, 0.83, {"Close", "Закрыть", "Schließen", "Зачыніць"}) {}
 
-void TargetConnect::activate() {
-    active = true;
-}
-
-void TargetConnect::reset() {
-    active = false;
-}
-
 bool TargetConnect::click(const Mouse _mouse) {
     if (active) {
+        // Check, if end typing
+        IPField.checkOff(_mouse);
+        portField.checkOff(_mouse);
+
+        // Check, if start typing
         if (IPField.click(_mouse)) {
             return true;
         }
@@ -47,7 +43,7 @@ bool TargetConnect::click(const Mouse _mouse) {
             return true;
         }
         if (closeButton.in(_mouse)) {
-            active = false;
+            close();
             return true;
         }
     }
@@ -59,18 +55,35 @@ void TargetConnect::unclick() {
     portField.unclick();
 }
 
-void TargetConnect::press(SDL_Keycode _key) {
+bool TargetConnect::press(SDL_Keycode _key) {
     if (active) {
-        IPField.type(_key);
-        portField.type(_key);
+        if (GUI::Code code = IPField.type(_key)) {
+            if (code == GUI::Activate) {
+                tryConnect();
+            }
+            return true;
+        }
+        if (GUI::Code code = portField.type(_key)) {
+            if (code == GUI::Activate) {
+                tryConnect();
+            }
+            return true;
+        }
+        if (_key == SDLK_ESCAPE) {
+            close();
+            return true;
+        }
     }
+    return false;
 }
 
-void TargetConnect::write(const char* _text) {
+bool TargetConnect::write(const char* _text) {
     if (active) {
         IPField.writeString(_text);
         portField.writeString(_text);
+        return true;
     }
+    return false;
 }
 
 void TargetConnect::update() {
@@ -142,7 +155,7 @@ void TargetConnect::tryConnect() {
 void TargetConnect::blit() const {
     // Draw main part
     if (active) {
-        backplate.blit();
+        background.blit();
         IPText.blit();
         IPField.blit();
         portText.blit();

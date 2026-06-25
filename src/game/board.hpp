@@ -17,8 +17,8 @@ class Board : public Field {
 
     const SDL_FRect rect;  // Global position of board
 
-    void pickFigure(Position pos);   // Function for pick figure from field
-    void placeFigure(Position pos);  // Function to try put figure back to field
+    void pickFigure(Position pos);   // Pick figure from field
+    bool placeFigure(Position pos);  // Try put figure back to field, true if end up
 
  protected:
     // Check, if position is valid game place
@@ -38,11 +38,11 @@ class Board : public Field {
 
     // Clicking with mouse on cell on field (depend game mode and player)
     // void clickSingle(const Mouse mouse);
-    void clickCooperative(const Mouse mouse);
-    void clickServerCurrent(const Mouse mouse);
-    void clickServerOpponent(Uint8 p1, Uint8 p2);
-    void clickClientCurrent(const Mouse mouse);
-    void clickClientOpponent(Uint8 p1, Uint8 p2);
+    bool clickCooperative(const Mouse mouse);
+    bool clickServerCurrent(const Mouse mouse);
+    bool clickServerOpponent(Uint8 p1, Uint8 p2);
+    bool clickClientCurrent(const Mouse mouse);
+    bool clickClientOpponent(Uint8 p1, Uint8 p2);
     // Reseting currently selected figure
     void resetSelection();
 

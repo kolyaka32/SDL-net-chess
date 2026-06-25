@@ -109,37 +109,41 @@ void GUI::TypeField<bufferSize>::updateTexture() {
 
 template <unsigned bufferSize>
 void GUI::TypeField<bufferSize>::updateSelected() {
-    // Update caret place
-    if (caret) {
-        int caretX = 0;
-        TTF_GetStringSize(font, buffer, caret, &caretX, nullptr);
-        caretRect.x = rect.x + caretX - 1;
-    } else {
-        caretRect.x = rect.x - 1;
-    }
-
-    // Inversing selected part of text, if need
-    if (selectLength) {
-        // Getting start position and length of selected part
-        int startPosition, length;
-        if (selectLength > 0) {
-            if (caret == 0) {
-                startPosition = 0;
-            } else {
-                TTF_GetStringSize(font, buffer, caret, &startPosition, nullptr);
-            }
-            TTF_GetStringSize(font, buffer+caret, selectLength, &length, nullptr);
+    if (length) {
+        // Update caret place
+        if (caret) {
+            int caretX = 0;
+            TTF_GetStringSize(font, buffer, caret, &caretX, nullptr);
+            caretRect.x = rect.x + caretX - 1;
         } else {
-            if (-selectLength == caret) {
-                startPosition = 0;
-            } else {
-                TTF_GetStringSize(font, buffer, caret + selectLength, &startPosition, nullptr);
-            }
-            TTF_GetStringSize(font, buffer+caret+selectLength, -selectLength, &length, nullptr);
+            caretRect.x = rect.x - 1;
         }
-        inversedRectSrc.x = startPosition;
-        inversedRectDest.x = inversedRectSrc.x + rect.x;
-        inversedRectDest.w = inversedRectSrc.w = length;
+    
+        // Inversing selected part of text, if need
+        if (selectLength) {
+            // Getting start position and length of selected part
+            int startPosition, length;
+            if (selectLength > 0) {
+                if (caret == 0) {
+                    startPosition = 0;
+                } else {
+                    TTF_GetStringSize(font, buffer, caret, &startPosition, nullptr);
+                }
+                TTF_GetStringSize(font, buffer+caret, selectLength, &length, nullptr);
+            } else {
+                if (-selectLength == caret) {
+                    startPosition = 0;
+                } else {
+                    TTF_GetStringSize(font, buffer, caret + selectLength, &startPosition, nullptr);
+                }
+                TTF_GetStringSize(font, buffer+caret+selectLength, -selectLength, &length, nullptr);
+            }
+            inversedRectSrc.x = startPosition;
+            inversedRectDest.x = inversedRectSrc.x + rect.x;
+            inversedRectDest.w = inversedRectSrc.w = length;
+        }
+    } else {
+        caretRect.x = posX - 1;
     }
 }
 
@@ -217,10 +221,10 @@ void GUI::TypeField<bufferSize>::deleteSelected() {
 }
 
 template <unsigned bufferSize>
-void GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
+GUI::Code GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
     // Checking, if box selected
     if (!selected) {
-        return;
+        return None;
     }
 
     // Getting current shft and control state
@@ -233,7 +237,7 @@ void GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
         // Coping after caret
         if (selectLength == 0) {
             if (caret == 0) {
-                return;
+                return Some;
             }
             selectLength = -1;
         }
@@ -244,7 +248,7 @@ void GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
         // Coping after caret
         if (selectLength == 0) {
             if (caret == length) {
-                return;
+                return Some;
             }
             selectLength = 1;
         }
@@ -269,7 +273,7 @@ void GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
             selectLength = 0;
         }
         updateSelected();
-        return;
+        return Some;
 
     case SDLK_RIGHT:
         if (keyMods & SDL_KMOD_SHIFT) {
@@ -288,7 +292,7 @@ void GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
             selectLength = 0;
         }
         updateSelected();
-        return;
+        return Some;
 
     // Special keys for faster caret move
     case SDLK_END:
@@ -300,7 +304,7 @@ void GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
         }
         caret = length;
         updateSelected();
-        return;
+        return Some;
 
     case SDLK_HOME:
     case SDLK_PAGEUP:
@@ -311,7 +315,7 @@ void GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
         }
         caret = 0;
         updateSelected();
-        return;
+        return Some;
 
     // Clipboard
     case SDLK_PASTE:
@@ -331,7 +335,7 @@ void GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
         if (keyMods & SDL_KMOD_CTRL) {
             writeClipboard();
         } else {
-            return;
+            return None;
         }
         break;
 
@@ -339,7 +343,7 @@ void GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
         if (keyMods & SDL_KMOD_CTRL) {
             copyToClipboard();
         } else {
-            return;
+            return None;
         }
         break;
 
@@ -348,7 +352,7 @@ void GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
             copyToClipboard();
             deleteSelected();
         } else {
-            return;
+            return None;
         }
         break;
 
@@ -357,18 +361,73 @@ void GUI::TypeField<bufferSize>::type(SDL_Keycode _code) {
             // Selecing all text
             caret = length;
             selectLength = -length;
+        } else {
+            return None;
         }
         break;
 
+    case SDLK_ESCAPE:
+        if (selectLength) {
+            selectLength = 0;
+            updateSelected();
+        } else {
+            // Stop entering
+            // Resetting selection
+            selected = false;
+            pressed = false;
+            showCaret = false;
+            // Stoping entering any letters
+            window.stopTextInput();
+            return Finished;
+        }
+        break;
+
+    case SDLK_RETURN:
+    case SDLK_RETURN2:
+        // Stop entering
+        updateSelected();
+        // Resetting selection
+        selected = false;
+        pressed = false;
+        selectLength = 0;
+        showCaret = false;
+        // Stoping entering any letters
+        window.stopTextInput();
+        // Return action
+        return Action;
+
     default:
-        return;
+        return None;
     }
     // Updating texture after modifiying text
     updateTexture();
+    return Some;
 }
 
 template <unsigned bufferSize>
-bool GUI::TypeField<bufferSize>::click(const Mouse _mouse) {
+bool GUI::TypeField<bufferSize>::checkOff(const Mouse _mouse) {
+    if (selected && !in(_mouse)) {
+        // Resetting selection
+        selected = false;
+        pressed = false;
+
+        // Stoping entering any letters
+        window.stopTextInput();
+
+        // Clearing caret
+        showCaret = false;
+        selectLength = 0;
+
+        updateSelected();
+
+        // Return, that finish text input
+        return true;
+    }
+    return false;
+}
+
+template <unsigned bufferSize>
+GUI::Code GUI::TypeField<bufferSize>::click(const Mouse _mouse) {
     if (in(_mouse)) {
         // Resetting values
         pressed = true;
@@ -388,25 +447,9 @@ bool GUI::TypeField<bufferSize>::click(const Mouse _mouse) {
         }
         // Showing caret
         updateSelected();
-        return false;
-    } else if (selected) {
-        // Resetting selection
-        selected = false;
-        pressed = false;
-
-        // Stoping entering any letters
-        window.stopTextInput();
-
-        // Clearing caret
-        showCaret = false;
-        selectLength = 0;
-
-        updateSelected();
-
-        // Return, that finish text input
-        return true;
+        return Some;
     }
-    return false;
+    return None;
 }
 
 template <unsigned bufferSize>

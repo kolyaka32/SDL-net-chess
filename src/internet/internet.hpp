@@ -8,6 +8,8 @@
 #include <vector>
 #include "reciepient.hpp"
 
+#if (USE_NET)
+
 
 // Global class for send/recieve data from internet
 class Internet : public InternetLibrary {
@@ -49,3 +51,5 @@ class Internet : public InternetLibrary {
 
 // Global system to send/recieve messages throw internet
 extern Internet internet;
+
+#endif  // (USE_NET)

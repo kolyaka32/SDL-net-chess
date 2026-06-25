@@ -5,6 +5,8 @@
 
 #include "reciepient.hpp"
 
+#if (USE_NET)
+
 
 Reciepient::Reciepient(const Destination& _dest)
 : dest(_dest) {}
@@ -98,3 +100,5 @@ bool Reciepient::checkIndexUniqness(Uint8 _index) {
 const char* Reciepient::getName() const {
     return dest.getName();
 }
+
+#endif  // (USE_NET)

@@ -9,15 +9,12 @@
 ClientLobbyCycle::ClientLobbyCycle(Window& _window)
 : BaseCycle(_window),
 broadcastSendSocket(),
-serverScroller(_window, 0.5, 0.4, 1.0, 0.6, 4,
+serverScroller(_window, 0.5, 0.46, 1.0, 0.72, 3,
     {"No servers found", "Сервера не найдены", "Kein Server gefunden", "Сервера не знойдзены"}),
-updateButton(_window, 0.5, 0.85, {"Update", "Обновить", "Update", "Абнаўленне"}),
+updateButton(_window, 0.5, 0.88, {"Update", "Обновить", "Update", "Абнаўленне"}),
 targetConnectButton(_window, 0.5, 0.95,
     {"Connect by IP", "Присоединиться по IP", "Über IP beitreten", "Далучыцца па IP"}),
 targetConnectMenu(_window) {
-    // Starting random getting socket
-    logger.additional("Start client lobby cycle");
-
     // Setting to correct send broadcast
     broadcastSendSocket.setSendBroadcast();
 
@@ -27,6 +24,7 @@ targetConnectMenu(_window) {
     if (!isRestarted()) {
         targetConnectMenu.reset();
     }
+    logger.additional("Start client lobby cycle");
 }
 
 bool ClientLobbyCycle::inputMouseDown() {
@@ -41,28 +39,43 @@ bool ClientLobbyCycle::inputMouseDown() {
         return true;
     }
     if (targetConnectButton.in(mouse)) {
-        targetConnectMenu.activate();
+        targetConnectMenu.open();
         return true;
     }
-    if (int i = serverScroller.click(mouse)) {
+    if (GUI::Code code = serverScroller.click(mouse)) {
         // Connecting to selected server
-        internet.sendFirst(serverDatas[i-1].getAddress(), {ConnectionCode::Init, Uint8(BROADCAST_APP_INDEX)});
+        internet.sendFirst(serverDatas[code-GUI::Button1].getAddress(), {ConnectionCode::Init, Uint8(BROADCAST_APP_INDEX)});
         return true;
     }
     return false;
 }
 
 void ClientLobbyCycle::inputMouseUp() {
-    settings.unClick();
+    serverScroller.unclick();
     targetConnectMenu.unclick();
+    BaseCycle::inputMouseUp();
 }
 
-void ClientLobbyCycle::inputKeys(SDL_Keycode _key) {
-    targetConnectMenu.press(_key);
+bool ClientLobbyCycle::inputKeys(SDL_Keycode _key) {
+    if (targetConnectMenu.press(_key)) {
+        return true;
+    }
+    return BaseCycle::inputKeys(_key);
+}
+
+bool ClientLobbyCycle::inputMouseWheel(float _wheelY) {
+    if (BaseCycle::inputMouseWheel(_wheelY)) {
+        return true;
+    }
+    if (serverScroller.scroll(mouse, _wheelY)) {
+        return true;
+    }
+    return false;
 }
 
 void ClientLobbyCycle::update() {
     BaseCycle::update();
+    serverScroller.update(mouse);
     targetConnectMenu.update();
 
     // Getting internet data from general socket
@@ -109,8 +122,8 @@ void ClientLobbyCycle::update() {
     }
 }
 
-void ClientLobbyCycle::inputText(const char* _text) {
-    targetConnectMenu.write(_text);
+bool ClientLobbyCycle::inputText(const char* _text) {
+    return targetConnectMenu.write(_text);
 }
 
 void ClientLobbyCycle::draw() const {

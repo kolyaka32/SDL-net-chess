@@ -13,9 +13,7 @@
 
 // Initialasing global objects in correct order
 // Logger
-#if (CHECK_ALL)
 Logger logger{};
-#endif
 
 // All side libries
 Libraries libraries{};

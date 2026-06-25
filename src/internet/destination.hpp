@@ -7,6 +7,8 @@
 
 #include "messages/confirmedMessage.hpp"
 
+#if (USE_NET)
+
 
 // Class with address and port for send operation
 class Destination {
@@ -27,3 +29,5 @@ class Destination {
     const char* getName() const;
     Uint16 getPort() const;
 };
+
+#endif  // (USE_NET)

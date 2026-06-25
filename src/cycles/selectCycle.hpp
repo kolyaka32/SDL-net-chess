@@ -22,7 +22,6 @@ class SelectCycle : public BaseCycle {
 
  protected:
     bool inputMouseDown() override;
-    void inputKeys(SDL_Keycode key) override;
     void update() override;
     void draw() const override;
 

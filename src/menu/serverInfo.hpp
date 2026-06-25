@@ -12,12 +12,14 @@
 // Info of one server as variant for connection
 class ServerInfo {
  private:
+    const float height;  // Full height of that unit
+    // Graphical elements
     GUI::RoundedBackplate backplate;
     GUI::StaticText addressText;
     GUI::StaticText pingText;
 
  public:
-    ServerInfo(const Window& window, int position, const ServerData& data);
+    ServerInfo(const Window& window, float height, float Y, const ServerData& data);
     ServerInfo(ServerInfo&& info) noexcept;
     void moveUp();
     void moveDown();

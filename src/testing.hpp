@@ -7,7 +7,7 @@
 
 // File for setting flags for all test for program
 // Debuging modifiers
-#define DEBUG false
+#define DEBUG true
 // Logging important information
 #define CHECK_CORRECTION DEBUG
 // Logging all actions (including minor)

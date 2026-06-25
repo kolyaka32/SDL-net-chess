@@ -3,16 +3,28 @@
  * <nik.kazankov.05@mail.ru>
  */
 
+#include <SDL3/SDL.h>
 #include "logger.hpp"
 
 
 Logger::Logger()
 #if (CHECK_ALL)
-: logFile(LOG_NAME) {
-    // Setting to write without buffering for correct work with errors
-    logFile << std::unitbuf;
+{
+    // File name
+    char fileName[20];
+    // Index of name
+    int index = 0;
 
-    additional("Started logging with file name: %s", LOG_NAME);
+    // Finding avaliable file name
+    while (logFile == nullptr) {
+        // Creating file name
+        SDL_snprintf(fileName, sizeof(fileName), LOG_NAME, index);
+        index++;
+
+        // Trying open file, blocking by app
+        logFile = SDL_IOFromFile(fileName, "w");
+    }
+    additional("Started logging to: %s", fileName);
 }
 #else
 {}
@@ -20,6 +32,7 @@ Logger::Logger()
 
 Logger::~Logger() noexcept {
     #if (CHECK_ALL)
-    logFile.close();
+    additional("Finished correctly");
+    SDL_CloseIO(logFile);
     #endif
 }

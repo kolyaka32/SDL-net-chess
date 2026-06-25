@@ -29,11 +29,13 @@ nobodyWinText(_window, 0.5, 0.05, {"Nobody win", "Ничья", "Unentschieden", 
     audio.music.startFading(Music::Main);
 }
 
-void GameCycle::inputKeys(SDL_Keycode _key) {
+bool GameCycle::inputKeys(SDL_Keycode _key) {
     // Quiting to menu
     if (_key == SDLK_Q) {
         App::setNextCycle(Cycle::Menu);
+        return true;
     }
+    return BaseCycle::inputKeys(_key);
 }
 
 void GameCycle::update() {

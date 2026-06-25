@@ -13,7 +13,7 @@
 SelectCycle::SelectCycle(Window& _window)
 : BaseCycle(_window),
 background(_window),
-titleText(_window, 0.5, 0.15, {"Tic-tac-toe", "Крестики нолики", "Tic-tac-toe", "Крыжыкі нулікі"}, 3, Height::Title),
+titleText(_window, 0.5, 0.15, {"Chess", "Шахматы", "Schachspiel", "Шахматы"}, 3, Height::Title),
 singleplayerButton(_window, 0.5, 0.3, {"Singleplayer", "Одиночная игра", "Einzelspiel", "Адзіночная гульня"}),
 twoPlayerButton(_window, 0.5, 0.5, {"Two players", "Два игрока", "Zwei Spieler", "Два гульца"}),
 serverButton(_window, 0.5, 0.7, {"Create server", "Создать сервер", "Server erstellen", "Стварыць сервер"}),
@@ -29,7 +29,7 @@ connectButton(_window, 0.5, 0.9, {"Connect", "Присоединиться", "Be
 }
 
 bool SelectCycle::inputMouseDown() {
-    if (settings.click(mouse)) {
+    if (BaseCycle::inputMouseDown()) {
         return true;
     }
     if (singleplayerButton.in(mouse)) {
@@ -49,14 +49,6 @@ bool SelectCycle::inputMouseDown() {
         return true;
     }
     return false;
-}
-
-void SelectCycle::inputKeys(SDL_Keycode _key) {
-    switch (_key) {
-    case SDLK_ESCAPE:
-        settings.activate();
-        return;
-    }
 }
 
 void SelectCycle::update() {

@@ -24,7 +24,6 @@ hideAddressButton(_window, 0.5, 0.5, {"Hide address", "Скрыть адресс
     if (!isRestarted()) {
         showAddress = false;
     }
-
     // Openning socket for recieving broadcast
     broadcastRecieveSocket.setRecieveBroadcast();
 
@@ -72,11 +71,11 @@ void ServerLobbyCycle::update() {
         case ConnectionCode::Init:
             // Check if app type is match
             if (packet->getData<Uint8>(1) == BROADCAST_APP_INDEX) {
+                // Sending initialisation applying message
+                internet.sendFirst(Destination{packet->getSourceAddress()}, {ConnectionCode::Init, Uint8(BROADCAST_APP_INDEX)});
+
                 // Connecting to getted address
                 internet.connectTo(Destination{packet->getSourceAddress()});
-
-                // Sending initialisation applying message
-                internet.sendAllConfirmed({ConnectionCode::Init, Uint8(BROADCAST_APP_INDEX)});
 
                 // Starting game (as server)
                 App::setNextCycle(Cycle::ServerGame);

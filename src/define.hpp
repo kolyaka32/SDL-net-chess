@@ -31,7 +31,7 @@
 
 // System game name
 #define WINDOW_NAME "Chess on SDL"
-#define LOG_NAME "log.txt"
+#define LOG_NAME "log-%d.txt"
 
 // Game field parameters
 #define FIELD_WIDTH 8  // Number of cells

@@ -17,12 +17,12 @@ enum class ConnectionCode : Uint8 {
     Quit,     // Code for break connection (not need aprove)
     Confirm,  // Code for confirm, that importane message was delivered (with number of message)
     ApplyConnection,  // Code of confirmation of continued connection
-    // Broadcast
+
+    // Broadcast codes
     Search,   // Code for search of servers in subnet
     Server,   // Code for server to say, where it is
 
     // Game codes
-    // Global
     GameTurn,     // Code of normal game turn with it options
     // Server-side
     GameNew,      // Code of sending new field
